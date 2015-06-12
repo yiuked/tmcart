@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="http://www.redsoleheels.co.uk/tools/sitemap/sitemap.xsl"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" 
+		xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+	<url>
+		<loc>http://www.redsoleheels.co.uk</loc>
+		<lastmod>2013-02-22 22:01:28</lastmod>
+		<changefreq>daily</changefreq>
+		<priority>1.0</priority>
+	</url>
+	<url>
+		<loc>http://www.redsoleheels.co.uk/about.html</loc>
+		<lastmod>2013-02-22 20:08:50</lastmod>
+		<changefreq>daily</changefreq>
+		<priority>0.6</priority>
+	</url>
+	<url>
+		<loc>http://www.redsoleheels.co.uk/</loc>
+		<lastmod>2012-10-31 15:32:56</lastmod>
+		<changefreq>daily</changefreq>
+		<priority>0.6</priority>
+	</url>
+	<url>
+		<loc>http://www.redsoleheels.co.uk/cms-update.html</loc>
+		<lastmod>2012-12-21 15:05:48</lastmod>
+		<changefreq>daily</changefreq>
+		<priority>0.6</priority>
+	</url>
+	<url>
+		<loc>http://www.redsoleheels.co.uk/Dollar.html</loc>
+		<lastmod>2012-12-28 14:27:07</lastmod>
+		<changefreq>daily</changefreq>
+		<priority>0.6</priority>
+	</url>
+	<url>
+		<loc>http://www.redsoleheels.co.uk/cl-shoes.html</loc>
+		<lastmod>2012-12-28 14:57:24</lastmod>
+		<changefreq>daily</changefreq>
+		<priority>0.6</priority>
+	</url>
+	<url>
+		<loc>http://www.redsoleheels.co.uk/tag-Prestashop-one-day.html</loc>
+		<lastmod>0000-00-00 00:00:00</lastmod>
+		<changefreq>daily</changefreq>
+		<priority>0.6</priority>
+	</url>
+	<url>
+		<loc>http://www.redsoleheels.co.uk/tag-asd.html</loc>
+		<lastmod>2012-12-25 10:45:58</lastmod>
+		<changefreq>daily</changefreq>
+		<priority>0.6</priority>
+	</url>
+	<url>
+		<loc>http://www.redsoleheels.co.uk/tag-adasdas.html</loc>
+		<lastmod>2012-12-25 10:45:58</lastmod>
+		<changefreq>daily</changefreq>
+		<priority>0.6</priority>
+	</url>
+	<url>
+		<loc>http://www.redsoleheels.co.uk/tag-asd.html</loc>
+		<lastmod>2012-12-25 11:09:05</lastmod>
+		<changefreq>daily</changefreq>
+		<priority>0.6</priority>
+	</url>
+	<url>
+		<loc>http://www.redsoleheels.co.uk/tag-adasdas.html</loc>
+		<lastmod>2012-12-25 11:09:05</lastmod>
+		<changefreq>daily</changefreq>
+		<priority>0.6</priority>
+	</url>
+</urlset>
