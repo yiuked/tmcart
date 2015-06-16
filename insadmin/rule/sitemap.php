@@ -12,41 +12,52 @@ $xmlString = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/
 $xmlString .= '
 	<url>
 		<loc>'._TM_BASE_URL_.'</loc>
-		<lastmod>'.date('Y-m-d H:i:s').'</lastmod>
+		<lastmod>'.date('c').'</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>1.0</priority>
 	</url>';
 
-//CMS page
-$result = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'cms` WHERE `active`=1');
-$cms    = CMS::resetCMS($result);
-foreach($cms as $c)
+$link = new Link();
+//category page
+$result = Db::getInstance()->ExecuteS('SELECT rule_link AS link FROM `'._DB_PREFIX_.'rule` WHERE entity="Category"');
+foreach($result as $row)
 $xmlString .= '
 	<url>
-		<loc>'.$c['link'].'</loc>
-		<lastmod>'.$c['upd_date'].'</lastmod>
+		<loc>'.$link->getLink($row['link']).'</loc>
+		<lastmod>'.date('c').'</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>0.6</priority>
 	</url>';
 
-//CMS page
-$cmscategory 		= Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'cms_category` WHERE `active`=1');
-foreach($cmscategory as $g)
+//brand page
+$result = Db::getInstance()->ExecuteS('SELECT rule_link AS link FROM `'._DB_PREFIX_.'rule` WHERE `entity`="Brand"');
+foreach($result as $row)
 $xmlString .= '
 	<url>
-		<loc>'.Tools::getLink($g['rewrite']).'</loc>
-		<lastmod>'.$g['upd_date'].'</lastmod>
+		<loc>'.$link->getLink($row['link']).'</loc>
+		<lastmod>'.date('c').'</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>0.6</priority>
 	</url>';
 
-//TAG page
-$cmstags 		= Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'cms_tag`');
-foreach($cmstags as $t)
+//color page
+$result = Db::getInstance()->ExecuteS('SELECT rule_link AS link FROM `'._DB_PREFIX_.'rule` WHERE `entity`="Color"');
+foreach($result as $row)
 $xmlString .= '
 	<url>
-		<loc>'.Tools::getLink($t['rewrite']).'</loc>
-		<lastmod>'.$t['upd_date'].'</lastmod>
+		<loc>'.$link->getLink($row['link']).'</loc>
+		<lastmod>'.date('c').'</lastmod>
+		<changefreq>daily</changefreq>
+		<priority>0.6</priority>
+	</url>';
+	
+//product page
+$result = Db::getInstance()->ExecuteS('SELECT rule_link AS link FROM `'._DB_PREFIX_.'rule` WHERE `entity`="Product"');
+foreach($result as $row)
+$xmlString .= '
+	<url>
+		<loc>'.$link->getLink($row['link']).'</loc>
+		<lastmod>'.date('c').'</lastmod>
 		<changefreq>daily</changefreq>
 		<priority>0.6</priority>
 	</url>';

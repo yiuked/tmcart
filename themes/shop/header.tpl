@@ -15,6 +15,7 @@
 {/if}
 <meta content="IE=Edge" http-equiv="X-UA-Compatible">
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+<link rel="alternate" hreflang="en" href="alternateURL">
 <link rel="shortcut icon" type="image/x-icon" href="{$root_dir}favicon.ico" />
 <link rel="shortcut icon" type="image/gif" href="{$root_dir}favicon.gif" />
 <link href="{$css_dir}global.css" rel="stylesheet" type="text/css" media="all" />
