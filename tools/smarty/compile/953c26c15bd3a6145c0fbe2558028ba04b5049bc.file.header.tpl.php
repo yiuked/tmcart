@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2015-05-14 12:55:17
+<?php /* Smarty version Smarty-3.1.12, created on 2015-06-27 09:43:07
          compiled from "D:\wamp\www\red\shoes\themes\shop\header.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:2377154992dd1dbaf44-85901661%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '953c26c15bd3a6145c0fbe2558028ba04b5049bc' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\header.tpl',
-      1 => 1431579276,
+      1 => 1434417389,
       2 => 'file',
     ),
   ),
@@ -71,6 +71,7 @@ if (!is_callable('smarty_modifier_escape')) include 'D:\\wamp\\www\\red\\shoes\\
 <?php }?>
 <meta content="IE=Edge" http-equiv="X-UA-Compatible">
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+<link rel="alternate" hreflang="en" href="alternateURL">
 <link rel="shortcut icon" type="image/x-icon" href="<?php echo $_smarty_tpl->tpl_vars['root_dir']->value;?>
 favicon.ico" />
 <link rel="shortcut icon" type="image/gif" href="<?php echo $_smarty_tpl->tpl_vars['root_dir']->value;?>

@@ -79,6 +79,8 @@ class Order extends ObjectBase{
 			$where .= ' AND a.`id_order`='.intval($filter['id_order']);
 		if(!empty($filter['subject']) && Validate::isCatalogName($filter['subject']))
 			$where .= ' AND a.`subject` LIKE "%'.pSQL($filter['subject']).'%"';
+		if(!empty($filter['id_cart']) && Validate::isCatalogName($filter['id_cart']))
+			$where .= ' AND a.`id_cart` = '.intval($filter['id_cart']);
 		if(!empty($filter['name']) && Validate::isCatalogName($filter['name']))
 			$where .= ' AND a.`name` LIKE "%'.pSQL($filter['name']).'%"';
 		if(!empty($filter['active']) && Validate::isInt($filter['active']))

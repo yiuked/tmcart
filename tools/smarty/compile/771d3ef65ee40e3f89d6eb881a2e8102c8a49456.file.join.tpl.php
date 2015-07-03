@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2014-12-24 15:13:45
+<?php /* Smarty version Smarty-3.1.12, created on 2015-06-27 10:33:47
          compiled from "D:\wamp\www\red\shoes\themes\shop\join.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:18896549a67a9f40155-48991427%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '771d3ef65ee40e3f89d6eb881a2e8102c8a49456' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\join.tpl',
-      1 => 1417760071,
+      1 => 1432093754,
       2 => 'file',
     ),
   ),
@@ -15,6 +15,8 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'function' => 
   array (
   ),
+  'version' => 'Smarty-3.1.12',
+  'unifunc' => 'content_549a67aa1c17c9_84632260',
   'variables' => 
   array (
     'step' => 0,
@@ -24,8 +26,6 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'link' => 0,
   ),
   'has_nocache_code' => false,
-  'version' => 'Smarty-3.1.12',
-  'unifunc' => 'content_549a67aa1c17c9_84632260',
 ),false); /*/%%SmartyHeaderCode%%*/?>
 <?php if ($_valid && !is_callable('content_549a67aa1c17c9_84632260')) {function content_549a67aa1c17c9_84632260($_smarty_tpl) {?><div id="main_columns">
 <?php echo $_smarty_tpl->getSubTemplate (((string)$_smarty_tpl->tpl_vars['tpl_dir']->value)."./block/errors.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null, array(), 0);?>
@@ -41,7 +41,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 <div class="box-style">
 	<form action="" method="post" class="bd">
 	  <div class="row">
-		<h2>Create a Sarenza account</h2>
+		<h2>Create a new account</h2>
 		<h3>Account settings</h3>
 	  </div>
 	  <div class="ck_customer">

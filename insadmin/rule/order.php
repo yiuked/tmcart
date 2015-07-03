@@ -30,9 +30,9 @@ if(intval(Tools::getRequest('delete'))>0){
 	}
 }
 
-$filter	 = $cookie->getFilter('order',array('id_order','name','carrier','amount','payment','status'));
-if(Tools::isSubmit('submitResetOrder')){
-	$cookie->unsetFilter('order',array('id_order','name','carrier','amount','payment','status'));
+$filter	 = $cookie->getFilter('order',array('id_order','id_cart','name','carrier','amount','payment','status'));
+if(Tools::isSubmit('submitReset')){
+	$cookie->unsetFilter('order',array('id_order','id_cart','name','carrier','amount','payment','status'));
 	$filter = array();
 }
 
@@ -86,7 +86,7 @@ require_once(dirname(__FILE__).'/../errors.php');
 </span>
 <span style="float: right;">
 	<input type="submit" class="button" value="检索" name="submitFilter" id="submitFilterButton">
-	<input type="submit" class="button" value="重置" name="submitResetcategory">
+	<input type="submit" class="button" value="重置" name="submitReset">
 </span>
 </td>
 </tr>

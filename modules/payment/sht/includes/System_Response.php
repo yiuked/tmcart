@@ -106,7 +106,7 @@ class System_Response{
 	
 	//以下状态码为支付成功
 	private $_succeedCode = array(
-		"16",
+		"10",
 		"88",
 	);
 	

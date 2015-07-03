@@ -27,6 +27,9 @@ if(Tools::isSubmit('orderStatusUpdate')){
 	  	<li><a title="提交到定单系统" href="javascript:void(0)" class="toolbar_btn" id="sendordersystem" data-id="<?php echo $obj->id?>"> <span class="process-icon-save-and-stay"></span>
 			  <div>提交到定单系统</div>
 			  </a> </li>
+		<li><a title="预览" href="index.php?rule=order_view&id=<?php echo $obj->id?>" class="toolbar_btn" > <span class="process-icon-view"></span>
+          <div>预览</div>
+          </a> </li>
         <li><a title="Back to list" href="javascript:history.back();" class="toolbar_btn" id="desc-product-back"> <span class="process-icon-back "></span>
           <div>返回列表</div>
           </a> </li>

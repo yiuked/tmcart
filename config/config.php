@@ -35,6 +35,11 @@ $cookie->isLogged();
 
 if(isset($cookie->id_cart)&&!Cart::cartIsOrder($cookie->id_cart)){
 	$cart = new Cart((int)($cookie->id_cart));
+	
+	if(!Validate::isLoadedObject($cart)){
+		unset($cart);
+		unset($cookie->id_cart);
+	}
 }
 
 if($id_currency = Tools::getRequest('id_currency'))
