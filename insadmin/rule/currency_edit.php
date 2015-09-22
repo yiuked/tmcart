@@ -42,7 +42,7 @@ require_once(dirname(__FILE__).'/../errors.php');
         <li> <a title="Save" href="#" class="toolbar_btn" id="emploay-save"> <span class="process-icon-save "></span>
           <div>保存</div>
           </a> </li>
-        <li> <a title="Back to list" href="javascript:history.back();" class="toolbar_btn" id="desc-product-back"> <span class="process-icon-back "></span>
+        <li> <a title="Back to list" href="index.php?rule=currency" class="toolbar_btn" id="desc-product-back"> <span class="process-icon-back "></span>
           <div>返回列表</div>
           </a> </li>
       </ul>

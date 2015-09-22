@@ -19,6 +19,34 @@ class Tools{
 		//	$host = (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$host;
 		return $host;
 	}
+	/*
+	生成随机密码
+	参数
+	$length 参数长度
+	$flag 密码类别，NUMERIC为纯数字密码，NO_NUMERIC为字母密码，默认为数字加字母
+	返回值
+	返回一个指定长度与类别的密码
+	*/
+	public static function passwdGen($length = 8, $flag = 'ALPHANUMERIC')
+	{
+		switch ($flag)
+		{
+			case 'NUMERIC':
+				$str = '0123456789';
+				break;
+			case 'NO_NUMERIC':
+				$str = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+				break;
+			default:
+				$str = 'abcdefghijkmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+				break;
+		}
+
+		for ($i = 0, $passwd = ''; $i < $length; $i++)
+			$passwd .= Tools::substr($str, mt_rand(0, Tools::strlen($str) - 1), 1);
+		return $passwd;
+	}
+	
 	/**
 	*获取客户端IP地址
 	*/
@@ -139,7 +167,7 @@ class Tools{
 		return ($field === '' OR $field === NULL);
 	}
 	
-	static function strlen($str, $encoding = 'UTF-8')
+	public static function strlen($str, $encoding = 'UTF-8')
 	{
 		if (is_array($str))
 			return false;
@@ -147,6 +175,15 @@ class Tools{
 		if (function_exists('mb_strlen'))
 			return mb_strlen($str, $encoding);
 		return strlen($str);
+	}
+
+	public static function substr($str, $start, $length = false, $encoding = 'utf-8')
+	{
+		if (is_array($str))
+			return false;
+		if (function_exists('mb_substr'))
+			return mb_substr($str, (int)$start, ($length === false ? Tools::strlen($str) : (int)$length), $encoding);
+		return substr($str, $start, ($length === false ? Tools::strlen($str) : (int)$length));
 	}
 	
 	/**
@@ -275,7 +312,8 @@ class Tools{
 		/* if you modified this function, don't forget to modify the Javascript function formatCurrency (in tools.js) */
 		if (is_int($currency))
 			$currency = Currency::getCurrencyInstance((int)$currency);
-		
+
+		$price = self::convertPrice($price);
 		if (is_array($currency))
 		{
 			$c_char = $currency['sign'];
@@ -445,6 +483,19 @@ class Tools{
 		}elseif(Tools::getRequest($key)==$val)
 			return "checked";
 		return;
+	}
+	
+	public static function Tstart()
+	{
+		return explode(" ",microtime());
+	}
+	
+	public static function Tend($hand)
+	{
+		$end=explode(" ",microtime()); 
+		echo "Time:".($end[1]+$end[0]-$hand[1]-$hand[0]);
+		echo "<br>";
+		printf('memory usage: %01.2f MB', memory_get_usage()/1024/1024);
 	}
 }
 

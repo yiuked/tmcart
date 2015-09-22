@@ -34,7 +34,8 @@ if (array_key_exists('sendorder', $_GET))
 		$data = array(
 			'token'=>md5($webname.$order->id_cart.$order->user->email.$order->amount.$key),
 			'web_name' =>$webname,
-			'id_order' =>$order->id_cart,
+			'id_order' =>$order->id_order,
+			'id_cart' =>$order->id_cart,
 			'image' =>implode("|||",$product_image),
 			'name' =>implode("|||",$product_name),
 			'email' =>$order->user->email,

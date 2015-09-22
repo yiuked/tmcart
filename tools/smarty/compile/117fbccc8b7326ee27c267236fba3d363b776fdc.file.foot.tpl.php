@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2015-02-25 12:22:12
+<?php /* Smarty version Smarty-3.1.12, created on 2015-08-07 09:34:03
          compiled from "D:\wamp\www\red\shoes\themes\shop\block\foot.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:2318154992dd248c3b9-97088008%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '117fbccc8b7326ee27c267236fba3d363b776fdc' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\block\\foot.tpl',
-      1 => 1422346002,
+      1 => 1435895024,
       2 => 'file',
     ),
   ),
@@ -55,8 +55,6 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 		  <li><span>Free Shipping</span></li>
 		  <li> <a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('SaleView');?>
 ">Hot sale products</a> </li>
-		  <li><span>Free 100 day exchanges</span></li>
-		  <li><span>Free returns for 30 days</span></li>
 		  <li><span>Express dispatch</span></li>
 		</ul>
 	  </div>

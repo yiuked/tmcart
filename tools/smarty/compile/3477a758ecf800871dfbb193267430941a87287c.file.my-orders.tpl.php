@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2015-01-24 11:32:03
+<?php /* Smarty version Smarty-3.1.12, created on 2015-08-10 14:44:05
          compiled from "D:\wamp\www\red\shoes\themes\shop\my-orders.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:2691654c3123315e939-90220538%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '3477a758ecf800871dfbb193267430941a87287c' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\my-orders.tpl',
-      1 => 1418026306,
+      1 => 1439188990,
       2 => 'file',
     ),
   ),
@@ -15,6 +15,8 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'function' => 
   array (
   ),
+  'version' => 'Smarty-3.1.12',
+  'unifunc' => 'content_54c312333c1078_72216633',
   'variables' => 
   array (
     'orders' => 0,
@@ -26,15 +28,13 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'attribute' => 0,
   ),
   'has_nocache_code' => false,
-  'version' => 'Smarty-3.1.12',
-  'unifunc' => 'content_54c312333c1078_72216633',
 ),false); /*/%%SmartyHeaderCode%%*/?>
 <?php if ($_valid && !is_callable('content_54c312333c1078_72216633')) {function content_54c312333c1078_72216633($_smarty_tpl) {?><div id="main_columns_two" class="custom">
 <h2>My Orders</h2>
 <?php if ($_smarty_tpl->tpl_vars['orders']->value){?>
 <table border="0" cellpadding="0" cellspacing="0" width="100%" class="table">
 	<tr>
-		<th>Order Number</th>
+		<th>Reference</th>
 		<th>Status</th>
 		<th>Shipping</th>
 		<th>Track Number</th>
@@ -48,7 +48,7 @@ foreach ($_from as $_smarty_tpl->tpl_vars['order']->key => $_smarty_tpl->tpl_var
 $_smarty_tpl->tpl_vars['order']->_loop = true;
 ?>
 	<tr>
-		<td>#<?php echo sprintf("%09d",$_smarty_tpl->tpl_vars['order']->value->id);?>
+		<td><?php echo $_smarty_tpl->tpl_vars['order']->value->reference;?>
 </td>
 		<td><span style="background-color:<?php echo $_smarty_tpl->tpl_vars['order']->value->order_status->color;?>
 ;color:white" class="color_field"><?php echo $_smarty_tpl->tpl_vars['order']->value->order_status->name;?>
@@ -61,7 +61,7 @@ $_smarty_tpl->tpl_vars['order']->_loop = true;
 </td>
 		<td><?php echo $_smarty_tpl->tpl_vars['order']->value->add_date;?>
 </td>
-		<td><a href="?id_order=<?php echo $_smarty_tpl->tpl_vars['order']->value->id;?>
+		<td><a href="?reference=<?php echo $_smarty_tpl->tpl_vars['order']->value->reference;?>
 ">details</a></td>
 	</tr>
 	<?php } ?>

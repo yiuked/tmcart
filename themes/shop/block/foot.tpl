@@ -20,8 +20,6 @@
 		  <li><span>The lowest price,save 60% off</span></li>
 		  <li><span>Free Shipping</span></li>
 		  <li> <a href="{$link->getPage('SaleView')}">Hot sale products</a> </li>
-		  <li><span>Free 100 day exchanges</span></li>
-		  <li><span>Free returns for 30 days</span></li>
 		  <li><span>Express dispatch</span></li>
 		</ul>
 	  </div>

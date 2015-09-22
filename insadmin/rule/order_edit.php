@@ -19,7 +19,9 @@ if(Tools::isSubmit('orderStatusUpdate')){
     <h3> 
 		<span style="font-weight: normal;" id="current_obj">
 		<span class="breadcrumb item-1 ">定单<img src="<?php echo $_tmconfig['tm_img_dir'];?>admin/separator_breadcrum.png" style="margin-right:5px" alt="&gt;"> </span>
-		<span class="breadcrumb item-2 ">#<?php echo sprintf("%09d",$id);?> (id_cart:<?php echo $obj->id_cart;?>)</span> </span> 
+		<span class="breadcrumb item-2 ">#<?php echo sprintf("%09d",$id);?> (id_cart:<?php echo $obj->id_cart;?>)</span>
+		<span class="breadcrumb item-3 "><?php echo $obj->reference;?></span>
+		</span>
 	</h3>
     <div class="cc_button">
       <ul>
@@ -41,7 +43,7 @@ if(Tools::isSubmit('orderStatusUpdate')){
 	<div style="width: 49%; float:left;">
 		<fieldset class="small">
 			<legend><img src="<?php echo $_tmconfig['ico_dir'];?>tab-customers.gif">用户</legend>
-			<span style="font-weight: bold; font-size: 14px;"><a href="index.php?rule=user_view&id=<?php echo $obj->user->id;?>">
+			<span style="font-weight: bold; font-size: 14px;"><a href="index.php?rule=user_edit&id=<?php echo $obj->user->id;?>">
 				<?php echo $obj->user->first_name.' '.$obj->user->last_name;?></a></span> (#<?php echo sprintf("%09d",$id);?>)<br>
 			(<a href="mailto:<?php echo $obj->user->email;?>"><?php echo $obj->user->email;?></a>)<br><br>
 		</fieldset>

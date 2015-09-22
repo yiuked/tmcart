@@ -17,7 +17,7 @@ define('_COOKIE_IV_', '5DvPoNt2');
 
 
 /*基本设置*/
-@ini_set('display_errors', 'on');
+@ini_set('display_errors', 'off');
 date_default_timezone_set('PRC');
 define('_TM_MODE_DEV_', false);
 
@@ -47,7 +47,7 @@ if($id_currency = Tools::getRequest('id_currency'))
 	$currency = new Currency((int)($id_currency));
 	$cookie->id_currency = $id_currency;
 	$cookie->write();
-	if(Validate::isLoadedObject($cart)){
+	if(isset($cart) && Validate::isLoadedObject($cart)){
 		$cart->id_currency = (int)($id_currency);
 		$cart->update();
 	}

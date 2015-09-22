@@ -30,9 +30,9 @@ if(intval(Tools::getRequest('delete'))>0){
 	}
 }
 
-$filter	 = $cookie->getFilter('order',array('id_order','id_cart','name','carrier','amount','payment','status'));
+$filter	 = $cookie->getFilter('order',array('id_order','reference','id_cart','name','carrier','amount','payment','status'));
 if(Tools::isSubmit('submitReset')){
-	$cookie->unsetFilter('order',array('id_order','id_cart','name','carrier','amount','payment','status'));
+	$cookie->unsetFilter('order',array('id_order','reference','id_cart','name','carrier','amount','payment','status'));
 	$filter = array();
 }
 
@@ -114,7 +114,24 @@ require_once(dirname(__FILE__).'/../errors.php');
 				</a>
 			</th>
 			<th>
-				编号
+				reference
+				<a href="index.php?rule=order&orderOrderBy=reference&orderOrderWay=desc" >
+					<?php if(isset($orderBy) && $orderBy=='reference' && isset($orderWay) && $orderWay=='desc'){ ?>
+					<img alt="预览" src="<?php echo $_tmconfig['ico_dir'];?>up_d.gif">
+					<?php }else{ ?>
+					<img alt="预览" src="<?php echo $_tmconfig['ico_dir'];?>up.gif">
+					<?php } ?>
+				</a>
+				<a href="index.php?rule=order&orderOrderBy=reference&orderOrderWay=asc">
+					<?php if(isset($orderBy) && $orderBy=='reference' && isset($orderWay) && $orderWay=='asc'){ ?>
+					<img alt="预览" src="<?php echo $_tmconfig['ico_dir'];?>down_d.gif">
+					<?php }else{ ?>
+					<img alt="预览" src="<?php echo $_tmconfig['ico_dir'];?>down.gif">
+					<?php } ?>
+				</a>
+			</th>
+			<th>
+				购物车ID
 				<a href="index.php?rule=order&orderOrderBy=id_cart&orderOrderWay=desc" >
 					<?php if(isset($orderBy) && $orderBy=='id_cart' && isset($orderWay) && $orderWay=='desc'){ ?>
 					<img alt="预览" src="<?php echo $_tmconfig['ico_dir'];?>up_d.gif">
@@ -220,6 +237,7 @@ require_once(dirname(__FILE__).'/../errors.php');
 		<tr style="height: 35px;" class="nodrag nodrop filter row_hover">
 		  <td class="center"> -- </td>
 		  <td class="center"><input type="text" style="width:40px" value="<?php echo isset($filter['id_order'])?$filter['id_order']:'';?>" name="orderFilter_id_order" class="filter"></td>
+		   <td class="center"><input type="text" style="width:80px" value="<?php echo isset($filter['reference'])?$filter['reference']:'';?>" name="orderFilter_reference" class="filter"></td>
 		  <td class="center"><input type="text" style="width:40px" value="<?php echo isset($filter['id_cart'])?$filter['id_cart']:'';?>" name="orderFilter_id_cart" class="filter"></td>
 		  <td><input type="text" value="<?php echo isset($filter['name'])?$filter['name']:'';?>" name="orderFilter_name" class="filter"></td>
 		  <td><input type="text" value="<?php echo isset($filter['amount'])?$filter['amount']:'';?>" name="orderFilter_amount" class="filter"></td>
@@ -236,6 +254,7 @@ require_once(dirname(__FILE__).'/../errors.php');
 		<tr class="<?php echo ($key%2?'alt_row':''); ?> row" id="tr_<?php echo $row['id_order'];?>">
 			<td><input type="checkbox" name="categoryBox[]" value="<?php echo $row['id_order'];?>" ></td>
 			<td class="pointer" onclick="document.location = 'index.php?rule=order_edit&id=<?php echo $row['id_order'];?>'"><?php echo $row['id_order'];?></td>
+			<td class="pointer" onclick="document.location = 'index.php?rule=order_edit&id=<?php echo $row['id_order'];?>'"><?php echo $row['reference'];?></td>
 			<td class="pointer" onclick="document.location = 'index.php?rule=order_edit&id=<?php echo $row['id_order'];?>'"><?php echo $row['id_cart'];?></td>
 			<td class="pointer" onclick="document.location = 'index.php?rule=order_edit&id=<?php echo $row['id_order'];?>'"><?php echo $row['first_name'].' '.$row['last_name'];?></td>
 			<td class="pointer" onclick="document.location = 'index.php?rule=order_edit&id=<?php echo $row['id_order'];?>'"><b><?php echo Tools::displayPrice($row['amount']);?></b></td>

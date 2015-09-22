@@ -3,7 +3,7 @@
 {if $orders}
 <table border="0" cellpadding="0" cellspacing="0" width="100%" class="table">
 	<tr>
-		<th>Order Number</th>
+		<th>Reference</th>
 		<th>Status</th>
 		<th>Shipping</th>
 		<th>Track Number</th>
@@ -13,13 +13,13 @@
 	</tr>
 	{foreach from=$orders item=order name=order}
 	<tr>
-		<td>#{$order->id|string_format:"%09d"}</td>
+		<td>{$order->reference}</td>
 		<td><span style="background-color:{$order->order_status->color};color:white" class="color_field">{$order->order_status->name}</span></td>
 		<td>{$order->carrier->name}</td>
 		<td>{$order->track_number}</td>
 		<td>{displayPrice price=$order->amount}</td>
 		<td>{$order->add_date}</td>
-		<td><a href="?id_order={$order->id}">details</a></td>
+		<td><a href="?reference={$order->reference}">details</a></td>
 	</tr>
 	{/foreach}
 </table>

@@ -13,6 +13,7 @@ class PaymentModule extends Module
 				$hook_payments[$key] = $pay->hookPayment();
 			}
 		}
+		
 		return $hook_payments;
 	}
 	

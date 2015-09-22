@@ -9,9 +9,9 @@ class MyordersView extends View
 				Tools::redirect($link->getPage('LoginView'));
 			$user = new User((int)($cookie->id_user));
 			
-			if($id_order = Tools::getRequest('id_order'))
+			if($reference = Tools::getRequest('reference'))
 			{
-				$order = new Order((int)($id_order));
+				$order = Order::getByReference($reference);
 				$smarty->assign(array(
 					'products'=>$order->cart->getProducts(),
 					'h_order'=>$order

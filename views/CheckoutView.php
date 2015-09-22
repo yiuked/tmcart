@@ -31,6 +31,7 @@ class CheckoutView extends View
 			$cart->id_address = $address->id;
 			$cart->update();
 		}
+		
 		$carriers  = Carrier::getEntity(true);
 		$payments   = PaymentModule::getHookPayment();
 		

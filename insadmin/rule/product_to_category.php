@@ -19,6 +19,11 @@ if(isset($_POST['changeProductCategory']))
 				UPDATE `'._DB_PREFIX_.'product` SET `id_category_default`='.(int)$_POST['id_category'].'
 				WHERE `id_product`='.intval($row['id_product']));
 			}
+			if($_POST['isDelete']==1){
+				Db::getInstance()->Execute('
+				DELETE  FROM `'._DB_PREFIX_.'product_to_category` WHERE `id_category` IN('.implode(',',$_POST['categoryBox']).') AND
+				`id_product`='.intval($row['id_product']));
+			}
 		}
 	}
 }
@@ -106,8 +111,10 @@ require_once(_TM_ADMIN_DIR_.'/errors.php');
 				}
 				$tree_html .= '</select>';
 				echo $tree_html;
+
 			  ?>
 			  <input type="checkbox" value="1" name="isDefault"  />将新分类设为默认分类.
+			  <input type="checkbox" value="1" name="isDelete"  />取消原分类关联.
 			  </div>
 			  <div class="margin-form">
 			  	<input type="submit" name="changeProductCategory" value="开始转移产品" id="changeProductCategory" class="button" />
