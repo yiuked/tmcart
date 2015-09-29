@@ -63,7 +63,22 @@ class Order extends ObjectBase{
 	public function add()
 	{	
 		$this->reference = self::generateReference();
-		return parent::add();
+		if(parent::add()){
+			$cart = new Cart($this->id_cart);
+			$cart->status = Cart::IS_ORDER;
+			return $cart->update();
+		}
+		return false;
+	}
+
+	public function delete()
+	{
+		if(parent::delete()){
+			$cart = new Cart($this->id_cart);
+			$cart->status = Cart::IS_CLOSE;
+			return $cart->update();
+		}
+		return false;
 	}
 	
 	public function update()
@@ -73,7 +88,7 @@ class Order extends ObjectBase{
 			foreach($products as $row)
 				Product::updateOrders($row['id_product']);
 		}
-		parent::update();
+		return parent::update();
 	}
 	
 	public static function generateReference()

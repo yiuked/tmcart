@@ -85,6 +85,12 @@ class CartView extends View
 	public function displayMain()
 	{
 		global $smarty;
+		$result = Coupon::getEntity();
+		if($result){
+			$smarty->assign(array(
+					'coupons' => $result,
+			));	
+		}
 		$smarty->display('cart.tpl');
 	}
 	

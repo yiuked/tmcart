@@ -141,6 +141,23 @@ require_once(dirname(__FILE__).'/../errors.php');
 				</a> 
 			</th>
 			<th>
+				状态
+				<a href="index.php?rule=cart&cartOrderBy=status&cartOrderWay=desc">
+					<?php if(isset($orderBy) && $orderBy=='status' && isset($orderWay) && $orderWay=='desc'){ ?>
+					<img alt="预览" src="<?php echo $_tmconfig['ico_dir'];?>up_d.gif">
+					<?php }else{ ?>
+					<img alt="预览" src="<?php echo $_tmconfig['ico_dir'];?>up.gif">
+					<?php } ?>
+				</a> 
+				<a href="index.php?rule=cart&cartOrderBy=status&cartOrderWay=asc">
+					<?php if(isset($orderBy) && $orderBy=='status' && isset($orderWay) && $orderWay=='asc'){ ?>
+					<img alt="预览" src="<?php echo $_tmconfig['ico_dir'];?>down_d.gif">
+					<?php }else{ ?>
+					<img alt="预览" src="<?php echo $_tmconfig['ico_dir'];?>down.gif">
+					<?php } ?>
+				</a> 
+			</th>
+			<th>
 				日期
 				<a href="index.php?rule=cart&cartOrderBy=add_date&cartOrderWay=desc">
 					<?php if(isset($orderBy) && $orderBy=='add_date' && isset($orderWay) && $orderWay=='desc'){ ?>
@@ -178,6 +195,7 @@ require_once(dirname(__FILE__).'/../errors.php');
 			<td class="pointer" onclick="document.location = 'index.php?rule=cart_edit&id=<?php echo $row['id_cart'];?>'"><?php echo $row['first_name'].' '.$row['last_name'];?></td>
 			<td class="pointer" onclick="document.location = 'index.php?rule=cart_edit&id=<?php echo $row['id_cart'];?>'"><b><?php echo Tools::displayPrice($row['total']);?></b></td>
 			<td class="pointer" onclick="document.location = 'index.php?rule=cart_edit&id=<?php echo $row['id_cart'];?>'"><?php echo $row['carrier_name'];?></td>
+			<td class="pointer" onclick="document.location = 'index.php?rule=cart_edit&id=<?php echo $row['id_cart'];?>'"><?php echo $row['status'];?></td>
 			<td class="pointer" onclick="document.location = 'index.php?rule=cart_edit&id=<?php echo $row['id_cart'];?>'"><?php echo $row['add_date'];?></td>
 			<td align="right">
 				<a href="index.php?rule=cart_edit&id=<?php echo $row['id_cart'];?>"><img alt="预览" src="<?php echo $_tmconfig['ico_dir'];?>details.gif"></a> 

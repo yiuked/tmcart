@@ -1,9 +1,18 @@
 <?php 
 class Cart extends ObjectBase{
-	protected $fields 			= array('id_user','id_address','id_carrier','id_currency','discount','msg','add_date','upd_date');
+	protected $fields 			= array('id_user','id_address','id_carrier','id_currency','discount','msg','status','add_date','upd_date');
 	protected $identifier 		= 'id_cart';
 	protected $table			= 'cart';
-
+	
+	/*
+	购物车默认为IS_OPEN状态，表示可操作增删改产品,
+	IS_ORDER状态为，购物轩已生成定单状态，不可更改,
+	IS_CLOSE用于定单被删除时的状态.
+	*/
+	const IS_OPEN 	= 0;
+	const IS_ORDER 	= 1;
+	const IS_CLOSE 	= 3;
+	
 	public function __construct($id=NULL)
 	{
 		parent::__construct($id);
@@ -28,6 +37,7 @@ class Cart extends ObjectBase{
 		$fields['id_currency'] = (int)($this->id_currency);
 		$fields['discount'] = (float)($this->discount);
 		$fields['msg'] = pSQL($this->msg);
+		$fields['status'] = (int)$this->status;
 		$fields['add_date'] = pSQL($this->add_date);
 		$fields['upd_date'] = pSQL($this->upd_date);
 		return $fields;
@@ -224,7 +234,7 @@ class Cart extends ObjectBase{
 		if($total==0)
 			return false;
 
-		$result = Db::getInstance()->ExecuteS('SELECT a.id_cart,a.id_user,a.id_address,a.id_carrier,a.id_currency,u.first_name,u.last_name,r.name as carrier_name,r.shipping,a.add_date 
+		$result = Db::getInstance()->ExecuteS('SELECT a.id_cart,a.id_user,a.id_address,a.id_carrier,a.id_currency,u.first_name,u.last_name,r.name as carrier_name,r.shipping,a.status,a.add_date 
 					FROM '._DB_PREFIX_.'cart AS a
 					Left JOIN '._DB_PREFIX_.'currency AS y ON a.id_currency = y.id_currency
 					Left JOIN '._DB_PREFIX_.'carrier AS r ON a.id_carrier = r.id_carrier

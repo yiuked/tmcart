@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2015-06-10 13:23:44
+<?php /* Smarty version Smarty-3.1.12, created on 2015-09-23 18:12:37
          compiled from "D:\wamp\www\red\shoes\themes\shop\cart.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:13715549a679f58f126-20984040%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '5457143d89ebc00a09604dc6c2095c1032608ad4' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\cart.tpl',
-      1 => 1433912275,
+      1 => 1443003154,
       2 => 'file',
     ),
   ),
@@ -26,11 +26,13 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'product' => 0,
     'img_dir' => 0,
     'attribute' => 0,
+    'coupons' => 0,
+    'coupon' => 0,
+    'cart_total' => 0,
     'cart_msg' => 0,
     'cart_discount' => 0,
     'cart_shipping' => 0,
     'enjoy_free_shipping' => 0,
-    'cart_total' => 0,
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
@@ -178,6 +180,55 @@ $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['last']      
 </form>
 <br/>
 <div class="clear"></div>
+<?php if (isset($_smarty_tpl->tpl_vars['coupons']->value)){?>
+<div class="panier-resume coupons">
+	<table>
+		<tr>
+			<th>Code</th>
+			<th>Save</th>
+			<th>Conditions</th>
+		</tr>
+		<?php  $_smarty_tpl->tpl_vars['coupon'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['coupon']->_loop = false;
+ $_from = $_smarty_tpl->tpl_vars['coupons']->value['entitys']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
+foreach ($_from as $_smarty_tpl->tpl_vars['coupon']->key => $_smarty_tpl->tpl_vars['coupon']->value){
+$_smarty_tpl->tpl_vars['coupon']->_loop = true;
+?>
+		<tr>
+			<td><?php echo $_smarty_tpl->tpl_vars['coupon']->value['code'];?>
+</td>
+			<td>
+				<?php if ($_smarty_tpl->tpl_vars['coupon']->value['off']>0){?>
+				<?php echo $_smarty_tpl->tpl_vars['coupon']->value['off'];?>
+%
+				<?php }else{ ?>
+				-<?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['coupon']->value['amount']),$_smarty_tpl);?>
+
+				<?php }?>
+			</td>
+			<td><?php echo $_smarty_tpl->tpl_vars['coupon']->value['code'];?>
+</td>
+			<td>
+			<?php if ($_smarty_tpl->tpl_vars['coupon']->value['total_over']>0){?>
+				<?php if ($_smarty_tpl->tpl_vars['cart_total']->value>$_smarty_tpl->tpl_vars['coupon']->value['total_over']){?>
+				YES
+				<?php }else{ ?>
+				NO(<?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['coupon']->value['total_over']-$_smarty_tpl->tpl_vars['cart_total']->value),$_smarty_tpl);?>
+)
+				<?php }?>
+			<?php }else{ ?>
+				<?php if ($_smarty_tpl->tpl_vars['cart_quantity']->value>$_smarty_tpl->tpl_vars['coupon']->value['quantity_over']){?>
+				YES
+				<?php }else{ ?>
+				NO(<?php echo $_smarty_tpl->tpl_vars['coupon']->value['quantity_over']-$_smarty_tpl->tpl_vars['cart_quantity']->value;?>
+items)
+				<?php }?>
+			<?php }?>
+			</td>
+		</tr>
+		<?php } ?>
+	</table>
+</div>
+<?php }?>
 <div class="panier-resume cart-total">
 	<form method="post" action="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('CheckoutView');?>
 " name="checkout_form" id="checkout_form">

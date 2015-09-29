@@ -22,6 +22,7 @@ date_default_timezone_set('PRC');
 define('_TM_MODE_DEV_', false);
 
 require_once(dirname(__FILE__).'/init.php');
+
 Db::getInstance();
 Configuration::loadConfiguration();
 if(Configuration::get('TM_SHOP_DOMAIN')!=$_SERVER['HTTP_HOST']){

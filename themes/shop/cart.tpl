@@ -58,6 +58,45 @@
 </form>
 <br/>
 <div class="clear"></div>
+{if isset($coupons)}
+<div class="panier-resume coupons">
+	<table>
+		<tr>
+			<th>Code</th>
+			<th>Save</th>
+			<th>Conditions</th>
+		</tr>
+		{foreach from=$coupons.entitys item=coupon name=coupon}
+		<tr>
+			<td>{$coupon.code}</td>
+			<td>
+				{if $coupon.off>0}
+				{$coupon.off}%
+				{else}
+				-{displayPrice price=$coupon.amount}
+				{/if}
+			</td>
+			<td>{$coupon.code}</td>
+			<td>
+			{if $coupon.total_over>0}
+				{if $cart_total>$coupon.total_over}
+				YES
+				{else}
+				NO({displayPrice price=$coupon.total_over-$cart_total})
+				{/if}
+			{else}
+				{if $cart_quantity>$coupon.quantity_over}
+				YES
+				{else}
+				NO({$coupon.quantity_over-$cart_quantity}items)
+				{/if}
+			{/if}
+			</td>
+		</tr>
+		{/foreach}
+	</table>
+</div>
+{/if}
 <div class="panier-resume cart-total">
 	<form method="post" action="{$link->getPage('CheckoutView')}" name="checkout_form" id="checkout_form">
 	<div class="memo" id="information">

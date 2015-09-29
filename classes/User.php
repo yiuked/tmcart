@@ -136,7 +136,7 @@ class User extends ObjectBase{
 	
 	public function getContacts()
 	{
-		$result 	= Db::getInstance()->ExecuteS('SELECT `id_contact`,`add_date` FROM `'._DB_PREFIX_.'contact` WHERE `id_user`='.(int)($this->id));
+		$result 	= Db::getInstance()->ExecuteS('SELECT `id_contact`,`add_date` FROM `'._DB_PREFIX_.'contact` WHERE `id_parent`=0 AND `id_user`='.(int)($this->id));
 		return $result;
 	}
 	

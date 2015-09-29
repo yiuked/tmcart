@@ -75,7 +75,7 @@ class Contact extends ObjectBase{
 	{
 		if(intval($this->id_user)==0)
 			return false;
-		$result = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'contact`');
+		$result = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'contact` where id_user='.(int)$this->id_user);
 		if(!$result)
 			return false;
 		$contacts = array();

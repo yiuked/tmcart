@@ -110,6 +110,7 @@ require_once(_TM_ADMIN_DIR_.'/errors.php');
 	<?php } ?>
 	<form enctype="multipart/form-data" method="post" action="index.php?rule=contact_edit<?php echo isset($id)?'&id='.$id:''?>" class="defaultForm admincontactcontent" id="contact_form" name="example">
 				<input type="hidden" name="name" value="<?php echo $obj->name;?>" />
+				<input type="hidden" name="id_user" value="<?php echo (int)$obj->id_user;?>" />
 				<input type="hidden" name="email" value="<?php echo $obj->email;?>" />
 				<input type="hidden" name="subject" value="<?php echo $obj->subject;?>" />
 				<input type="hidden" name="id_parent" value="<?php echo $obj->id_contact;?>" />
