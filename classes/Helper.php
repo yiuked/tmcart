@@ -199,10 +199,10 @@ class Helper
 	{
 
 		$args = $_GET;
-		$p    = (int)$_GET[$pageKey];
+		$p    = isset($_GET[$pageKey]) ? (int)$_GET[$pageKey] : 1;
 
-		$showPage = 5;	//显示多少页
-		$currentPageBefor = 3; //当前页前显示多少页
+		$showPage = 5;	//show total pages
+		$currentPageBefor = 3; //current page before
 
 		$html 	= '<ul class="pagination">';
 		$pagesNB 	= ceil($total/$perPageNb);
@@ -210,7 +210,7 @@ class Helper
 		if ($p !=1 ) {
 			$args[$pageKey] = $p - 1;
 			$argstr = http_build_query($args);
-			$html .= '<li><a href="'.$argstr.'" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>';
+			$html .= '<li><a href="index.php?'.$argstr.'" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>';
 		}else{
 			$html .= '<li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>';
 		}
