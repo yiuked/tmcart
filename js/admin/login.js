@@ -30,25 +30,15 @@ $(document).ready(function() {
 
 
 function displayForgotPassword() {
-	$('#error').hide();
-	$('#login_form').fadeOut('fast', function () {
-		$("#forgot_password_form").fadeIn('fast');
-		// Focus on email address forgot field
-		$('#email_forgot').select();
-	});
-
+	$('#error').addClass('hidden');
+	$('#login_form').addClass('hidden');
+	$("#forgot_password_form").removeClass('hidden');
 }
 
 function displayLogin() {
-	$('#error').hide();
-
-	$('#forgot_password_form').fadeOut('fast', function () {
-		$('#login_form').fadeIn('fast');
-		// Focus on email address field
-		$('#email').select();
-	});
-
-	return false;
+	$('#error').addClass('hidden');
+	$('#login_form').removeClass('hidden');
+	$("#forgot_password_form").addClass('hidden');
 }
 
 /**
@@ -57,38 +47,37 @@ function displayLogin() {
  * @param string redirect name of the controller to redirect to after login (or null)
  */
 function doAjaxLogin() {
-	$('#error').hide();
-	$('#login_form .ajax-loader').fadeIn('slow', function() {
-		$.ajax({
-			type: "POST",
-			url: "public/ajax_aute.php",
-			async: true,
-			dataType: "json",
-			data: {
-				submitLogin: "1",
-				passwd: $('#passwd').val(),
-				email: $('#email').val()
-			},
-			success: function(jsonData) {
-				if (jsonData.hasErrors) {
-					displayErrors(jsonData.errors);
-				} else {
-					window.location.href = 'index.php';
-				}
-			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				$('#error').html('<h3>TECHNICAL ERROR:</h3><p>Details: Error thrown: ' + XMLHttpRequest + '</p><p>Text status: ' + textStatus + '</p>').show();
-				$('#login_form .ajax-loader').fadeOut('slow');
+	$('#error').addClass('hidden');
+	$('#login_form .ajax-loader').removeClass("hidden");
+	$.ajax({
+		type: "POST",
+		url: "public/ajax_aute.php",
+		async: true,
+		dataType: "json",
+		data: {
+			submitLogin: "1",
+			passwd: $('#passwd').val(),
+			email: $('#email').val()
+		},
+		success: function(jsonData) {
+			if (jsonData.hasErrors) {
+				displayErrors(jsonData.errors);
+			} else {
+				window.location.href = 'index.php';
 			}
-		});
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			$('#error').html('<h3>TECHNICAL ERROR:</h3><p>Details: Error thrown: ' + XMLHttpRequest + '</p><p>Text status: ' + textStatus + '</p>').show();
+			$('#login_form .ajax-loader').addClass('hidden');
+		}
 	});
 }
 function doAjaxForgot() {
-	$('#error').hide();
+	$('#error').addClass('hidden');
 	$('#forgot_password_form .ajax-loader').fadeIn('slow', function() {
 		$.ajax({
 			type: "POST",
-			url: "ajax-tab.php",
+			url: "public/ajax-tab.php",
 			async: true,
 			dataType: "json",
 			data: {
@@ -116,13 +105,10 @@ function doAjaxForgot() {
 	});
 }
 function displayErrors(errors) {
-	str_errors = '<h3>有 ' + errors.length + ' 错误！</h3><ol>';
+	str_errors = '<b>有 ' + errors.length + ' 个错误！</b>';
 	for (var error in errors) //IE6 bug fix
-		if (error != 'indexOf') str_errors += '<li>' + errors[error] + '</li>';
-	$('.ajax-loader').hide();
-	$('#error').html(str_errors + '</ol>').fadeIn('slow');
-	$("#login").effect("shake", {
-		times: 4
-	}, 100);
+		if (error != 'indexOf') str_errors += '<p class="bg-danger">' + errors[error] + '</p>';
+	$('#login_form .ajax-loader').addClass('hidden');
+	$('#error').html(str_errors).removeClass("hidden");
 }
 

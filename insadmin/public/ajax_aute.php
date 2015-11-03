@@ -10,7 +10,7 @@ if (array_key_exists('submitLogin', $_POST))
 		die(json_encode(array('hasErrors'=>true,'errors'=>array('邮箱或密码不能为空！'))));
 	
 	$employee 	=  new Employee();
-	if($employee->getByEmail($email,$passwd)){
+	if($employee->getByEmail($email) && $employee->passwd == Tools::encrypt($passwd)){
 			/* Creating cookie */
 			$cookie->ad_id_employee 	= $employee->id;
 			$cookie->ad_name 			= $employee->name;

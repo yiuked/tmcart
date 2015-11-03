@@ -194,4 +194,62 @@ class Helper
 		}
 		return $html;
 	}
+
+	public static function renderAdminPagination($total,$perPageNb,$pageKey = 'p')
+	{
+
+		$args = $_GET;
+		$p    = (int)$_GET[$pageKey];
+
+		$showPage = 5;	//显示多少页
+		$currentPageBefor = 3; //当前页前显示多少页
+
+		$html 	= '<ul class="pagination">';
+		$pagesNB 	= ceil($total/$perPageNb);
+
+		if ($p !=1 ) {
+			$args[$pageKey] = $p - 1;
+			$argstr = http_build_query($args);
+			$html .= '<li><a href="'.$argstr.'" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>';
+		}else{
+			$html .= '<li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>';
+		}
+
+		if ($pagesNB < $showPage) {
+			for ($i = 1; $i <= $pagesNB; $i++) {
+				$args[$pageKey] = $i;
+				$argstr = http_build_query($args);
+				$html .= '<li'.($p == $i?' class="active"':'').'><a href="index.php?'.$argstr.'">'.$i.'</a></li>';
+			}
+		} elseif ($p<=$currentPageBefor) {
+			for ($i = 1; $i <= $showPage; $i++) {
+				$args[$pageKey] = $i;
+				$argstr = http_build_query($args);
+				$html .= '<li'.($p == $i?' class="active"':'').'><a href="index.php?'.$argstr.'">'.$i.'</a></li>';
+			}
+		} elseif (($pagesNB - $p) <= $currentPageBefor) {
+			for ($i = $pagesNB - $showPage + 1; $i<= $pagesNB; $i++) {
+				$args[$pageKey] = $i;
+				$argstr = http_build_query($args);
+				$html .= '<li'.($p == $i?' class="active"':'').'><a href="index.php?'.$argstr.'">'.$i.'</a></li>';
+			}
+		} else {
+			for ($i = $p - $currentPageBefor; $i<= $p + $showPage - $currentPageBefor; $i++) {
+				$args[$pageKey] = $i;
+				$argstr = http_build_query($args);
+				$html .= '<li'.($p == $i?' class="active"':'').'><a href="index.php?'.$argstr.'">'.$i.'</a></li>';
+			}
+		}
+
+		if ($pagesNB > 1 AND $p != $pagesNB) {
+			$args[$pageKey] = $p + 1;
+			$argstr = http_build_query($args);
+			$html .= '<li><a href="index.php?'.$argstr.'" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>';
+		}else{
+			$html .= '<li class="disabled"><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>';
+		}
+
+		$html 	.= '</ul>';
+		return $html;
+	}
 }

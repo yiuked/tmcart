@@ -23,7 +23,12 @@
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/jquery.tablednd_0_5.js"></script>
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/plugins/fancybox/jquery.fancybox.js"></script>
 <!--//head-->
+<div class="col-md-12">
 <?php
+$adminBrand = new AdminBreadcrumb();
+$adminBrand->add('product','商品');
+echo $adminBrand->last('商品编辑');
+
 if(isset($_POST['sveProduct']) && Tools::getRequest('sveProduct')=='add')
 {
 	$product = new Product();
@@ -58,36 +63,27 @@ if(isset($_POST['sveProduct']) && Tools::getRequest('sveProduct')=='edit')
 	if(is_array($obj->_errors) AND count($obj->_errors)>0){
 		$errors = $obj->_errors;
 	}else{
-		echo '<div class="conf">更新产品内容成功</div>';
+		echo '<div class="alert alert-success" role="alert">更新产品内容成功</div>';
 	}
-	
+
 }
 require_once(_TM_ADMIN_DIR_.'/errors.php');
 ?>
-<div class="path_bar">
-  <div class="path_title">
-    <h3> 
-		<span style="font-weight: normal;" id="current_obj">
-		<span class="breadcrumb item-1 ">商品<img src="<?php echo $_tmconfig['tm_img_dir'];?>admin/separator_breadcrum.png" style="margin-right:5px" alt="&gt;"> </span>
-		<span class="breadcrumb item-2 ">编辑 </span> </span> 
-	</h3>
-    <div class="cc_button">
-      <ul>
-	    <?php if(isset($obj)){?>
-		<li> <a title="Save" href="<?php echo $link->getPage('ProductView',$obj->id);?>" class="toolbar_btn" target="_blank" id="desc-product-view"> <span class="process-icon-view "></span>
-          <div>浏览</div>
-          </a> </li>
-		 <?php }?>
-        <li> <a title="Save" href="#" class="toolbar_btn" id="desc-product-save"> <span class="process-icon-save "></span>
-          <div>保存</div>
-          </a> </li>
-        <li> <a title="Back to list" href="index.php?rule=product" class="toolbar_btn" id="desc-product-back"> <span class="process-icon-back "></span>
-          <div>返回列表</div>
-          </a> </li>
-      </ul>
-    </div>
-  </div>
+
+<div class="col-md-12 action-group">
+	<div class="btn-group pull-right" role="group">
+	  <a href="<?php echo $link->getPage('ProductView',$obj->id);?>"  class="btn btn-warning" target="_blank">
+		  <span aria-hidden="true" class="glyphicon glyphicon-eye-open"></span> 浏览</a>
+		<a href="index.php?rule=product"  class="btn btn-primary"><span aria-hidden="true" class="glyphicon glyphicon-level-up"></span> 返回</a>
+	</div>
+	
+	<div class="btn-group save-group pull-right" role="group">
+		<a href="javascript:void(0)"  class="btn btn-success" id="desc-product-save"><span aria-hidden="true" class="glyphicon glyphicon-floppy-saved"></span> 保存</a>
+	</div>
 </div>
+<div class="clearfix"></div>
+<div class="col-md-12">
+	</div>
 <script language="javascript">
 	$("#desc-product-save").click(function(){
 		$("#product_form").submit();
@@ -790,4 +786,5 @@ $(document).ready(function(){
 		  </div>
 		</div>
 	</form>
+</div>
 </div>

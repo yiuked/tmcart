@@ -202,4 +202,16 @@ function display_details(id)
 							}
 		);
 }
+$(document).ready(function(){
+	/*
+	* 将全选box的class设置为check-all,并添加属性data-name="子checkbox的name值"
+	* eg.<input type="checkbox" class="check-all" data-name="product[]">
+	* */
+	$(".check-all").click(function(){
+		var allCheck = $(this).prop("checked");
+		$("input[name='"+$(this).data("name")+"']").each(function(){
+			$(this).prop("checked",allCheck);
+		})
+	})
+})
 // JavaScript Document

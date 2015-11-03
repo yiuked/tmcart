@@ -4,12 +4,12 @@ if (!defined('_TM_MAGIC_QUOTES_GPC_'))
 if (!defined('_TM_MYSQL_REAL_ESCAPE_STRING_'))
 	define('_TM_MYSQL_REAL_ESCAPE_STRING_', function_exists('mysql_real_escape_string'));
 
-define('_TM_BASE_URL_', Tools::getShopDomain(true));
-define('_TM_ROOT_URL_', _TM_BASE_URL_.__TM_BASE_URI__);
-
 $currentDir = dirname(__FILE__);
 define('_TM_ROOT_DIR_',realpath($currentDir.'/..'));
 
+//本地决对路径
+define('_TM_CLASS_DIR', _TM_ROOT_DIR_.'/classes/');
+define('_TM_CONF_DIR', _TM_ROOT_DIR_.'/config/');
 define('_TM_THEMES_DIR', _TM_ROOT_DIR_.'/themes/'._TM_THEMES_.'/');
 define('_TM_TOOLS_DIR', _TM_ROOT_DIR_.'/tools/');
 define('_TM_SWIFT_DIR', _TM_TOOLS_DIR.'/swift/');
@@ -22,7 +22,16 @@ define('_TM_TMP_IMG_DIR', _TM_IMG_DIR.'tmp/');
 define('_TM_VIEWS_DIR', _TM_ROOT_DIR_.'/views/');
 define('_TM_FSO_DIR', _TM_ROOT_DIR_.'/cache/fso/');
 
+//include auto load
+require_once(_TM_CONF_DIR . 'autoload.php');
+
+//URL链接形式
+define('_TM_BASE_URL_', Tools::getShopDomain(true));
+define('_TM_ROOT_URL_', _TM_BASE_URL_.__TM_BASE_URI__);
 define('_TM_JS_URL', _TM_ROOT_URL_.'js/');
+define('_TM_JS_ADM_URL', _TM_JS_URL.'admin/');
+define('_TM_CSS_URL', _TM_ROOT_URL_.'css/');
+define('_TM_CSS_ADM_URL', _TM_CSS_URL.'admin/');
 define('_TM_JQ_URL', _TM_JS_URL.'jquery/');
 define('_TM_JQP_URL', _TM_JQ_URL.'plugins/');
 define('_TM_IMG_URL', _TM_ROOT_URL_.'images/');
@@ -30,9 +39,12 @@ define('_TM_MOD_URL', _TM_ROOT_URL_.'modules/');
 define('_TM_PRO_URL', _TM_IMG_URL.'pro/');
 define('_TM_THEMES_URL', _TM_ROOT_URL_.'themes/'._TM_THEMES_.'/');
 
+//include bootstrap config
+require_once(_TM_CONF_DIR . 'bootstrap.php');
+
 $_tmconfig = array(
 	'root_dir'	=> _TM_ROOT_URL_,
-	'tm_img_dir'	=> _TM_ROOT_URL_.'images/',
+	'tm_img_dir' => _TM_ROOT_URL_.'images/',
 	'ico_dir'	=> _TM_ROOT_URL_.'images/icon/',
 	'adm_dir'	=> _TM_ROOT_URL_.'images/admin/',
 	'pro_dir'	=> _TM_ROOT_URL_.'images/pro/',
@@ -45,19 +57,7 @@ $_tmconfig = array(
 	'img_dir' =>_TM_THEMES_URL.'img/',
 	'css_dir' =>_TM_THEMES_URL.'css/',
 	'js_dir' =>_TM_THEMES_URL.'js/',
-	'tpl_dir' =>_TM_THEMES_DIR,	
+	'tpl_dir' =>_TM_THEMES_DIR,
 );
 
-
-function __autoload($className)
-{
-	if(file_exists(dirname(__FILE__).'/../classes/'.$className.'.php'))
-		require_once(dirname(__FILE__).'/../classes/'.$className.'.php');
-	elseif(file_exists(dirname(__FILE__).'/../class/lib/'.$className.'.php'))
-		require_once(dirname(__FILE__).'/../class/lib/'.$className.'.php');
-	elseif(file_exists(dirname(__FILE__).'/../views/'.$className.'.php'))
-		require_once(dirname(__FILE__).'/../views/'.$className.'.php');
-	else
-		die('Class \''.$className.'\' not found!');
-}
 ?>
