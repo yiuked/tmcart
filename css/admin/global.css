@@ -28,7 +28,9 @@ ul{ list-style-type:none; margin:0; padding:0;}
   line-height: 28px;
 }
 .navbar-custom li>a{
-  color:#f3f3f3;
+  color: #f3f3f3;
+  font-size: 14px;
+  font-weight: bold;
 }
 .navbar-custom li>a:focus,.navbar-custom li>a:hover,.navbar-custom li.open a,.navbar-custom .dropdown:hover a{
   color:#333;
@@ -299,60 +301,6 @@ fieldset img {
   padding: 0 4px 0 0;
   vertical-align: bottom;
 }
-label {
-  color: #585A69;
-  text-shadow: 0 1px 0 #FFFFFF;
-  float: left;
-  font-weight: bold;
-  padding: 0.2em 0.5em 0 0;
-  text-align: right;
-  width: 250px;
-}
-label.radioCheck {
-  float: none;
-  font-weight: normal;
-  margin: 0 1em 0 0.25em;
-  padding: 0;
-}
-input[type="text"], input[type="password"], input[type="file"], textarea {
-  background-color: #FFFFFF;
-  border: 1px solid #CCCCCC;
-}
-input {
-  vertical-align: middle;
-}
-input.text_input{ width:50em;}
-input, textarea, option {
-  color: #000000;
-  font-size: 12px;
-  margin: 0;
-  padding: 0;
-}
-input[type="text"], input[type="password"], input[type="file"], textarea {
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
-  padding: 2px 4px;
-}
-.button {
-  background: -moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
-  border-color: #CCCCCC #BBBBBB #A0A0A0;
-  border-radius: 3px 3px 3px 3px;
-  border-style: solid;
-  border-width: 1px;
-  color: #000000;
-  margin: 0;
-  outline: medium none;
-  padding: 3px 8px;
-  text-align: center;
-  text-shadow: 0 1px 0 #FFFFFF;
-  vertical-align: middle;
-  white-space: nowrap;
-  cursor: pointer;
-}
-.margin-form{
-  color: #7F7F7F;
-  font-size: 0.85em;
-  padding: 0 0 1em 260px;
-}
 .preference_description{
 color: #7F7F7F;
 font-size: 0.85em;
@@ -416,6 +364,9 @@ width: 100%;}
   border-width: 1px medium 1px 1px;
   float: left;
   width: 140px;
+}
+.product-tab-content{
+  padding:15px;
 }
 .productTabs ul {
   margin: 0;

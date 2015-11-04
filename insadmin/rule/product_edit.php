@@ -70,7 +70,7 @@ if(isset($_POST['sveProduct']) && Tools::getRequest('sveProduct')=='edit')
 require_once(_TM_ADMIN_DIR_.'/errors.php');
 ?>
 
-<div class="col-md-12 action-group">
+<div class="action-group">
 	<div class="btn-group pull-right" role="group">
 	  <a href="<?php echo $link->getPage('ProductView',$obj->id);?>"  class="btn btn-warning" target="_blank">
 		  <span aria-hidden="true" class="glyphicon glyphicon-eye-open"></span> 浏览</a>
@@ -80,10 +80,8 @@ require_once(_TM_ADMIN_DIR_.'/errors.php');
 	<div class="btn-group save-group pull-right" role="group">
 		<a href="javascript:void(0)"  class="btn btn-success" id="desc-product-save"><span aria-hidden="true" class="glyphicon glyphicon-floppy-saved"></span> 保存</a>
 	</div>
+	<div class="clearfix"></div>
 </div>
-<div class="clearfix"></div>
-<div class="col-md-12">
-	</div>
 <script language="javascript">
 	$("#desc-product-save").click(function(){
 		$("#product_form").submit();
@@ -147,7 +145,7 @@ $(document).ready(function(){
 	});
 });
 </script>
-<div class="mianForm">
+<div class="panel">
 	<div class="productTabs">
 		<ul id="product_tab">
 			<li class="tab-row"><a id="link-Base" class="tab-page <?php if(!isset($_POST['tab_key']) || (isset($_POST['tab_key']) && $_POST['tab_key']=='Base')){echo "selected";}?>" href="#">基本信息</a></li>
@@ -163,57 +161,44 @@ $(document).ready(function(){
 			<input type="hidden" value="<?php echo isset($_POST['tab_key'])?$_POST['tab_key']:'Base'?>" name="tab_key" id="tab_key" />
 			<div id="product-tab-content-Base" class=" product-tab-content" style="display: block;">
 				<h4>基本信息</h4>
+				<div class="row">
+					<div class="col-md-8 form-horizontal">
+						<div class="form-group">
+							<label for="inputEmail3" class="col-sm-2 control-label">产品名</label>
+							<div class="col-sm-10">
+								<input type="text" value="<?php echo isset($obj)?$obj->name:Tools::getRequest('name');?>" id="name" class="form-control" name="name" size="60" onkeyup="if (isArrowKey(event)) return ;copy2friendlyURL();" onchange="copy2friendlyURL();">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputEmail3" class="col-sm-2 control-label">产品编号</label>
+							<div class="col-sm-2">
+								<input type="text" value="<?php echo isset($obj)?$obj->ean13:Tools::getRequest('ean13');?>"  name="ean13" class="form-control" >
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputEmail3" class="col-sm-2 control-label">库存</label>
+							<div class="col-sm-2">
+								<input type="text" value="<?php echo isset($obj)?$obj->quantity:(Tools::getRequest('quantity')?Tools::getRequest('quantity'):0);?>"  name="quantity" class="form-control">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputEmail3" class="col-sm-2 control-label">价格</label>
+							<div class="col-sm-2">
+								<input type="text" value="<?php echo isset($obj)?$obj->price:(Tools::getRequest('price')?Tools::getRequest('price'):0);?>"  name="price" class="form-control">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputEmail3" class="col-sm-2 control-label">官方标价</label>
+							<div class="col-sm-2">
+								<input type="text" value="<?php echo isset($obj)?$obj->special_price:(Tools::getRequest('special_price')?Tools::getRequest('special_price'):0);?>"  name="special_price" class="form-control">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+
 				<div class="separation"></div>
 				<table cellpadding="5" style="width: 50%; float: left; margin-right: 20px; border-right: 1px solid #CCCCCC;">
-					<tr>
-						<td class="col-left"><label>产品名: </label></td>
-						<td>
-							<div style="display:block; float: left;">
-							<input type="text" value="<?php echo isset($obj)?$obj->name:Tools::getRequest('name');?>" id="name" name="name" size="60" onkeyup="if (isArrowKey(event)) return ;copy2friendlyURL();" onchange="copy2friendlyURL();">
-							<sup>*</sup>
-							<span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span>
-						</div>
-						</td>
-					</tr>
-					<tr>
-						<td class="col-left"><label>产品编号: </label></td>
-						<td>
-							<div style="display:block; float: left;">
-							<input type="text" value="<?php echo isset($obj)?$obj->ean13:Tools::getRequest('ean13');?>"  name="ean13" size="20">
-							<sup>*</sup>
-							<span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span>
-						</div>
-						</td>
-					</tr>
-					<tr>
-						<td class="col-left"><label>库存: </label></td>
-						<td>
-							<div style="display:block; float: left;">
-							<input type="text" value="<?php echo isset($obj)?$obj->quantity:(Tools::getRequest('quantity')?Tools::getRequest('quantity'):0);?>"  name="quantity" size="20">
-							<sup>*</sup>
-							<span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span>
-						</div>
-						</td>
-					</tr>
-					<tr>
-						<td class="col-left"><label>价格: </label></td>
-						<td>
-							<div style="display:block; float: left;">
-							<input type="text" value="<?php echo isset($obj)?$obj->price:(Tools::getRequest('price')?Tools::getRequest('price'):0);?>"  name="price" size="20">
-							<sup>*</sup>
-							<span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span>
-						</div>
-						</td>
-					</tr>
-					<tr>
-						<td class="col-left"><label>官方标价: </label></td>
-						<td>
-							<div style="display:block; float: left;">
-							<input type="text" value="<?php echo isset($obj)?$obj->special_price:(Tools::getRequest('special_price')?Tools::getRequest('special_price'):0);?>"  name="special_price" size="20">						
-							<span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span>
-						</div>
-						</td>
-					</tr>
 					<tr>
 						<td class="col-left"><label>促销日期: </label></td>
 						<td>
