@@ -1,27 +1,21 @@
 <!--head-->
 <link href="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/themes/base/jquery.ui.theme.css" rel="stylesheet" type="text/css" media="all" />
-<link href="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/themes/base/jquery.ui.datepicker.css" rel="stylesheet" type="text/css" media="all" />
 <link href="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/themes/base/jquery.ui.slider.css" rel="stylesheet" type="text/css" media="all" />
-<link href="<?php echo $_tmconfig['tm_js_dir']?>jquery/plugins/timepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" media="all" />
-<link href="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/themes/base/jquery.ui.datepicker.css" rel="stylesheet" type="text/css" media="all" />
+<link href="<?php echo BOOTSTRAP_CSS;?>bootstrap-datetimepicker.min.css" rel="stylesheet" />
 <link href="<?php echo $_tmconfig['tm_js_dir']?>jquery/plugins/treeview-categories/jquery.treeview-categories.css" rel="stylesheet" type="text/css" media="all" />
-<link href="<?php echo $_tmconfig['tm_js_dir']?>jquery/plugins/timepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" media="all" />
 <link href="<?php echo $_tmconfig['tm_js_dir']?>jquery/plugins/ajaxfileupload/jquery.ajaxfileupload.css" rel="stylesheet" type="text/css" media="all" />
-<link href="<?php echo $_tmconfig['tm_js_dir']?>jquery/plugins/fancybox/jquery.fancybox.css" rel="stylesheet" type="text/css" media="all" />
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>kindeditor/kindeditor-min.js"></script>
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>kindeditor/lang/zh_CN.js"></script>
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/jquery.ui.core.min.js"></script>
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/jquery.ui.widget.min.js"></script>
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/jquery.ui.mouse.min.js"></script>
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/jquery.ui.slider.min.js"></script>
-<script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/jquery.ui.datepicker.min.js"></script>
-<script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/i18n/jquery.ui.datepicker-zh-CN.js"></script>
+<script type="text/javascript" src="<?php echo BOOTSTRAP_JS;?>bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="<?php echo BOOTSTRAP_JS;?>bootstrap-datetimepicker.zh-CN.js"></script>
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/jquery.ui.progressbar.min.js"></script>
-<script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/plugins/timepicker/jquery-ui-timepicker-addon.js"></script>
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/plugins/ajaxfileupload/jquery.ajaxfileupload.js"></script>
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>fileuploader.js"></script>
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/jquery.tablednd_0_5.js"></script>
-<script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/plugins/fancybox/jquery.fancybox.js"></script>
 <!--//head-->
 <div class="col-md-12">
 <?php
@@ -86,27 +80,7 @@ require_once(_TM_ADMIN_DIR_.'/errors.php');
 	$("#desc-product-save").click(function(){
 		$("#product_form").submit();
 	})
-	$(function() {
-		if ($(".datepicker").length > 0)
-				$('.datepicker').datetimepicker({
-					prevText: '',
-					nextText: '',
-					dateFormat: 'yy-mm-dd',
 
-					// Define a custom regional settings in order to use PrestaShop translation tools
-					currentText: '现在',
-					closeText: '完成',
-					ampm: false,
-					amNames: ['AM', 'A'],
-					pmNames: ['PM', 'P'],
-					timeFormat: 'hh:mm:ss tt',
-					timeSuffix: '',
-					timeOnlyTitle: '选择时间',
-					timeText: '时间',
-					hourText: '小时',
-					minuteText: '分钟',
-				});
-	});
 	KindEditor.ready(function(K) {
 	var editor1 = K.create('textarea[name="description"]', {
 		cssPath : '../js/kindeditor/plugins/code/prettify.css',
@@ -162,118 +136,113 @@ $(document).ready(function(){
 			<div id="product-tab-content-Base" class=" product-tab-content" style="display: block;">
 				<h4>基本信息</h4>
 				<div class="row">
-					<div class="col-md-8 form-horizontal">
+					<div class="col-md-6 form-horizontal">
 						<div class="form-group">
-							<label for="inputEmail3" class="col-sm-2 control-label">产品名</label>
+							<label for="name" class="col-sm-2 control-label">产品名</label>
 							<div class="col-sm-10">
 								<input type="text" value="<?php echo isset($obj)?$obj->name:Tools::getRequest('name');?>" id="name" class="form-control" name="name" size="60" onkeyup="if (isArrowKey(event)) return ;copy2friendlyURL();" onchange="copy2friendlyURL();">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="inputEmail3" class="col-sm-2 control-label">产品编号</label>
+							<label for="ean13" class="col-sm-2 control-label">产品编号</label>
 							<div class="col-sm-2">
 								<input type="text" value="<?php echo isset($obj)?$obj->ean13:Tools::getRequest('ean13');?>"  name="ean13" class="form-control" >
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="inputEmail3" class="col-sm-2 control-label">库存</label>
+							<label for="quantity" class="col-sm-2 control-label">库存</label>
 							<div class="col-sm-2">
 								<input type="text" value="<?php echo isset($obj)?$obj->quantity:(Tools::getRequest('quantity')?Tools::getRequest('quantity'):0);?>"  name="quantity" class="form-control">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="inputEmail3" class="col-sm-2 control-label">价格</label>
+							<label for="price" class="col-sm-2 control-label">价格</label>
 							<div class="col-sm-2">
 								<input type="text" value="<?php echo isset($obj)?$obj->price:(Tools::getRequest('price')?Tools::getRequest('price'):0);?>"  name="price" class="form-control">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="inputEmail3" class="col-sm-2 control-label">官方标价</label>
+							<label for="special_price" class="col-sm-2 control-label">官方标价</label>
 							<div class="col-sm-2">
 								<input type="text" value="<?php echo isset($obj)?$obj->special_price:(Tools::getRequest('special_price')?Tools::getRequest('special_price'):0);?>"  name="special_price" class="form-control">
 							</div>
 						</div>
-					</div>
-					<div class="col-md-4"></div>
-				</div>
-
-				<div class="separation"></div>
-				<table cellpadding="5" style="width: 50%; float: left; margin-right: 20px; border-right: 1px solid #CCCCCC;">
-					<tr>
-						<td class="col-left"><label>促销日期: </label></td>
-						<td>
-							<div style="display:block; float: left; padding:0" class="margin-form">
-							起于
-							<input type="text" class="text_input_sort datepicker" value="<?php echo isset($obj)?$obj->from_date:Tools::getRequest('from_date');?>"  name="from_date">&nbsp;
-							终于
-							<input type="text" class="text_input_sort datepicker" value="<?php echo isset($obj)?$obj->to_date:Tools::getRequest('to_date');?>"  name="to_date">
-							<span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span>
+						<div class="form-group">
+							<label for="time" class="col-sm-2 control-label">促销时间</label>
+							<div class="col-sm-6">
+								<div id="datepicker" class="input-daterange input-group">
+									<input type="text" name="from_date" class="datetimepicker input-sm form-control">
+									<span class="input-group-addon">到</span>
+									<input type="text" name="to_date" class="datetimepicker input-sm form-control">
+								</div>
+							</div>
 						</div>
-						</td>
-					</tr>
-				</table>
-				<table cellpadding="5" style="width: 40%; float: left; margin-left: 10px;">
-					<tr>
-						<td class="col-left"><label>产品状态: </label></td>
-						<td style="padding-bottom:5px;">
-							<ul class="listForm">
-								<li>
-									<input type="radio" checked="checked" value="1" id="active_on" name="active">
-									<label class="radioCheck" for="active_on">启用</label>
-								</li>
-								<li>
-									<input type="radio" value="0" id="active_off" name="active">
-									<label class="radioCheck" for="active_off">关闭</label>
-								</li>
-							</ul>
-						</td>
-					</tr>
-					<tr>
-						<td class="col-left"><label>新产品: </label></td>
-						<td style="padding-bottom:5px;">
-							<ul class="listForm">
-								<li>
-									<input type="radio" value="1" id="is_new_on" name="is_new">
-									<label class="radioCheck" for="is_new_on">是</label>
-								</li>
-								<li>
-									<input type="radio" value="0" id="is_new_off" name="is_new">
-									<label class="radioCheck" for="is_new_off">否</label>
-								</li>
-							</ul>
-						</td>
-					</tr>
-					<tr>
-						<td class="col-left"><label>热销产品: </label></td>
-						<td style="padding-bottom:5px;">
-							<ul class="listForm">
-								<li>
-									<input type="radio" value="1" id="is_sale_on" name="is_sale">
-									<label class="radioCheck" for="is_sale_on">是</label>
-								</li>
-								<li>
-									<input type="radio" value="0" id="is_sale_off" name="is_sale">
-									<label class="radioCheck" for="is_sale_off">否</label>
-								</li>
-							</ul>
-						</td>
-					</tr>
-					<tr>
-						<td class="col-left"><label>推荐产品: </label></td>
-						<td style="padding-bottom:5px;">
-							<ul class="listForm">
-								<li>
-									<input type="radio" value="1" id="is_top_on" name="is_top">
-									<label class="radioCheck" for="is_top_on">是</label>
-								</li>
-								<li>
-									<input type="radio" value="0" id="is_top_off" name="is_top">
-									<label class="radioCheck" for="is_top_off">否</label>
-								</li>
-							</ul>
-						</td>
-					</tr>
-				</table>
+					</div>
+					<div class="col-md-6">
+						<table cellpadding="5" style="width: 40%; float: left; margin-left: 10px;">
+							<tr>
+								<td class="col-left"><label>产品状态: </label></td>
+								<td style="padding-bottom:5px;">
+									<ul class="listForm">
+										<li>
+											<input type="radio" checked="checked" value="1" id="active_on" name="active">
+											<label class="radioCheck" for="active_on">启用</label>
+										</li>
+										<li>
+											<input type="radio" value="0" id="active_off" name="active">
+											<label class="radioCheck" for="active_off">关闭</label>
+										</li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<td class="col-left"><label>新产品: </label></td>
+								<td style="padding-bottom:5px;">
+									<ul class="listForm">
+										<li>
+											<input type="radio" value="1" id="is_new_on" name="is_new">
+											<label class="radioCheck" for="is_new_on">是</label>
+										</li>
+										<li>
+											<input type="radio" value="0" id="is_new_off" name="is_new">
+											<label class="radioCheck" for="is_new_off">否</label>
+										</li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<td class="col-left"><label>热销产品: </label></td>
+								<td style="padding-bottom:5px;">
+									<ul class="listForm">
+										<li>
+											<input type="radio" value="1" id="is_sale_on" name="is_sale">
+											<label class="radioCheck" for="is_sale_on">是</label>
+										</li>
+										<li>
+											<input type="radio" value="0" id="is_sale_off" name="is_sale">
+											<label class="radioCheck" for="is_sale_off">否</label>
+										</li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<td class="col-left"><label>推荐产品: </label></td>
+								<td style="padding-bottom:5px;">
+									<ul class="listForm">
+										<li>
+											<input type="radio" value="1" id="is_top_on" name="is_top">
+											<label class="radioCheck" for="is_top_on">是</label>
+										</li>
+										<li>
+											<input type="radio" value="0" id="is_top_off" name="is_top">
+											<label class="radioCheck" for="is_top_off">否</label>
+										</li>
+									</ul>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
 				<div class="clear"></div>
 				<div class="separation"></div>
 				<table cellspacing="0" cellpadding="5" border="0">
@@ -553,7 +522,7 @@ $(document).ready(function(){
 	<table id="lineType" style="display:none;">
 		<tr id="image_id">
 			<td style="padding: 4px;">
-				<a href="<?php echo $_tmconfig['pro_dir']; ?>image_path.jpg" class="fancybox">
+				<a href="<?php echo $_tmconfig['pro_dir']; ?>image_path.jpg">
 					<img src="<?php echo $_tmconfig['pro_dir']; ?>en-default-small.jpg" alt="image_id" title="image_id" />
 				</a>
 			</td>
@@ -584,6 +553,12 @@ $(document).ready(function(){
 				 	echo 'imageLine('.$image->id.', "'.$image->getExistingImgPath().'", '.$image->position.', "'.(($image->cover)?'enabled':'forbbiden').'");';
 				 }	
 			?>
+
+			$('.datetimepicker').datetimepicker({
+				container: '.container-fluid',
+				pickerPosition: 'top-left',
+				format: 'yyyy-mm-dd hh:ii'
+			});
 
 			$("#imageTable").tableDnD(
 			{
@@ -681,7 +656,7 @@ $(document).ready(function(){
 				}
 			}
 
-			$('.delete_product_image').die().live('click', function(e)
+			$('.delete_product_image').off().on('click', function(e)
 			{
 				e.preventDefault();
 				id = $(this).parent().parent().attr('id');
@@ -695,7 +670,7 @@ $(document).ready(function(){
 				);
 			});
 			
-			$('.covered').die().live('click', function(e)
+			$('.covered').off().on('click', function(e)
 			{
 				e.preventDefault();
 				id = $(this).parent().parent().parent().attr('id');
@@ -714,7 +689,7 @@ $(document).ready(function(){
 				
 			});
 			
-			$('.image_shop').die().live('click', function()
+			$('.image_shop').off().on('click', function()
 			{
 				active = false;
 				if ($(this).attr("checked"))
@@ -762,7 +737,6 @@ $(document).ready(function(){
 				line = line.replace("</tbody>", "");
 				$("#imageList").append(line);
 			}
-			$('.fancybox').fancybox();
 		});
 	</script>
 <?php }?>
