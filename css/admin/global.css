@@ -556,3 +556,14 @@ border: 1px solid #006633;
   height: 30px;
   width: 80px;
 }
+/*custom buttom*/
+.btn-grey{
+  background-color: #ccc;
+  border-color: #aaa;
+  color: #fff;
+}
+.btn-grey.enabled.active{
+  background-color: #5cb85c;
+  border-color: #4cae4c;
+  color: #fff;
+}

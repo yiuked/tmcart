@@ -2,6 +2,7 @@
 <link href="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/themes/base/jquery.ui.theme.css" rel="stylesheet" type="text/css" media="all" />
 <link href="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/themes/base/jquery.ui.slider.css" rel="stylesheet" type="text/css" media="all" />
 <link href="<?php echo BOOTSTRAP_CSS;?>bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<link href="<?php echo BOOTSTRAP_CSS;?>bootstrap-tagsinput.css" rel="stylesheet" />
 <link href="<?php echo $_tmconfig['tm_js_dir']?>jquery/plugins/treeview-categories/jquery.treeview-categories.css" rel="stylesheet" type="text/css" media="all" />
 <link href="<?php echo $_tmconfig['tm_js_dir']?>jquery/plugins/ajaxfileupload/jquery.ajaxfileupload.css" rel="stylesheet" type="text/css" media="all" />
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>kindeditor/kindeditor-min.js"></script>
@@ -12,6 +13,7 @@
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/jquery.ui.slider.min.js"></script>
 <script type="text/javascript" src="<?php echo BOOTSTRAP_JS;?>bootstrap-datetimepicker.js"></script>
 <script type="text/javascript" src="<?php echo BOOTSTRAP_JS;?>bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="<?php echo BOOTSTRAP_JS;?>bootstrap-tagsinput.min.js"></script>
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/jquery.ui.progressbar.min.js"></script>
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/plugins/ajaxfileupload/jquery.ajaxfileupload.js"></script>
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>fileuploader.js"></script>
@@ -134,7 +136,6 @@ $(document).ready(function(){
 			<input type="hidden" value="<?php echo isset($id)?'edit':'add'?>" name="sveProduct" />
 			<input type="hidden" value="<?php echo isset($_POST['tab_key'])?$_POST['tab_key']:'Base'?>" name="tab_key" id="tab_key" />
 			<div id="product-tab-content-Base" class=" product-tab-content" style="display: block;">
-				<h4>基本信息</h4>
 				<div class="row">
 					<div class="col-md-6 form-horizontal">
 						<div class="form-group">
@@ -171,310 +172,282 @@ $(document).ready(function(){
 							<label for="time" class="col-sm-2 control-label">促销时间</label>
 							<div class="col-sm-6">
 								<div id="datepicker" class="input-daterange input-group">
-									<input type="text" name="from_date" class="datetimepicker input-sm form-control">
+									<input type="text" name="from_date" class="tmdatatimepicker input-sm form-control">
 									<span class="input-group-addon">到</span>
-									<input type="text" name="to_date" class="datetimepicker input-sm form-control">
+									<input type="text" name="to_date" class="tmdatatimepicker input-sm form-control">
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6">
-						<table cellpadding="5" style="width: 40%; float: left; margin-left: 10px;">
-							<tr>
-								<td class="col-left"><label>产品状态: </label></td>
-								<td style="padding-bottom:5px;">
-									<ul class="listForm">
-										<li>
-											<input type="radio" checked="checked" value="1" id="active_on" name="active">
-											<label class="radioCheck" for="active_on">启用</label>
-										</li>
-										<li>
-											<input type="radio" value="0" id="active_off" name="active">
-											<label class="radioCheck" for="active_off">关闭</label>
-										</li>
-									</ul>
-								</td>
-							</tr>
-							<tr>
-								<td class="col-left"><label>新产品: </label></td>
-								<td style="padding-bottom:5px;">
-									<ul class="listForm">
-										<li>
-											<input type="radio" value="1" id="is_new_on" name="is_new">
-											<label class="radioCheck" for="is_new_on">是</label>
-										</li>
-										<li>
-											<input type="radio" value="0" id="is_new_off" name="is_new">
-											<label class="radioCheck" for="is_new_off">否</label>
-										</li>
-									</ul>
-								</td>
-							</tr>
-							<tr>
-								<td class="col-left"><label>热销产品: </label></td>
-								<td style="padding-bottom:5px;">
-									<ul class="listForm">
-										<li>
-											<input type="radio" value="1" id="is_sale_on" name="is_sale">
-											<label class="radioCheck" for="is_sale_on">是</label>
-										</li>
-										<li>
-											<input type="radio" value="0" id="is_sale_off" name="is_sale">
-											<label class="radioCheck" for="is_sale_off">否</label>
-										</li>
-									</ul>
-								</td>
-							</tr>
-							<tr>
-								<td class="col-left"><label>推荐产品: </label></td>
-								<td style="padding-bottom:5px;">
-									<ul class="listForm">
-										<li>
-											<input type="radio" value="1" id="is_top_on" name="is_top">
-											<label class="radioCheck" for="is_top_on">是</label>
-										</li>
-										<li>
-											<input type="radio" value="0" id="is_top_off" name="is_top">
-											<label class="radioCheck" for="is_top_off">否</label>
-										</li>
-									</ul>
-								</td>
-							</tr>
-						</table>
+					<div class="col-md-6 form-horizontal">
+						<div class="form-group">
+							<label for="time" class="col-sm-2 control-label">产品状态</label>
+							<div class="col-sm-6">
+								<div class="btn-group" data-toggle="buttons">
+									<label class="btn btn-grey enabled<?php echo isset($obj)&&$obj->active==1?' active':(Tools::getRequest('active')==1?' active':'');?>">
+										<input type="radio" name="active" value="1" autocomplete="off" >启用
+									</label>
+									<label class="btn btn-grey">
+										<input type="radio" name="active" value="0" autocomplete="off">关闭
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="time" class="col-sm-2 control-label">新产品</label>
+							<div class="col-sm-6">
+								<div class="btn-group" data-toggle="buttons">
+									<label class="btn btn-grey enabled<?php echo isset($obj)&&$obj->is_new==1?' active':(Tools::getRequest('is_new')==1?' active':'');?>">
+										<input type="radio" name="is_new" value="1" autocomplete="off" checked>是
+									</label>
+									<label class="btn btn-grey">
+										<input type="radio" name="is_new" value="0" autocomplete="off">否
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="time" class="col-sm-2 control-label">热销产品</label>
+							<div class="col-sm-6">
+								<div class="btn-group" data-toggle="buttons">
+									<label class="btn btn-grey enabled<?php echo isset($obj)&&$obj->is_sale==1?' active':(Tools::getRequest('is_sale')==1?' active':'');?>">
+										<input type="radio" name="is_sale" value="1" autocomplete="off" checked>是
+									</label>
+									<label class="btn btn-grey">
+										<input type="radio" name="is_sale" value="0" autocomplete="off">否
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="time" class="col-sm-2 control-label">推荐产品</label>
+							<div class="col-sm-6">
+								<div class="btn-group" data-toggle="buttons">
+									<label class="btn btn-grey enabled<?php echo isset($obj)&&$obj->is_top==1?' active':(Tools::getRequest('is_top')==1?' active':'');?>">
+										<input type="radio" name="is_top" value="1" autocomplete="off" checked>是
+									</label>
+									<label class="btn btn-grey">
+										<input type="radio" name="is_top" value="0" autocomplete="off">否
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12 form-horizontal">
+						<div class="form-group">
+							<label for="time" class="col-md-1 control-label">内容描述</label>
+							<div class="col-md-10">
+								<textarea name="description" class="description" style="width:700px;height:300px;visibility:hidden;"><?php echo isset($obj->description)?$obj->description:Tools::getRequest('description');?></textarea>
+							</div>
+						</div>
 					</div>
 				</div>
-				<div class="clear"></div>
-				<div class="separation"></div>
-				<table cellspacing="0" cellpadding="5" border="0">
-					<td class="col-left" valign="top"><label>内容描述: </label></td>
-					<td>
-						<div style="display:block; float: left;">
-							<textarea name="description" class="description" style="width:700px;height:300px;visibility:hidden;"><?php echo isset($obj->description)?$obj->description:Tools::getRequest('description');?></textarea>
-						</div>
-					</td>
-				</table>
-				
 			</div>
 			
 			<div id="product-tab-content-SEO" class="product-tab-content" style=" display:none">
-				<h4>SEO</h4>
-				<div class="separation"></div>
-				<table cellspacing="0" cellpadding="5" border="0">
-				 <tr>
-					<td class="col-left" valign="top"><label>Tab 标签: </label></td>
-					<td>
-					<div style="display:block; float: left;">
-						<input type="text" class="text_input" value="<?php echo isset($obj)?(Tag::tagToString($obj->id)):Tools::getRequest('tags');?>"  name="tags">
-						<span name="help_box" class="hint" style="display: none;">以","号分隔<span class="hint-pointer">&nbsp;</span></span>
+				<div class="row">
+					<div class="col-md-10 form-horizontal">
+						<div class="form-group">
+							<label for="tags" class="col-sm-2 control-label">Tag标签</label>
+							<div class="col-sm-10">
+								<div class="tagify-container">
+									<input type="text" value="<?php echo isset($obj)?(Tag::tagToString($obj->id)):Tools::getRequest('tags');?>" class="form-control" data-role="tagsinput" name="tags" >
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="meta_title" class="col-sm-2 control-label">Meta Title</label>
+							<div class="col-sm-10">
+								<input type="text" value="<?php echo isset($obj)?$obj->meta_title:Tools::getRequest('meta_title');?>" class="form-control" name="meta_title" >
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="meta_keywords" class="col-sm-2 control-label">Meta Keywords</label>
+							<div class="col-sm-10">
+								<input type="text" value="<?php echo isset($obj)?$obj->meta_keywords:Tools::getRequest('meta_keywords');?>" class="form-control" name="meta_keywords" >
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="meta_description" class="col-sm-2 control-label">Meta Description</label>
+							<div class="col-sm-10">
+								<input type="text" value="<?php echo isset($obj)?$obj->meta_description:Tools::getRequest('meta_description');?>" class="form-control" name="meta_description" >
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="rewrite" class="col-sm-2 control-label">Url Rewrite</label>
+							<div class="col-sm-10">
+								<input type="text" value="<?php echo isset($obj)?$obj->rewrite:Tools::getRequest('rewrite');?>" class="form-control" name="rewrite" id="rewrite" onkeyup="if (isArrowKey(event)) return ;generateFriendlyURL();" onchange="generateFriendlyURL();">
+							</div>
+						</div>
 					</div>
-					</td>
-				</tr><tr>
-					<td class="col-left" valign="top"><label>Meta Title: </label></td>
-					<td>
-					<div style="display:block; float: left;">
-						<input type="text" class="text_input" value="<?php echo isset($obj)?$obj->meta_title:Tools::getRequest('meta_title');?>"  name="meta_title">
-						<span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span>
-					</div>
-					</td>
-				</tr><tr>
-					<td class="col-left" valign="top"><label>Meta Keywords: </label></td>
-					<td>
-					<div style="display:block; float: left;">
-						<input type="text" class="text_input" value="<?php echo isset($obj)?$obj->meta_title:Tools::getRequest('meta_title');?>"  name="meta_title">
-						<span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span>
-					</div>
-					</td>
-				</tr><tr>
-					<td class="col-left" valign="top"><label>Meta Description: </label></td>
-					<td>
-					<div style="display:block; float: left;">
-						<textarea name="meta_description" cols="80"><?php echo isset($obj)?$obj->meta_description:Tools::getRequest('meta_description');?></textarea>
-						<span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span>
-					</div>
-					</td>
-				</tr><tr>
-					<td class="col-left" valign="top"><label>Url Rewrite: </label></td>
-					<td>
-					<div style="display:block; float: left;">
-						<input type="text" class="text_input" value="<?php echo isset($obj)?$obj->rewrite:Tools::getRequest('rewrite');?>"  name="rewrite" id="rewrite" onkeyup="if (isArrowKey(event)) return ;generateFriendlyURL();" onchange="generateFriendlyURL();">
-						<sup>*</sup>
-						<p class="preference_description">只能包含数字,字母及"-"<span class="hint-pointer">&nbsp;</span></p>
-					</div>
-					</td>
-				 </tr>
-				</table>			
+				</div>
 			</div>
 			
 			<div id="product-tab-content-Category" class="product-tab-content" style=" display:none">
-				<h4>分类</h4>
-				<div class="separation"></div>
-				<label>关联分类：</label>
-				<div class="margin-form">
-				<?php
-				$trads = array(
-					 'Home' 		=> '根分类', 
-					 'selected' 	=> '选择', 
-					 'Collapse All' => '关闭', 
-					 'Expand All' 	=> '展开',
-					 'Check All'	=> '全选',
-					 'Uncheck All'	=> '全不选'
-				);
-				if (!isset($obj))
-				{
-					$categoryBox = Tools::getRequest('categoryBox')?Tools::getRequest('categoryBox'):array();
-				}
-				else
-				{
-					if (Tools::isSubmit('categoryBox'))
-						$categoryBox = Tools::getRequest('categoryBox');
-					else
-						$categoryBox = Product::getProductCategoriesFullId($obj->id);
-				}
-				echo Helper::renderAdminCategorieTree($trads,$categoryBox, 'categoryBox', false,'Tree');
-			 ?>
-			 	<br>
-				 <a href="index.php?rule=category_edit" class="button bt-icon confirm_leave">
-					<img title="添加分类" alt="添加分类" src="<?php echo $_tmconfig['tm_img_dir'];?>icon/add.gif" style="vertical-align: bottom;">
-					<span>添加分类</span>
-				</a>
-			</div>
-			<?php
-				if (!isset($obj))
-				{
-					$selectedCat = Category::getCategoryInformations(Tools::getRequest('categoryBox'));
-				}
-				else
-				{
-					if (Tools::isSubmit('categoryBox'))
-						$selectedCat = Category::getCategoryInformations(Tools::getRequest('categoryBox'));
-					else
-						$selectedCat = Product::getProductCategoriesFull($obj->id);
-				}
-			?>
-			<label>默认分类: </label>
-			<div class="margin-form">
-				<div style="display:block; float: left;">
-					<select name="id_category_default" id="id_category_default" <?php if(!$selectedCat || count($selectedCat)==0){echo 'style="display:none"';}?>>
-					<?php
-					  if(count($selectedCat)>0)
-						foreach($selectedCat as $cat){?>
-						<option value="<?php echo $cat['id_category'];?>" <?php  echo isset($obj)&&$obj->id_category_default==$cat['id_category']?'selected="selected"':'';?>><?php echo $cat['name'];?></option>
-					<?php }?>
-					</select>
-					<div style="display:block;" id="no_default_category">默认分类需要先选择关联分类.</div>
+				<div class="row">
+					<div class="col-md-10 form-horizontal">
+						<div class="form-group">
+							<label for="categoryBox" class="col-sm-2 control-label">关联分类</label>
+							<div class="col-sm-10">
+								<?php
+								$trads = array(
+									'Home' 		=> '根分类',
+									'selected' 	=> '选择',
+									'Collapse All' => '关闭',
+									'Expand All' 	=> '展开',
+									'Check All'	=> '全选',
+									'Uncheck All'	=> '全不选'
+								);
+								if (!isset($obj))
+								{
+									$categoryBox = Tools::getRequest('categoryBox')?Tools::getRequest('categoryBox'):array();
+								}
+								else
+								{
+									if (Tools::isSubmit('categoryBox'))
+										$categoryBox = Tools::getRequest('categoryBox');
+									else
+										$categoryBox = Product::getProductCategoriesFullId($obj->id);
+								}
+								echo Helper::renderAdminCategorieTree($trads,$categoryBox, 'categoryBox', false,'Tree');
+								?>
+								<a href="index.php?rule=category_edit" class="btn btn-link bt-icon confirm_leave">
+									<span class="glyphicon glyphicon-plus"></span> 创建一个新分类 <span class="glyphicon glyphicon-new-window"></span>
+								</a>
+							</div>
+						</div>
+						<?php
+						if (!isset($obj))
+						{
+							$selectedCat = Category::getCategoryInformations(Tools::getRequest('categoryBox'));
+						}
+						else
+						{
+							if (Tools::isSubmit('categoryBox'))
+								$selectedCat = Category::getCategoryInformations(Tools::getRequest('categoryBox'));
+							else
+								$selectedCat = Product::getProductCategoriesFull($obj->id);
+						}
+						?>
+						<div class="form-group">
+							<label for="id_category_default" class="col-sm-2 control-label">默认分类</label>
+							<div class="col-sm-10">
+								<select name="id_category_default" class="form-control" id="id_category_default" <?php if(!$selectedCat || count($selectedCat)==0){echo 'style="display:none"';}?>>
+									<?php
+									if(count($selectedCat)>0)
+										foreach($selectedCat as $cat){?>
+											<option value="<?php echo $cat['id_category'];?>" <?php  echo isset($obj)&&$obj->id_category_default==$cat['id_category']?'selected="selected"':'';?>><?php echo $cat['name'];?></option>
+										<?php }?>
+								</select>
+								<p class="text-muted" id="no_default_category">默认分类需要先选择关联分类.</p>
+							</div>
+						</div>
+						<?php
+						$brandData = Brand::getEntity();
+						if($brandData){
+						$brands = $brandData['entitys'];
+						?>
+						<div class="form-group">
+							<label for="categoryBox" class="col-sm-2 control-label">品牌</label>
+							<div class="col-sm-10">
+								<select name="id_brand" class="form-control" id="id_brand">
+									<?php
+									foreach($brands as $brand){ ?>
+											<option value="<?php echo $brand['id_brand'];?>" <?php  echo isset($obj)&&$obj->id_brand==$brand['id_brand']?'selected="selected"':'';?>><?php echo $brand['name'];?></option>
+										<?php }?>
+								</select>
+							</div>
+						</div>
+						<?php } ?>
+					</div>
 				</div>
-				<sup>*</sup>
-				<div class="clear"></div>
-			</div>
-			<?php
-				$brandData = Brand::getEntity();
-				if($brandData){
-				$brands = $brandData['entitys'];
-			?>
-			<label>品牌: </label>
-			<div class="margin-form">
-				<div style="display:block; float: left;">
-					<?php
-						foreach($brands as $brand){?>
-						<input type="radio" name="id_brand" value="<?php echo $brand['id_brand'];?>" <?php  echo isset($obj)&&$obj->id_brand==$brand['id_brand']?'checked':'';?> /><?php echo $brand['name'];?><br>
-					<?php }?>
-				</div>
-				<div class="clear"></div>
-			</div>
-			<?php
-				}
-			?>
 		  </div>
 		  
 		  <div id="product-tab-content-Atrribute" class="product-tab-content" style=" display:none">
-		  	<h4>属性</h4>
-			<div class="separation"></div>
-			 <table cellspacing="0" cellpadding="5" border="0">
-				 <tr>
-					<td class="col-left" valign="top">
-				 <input type="hidden" value="" id="itemsInput" name="attribute_items">
-				  <?php $attributeGroup = AttributeGroup::getEntitys();?>
-				  <select id="availableItems" class="" multiple="multiple" style="width: 300px; height: 260px;">
-				  <?php foreach($attributeGroup['entitys'] as $group){?>
-					<optgroup id="<?php echo $group['id_attribute_group'];?>" label="<?php echo $group['name'];?>" name="<?php echo $group['id_attribute_group'];?>">
-					  <?php
-					  	 $attributegroup = new AttributeGroup((int)($group['id_attribute_group']));
-					  	 $attributes = $attributegroup->getAttributes();
-					  	 foreach($attributes as $attribute){
-						?>
-						<option value="<?php echo $attribute['id_attribute'];?>"><?php echo $attribute['name'];?></option>
-					  <?php }?>
-					 </optgroup>
-				  <?php }?>
-				  </select><br/><br/>
-				  <a style="border: 1px solid rgb(170, 170, 170); margin: 2px; padding: 2px; text-align: center; display: block; text-decoration: none; background-color: rgb(250, 250, 250); color: rgb(18, 52, 86);" id="addItem" href="#">添加到 >></a>
-					</td>
-					<td>
-					<?php
-						$groups = array();
-						if(isset($obj))	
-							$groups = Product::getAttributeAndGrop($obj->id);
-					?>
-					<select id="items" multiple="multiple" style="width: 300px; height: 260px;">
-						<?php foreach($groups as $group){?>
-						<optgroup id="<?php echo $group['id_attribute_group'];?>" label="<?php echo $group['name'];?>" name="<?php echo $group['id_attribute_group'];?>">
-						<?php foreach($group['attributes'] as $attribute){?>
-						<option value="<?php echo $attribute['id_attribute'];?>"><?php echo $attribute['name'];?></option>
-						<?php }?>
-						<?php }?>
-						</optgroup>
-					</select><br/><br/>
-					<a style="border: 1px solid rgb(170, 170, 170); margin: 2px; padding: 2px; text-align: center; display: block; text-decoration: none; background-color: rgb(250, 250, 250); color: rgb(18, 52, 86);" id="removeItem" href="#"><< 删除</a>
-						<script type="text/javascript">
-						$(document).ready(function(){
-							$("#addItem").click(add);
-							$("#availableItems").dblclick(add);
-							$("#removeItem").click(remove);
-							$("#items").dblclick(remove);
-							function add()
-							{
-								$("#availableItems option:selected").each(function(i){
-									var val = $(this).val();
-									var text = $(this).text();
-									text = text.replace(/(^\s*)|(\s*$)/gi,"");
-									if (val == "PRODUCT")
-									{
-										val = prompt("Set ID product");
-										if (val == null || val == "" || isNaN(val))
-											return;
-										text = "Product ID "+val;
-										val = "PRD"+val;
-									}
-									$("#items").append("<option value=\""+val+"\">"+text+"</option>");
-								});
-								serialize();
-								return false;
-							}
-							function remove()
-							{
-								$("#items option:selected").each(function(i){
-									$(this).remove();
-								});
-								serialize();
-								return false;
-							}
-							function serialize()
-							{
-								var options = "";
-								$("#items option").each(function(i){
-									options += $(this).val()+",";
-								});
-								$("#itemsInput").val(options.substr(0, options.length - 1));
-							}
-						});
-						</script>
-					</td>
-				</tr>
-				</table>
+			<div class="row">
+				<div class="col-md-10 form-horizontal">
+					<div class="form-group">
+						<label for="categoryBox" class="col-sm-2 control-label">商品属性</label>
+						<div class="col-sm-10">
+							<div class="col-xs-6">
+								<input type="hidden" value="" id="itemsInput" name="attribute_items">
+								<?php $attributeGroup = AttributeGroup::getEntitys();?>
+								<p>可选属性</p>
+								<select id="availableItems" class="form-control" multiple="multiple" style="height: 260px;">
+									<?php foreach($attributeGroup['entitys'] as $group){?>
+										<optgroup id="<?php echo $group['id_attribute_group'];?>" label="<?php echo $group['name'];?>" name="<?php echo $group['id_attribute_group'];?>">
+											<?php
+											$attributegroup = new AttributeGroup((int)($group['id_attribute_group']));
+											$attributes = $attributegroup->getAttributes();
+											foreach($attributes as $attribute){
+												?>
+												<option value="<?php echo $attribute['id_attribute'];?>"><?php echo $attribute['name'];?></option>
+											<?php }?>
+										</optgroup>
+									<?php }?>
+								</select><br/>
+								<a class="btn btn-default btn-block" id="addItem" href="#">添加到 <span aria-hidden="true" class="glyphicon glyphicon-arrow-right"></span></a>
+							</div>
+							<div class="col-xs-6">
+								<?php
+								$groups = array();
+								if(isset($obj))
+									$groups = Product::getAttributeAndGrop($obj->id);
+								?>
+								<p>已选属性</p>
+								<select id="items" multiple="multiple" class="form-control" style="height: 260px;">
+									<?php foreach($groups as $group){?>
+									<optgroup id="<?php echo $group['id_attribute_group'];?>" label="<?php echo $group['name'];?>" name="<?php echo $group['id_attribute_group'];?>">
+										<?php foreach($group['attributes'] as $attribute){?>
+											<option value="<?php echo $attribute['id_attribute'];?>"><?php echo $attribute['name'];?></option>
+										<?php }?>
+										<?php }?>
+									</optgroup>
+								</select><br/>
+								<a class="btn btn-default btn-block" id="removeItem" href="#"><span aria-hidden="true" class="glyphicon glyphicon-arrow-left"></span> 删除</a>
+							</div>
+						</div>
+					</div>
+					<script type="text/javascript">
+					$(document).ready(function(){
+						$("#addItem").click(add);
+						$("#availableItems").dblclick(add);
+						$("#removeItem").click(remove);
+						$("#items").dblclick(remove);
+						function add()
+						{
+							$("#availableItems option:selected").each(function(i){
+								$("#items").append("<option value=\""+$(this).val()+"\">"+$(this).text()+"</option>");
+								$(this).remove();
+							});
+							serialize();
+							return false;
+						}
+						function remove()
+						{
+							$("#items option:selected").each(function(i){
+								$("#availableItems").append("<option value=\"" + $(this).val() + "\">" + $(this).text() + "</option>");
+								$(this).remove();
+							});
+							serialize();
+							return false;
+						}
+						function serialize()
+						{
+							var options = "";
+							$("#items option").each(function(i){
+								options += $(this).val()+",";
+							});
+							$("#itemsInput").val(options.substr(0, options.length - 1));
+						}
+					});
+				</script>
+				</div>
+			</div>
 		  </div>
+
 		  
 		  <div id="product-tab-content-Image" class="product-tab-content" style=" display:none">
-		  	<h4>产品图片</h4>
 			<div class="separation"></div>
 			
 
@@ -554,9 +527,9 @@ $(document).ready(function(){
 				 }	
 			?>
 
-			$('.datetimepicker').datetimepicker({
+			$('.tmdatatimepicker').datetimepicker({
+				language: 'zh-CN',
 				container: '.container-fluid',
-				pickerPosition: 'top-left',
 				format: 'yyyy-mm-dd hh:ii'
 			});
 
