@@ -1,12 +1,14 @@
 <?php
 include_once(dirname(__FILE__)."/init.php");
 
-if(Tools::getRequest('action')=='addImage'){
+if(Tools::getRequest('action') == 'addImage'){
 	ajaxProcessAddImage();
-}elseif(Tools::getRequest('action')=='deleteProductImage'){
+}elseif(Tools::getRequest('action') == 'deleteProductImage'){
 	ajaxProcessDeleteProductImage();
-}elseif(Tools::getRequest('action')=='UpdateCover'){
+}elseif(Tools::getRequest('action') == 'UpdateCover'){
 	ajaxProcessUpdateCover();
+}elseif(Tools::getRequest('action') == 'updateImagePosition') {
+	ajaxProcessUpdatePosition();
 }
 
 
@@ -89,4 +91,27 @@ function ajaxProcessUpdateCover()
 				'confirmations'=>'更新失败！'
 		)));
 }
-?>
+
+function ajaxProcessUpdatePosition()
+{
+	$json = json_decode($_GET['json'],true);
+
+	$isOk = true;
+	foreach ($json as $id_image => $position) {
+		$image = new Image((int)$id_image);
+		$image->position = (int)$position;
+		$isOk &= $image->update();
+	}
+
+	if ($isOk) {
+		die(json_encode(array(
+			'status'=>'ok',
+			'confirmations'=>'更新成功！'
+		)));
+	} else {
+		die(json_encode(array(
+			'status'=>'error',
+			'confirmations'=>'更新失败！'
+		)));
+	}
+}

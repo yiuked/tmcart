@@ -204,7 +204,7 @@ function display_details(id)
 }
 $(document).ready(function(){
 	/*
-	* 将全选box的class设置为check-all,并添加属性data-name="子checkbox的name值"
+	* the class name must eq check-all,data-name is other checkbox name value"
 	* eg.<input type="checkbox" class="check-all" data-name="product[]">
 	* */
 	$(".check-all").click(function(){

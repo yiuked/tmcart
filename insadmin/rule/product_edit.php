@@ -101,7 +101,6 @@ $(document).ready(function(){
 	currentId = $(".productTabs a.selected").attr('id').substr(5);
 	$('.product-tab-content').hide();
 	$("#product-tab-content-"+currentId).show();
-	
 	$(".tab-page").click(function(e){
 		// currentId is the current product tab id
 		currentId = $(".productTabs a.selected").attr('id').substr(5);
@@ -118,6 +117,11 @@ $(document).ready(function(){
 			$("#product-tab-content-"+id).show();
 		}
 		return false;
+	});
+	$('.tmdatatimepicker').datetimepicker({
+		language: 'zh-CN',
+		container: '.container-fluid',
+		format: 'yyyy-mm-dd hh:ii'
 	});
 });
 </script>
@@ -370,54 +374,64 @@ $(document).ready(function(){
 						<label for="categoryBox" class="col-sm-2 control-label">商品属性</label>
 						<div class="col-sm-10">
 							<div class="col-xs-6">
-								<input type="hidden" value="" id="itemsInput" name="attribute_items">
-								<?php $attributeGroup = AttributeGroup::getEntitys();?>
+								<input type="hidden" value="" id="attribute-ids" name="attribute_items">
+								<?php
+								$groups = array();
+								if (isset($obj)) {
+									$selectedArributes = $obj->getAttributes();
+								}
+
+								$attributeGroup = AttributeGroup::getAttributeAndGrop();
+								?>
 								<p>可选属性</p>
-								<select id="availableItems" class="form-control" multiple="multiple" style="height: 260px;">
-									<?php foreach($attributeGroup['entitys'] as $group){?>
-										<optgroup id="<?php echo $group['id_attribute_group'];?>" label="<?php echo $group['name'];?>" name="<?php echo $group['id_attribute_group'];?>">
+								<select id="available-attribute" class="form-control" multiple="multiple" style="height: 260px;">
+									<?php foreach($attributeGroup as $group){?>
+										<optgroup id="available-group-<?php echo $group['id_attribute_group'];?>" label="<?php echo $group['name'];?>">
 											<?php
-											$attributegroup = new AttributeGroup((int)($group['id_attribute_group']));
-											$attributes = $attributegroup->getAttributes();
-											foreach($attributes as $attribute){
+											foreach($group['attributes'] as $attribute){
+												if (in_array($attribute['id_attribute'], $selectedArributes)) {
+													continue;
+												}
 												?>
 												<option value="<?php echo $attribute['id_attribute'];?>"><?php echo $attribute['name'];?></option>
 											<?php }?>
 										</optgroup>
 									<?php }?>
 								</select><br/>
-								<a class="btn btn-default btn-block" id="addItem" href="#">添加到 <span aria-hidden="true" class="glyphicon glyphicon-arrow-right"></span></a>
+								<a class="btn btn-default btn-block" id="add-attribute" href="#">添加到 <span aria-hidden="true" class="glyphicon glyphicon-arrow-right"></span></a>
 							</div>
 							<div class="col-xs-6">
-								<?php
-								$groups = array();
-								if(isset($obj))
-									$groups = Product::getAttributeAndGrop($obj->id);
-								?>
 								<p>已选属性</p>
-								<select id="items" multiple="multiple" class="form-control" style="height: 260px;">
-									<?php foreach($groups as $group){?>
-									<optgroup id="<?php echo $group['id_attribute_group'];?>" label="<?php echo $group['name'];?>" name="<?php echo $group['id_attribute_group'];?>">
-										<?php foreach($group['attributes'] as $attribute){?>
+								<select id="selected-attribute" multiple="multiple" class="form-control" style="height: 260px;">
+									<?php foreach($attributeGroup as $group){?>
+									<optgroup id="selected-group-<?php echo $group['id_attribute_group'];?>" label="<?php echo $group['name'];?>">
+										<?php
+										foreach($group['attributes'] as $attribute){
+											if (!in_array($attribute['id_attribute'], $selectedArributes)) {
+												continue;
+											}
+											?>
 											<option value="<?php echo $attribute['id_attribute'];?>"><?php echo $attribute['name'];?></option>
 										<?php }?>
 										<?php }?>
 									</optgroup>
 								</select><br/>
-								<a class="btn btn-default btn-block" id="removeItem" href="#"><span aria-hidden="true" class="glyphicon glyphicon-arrow-left"></span> 删除</a>
+								<a class="btn btn-default btn-block" id="remove-attribute" href="#"><span aria-hidden="true" class="glyphicon glyphicon-arrow-left"></span> 删除</a>
 							</div>
 						</div>
 					</div>
 					<script type="text/javascript">
 					$(document).ready(function(){
-						$("#addItem").click(add);
-						$("#availableItems").dblclick(add);
-						$("#removeItem").click(remove);
-						$("#items").dblclick(remove);
+						$("#add-attribute").click(add);
+						$("#available-attribute").dblclick(add);
+						$("#remove-attribute").click(remove);
+						$("#selected-attribute").dblclick(remove);
 						function add()
 						{
-							$("#availableItems option:selected").each(function(i){
-								$("#items").append("<option value=\""+$(this).val()+"\">"+$(this).text()+"</option>");
+							$("#available-attribute option:selected").each(function(i){
+								var availableGroup = $(this).parent();
+								var selectedGroup  = $("#selected-attribute").find("#" + availableGroup.attr("id").replace("available","selected"));
+								selectedGroup.append("<option value=\""+$(this).val()+"\">"+$(this).text()+"</option>");
 								$(this).remove();
 							});
 							serialize();
@@ -425,8 +439,8 @@ $(document).ready(function(){
 						}
 						function remove()
 						{
-							$("#items option:selected").each(function(i){
-								$("#availableItems").append("<option value=\"" + $(this).val() + "\">" + $(this).text() + "</option>");
+							$("#selected-attribute option:selected").each(function(i){
+								$("#available-attribute").append("<option value=\"" + $(this).val() + "\">" + $(this).text() + "</option>");
 								$(this).remove();
 							});
 							serialize();
@@ -435,10 +449,10 @@ $(document).ready(function(){
 						function serialize()
 						{
 							var options = "";
-							$("#items option").each(function(i){
+							$("#selected-attribute option").each(function(i){
 								options += $(this).val()+",";
 							});
-							$("#itemsInput").val(options.substr(0, options.length - 1));
+							$("#attribute-ids").val(options.substr(0, options.length - 1));
 						}
 					});
 				</script>
@@ -446,39 +460,30 @@ $(document).ready(function(){
 			</div>
 		  </div>
 
-		  
-		  <div id="product-tab-content-Image" class="product-tab-content" style=" display:none">
-			<div class="separation"></div>
-			
-
 <?php if(isset($id) && isset($obj)){ ?>
-	<table cellpadding="5" style="width:100%">
-		<tr>
-			<td class="col-left"><label class="file_upload_label">图片：</label></td>
-			<td style="padding-bottom:5px;">
-				<div id="file-uploader">
-					<noscript>
-						<p>请启用Javascript,否则无法上传图片.</p>
-					</noscript>
+		  <div id="product-tab-content-Image" class="product-tab-content" style=" display:none">
+			<div class="row">
+				<div class="col-md-12 form-horizontal">
+					<div class="form-group">
+						<label for="name" class="col-sm-2 control-label">图片</label>
+						<div class="col-sm-10">
+							<div id="file-uploader">
+								<noscript>
+									<p>请启用Javascript,否则无法上传图片.</p>
+								</noscript>
+							</div>
+							<div id="progressBarImage" class="progressBarImage"></div>
+							<div id="showCounter" style="display:none;"><span id="imageUpload">0</span><span id="imageTotal">0</span></div>
+							<p class="preference_description" style="clear: both;">
+								支持格式: JPG, GIF, PNG. 单个文件大小不超过2M.
+							</p>
+						</div>
+					</div>
 				</div>
-				<div id="progressBarImage" class="progressBarImage"></div>
-				<div id="showCounter" style="display:none;"><span id="imageUpload">0</span><span id="imageTotal">0</span></div>
-					<p class="preference_description" style="clear: both;">
-						支持格式: JPG, GIF, PNG. 单个文件大小不超过2M.
-					</p>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="2" style="text-align:center;">
-				<input type="hidden" name="resizer" value="auto" />
-			</td>
-		</tr>
-		<tr><td colspan="2" style="padding-bottom:10px;"><div class="separation"></div></td></tr>
-		<tr>
-			<td colspan="2">
-				<table cellspacing="0" cellpadding="0" class="table tableDnD" id="imageTable">
+				<div class="col-md-4">
+					<table cellspacing="0" cellpadding="0" class="table tableDnD" id="imageTable">
 						<thead>
-						<tr class="nodrag nodrop"> 
+						<tr class="nodrag nodrop">
 							<th style="width: 100px;">图片</th>
 							<th>排序</th>
 							<th>封面</th>
@@ -487,10 +492,13 @@ $(document).ready(function(){
 						</thead>
 						<tbody id="imageList">
 						</tbody>
-				</table>
-			</td>
-		</tr>
-	</table>
+					</table>
+				</div>
+			</div>
+			
+
+
+
 
 	<table id="lineType" style="display:none;">
 		<tr id="image_id">
@@ -502,12 +510,12 @@ $(document).ready(function(){
 			<td id="td_image_id" class="pointer dragHandle center positionImage">
 				image_position
 			</td>
-			<td class="center cover"><a href="#">
-				<img class="covered" src="<?php echo $_tmconfig['ico_dir'];?>blank.gif" alt="e" /></a>
+			<td class="center cover">
+				<span class="covered glyphicon glyphicon-remove active-toggle"></span>
 			</td>
 			<td class="center">
 				<a href="#" class="delete_product_image" >
-					<img src="<?php echo $_tmconfig['ico_dir'];?>delete.gif" alt="删除" title="删除" />
+					<span class="glyphicon glyphicon-trash" title="删除" aria-hidden="true"></span>
 				</a>
 			</td>
 		</tr>
@@ -523,15 +531,9 @@ $(document).ready(function(){
 			<?php 
 				 foreach($images as $r){
 				 	$image = new Image($r['id_image']);
-				 	echo 'imageLine('.$image->id.', "'.$image->getExistingImgPath().'", '.$image->position.', "'.(($image->cover)?'enabled':'forbbiden').'");';
+				 	echo 'imageLine('.$image->id.', "'.$image->getExistingImgPath().'", '.$image->position.', "'.(($image->cover)?'ok':'remove').'");';
 				 }	
 			?>
-
-			$('.tmdatatimepicker').datetimepicker({
-				language: 'zh-CN',
-				container: '.container-fluid',
-				format: 'yyyy-mm-dd hh:ii'
-			});
 
 			$("#imageTable").tableDnD(
 			{
@@ -620,7 +622,7 @@ $(document).ready(function(){
 						$("#" + id).remove();
 					}
 					if (cover)
-						$("#imageTable tr").eq(1).find(".covered").attr("src", "<?php echo $_tmconfig['ico_dir'];?>enabled.gif");
+						$("#imageTable tr").eq(1).find(".covered").attr("class", "<?php echo $_tmconfig['ico_dir'];?>enabled.gif");
 					$("#countImage").html(parseInt($("#countImage").html()) - 1);
 					refreshImagePositions($("#imageTable"));
 					
@@ -646,13 +648,13 @@ $(document).ready(function(){
 			$('.covered').off().on('click', function(e)
 			{
 				e.preventDefault();
-				id = $(this).parent().parent().parent().attr('id');
-				$("#imageList .cover img").each( function(i){
-					$(this).attr("src", $(this).attr("src").replace("enabled", "forbbiden"));
+				id = $(this).parent().parent().attr('id');
+				$("#imageList .cover span").each( function(i){
+					$(this).attr("class", $(this).attr("class").replace("ok", "remove"));
 				});
-				$(this).attr("src", $(this).attr("src").replace("forbbiden", "enabled"));
+				$(this).attr("class", $(this).attr("class").replace("remove", "ok"));
 
-				$(this).parent().parent().parent().children('td input').attr('check', true);
+				$(this).parent().parent().children('td input').attr('check', true);
 				doAdminAjax({
 					"action":"UpdateCover",
 					"id_image":id,
@@ -662,33 +664,14 @@ $(document).ready(function(){
 				
 			});
 			
-			$('.image_shop').off().on('click', function()
-			{
-				active = false;
-				if ($(this).attr("checked"))
-					active = true;
-				id = $(this).parent().parent().attr('id');
-				id_shop = $(this).attr("id").replace(id, "");
-				doAdminAjax(
-				{
-					"action":"UpdateProductImageShopAsso",
-					"id_image":id,
-					"active":active,
-					"tab" : "AdminProducts",
-					"ajax" : 1 
-				});
-			});
-			
 			//function	
-			function updateImagePosition(json)
-			{
-				doAdminAjax(
-				{
+			function updateImagePosition(json) {
+				doAdminAjax({
 					"action":"updateImagePosition",
 					"json":json,
 					"tab" : "AdminProducts",
-					"ajax" : 1
-				});
+					"ajax" : 1},'public/ajax-img.php'
+				);
 	
 			}
 			
@@ -705,7 +688,7 @@ $(document).ready(function(){
 			    line = line.replace(/en-default/g, path);
 			    line = line.replace(/image_path/g, path);
 				line = line.replace(/image_position/g, position);
-				line = line.replace(/blank/g, cover);
+				line = line.replace(/remove/g, cover);
 				line = line.replace("<tbody>", "");
 				line = line.replace("</tbody>", "");
 				$("#imageList").append(line);

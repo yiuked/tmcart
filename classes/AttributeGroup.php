@@ -80,6 +80,26 @@ class AttributeGroup extends ObjectBase{
 				   ORDER BY position ASC
 		');
 	}
+
+	public static function getAttributeAndGrop()
+	{
+		$attributes = array();
+		$result = Db::getInstance()->ExecuteS('SELECT a.id_attribute,a.`name`,a.id_attribute_group,g.`name` AS g_name
+			FROM '._DB_PREFIX_.'attribute AS a
+			LEFT JOIN '._DB_PREFIX_.'attribute_group AS g ON a.id_attribute_group = g.id_attribute_group
+			ORDER BY a.position ASC');
+		if(!$result)
+			return $attributes;
+
+		foreach($result as $row){
+			$attributes[$row['id_attribute_group']]['id_attribute_group'] = $row['id_attribute_group'];
+			$attributes[$row['id_attribute_group']]['name'] = $row['g_name'];
+			$attributes[$row['id_attribute_group']]['attributes'][$row['id_attribute']]['id_attribute'] = $row['id_attribute'];
+			$attributes[$row['id_attribute_group']]['attributes'][$row['id_attribute']]['id_attribute_product'] = $row['id_attribute_product'];
+			$attributes[$row['id_attribute_group']]['attributes'][$row['id_attribute']]['name'] = $row['name'];
+		}
+		return 	$attributes;
+	}
 	
 	public static function getLastPosition()
 	{
