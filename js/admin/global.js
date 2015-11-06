@@ -119,12 +119,6 @@ if (typeof helpboxes != 'undefined' && helpboxes)
 	});
 }
 
-function checkDelBoxes(pForm, boxName, parent)
-{
-	for (i = 0; i < pForm.elements.length; i++)
-		if (pForm.elements[i].name == boxName)
-			pForm.elements[i].checked = parent;
-}
 /** display a success message in a #ajax_confirmation container
  * @param string msg string to display
  */
@@ -202,6 +196,26 @@ function display_details(id)
 							}
 		);
 }
+function setToggle(e,object,key,id)
+{
+	$.ajax({
+		url: 'public/ajax.php',
+		cache: false,
+		data: "toggle=" + object + "&key=" + key + "&id=" + id,
+		dataType: "json",
+		success: function(data)
+		{
+			if (data.status == 'YES') {
+				if (e.attr('class').indexOf('ok') > 0 ) {
+					e.attr('class', e.attr('class').replace('ok', 'remove'))
+				} else {
+					e.attr('class', e.attr('class').replace('remove', 'ok'))
+				}
+			}
+		}
+	});
+};
+
 $(document).ready(function(){
 	/*
 	* the class name must eq check-all,data-name is other checkbox name value"
@@ -214,4 +228,3 @@ $(document).ready(function(){
 		})
 	})
 })
-// JavaScript Document

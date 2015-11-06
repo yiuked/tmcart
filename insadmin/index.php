@@ -128,12 +128,10 @@
 	</nav>
 </header>
 <div class="container-fluid">
-	<div class="row">
 		<?php
 			$rule = Tools::getRequest('rule');
 			require_once(_TM_ADMIN_DIR_.'/rule/'.($rule?$rule:'index').'.php');
 		?>
-	</div>
 </div>
 <div id="footer">
 	<div class="version"><b>Version:TM Shop <?php echo _TM_VERSION_;?></b></div>

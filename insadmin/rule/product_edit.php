@@ -21,10 +21,6 @@
 <!--//head-->
 <div class="col-md-12">
 <?php
-$adminBrand = new AdminBreadcrumb();
-$adminBrand->add('product','商品');
-echo $adminBrand->last('商品编辑');
-
 if(isset($_POST['sveProduct']) && Tools::getRequest('sveProduct')=='add')
 {
 	$product = new Product();
@@ -65,19 +61,34 @@ if(isset($_POST['sveProduct']) && Tools::getRequest('sveProduct')=='edit')
 }
 require_once(_TM_ADMIN_DIR_.'/errors.php');
 ?>
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="col-md-6">
+					<?php
+					echo AdminBreadcrumb::getInstance()->home()
+						->add(array('href' => 'index.php?rule=product', 'title' => '商品'))
+						->add(array('title' => '编辑', 'active' => true))
+						->generate();
+					?>
+				</div>
+				<div class="col-md-6">
+					<div class="btn-group pull-right" role="group">
+						<a href="<?php echo $link->getPage('ProductView',$obj->id);?>"  class="btn btn-warning" target="_blank">
+							<span aria-hidden="true" class="glyphicon glyphicon-eye-open"></span> 浏览</a>
+						<a href="index.php?rule=product"  class="btn btn-primary"><span aria-hidden="true" class="glyphicon glyphicon-level-up"></span> 返回</a>
+					</div>
 
-<div class="action-group">
-	<div class="btn-group pull-right" role="group">
-	  <a href="<?php echo $link->getPage('ProductView',$obj->id);?>"  class="btn btn-warning" target="_blank">
-		  <span aria-hidden="true" class="glyphicon glyphicon-eye-open"></span> 浏览</a>
-		<a href="index.php?rule=product"  class="btn btn-primary"><span aria-hidden="true" class="glyphicon glyphicon-level-up"></span> 返回</a>
+					<div class="btn-group save-group pull-right" role="group">
+						<a href="javascript:void(0)"  class="btn btn-success" id="desc-product-save"><span aria-hidden="true" class="glyphicon glyphicon-floppy-saved"></span> 保存</a>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
-	
-	<div class="btn-group save-group pull-right" role="group">
-		<a href="javascript:void(0)"  class="btn btn-success" id="desc-product-save"><span aria-hidden="true" class="glyphicon glyphicon-floppy-saved"></span> 保存</a>
-	</div>
-	<div class="clearfix"></div>
 </div>
+
 <script language="javascript">
 	$("#desc-product-save").click(function(){
 		$("#product_form").submit();
@@ -440,7 +451,9 @@ $(document).ready(function(){
 						function remove()
 						{
 							$("#selected-attribute option:selected").each(function(i){
-								$("#available-attribute").append("<option value=\"" + $(this).val() + "\">" + $(this).text() + "</option>");
+								var selectedGroup = $(this).parent();
+								var availableGroup  = $("#available-attribute").find("#" + selectedGroup.attr("id").replace("selected","available"));
+								availableGroup.append("<option value=\""+$(this).val()+"\">"+$(this).text()+"</option>");
 								$(this).remove();
 							});
 							serialize();

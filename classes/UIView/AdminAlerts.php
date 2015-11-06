@@ -24,5 +24,48 @@
 
 class AdminAlerts
 {
+    public static function conf($msg, $return = false)
+    {
+        $html = self::msg($msg, 'bg-success');
+        if ($return) {
+            return $html;
+        } else {
+            echo $html;
+        }
+    }
 
+    public static function MError($errors = array(), $return = false)
+    {
+        if (count($errors) == 0) {
+            return;
+        }
+
+        $msg = '<p>发现 '. count($errors) .' 处错误</p>';
+        $msg .= '<ol>';
+        foreach ($errors as $error) {
+            $msg .= '<li>' .$error. '</li>';
+        }
+        $msg .= '</ol>';
+        $html = '<div class="row"><div class="col-md-12"><div class="bg-danger alert">' . $msg . '</div></div></div>';
+
+        if ($return) {
+            return $html;
+        } else {
+            echo $html;
+        }
+    }
+
+    /**
+     * the type value:
+     * bg-primary
+     * bg-success
+     * bg-info
+     * bg-warning
+     * bg-danger
+     * */
+    public static function msg($msg, $type)
+    {
+        $html = '<div class="row"><div class="col-md-12"><p class="' . $type . ' alert">' . $msg . '</p></div></div>';
+        return $html;
+    }
 }

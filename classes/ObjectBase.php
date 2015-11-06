@@ -68,16 +68,13 @@ abstract class ObjectBase{
 	 */
 	public function statusSelection($ids,$action)
 	{
-		$return = 1;
-		foreach ($ids AS $id)
-		{
-			$obj_name = get_class($this);
-			$obj = new $obj_name;
-			$obj->id = $id;
-			$obj->load();
-			$return &= $obj->toggleStatus($action);
-		}
-		return $return;
+		if (!Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
+			die('Fatal error:Object not exist!');
+
+		return Db::getInstance()->Execute('
+			UPDATE `' . _DB_PREFIX_ . $this->table .'`
+			SET `active`= ' . (int)$action . '
+			WHERE `' . $this->identifier . '` IN(' . implode(',', array_map('intval',$ids)) . ')');
 	}
 	
 	/**
@@ -208,7 +205,7 @@ abstract class ObjectBase{
 	 *
 	 * return boolean Update result
 	 */
-	public function toggleStatus($default=NULL)
+	public function toggle($key = 'active')
 	{
 	 	if (!Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
 	 		die('Fatal error:Object not exist!');
@@ -218,7 +215,7 @@ abstract class ObjectBase{
 	 		die('Fatal error:No field \'active\'');
 
 	 	/* Update active status on object */
-	 	$this->active = is_null($default)?(int)(!$this->active):(int)($default);
+	 	$this->active = $this->active > 0 ? 0 : 1;
 
 		/* Change status to active/inactive */
 		return Db::getInstance()->Execute('

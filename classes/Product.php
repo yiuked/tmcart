@@ -558,7 +558,7 @@ class Product extends ObjectBase{
 		return $result;
 	}
 
-	public function toggle($key,$default=NULL)
+	public function toggle($key = 'active')
 	{
 	 	if (!Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
 	 		die('Fatal error:Object not exist!');
@@ -568,7 +568,7 @@ class Product extends ObjectBase{
 	 		die('Fatal error:No field \''.$key.'\'');
 
 	 	/* Update active status on object */
-	 	$this->{$key} = is_null($default)?(int)(!$this->{$key}):(int)($default);
+	 	$this->{$key} = $this->{$key} > 0 ? 0 : 1;
 
 		/* Change status to active/inactive */
 		return Db::getInstance()->Execute('

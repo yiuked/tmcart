@@ -24,28 +24,45 @@
 
 class AdminBreadcrumb
 {
-    private $steps = array();
-    private $home;
+    private $breadcrumbs = array();
+    private $customClass = 'custom';
 
-    public function add($rule,$title)
+
+    public static function getInstance()
     {
-        $this->steps[$rule] = $title;
+        $breadcrumb = new AdminBreadcrumb();
+        return $breadcrumb;
+    }
+    public function home()
+    {
+        $array = array(
+          'href' => 'index.php',
+          'title'=> '面板',
+            'icon' => 'home'
+        );
+        $this->breadcrumbs[] = $array;
+        return $this;
+    }
+    public function add($array)
+    {
+        $this->breadcrumbs[] = $array;
         return $this;
     }
 
-    public function last($title)
+    public function setCustomClass($customClass)
     {
-        $html = '<ol class="breadcrumb">';
-        if (empty($this->home)) {
-            $html .= '<li><a href="index.php">后台首页</a></li>';
-        } else {
-            $html .= '<li><a href="index.php">' . $home . '</a></li>';
-        }
-        foreach ($this->steps as $rule => $title) {
-            $html .= '<li><a href="index.php?rule=' . $rule . '">' .$title. '</a></li>';
-        }
+        $this->customClass = $customClass;
+    }
 
-        $html .= '<li class="active">' .$title. '</li>';
+    public function generate()
+    {
+        $html = '<ol class="breadcrumb ' . (!empty($this->customClass) ? $this->customClass : '') . '">';
+        foreach ($this->breadcrumbs as $breadcrumb) {
+            $html .= '<li' .(isset($breadcrumb['active']) ? ' class="active"' : '').'>';
+            $html .= (isset($breadcrumb['icon']) ? '<span class="glyphicon glyphicon-' . $breadcrumb['icon']  . '"></span> ':'');
+            $html .= (isset($breadcrumb['href']) ? '<a href="' . $breadcrumb['href']  . '">' . $breadcrumb['title']  . '</a>':$breadcrumb['title']);
+            $html .= '</li>';
+        }
         $html .= '</ol>';
         return $html;
     }

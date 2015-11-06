@@ -226,7 +226,7 @@ class Category extends ObjectBase{
 		}
 		
 		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'category`
-		WHERE 1 '.($active?' `active`=1 AND':'').'
+		WHERE `id_parent` = '.(int)($this->id).' '.($active?' `active`=1 AND':'').'
 		'.$where);
 
 		$result = Db::getInstance()->ExecuteS('

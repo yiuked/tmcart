@@ -19,7 +19,7 @@ if(isset($_POST['sveCategory']) && Tools::getRequest('sveCategory')=='add')
 		$errors = $cmscategory->_errors;
 	}else{
 		$_GET['id']	= $cmscategory->id;
-		echo '<div class="conf">创建分类成功</div>';
+		AdminAlerts::conf('创建分类成功');
 	}
 }
 
@@ -42,156 +42,141 @@ if(isset($_POST['sveCategory']) && Tools::getRequest('sveCategory')=='edit')
 	if(is_array($obj->_errors) AND count($obj->_errors)>0){
 		$errors = $obj->_errors;
 	}else{
-		echo '<div class="conf">更新分类成功</div>';
+		AdminAlerts::conf('更新分类成功');
 	}
  
 }
-require_once(_TM_ADMIN_DIR_.'/errors.php');
+if (isset($errors)) {
+	AdminAlerts::MError($errors);
+}
+
 ?>
-<div class="path_bar">
-  <div class="path_title">
-    <h3> 
-		<span style="font-weight: normal;" id="current_obj">
-		<span class="breadcrumb item-1 ">CMS<img src="<?php echo $_tmconfig['tm_img_dir'];?>admin/separator_breadcrum.png" style="margin-right:5px" alt="&gt;"> </span>
-		<span class="breadcrumb item-1 ">分类<img src="<?php echo $_tmconfig['tm_img_dir'];?>admin/separator_breadcrum.png" style="margin-right:5px" alt="&gt;"> </span> 
-		<span class="breadcrumb item-2 ">编辑 </span> </span> 
-	</h3>
-    <div class="cc_button">
-      <ul>
-        <li> <a title="Save" href="#" class="toolbar_btn" id="desc-product-save"> <span class="process-icon-save "></span>
-          <div>保存</div>
-          </a> </li>
-        <li> <a title="Back to list" href="javascript:history.back();" class="toolbar_btn" id="desc-product-back"> <span class="process-icon-back "></span>
-          <div>返回列表</div>
-          </a> </li>
-      </ul>
-    </div>
-  </div>
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="col-md-6">
+				<?php
+				echo AdminBreadcrumb::getInstance()->home()
+					->add(array('href' => 'index.php?rule=category', 'title' => '分类'))
+					->add(array('title' => '编辑', 'active' => true))
+					->generate();
+				?>
+				</div>
+				<div class="col-md-6">
+					<div class="btn-group pull-right" role="group">
+						<a href="index.php?rule=category"  class="btn btn-primary"><span aria-hidden="true" class="glyphicon glyphicon-level-up"></span> 返回</a>
+					</div>
+
+					<div class="btn-group save-group pull-right" role="group">
+						<a href="javascript:void(0)"  class="btn btn-success" id="submit-form"><span aria-hidden="true" class="glyphicon glyphicon-floppy-saved"></span> 保存</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <script language="javascript">
-	$("#desc-product-save").click(function(){
+	$("#submit-form").click(function(){
 		$("#cms_category_form").submit();
 	})
 </script>
-<div class="mianForm">
-	<form enctype="multipart/form-data" method="post" action="index.php?rule=category_edit<?php echo isset($id)?'&id='.$id:''?>" class="defaultForm admincmscontent" id="cms_category_form" name="example">
-		  <fieldset>
-  			<legend> <img alt="CMS 分类" src="<?php echo $_tmconfig['tm_img_dir'];?>icon/category.png">分类</legend>
-			<label>分类名: </label>
-			<div class="margin-form">
-				<div style="display:block; float: left;">
-					<input type="text" class="text_input" value="<?php echo isset($obj)?$obj->name:Tools::getRequest('name');?>"  name="name" id="name" onkeyup="if (isArrowKey(event)) return ;copy2friendlyURL();" onchange="copy2friendlyURL();">
-					<span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span>
+<div class="panel panel-default">
+	<div class="panel-body">
+		<div class="col-md-10 form-horizontal">
+			<form enctype="multipart/form-data" method="post" action="index.php?rule=category_edit<?php echo isset($id)?'&id='.$id:''?>" class="defaultForm admincmscontent" id="cms_category_form" name="example">
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">名称</label>
+					<div class="col-sm-10">
+						<input type="text" value="<?php echo isset($obj)?$obj->name:Tools::getRequest('name');?>" id="name" class="form-control" name="name" size="60" onkeyup="if (isArrowKey(event)) return ;copy2friendlyURL();" onchange="copy2friendlyURL();">
+					</div>
 				</div>
-				<sup>*</sup>
-				<div class="clear"></div>
-			</div>
-			<label>状态: </label>
-			<div class="margin-form">
-					<input type="radio" checked="checked" value="1" id="active_on" name="active">
-					<label for="active_on" class="t">
-						<img title="Enabled" alt="Enabled" src="<?php echo $_tmconfig['ico_dir'];?>enabled.gif">
-					</label>
-					<input type="radio" value="0" id="active_off" name="active">
-					<label for="active_off" class="t">
-						<img title="Disabled" alt="Disabled" src="<?php echo $_tmconfig['ico_dir'];?>disabled.gif">
-					</label>
-			</div>
-			<label>所属分类：</label>
-				<div class="margin-form">
-				<?php
-				$trads = array(
-					 'Home' => '根分类', 
-					 'selected' => '选择', 
-					 'Collapse All' => '关闭', 
-					 'Expand All' => '展开'
-				);
-				echo Helper::renderAdminCategorieTree($trads, array(isset($obj)?$obj->id_parent:1), 'id_parent', true,'Tree');
-			 ?>
-			 
-			 
-			</div>
-			<label>Meta Title: </label>
-			<div class="margin-form">
-				<div style="display:block; float: left;">
-					<input type="text" class="text_input" value="<?php echo isset($obj)?$obj->meta_title:Tools::getRequest('meta_title');?>"  name="meta_title">
-					<span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span>
+				<div class="form-group">
+					<label for="time" class="col-sm-2 control-label">状态</label>
+					<div class="col-sm-6">
+						<div class="btn-group" data-toggle="buttons">
+							<label class="btn btn-grey enabled<?php echo isset($obj)&&$obj->active==1?' active':(Tools::getRequest('active')==1?' active':'');?>">
+								<input type="radio" name="active" value="1" autocomplete="off" >启用
+							</label>
+							<label class="btn btn-grey">
+								<input type="radio" name="active" value="0" autocomplete="off">关闭
+							</label>
+						</div>
+					</div>
 				</div>
-				<div class="clear"></div>
-			</div>
-			<label>Meta Keywords: </label>
-			<div class="margin-form">
-				<div style="display:block; float: left;">
-					<input type="text" class="text_input" value="<?php echo isset($obj)?$obj->meta_keywords:Tools::getRequest('meta_keywords');?>"  name="meta_keywords">
-					<span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span>
+				<div class="form-group">
+					<label for="categoryBox" class="col-sm-2 control-label">关联分类</label>
+					<div class="col-sm-10">
+						<?php
+						$trads = array(
+							'Home' => '根分类',
+							'selected' => '选择',
+							'Collapse All' => '关闭',
+							'Expand All' => '展开'
+						);
+						echo Helper::renderAdminCategorieTree($trads, array(isset($obj)?$obj->id_parent:1), 'id_parent', true,'Tree');
+						?>
+					</div>
 				</div>
-				<div class="clear"></div>
-			</div>
-			<label>Meta Description: </label>
-			<div class="margin-form">
-				<div style="display:block; float: left;">
-					<input type="text" class="text_input" value="<?php echo isset($obj)?$obj->meta_description:Tools::getRequest('meta_description');?>"  name="meta_description">
-					<span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span>
+				<div class="form-group">
+					<label for="meta_title" class="col-sm-2 control-label">Meta Title</label>
+					<div class="col-sm-10">
+						<input type="text" value="<?php echo isset($obj)?$obj->meta_title:Tools::getRequest('meta_title');?>" class="form-control" name="meta_title" >
+					</div>
 				</div>
-				<div class="clear"></div>
-			</div>
-			<label>友好URL链接: </label>
-			<div class="margin-form">
-				<div style="display:block; float: left;">
-					<input type="text" class="text_input" value="<?php echo isset($obj)?$obj->rewrite:Tools::getRequest('rewrite');?>"  id="rewrite" name="rewrite" onkeyup="if (isArrowKey(event)) return ;generateFriendlyURL();" onchange="generateFriendlyURL();">
-					<span name="help_box" class="hint" style="display: none;">只能包含数字,字母及"-"<span class="hint-pointer">&nbsp;</span></span>
+				<div class="form-group">
+					<label for="meta_keywords" class="col-sm-2 control-label">Meta Keywords</label>
+					<div class="col-sm-10">
+						<input type="text" value="<?php echo isset($obj)?$obj->meta_keywords:Tools::getRequest('meta_keywords');?>" class="form-control" name="meta_keywords" >
+					</div>
 				</div>
-				<sup>*</sup>
-				<div class="clear"></div>
-			</div>
-		<script>
-			KindEditor.ready(function(K) {
-				var editor1 = K.create('textarea[name="description"]', {
-					cssPath : '../js/kindeditor/plugins/code/prettify.css',
-					uploadJson : '../js/kindeditor/php/upload_json.php',
-					fileManagerJson : '../js/kindeditor/php/file_manager_json.php',
-					allowFileManager : true,
-					afterCreate: function () {
-						this.sync();
-					},
-					afterBlur: function () {
-						this.sync();
-					}
-				});
-			});
-		</script>
-			<label>内容描述: </label>
-			<div class="margin-form">
-				<div style="display:block; float: left;">
-					<textarea name="description" style="width:800px;height:400px;visibility:hidden;"><?php echo isset($obj)?$obj->description:Tools::getRequest('description');?></textarea>
+				<div class="form-group">
+					<label for="meta_description" class="col-sm-2 control-label">Meta Description</label>
+					<div class="col-sm-10">
+						<input type="text" value="<?php echo isset($obj)?$obj->meta_description:Tools::getRequest('meta_description');?>" class="form-control" name="meta_description" >
+					</div>
 				</div>
-				<div class="clear"></div>
-			</div>
-		<script type="text/javascript">
-			$(function() {
-				if ($(".datepicker").length > 0)
-					$(".datepicker").datepicker({
-						prevText: '',
-						nextText: '',
-						dateFormat: 'yy-mm-dd'
+				<div class="form-group">
+					<label for="rewrite" class="col-sm-2 control-label">Url Rewrite</label>
+					<div class="col-sm-10">
+						<input type="text" value="<?php echo isset($obj)?$obj->rewrite:Tools::getRequest('rewrite');?>" class="form-control" name="rewrite" id="rewrite" onkeyup="if (isArrowKey(event)) return ;generateFriendlyURL();" onchange="generateFriendlyURL();">
+					</div>
+				</div>
+				<script>
+					KindEditor.ready(function(K) {
+						var editor1 = K.create('textarea[name="description"]', {
+							cssPath : '../js/kindeditor/plugins/code/prettify.css',
+							uploadJson : '../js/kindeditor/php/upload_json.php',
+							fileManagerJson : '../js/kindeditor/php/file_manager_json.php',
+							allowFileManager : true,
+							afterCreate: function () {
+								this.sync();
+							},
+							afterBlur: function () {
+								this.sync();
+							}
+						});
 					});
-			});
-		</script>
-			<label>添加时间: </label>
-			<div class="margin-form">
-				<div style="display:block; float: left;">
-					<input type="text" class="text_input_sort datepicker" value="<?php echo isset($obj)?$obj->add_date:Tools::getRequest('add_date');?>"  name="add_date">
+				</script>
+				<div class="form-group">
+					<label for="rewrite" class="col-sm-2 control-label">描述</label>
+					<div class="col-sm-10">
+							<textarea name="description" style="width:800px;height:400px;visibility:hidden;"><?php echo isset($obj)?$obj->description:Tools::getRequest('description');?></textarea>
+					</div>
 				</div>
-				<div class="clear"></div>
-			</div>
-			<label>修改时间: </label>
-			<div class="margin-form">
-				<div style="display:block; float: left;">
-					<input type="text" class="text_input_sort datepicker" value="<?php echo isset($obj)?$obj->upd_date:Tools::getRequest('upd_date');?>"  name="upd_date">
-				</div>
-				<div class="clear"></div>
-			</div>
-			<input type="hidden" value="<?php echo isset($id)?'edit':'add'?>"  name="sveCategory">
-		  </fieldset>
-	</form>
+				<script type="text/javascript">
+					$(function() {
+						if ($(".datepicker").length > 0)
+							$(".datepicker").datepicker({
+								prevText: '',
+								nextText: '',
+								dateFormat: 'yy-mm-dd'
+							});
+					});
+				</script>
+				<input type="hidden" value="<?php echo isset($id)?'edit':'add'?>"  name="sveCategory">
+			</form>
+		</div>
+	</div>
 </div>
+

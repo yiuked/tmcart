@@ -1,13 +1,19 @@
 <?php
 include_once(dirname(__FILE__)."/init.php");
-if(isset($_GET['toggle'])&&$_GET['toggle']=='product')
+if(isset($_GET['toggle']))
 {
-	$fields = array('active','in_stock','is_new','is_sale','is_top');
-	$key    = $_GET['key'];
-	$value  = (int)$_GET['value'];
-	if(in_array($key,$fields)){
-		$product = new Product($value);
-		if($product->toggle($key))
+	$fields = array(
+		'Product' => array('active','in_stock','is_new','is_sale','is_top'),
+		'Category'=> array('active')
+	);
+
+	$key    = Tools::G('key');
+	$object = Tools::G('toggle');
+	$id  	= Tools::G('id');
+
+	if (isset($fields[$object]) && in_array($key,$fields[$object])){
+		$entity = new $object($id);
+		if($entity->toggle($key))
 		{
 			die(json_encode(array("status"=>"YES")));
 		}

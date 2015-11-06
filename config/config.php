@@ -17,7 +17,7 @@ define('_COOKIE_IV_', '5DvPoNt2');
 
 
 /*基本设置*/
-@ini_set('display_errors', 'off');
+@ini_set('display_errors', 'on');
 date_default_timezone_set('PRC');
 define('_TM_MODE_DEV_', false);
 

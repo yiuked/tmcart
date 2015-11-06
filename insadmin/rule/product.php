@@ -83,25 +83,6 @@ require_once(_TM_ADMIN_DIR_.'/errors.php');
 				}
 			});
 		});
-		function ajaxToggle (obj,key,value)
-		{
-			$.ajax({
-				url: 'public/ajax.php',
-				cache: false,
-				data: "toggle=product&key="+key+"&value="+value,
-				dataType: "json",
-				success: function(data)
-				{
-					if(data.status=='YES'){
-						if(obj.src.indexOf('enabled')>0){
-							obj.src = obj.src.replace('enabled','disabled');
-						}else{
-							obj.src = obj.src.replace('disabled','enabled');
-						}
-					}
-				}
-			});
-		};
 	</script>
 	<ul class="list-group brand-group">
 		<li class="list-group-item active">检索分类</li>
@@ -139,7 +120,7 @@ require_once(_TM_ADMIN_DIR_.'/errors.php');
 </div>
 <div class="col-md-10 col-md-offset-2">
 	<form class="form" method="post" action="index.php?rule=product">
-		<table class="table table-bordered" width="100%">
+		<table class="table table-bordered table-hover" width="100%">
 			<thead>
 			<tr>
 				<th><input type="checkbox" name="checkme" data-name="productBox[]" class="check-all" ></th>
@@ -235,7 +216,7 @@ require_once(_TM_ADMIN_DIR_.'/errors.php');
 						<span aria-hidden="true" class="glyphicon glyphicon-sort-by-order"></span>
 					</a>
 				</th>
-				<th align="right" >操作</th>
+				<th clas="text-right" >操作</th>
 			</tr>
 			<tr>
 				<td class="center"> -- </td>
@@ -300,25 +281,25 @@ require_once(_TM_ADMIN_DIR_.'/errors.php');
 						<td><input type="text" name="change_price_<?php echo $row['id_product'];?>" value="<?php echo $row['price'];?>" class="price_value" size="10"/></td>
 						<td><input type="text" name="change_special_price_<?php echo $row['id_product'];?>" value="<?php echo $row['special_price'];?>" class="special_price_value" size="10"/></td>
 						<td class="pointer text-center">
-							<span onclick="ajaxToggle(this,'active',<?php echo $row['id_product'];?>)" class="glyphicon glyphicon-<?php echo ($row['active']?'ok':'remove');?> active-toggle"></span>
+							<span onclick="setToggle($(this), 'Product', 'active', <?php echo $row['id_product'];?>)" class="glyphicon glyphicon-<?php echo ($row['active']?'ok':'remove');?> active-toggle"></span>
 						</td>
 						<td class="pointer text-center">
-							<span onclick="ajaxToggle(this,'in_stock',<?php echo $row['id_product'];?>)" class="glyphicon glyphicon-<?php echo ($row['in_stock']?'ok':'remove');?> active-toggle"></span>
+							<span onclick="setToggle($(this), 'Product', 'in_stock',<?php echo $row['id_product'];?>)" class="glyphicon glyphicon-<?php echo ($row['in_stock']?'ok':'remove');?> active-toggle"></span>
 						</td>
 						<td class="pointer text-center">
-							<span onclick="ajaxToggle(this,'is_new',<?php echo $row['id_product'];?>)" class="glyphicon glyphicon-<?php echo ($row['is_new']?'ok':'remove');?> active-toggle"></span>
+							<span onclick="setToggle($(this), 'Product', 'is_new',<?php echo $row['id_product'];?>)" class="glyphicon glyphicon-<?php echo ($row['is_new']?'ok':'remove');?> active-toggle"></span>
 						</td>
 						<td class="pointer text-center">
-							<span onclick="ajaxToggle(this,'is_sale',<?php echo $row['id_product'];?>)" class="glyphicon glyphicon-<?php echo ($row['is_sale']?'ok':'remove');?> active-toggle"></span>
+							<span onclick="setToggle($(this), 'Product', 'is_sale',<?php echo $row['id_product'];?>)" class="glyphicon glyphicon-<?php echo ($row['is_sale']?'ok':'remove');?> active-toggle"></span>
 						</td>
 						<td class="pointer text-center">
-							<span onclick="ajaxToggle(this,'is_top',<?php echo $row['id_product'];?>)" class="glyphicon glyphicon-<?php echo ($row['is_top']?'ok':'remove');?> active-toggle"></span>
+							<span onclick="setToggle($(this), 'Product', 'is_top',<?php echo $row['id_product'];?>)" class="glyphicon glyphicon-<?php echo ($row['is_top']?'ok':'remove');?> active-toggle"></span>
 						</td>
 						<td align="right">
 							<div class="btn-group">
-								<a target="_blank" href="<?php echo Tools::getLink($row['rewrite']);?>" aria-label="Left Align" class="btn btn-default"><span aria-hidden="true" title="预览" class="glyphicon glyphicon-file"></span></a>
-								<a href="index.php?rule=product_edit&id=<?php echo $row['id_product'];?>" aria-label="Center Align" class="btn btn-default"><span aria-hidden="true" title="编辑" class="glyphicon glyphicon-edit"></span></a>
-								<a onclick="return confirm('你确定要删除？')" href="index.php?rule=product&delete=<?php echo $row['id_product'];?>" aria-label="Justify" class="btn btn-default"><span aria-hidden="true" title="删除"  class="glyphicon glyphicon-trash"></span></a>
+								<a target="_blank" href="<?php echo Tools::getLink($row['rewrite']);?>" class="btn btn-default"><span aria-hidden="true" title="预览" class="glyphicon glyphicon-file"></span></a>
+								<a href="index.php?rule=product_edit&id=<?php echo $row['id_product'];?>" class="btn btn-default"><span aria-hidden="true" title="编辑" class="glyphicon glyphicon-edit"></span></a>
+								<a onclick="return confirm('你确定要删除？')" href="index.php?rule=product&delete=<?php echo $row['id_product'];?>" class="btn btn-default"><span aria-hidden="true" title="删除"  class="glyphicon glyphicon-trash"></span></a>
 							</div>
 						</td>
 					</tr>
@@ -328,33 +309,32 @@ require_once(_TM_ADMIN_DIR_.'/errors.php');
 				<tr><td colspan="5" align="center">暂无内容</td></tr>
 			<?php }?>
 		</table>
-<!--
-		<span>
-			<input type="submit" class="button" value="检索" name="submitFilter" id="submitFilterButtonProduct">
-			<input type="submit" class="button" value="重置" name="submitResetProduct">
-		</span>
-		-->
-			<div class="btn-group" role="group" >
-				<button type="submit" class="btn btn-default" onclick="return confirm('你确定要删除选中项目?');" name="subDelete">批量删除</button>
-				<button type="submit" class="btn btn-default" name="subActiveON">批量启用</button>
-				<button type="submit" class="btn btn-default" name="subActiveOFF">批量关闭</button>
-			</div>
 
-
-			<nav>
-				<div class="page-number pull-left">
-					<span class="page-number-title pull-left">共 <strong><?php echo $result['total'];?></strong> 个产品,每页显示</span>
-					<select onchange="submit()" name="pagination" class="form-control page-number-select pull-left">
-						<option value="20" <?php if($limit==20){echo 'selected="selected"';}?>>20</option>
-						<option value="50" <?php if($limit==50){echo 'selected="selected"';}?>>50</option>
-						<option value="100" <?php if($limit==100){echo 'selected="selected"';}?>>100</option>
-						<option value="300" <?php if($limit==300){echo 'selected="selected"';}?>>300</option>
-					</select>
+			<div class="row">
+				<div class="col-md-4">
+					<div class="btn-group" role="group" >
+						<button type="submit" class="btn btn-default" onclick="return confirm('你确定要删除选中项目?');" name="subDelete">批量删除</button>
+						<button type="submit" class="btn btn-default" name="subActiveON">批量启用</button>
+						<button type="submit" class="btn btn-default" name="subActiveOFF">批量关闭</button>
+					</div>
 				</div>
-				<?php
-				echo Helper::renderAdminPagination($result['total'],$limit);
-				?>
-			</nav>
+				<div class="col-md-6">
+					<nav class="page-number">
+						<div class="pull-left">
+							<span class="page-number-title pull-left">共 <strong><?php echo $result['total'];?></strong> 个分类,每页显示</span>
+							<select onchange="submit()" name="pagination" class="form-control page-number-select pull-left">
+								<option value="20" <?php if($limit==20){echo 'selected="selected"';}?>>20</option>
+								<option value="50" <?php if($limit==50){echo 'selected="selected"';}?>>50</option>
+								<option value="100" <?php if($limit==100){echo 'selected="selected"';}?>>100</option>
+								<option value="300" <?php if($limit==300){echo 'selected="selected"';}?>>300</option>
+							</select>
+						</div>
+						<?php
+						echo Helper::renderAdminPagination($result['total'],$limit);
+						?>
+					</nav>
+				</div>
+			</div>
 		</form>
 </div>
 
