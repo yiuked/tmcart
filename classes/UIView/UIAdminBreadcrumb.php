@@ -22,17 +22,11 @@
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
-class AdminBreadcrumb
+class UIAdminBreadcrumb extends UIView
 {
     private $breadcrumbs = array();
     private $customClass = 'custom';
 
-
-    public static function getInstance()
-    {
-        $breadcrumb = new AdminBreadcrumb();
-        return $breadcrumb;
-    }
     public function home()
     {
         $array = array(
@@ -54,7 +48,7 @@ class AdminBreadcrumb
         $this->customClass = $customClass;
     }
 
-    public function generate()
+    public function draw()
     {
         $html = '<ol class="breadcrumb ' . (!empty($this->customClass) ? $this->customClass : '') . '">';
         foreach ($this->breadcrumbs as $breadcrumb) {

@@ -88,8 +88,8 @@ class	Cookie
 	
 	public function getPost($key)
 	{
-		if(Tools::getRequest($key))
-			$this->__set($key,Tools::getRequest($key));
+		if(Tools::Q($key))
+			$this->__set($key,Tools::Q($key));
 		return  $this->__get($key);
 	}
 

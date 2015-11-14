@@ -211,7 +211,7 @@ abstract class ObjectBase{
 	 		die('Fatal error:Object not exist!');
 
 	 	/* Object must have a variable called 'active' */
-	 	elseif (!key_exists('active', $this))
+	 	elseif (!isset($this->active))
 	 		die('Fatal error:No field \'active\'');
 
 	 	/* Update active status on object */

@@ -95,7 +95,7 @@ class AttributeGroup extends ObjectBase{
 			$attributes[$row['id_attribute_group']]['id_attribute_group'] = $row['id_attribute_group'];
 			$attributes[$row['id_attribute_group']]['name'] = $row['g_name'];
 			$attributes[$row['id_attribute_group']]['attributes'][$row['id_attribute']]['id_attribute'] = $row['id_attribute'];
-			$attributes[$row['id_attribute_group']]['attributes'][$row['id_attribute']]['id_attribute_product'] = $row['id_attribute_product'];
+			$attributes[$row['id_attribute_group']]['attributes'][$row['id_attribute']]['id_attribute_group'] = $row['id_attribute_group'];
 			$attributes[$row['id_attribute_group']]['attributes'][$row['id_attribute']]['name'] = $row['name'];
 		}
 		return 	$attributes;

@@ -213,8 +213,6 @@ class Category extends ObjectBase{
 			$where .= ' AND `id_category`='.intval($filter['id_category']);
 		if(!empty($filter['name']) && Validate::isCatalogName($filter['name']))
 			$where .= ' AND `name` LIKE "%'.pSQL($filter['name']).'%"';
-		if(!empty($filter['rewrite']) && Validate::isCatalogName($filter['rewrite']))
-			$where .= ' AND `rewrite` LIKE "%'.pSQL($filter['rewrite']).'%"';
 		if(!empty($filter['active']) && Validate::isInt($filter['active']))
 			$where .= ' AND `active`='.((int)($filter['active'])==1?'1':'0');
 		

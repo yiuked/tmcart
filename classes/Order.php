@@ -60,7 +60,7 @@ class Order extends ObjectBase{
 		return $fields;
 	}
 	
-	public function add()
+	public function add($nullValues = false)
 	{	
 		$this->reference = self::generateReference();
 		if(parent::add()){
@@ -81,7 +81,7 @@ class Order extends ObjectBase{
 		return false;
 	}
 	
-	public function update()
+	public function update($nullValues = false)
 	{
 		if($this->id_order_status==2){
 			$products = $this->cart->getProducts();

@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2014-12-23 16:54:50
+<?php /* Smarty version Smarty-3.1.12, created on 2015-11-13 23:27:21
          compiled from "D:\wamp\www\red\shoes\themes\shop\category.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:1981354992dda6e60f3-36407533%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '09862c3e9dfb295754f9ff7caa33c3610e8bf02a' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\category.tpl',
-      1 => 1418020498,
+      1 => 1446561897,
       2 => 'file',
     ),
   ),
@@ -15,13 +15,13 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'function' => 
   array (
   ),
+  'version' => 'Smarty-3.1.12',
+  'unifunc' => 'content_54992dda6f93e1_59988549',
   'variables' => 
   array (
     'name' => 0,
   ),
   'has_nocache_code' => false,
-  'version' => 'Smarty-3.1.12',
-  'unifunc' => 'content_54992dda6f93e1_59988549',
 ),false); /*/%%SmartyHeaderCode%%*/?>
 <?php if ($_valid && !is_callable('content_54992dda6f93e1_59988549')) {function content_54992dda6f93e1_59988549($_smarty_tpl) {?><div id="main_columns_two">
 <div class="list-entete">

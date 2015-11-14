@@ -1,11 +1,10 @@
 <?php 
 class User extends ObjectBase{
-	protected $fields 			= array('first_name','last_name','email','passwd','active','add_date','upd_date');
-	protected $fieldsRequired	= array('first_name','last_name','email');
-	protected $fieldsSize 		= array('first_name' => 32, 'last_name' => 32,'email' => 128,'passwd' => 32);
+	protected $fields 			= array('name','email','passwd','active','add_date','upd_date');
+	protected $fieldsRequired	= array('name','email');
+	protected $fieldsSize 		= array('name' => 32,'email' => 128,'passwd' => 32);
 	protected $fieldsValidate	= array(
-		'first_name' => 'isName',
-		'last_name' => 'isName',
+		'name' => 'isName',
 		'passwd' => 'isPasswd',
 		'active'=> 'isBool',
 		'email' => 'isEmail');
@@ -18,8 +17,7 @@ class User extends ObjectBase{
 		parent::validation();
 		if (isset($this->id))
 			$fields['id_user'] = (int)($this->id);
-		$fields['first_name'] = pSQL($this->first_name);
-		$fields['last_name'] = pSQL($this->last_name);
+		$fields['name'] = pSQL($this->name);
 		$fields['email'] = pSQL($this->email);
 		$fields['passwd'] = pSQL($this->passwd);
 		$fields['active'] = 1;

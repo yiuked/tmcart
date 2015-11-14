@@ -56,12 +56,12 @@ if (isset($errors)) {
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<div class="col-md-6">
-				<?php
-				echo AdminBreadcrumb::getInstance()->home()
-					->add(array('href' => 'index.php?rule=category', 'title' => '分类'))
-					->add(array('title' => '编辑', 'active' => true))
-					->generate();
-				?>
+					<?php
+					$breadcrumb = new UIAdminBreadcrumb();
+					$breadcrumb->home();
+					$breadcrumb->add(array('title' => '分类', 'active' => true));
+					echo $breadcrumb->draw();
+					?>
 				</div>
 				<div class="col-md-6">
 					<div class="btn-group pull-right" role="group">
@@ -76,6 +76,7 @@ if (isset($errors)) {
 		</div>
 	</div>
 </div>
+
 <script language="javascript">
 	$("#submit-form").click(function(){
 		$("#cms_category_form").submit();
@@ -175,6 +176,12 @@ if (isset($errors)) {
 					});
 				</script>
 				<input type="hidden" value="<?php echo isset($id)?'edit':'add'?>"  name="sveCategory">
+				<div class="form-group">
+					<div class="col-sm-10 col-sm-offset-2">
+						<button type="submit"  class="btn btn-success"><span aria-hidden="true" class="glyphicon glyphicon-floppy-saved"></span> 保存</button>
+						<a href="index.php?rule=category"  class="btn btn-primary"><span aria-hidden="true" class="glyphicon glyphicon-level-up"></span> 返回</a>
+					</div>
+				</div>
 			</form>
 		</div>
 	</div>

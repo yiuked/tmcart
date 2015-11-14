@@ -171,11 +171,7 @@ color: #7F7F7F;
 font-size: 0.85em;
 text-align:left;}
 .table tr td {
-  border-bottom: 1px solid #DEDEDE;
   color: #996633;
-  font-size: 0.9em;
-  height: 23px;
-  padding: 4px 4px 4px 6px;
 }
 .alt_row {
   background-color: #F8F8F8;
@@ -216,57 +212,9 @@ width: 100%;}
 .filter {
   background-color: #F1F9FF;
 }
-/*product_edit*/
-.productTabs {
-  -moz-border-bottom-colors: none;
-  -moz-border-image: none;
-  -moz-border-left-colors: none;
-  -moz-border-right-colors: none;
-  -moz-border-top-colors: none;
-  background-color: #FAFAFA;
-  border-color: #CCCED7 -moz-use-text-color #CCCED7 #CCCED7;
-  border-style: solid none solid solid;
-  border-width: 1px medium 1px 1px;
-  float: left;
-  width: 140px;
-}
-.product-tab-content{
-  padding:15px;
-}
-.productTabs ul {
-  margin: 0;
-  padding: 0;
-}
-.productTabs ul li.tab-row a {
-  border-right: 1px solid #CCCED7;
-  border-top: 1px solid #CCCED7;
-  color: #666666;
-  display: block;
-  font-weight: normal;
-  padding: 7px 10px;
-}
-.productTabs ul li.tab-row a.selected {
-  background-color: #EBEDF4;
-  border-right: medium none;
-  color: #000000;
-  font-weight: bold;
-}
-.productTabs ul li.tab-row:first-child a {
-  border-top: medium none;
-}
 form#product_form{
-  background-color: #EBEDF4;
-  border: 1px solid #CCCED7;
-  margin-left: 140px;
   min-height: 404px;
   padding: 5px 10px 10px;
-}
-.separation {
-  background-color: #CCCCCC;
-  border-bottom: 1px solid #FFFFFF;
-  height: 1px;
-  margin: 10px 0;
-  width: 100%;
 }
 #tabPane1 td.col-left {
   width: 200px;

@@ -4,7 +4,8 @@ if(isset($_GET['toggle']))
 {
 	$fields = array(
 		'Product' => array('active','in_stock','is_new','is_sale','is_top'),
-		'Category'=> array('active')
+		'Category'=> array('active'),
+		'User'=> array('active'),
 	);
 
 	$key    = Tools::G('key');
