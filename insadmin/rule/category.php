@@ -68,12 +68,10 @@ $table->header = array(
 );
 $filter = $table->initFilter();
 
-$orderBy 	= $cookie->getPost('orderby') ? $cookie->getPost('orderby') : 'id_category';
-$orderWay 	= $cookie->getPost('orderway') ? $cookie->getPost('orderway') : 'ASC';
-$limit		= $cookie->getPost('pagination') ? $cookie->getPost('pagination') : '20';
-
-$p			= Tools::getRequest('p') ? (Tools::getRequest('p')==0?1:Tools::getRequest('p')):1;
-
+$orderBy 	= isset($_GET['orderby']) ? Tools::G('orderby') : 'position';
+$orderWay 	= isset($_GET['orderway']) ? Tools::G('orderway') : 'asc';
+$limit		= $cookie->getPost('pagination') ? $cookie->getPost('pagination') : '50';
+$p			= Tools::G('p') ? (Tools::G('p') == 0 ? 1 : Tools::G('p')) : 1;
 
 $result  	= $category->getSubCategories(false,$limit,$p,$orderBy,$orderWay,$filter);
 $catBar = $category->getCatBar($category->id);
@@ -131,7 +129,7 @@ require_once(_TM_ADMIN_DIR_.'/errors.php');
 			?>
 			</div>
 			<div class="panel-body">
-				<form class="form-inline" method="post" action="index.php?rule=category&id=<?php echo $id; ?>">
+				<form class="form-inline" method="post" action="<?php echo Helper::urlByRule(array('id' => $id)); ?>">
 					<?php
 						//config table options
 						$table->data = $result['entitys'];

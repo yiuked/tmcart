@@ -77,8 +77,10 @@ require_once(_TM_ADMIN_DIR_.'/errors.php');
 				</div>
 				<div class="col-md-6">
 					<div class="btn-group pull-right" role="group">
+						<?php if (isset($obj)){ ?>
 						<a href="<?php echo $link->getPage('ProductView',$obj->id);?>"  class="btn btn-warning" target="_blank">
 							<span aria-hidden="true" class="glyphicon glyphicon-eye-open"></span> 浏览</a>
+						<?php } ?>
 						<a href="index.php?rule=product"  class="btn btn-primary"><span aria-hidden="true" class="glyphicon glyphicon-level-up"></span> 返回</a>
 					</div>
 
@@ -157,7 +159,7 @@ $(document).ready(function(){
 	<div class="col-md-10">
 		<div class="panel panel-default">
 			<div class="panel-body">
-				<form enctype="multipart/form-data" method="post" action="index.php?rule=product_edit<?php echo isset($id)?'&id='.$id:''?>" class="defaultForm" id="product_form" name="example">
+				<form enctype="multipart/form-data" method="post" action="index.php?rule=product_edit<?php echo isset($id) ? '&id=' . $id : '';?>" class="defaultForm" id="product_form" name="example">
 					<div id="tabPane1" class="tab-pane">
 						<input type="hidden" value="<?php echo isset($id)?'edit':'add'?>" name="sveProduct" />
 						<input type="hidden" value="<?php echo isset($_POST['tab_key'])?$_POST['tab_key']:'base'?>" name="tab_key" id="tab_key" />

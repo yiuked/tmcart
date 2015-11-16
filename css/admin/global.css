@@ -87,7 +87,6 @@ ul{ list-style-type:none; margin:0; padding:0;}
 .table{  border: 1px solid #CCCCCC;
   border-radius: 3px 3px 3px 3px;
   margin-bottom: 10px;}
-
 .hint {
   background: url("../../images/icon/icon-info.png") no-repeat scroll 6px 5px #BDE5F8;
   border: 1px solid #00529B;
@@ -380,10 +379,21 @@ border: 1px solid #006633;
   border-color: #4cae4c;
   color: #fff;
 }
+.clear-btn{
+  background:none;
+  border:none;
+}
 /*custom breadcrumb*/
 .breadcrumb.custom{
   background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
   font-size: 14px;
   font-weight: bold;
   margin: 0;
+}
+/*custom table*/
+.table-action-dropdown-menu{
+  min-width:75px;
+}
+.table-action-dropdown-menu > li > a{
+  padding: 3px 10px;
 }

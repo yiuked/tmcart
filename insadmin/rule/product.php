@@ -94,10 +94,6 @@ $table->header = array(
 		'filter' => 'bool'
 	),
 	array(
-		'name' => 'add_date',
-		'title' => '添加时间'
-	),
-	array(
 		'sort' => false ,
 		'title' => '操作',
 		'class' => 'text-right',
@@ -109,10 +105,10 @@ $filter['id_category'] = isset($_GET['id_category'])?intval($_GET['id_category']
 if(isset($_GET['id_brand']))
 	$filter['id_brand'] = intval($_GET['id_brand']);
 
-$orderBy 	= $cookie->getPost('productOrderBy') ? $cookie->getPost('productOrderBy') : 'id_product';
-$orderWay 	= $cookie->getPost('productOrderWay') ? $cookie->getPost('productOrderWay') : 'ASC';
+$orderBy 	= isset($_GET['orderby']) ? Tools::G('orderby') : 'id_product';
+$orderWay 	= isset($_GET['orderway']) ? Tools::G('orderway') : 'desc';
 $limit		= $cookie->getPost('pagination') ? $cookie->getPost('pagination') : '50';
-$p			= Tools::getRequest('p') ? (Tools::getRequest('p')==0?1:Tools::getRequest('p')):1;
+$p			= Tools::G('p') ? (Tools::G('p') == 0 ? 1 : Tools::G('p')) : 1;
 
 $result  	= Product::getProducts(false,$p,$limit,$orderBy,$orderWay,$filter);
 require_once(_TM_ADMIN_DIR_.'/errors.php');
@@ -133,7 +129,7 @@ require_once(_TM_ADMIN_DIR_.'/errors.php');
 			</div>
 			<div class="col-md-6">
 				<div class="btn-group save-group pull-right" role="group">
-					<a href="index.php?rule=product_edit"  class="btn btn-success" id="submit-form"><span aria-hidden="true" class="glyphicon glyphicon-plus"></span> 新商品</a>
+					<a href="<?php echo Helper::urlByRule(array('rule' => 'product_edit')); ?>"  class="btn btn-success" id="submit-form"><span aria-hidden="true" class="glyphicon glyphicon-plus"></span> 新商品</a>
 				</div>
 			</div>
 		</div>
@@ -207,7 +203,7 @@ require_once(_TM_ADMIN_DIR_.'/errors.php');
 			产品列表
 		</div>
 		<div class="panel-body">
-			<form class="form" method="post" action="index.php?rule=product">
+			<form class="form" method="post" action="<?php echo Helper::urlByRule()?>">
 				<?php
 				//config table options
 				$table->data = $result['entitys'];

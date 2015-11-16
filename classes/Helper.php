@@ -168,88 +168,24 @@ class Helper
 			</ul>';
 		return $html;
 	}
-	
-	public static function renderAdminPagaNation($total,$pagenum,$p,$boutton='page')
-	{
-		global $_tmconfig;
-		$html 	= '<input type="hidden" value="'.$p.'" name="'.$boutton.'" id="'.$boutton.'">';
-		
-		$top 	= ceil($total/$pagenum);
-		
-		if($top==1){
-			$html .= 'Page<b>1</b> / 1';
-		}elseif($top>1 and $p>1 and $p<=$top){
-			$html .= '
-				<input type="image" onclick="$(\'#'.$boutton.'\').val(1)" src="'.$_tmconfig['ico_dir'].'list-prev2.gif">&nbsp;
-				<input type="image" onclick="$(\'#'.$boutton.'\').val('.($p-1).')" src="'.$_tmconfig['ico_dir'].'list-prev.gif">';
-		}
-		
-		if($top>1)
-			$html .= 'Page<b>'.$p.'</b> / '.$top;
-		
-		if($top>1 and $p>=1 and $p<$top){
-			$html .= '
-				<input type="image" onclick="$(\'#'.$boutton.'\').val('.($p+1).')" src="'.$_tmconfig['ico_dir'].'list-next.gif">&nbsp;
-				<input type="image" onclick="$(\'#'.$boutton.'\').val('.($top).')" src="'.$_tmconfig['ico_dir'].'list-next2.gif">';
-		}
-		return $html;
-	}
 
-	public static function renderAdminPagination($total,$perPageNb,$pageKey = 'p')
+	public static function urlByRule($change = array())
 	{
-
+		$declines = array('delete');
 		$args = $_GET;
-		$p    = isset($_GET[$pageKey]) ? (int)$_GET[$pageKey] : 1;
 
-		$showPage = 5;	//show total pages
-		$currentPageBefor = 3; //current page before
-
-		$html 	= '<ul class="pagination">';
-		$pagesNB 	= ceil($total/$perPageNb);
-
-		if ($p !=1 ) {
-			$args[$pageKey] = $p - 1;
-			$argstr = http_build_query($args);
-			$html .= '<li><a href="index.php?'.$argstr.'" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>';
-		}else{
-			$html .= '<li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>';
-		}
-
-		if ($pagesNB < $showPage) {
-			for ($i = 1; $i <= $pagesNB; $i++) {
-				$args[$pageKey] = $i;
-				$argstr = http_build_query($args);
-				$html .= '<li'.($p == $i?' class="active"':'').'><a href="index.php?'.$argstr.'">'.$i.'</a></li>';
-			}
-		} elseif ($p<=$currentPageBefor) {
-			for ($i = 1; $i <= $showPage; $i++) {
-				$args[$pageKey] = $i;
-				$argstr = http_build_query($args);
-				$html .= '<li'.($p == $i?' class="active"':'').'><a href="index.php?'.$argstr.'">'.$i.'</a></li>';
-			}
-		} elseif (($pagesNB - $p) <= $currentPageBefor) {
-			for ($i = $pagesNB - $showPage + 1; $i<= $pagesNB; $i++) {
-				$args[$pageKey] = $i;
-				$argstr = http_build_query($args);
-				$html .= '<li'.($p == $i?' class="active"':'').'><a href="index.php?'.$argstr.'">'.$i.'</a></li>';
-			}
-		} else {
-			for ($i = $p - $currentPageBefor; $i<= $p + $showPage - $currentPageBefor; $i++) {
-				$args[$pageKey] = $i;
-				$argstr = http_build_query($args);
-				$html .= '<li'.($p == $i?' class="active"':'').'><a href="index.php?'.$argstr.'">'.$i.'</a></li>';
+		foreach ($declines as $decline) {
+			if (isset($args[$decline])) {
+				unset($args[$decline]);
 			}
 		}
 
-		if ($pagesNB > 1 AND $p != $pagesNB) {
-			$args[$pageKey] = $p + 1;
-			$argstr = http_build_query($args);
-			$html .= '<li><a href="index.php?'.$argstr.'" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>';
-		}else{
-			$html .= '<li class="disabled"><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>';
+		if (count($change) > 0) {
+			foreach ($change as $key => $val) {
+				$args[$key] = $val;
+			}
 		}
 
-		$html 	.= '</ul>';
-		return $html;
+		return 'index.php?' . http_build_query($args);
 	}
 }

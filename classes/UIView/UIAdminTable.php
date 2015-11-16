@@ -107,11 +107,11 @@ class UIAdminTable extends UIView
                 $headHtml .= '<th'. $width . $class .'>' . $head['title'] . '</th>';
             }else{
                 $headHtml .= '<th'. $width . $class .'>';
-                $headHtml .= '<a href="index.php?rule=' . $this->rule . '&orderby=' . $head['name'] . '&orderway=desc">';
+                $headHtml .= '<a href="index.php?rule=' . $this->rule . '&orderby=' . $head['name'] . '&orderway=desc&token=' . $this->token . '">';
                 $headHtml .= '<span class="glyphicon glyphicon-sort-by-order-alt" aria-hidden="true"></span>';
                 $headHtml .= '</a>';
                 $headHtml .= $head['title'] ;
-                $headHtml .= '<a href="index.php?rule=' . $this->rule . '&orderby=' . $head['name'] . '&orderway=asc">';
+                $headHtml .= '<a href="index.php?rule=' . $this->rule . '&orderby=' . $head['name'] . '&orderway=asc&token=' . $this->token . '">';
                 $headHtml .= '<span class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></span>';
                 $headHtml .= '</a>';
                 $headHtml .= '</th>';
@@ -121,9 +121,11 @@ class UIAdminTable extends UIView
             if (isset($head['isAction']) && $haveFilter == true) {
                 $filterHtml .= ' <td'. $width . $class .'>';
                 $filterHtml .= '   <div role="group" class="btn-group">';
-                $filterHtml .= '       <button name="' . $this->token . '_submitFilter" type="submit" class="btn btn-primary">查询</button>';
-                $filterHtml .= '       <button name="' . $this->token . '_resetFilter" class="btn btn-default" type="submit">重置</button>';
-                $filterHtml .= '   </div>';
+                $filterHtml .= '    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">搜索 <span aria-hidden="true" class="glyphicon glyphicon-collapse-down"></span></button>';
+                $filterHtml .= '    <ul class="dropdown-menu table-action-dropdown-menu">';
+                $filterHtml .= '       <li><button name="' . $this->token . '_submitFilter" type="submit" class="clear-btn btn-default"><span aria-hidden="true" class="glyphicon glyphicon-search"></span> 查询</button></li>';
+                $filterHtml .= '       <li><button name="' . $this->token . '_resetFilter"  type="submit" class="clear-btn btn-default"><span aria-hidden="true" class="glyphicon glyphicon-refresh"></span> 重置</button></li>';
+                $filterHtml .= '   </ul></div>';
                 $filterHtml .= ' </td>';
             } elseif (!isset($head['filter']) || (isset($head['isAction']) && $haveFilter == false)){
                 $filterHtml .= '<td'. $width . $class .'>--</td>';
@@ -170,23 +172,27 @@ class UIAdminTable extends UIView
                         } elseif (isset($head['filter']) && $head['filter'] == 'bool') {
                             $body .= '<td'. $width . $class .'><span class="glyphicon glyphicon-'. ($row[$head['name']] == 0 ? 'remove':'ok') .' active-toggle" onclick="setToggle($(this),\'' .  $this->className . '\',\'' .  $head['name'] . '\',' .  $row[$this->identifier] . ')"></span></td>';
                         }else{
-                            $body .= '<td'. $width . $class .' onclick="document.location = \'index.php?rule=' .  $this->rule . (!$this->child ? '_edit' : '') . '&id=' .  $row[$this->identifier] . '\'" class="pointer">' .  $row[$head['name']] . '</td>';
+                            $title = isset($head['color']) ? '<span style="background-color:' .  $row['color'] . ';color:white" class="color_field">' .  $row[$head['name']] . '</span>' : $row[$head['name']];
+                            $body .= '<td'. $width . $class .' onclick="document.location = \'index.php?rule=' .  $this->rule . (!$this->child ? '_edit' : '') . '&id=' .  $row[$this->identifier] . '\'" class="pointer">' .  $title . '</td>';
                         }
                     } elseif (isset($head['isAction'])) {
                         //create filter and reset filter buttom group
                         $body .=  '<td'. $width . $class .'><div class="btn-group">';
+                        $body .=  '<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作 <span aria-hidden="true" class="glyphicon glyphicon-collapse-down"></span></button>';
+                        $body .=  '<ul class="dropdown-menu table-action-dropdown-menu">';
                         foreach ($head['isAction'] as $action) {
                             if ($action == 'view') {
-                                $body .=  '<a class="btn btn-default" href="' .Tools::getLink($row['rewrite']). '" target="_blank"><span class="glyphicon glyphicon-file" title="预览" aria-hidden="true"></span></a>';
+                                $body .=  '<li><a href="' .Tools::getLink($row['rewrite']). '" target="_blank"><span class="glyphicon glyphicon-file" title="查看" aria-hidden="true"></span> 查看</a></li>';
                             }
                             if ($action == 'edit') {
-                                $body .=  '<a class="btn btn-default" href="index.php?rule=' .  $this->rule . '_edit&id=' .  $row[$this->identifier] . '"><span class="glyphicon glyphicon-edit" title="编辑" aria-hidden="true"></span></a>';
+                                $body .=  '<li><a href="index.php?rule=' .  $this->rule . '_edit&id=' .  $row[$this->identifier] . '"><span class="glyphicon glyphicon-edit" title="编辑" aria-hidden="true"></span> 编辑</a></li>';
                             }
                             if ($action == 'delete') {
-                                $body .=  '<a class="btn btn-default" href="index.php?rule=' .  $this->rule . '&delete=' .  $row[$this->identifier] . '" onclick="return confirm(\'你确定要删除？\')"><span class="glyphicon glyphicon-trash" title="删除" aria-hidden="true"></span></a>';
+                                $body .=  '<li><a href="index.php?rule=' .  $this->rule . '&delete=' .  $row[$this->identifier] . '" onclick="return confirm(\'你确定要删除？\')"><span class="glyphicon glyphicon-trash" title="删除" aria-hidden="true"></span> 删除</a></li>';
                             }
                         }
-						$body .=  '</div></td>';
+
+						$body .=  '</ul></div></td>';
                     }
                 }
                 $body .= '</tr>';

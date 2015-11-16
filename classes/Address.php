@@ -1,11 +1,10 @@
 <?php 
 class Address extends ObjectBase{
-	protected $fields 			= array('id_user','first_name','last_name','id_country','id_state','city','postcode','address','address2','phone','is_default','deleted','add_date','upd_date');
+	protected $fields 			= array('id_user','name','id_country','id_state','city','postcode','address','address2','phone','is_default','deleted','add_date','upd_date');
 	protected $fieldsRequired	= array('id_user','first_name','last_name','id_country','city','postcode','phone','address');
 	protected $fieldsSize 		= array('first_name' => 32, 'last_name' => 32,'email' => 128,'passwd' => 32);
 	protected $fieldsValidate	= array(
-		'first_name' => 'isName',
-		'last_name' => 'isName',
+		'name' => 'isName',
 		'id_country' => 'isUnsignedId',
 		'id_state'=> 'isUnsignedId',
 		'city'=> 'isGenericName',
@@ -36,8 +35,7 @@ class Address extends ObjectBase{
 		if (isset($this->id))
 			$fields['id_address'] = (int)($this->id);
 		$fields['id_user'] = (int)($this->id_user);
-		$fields['first_name'] = pSQL($this->first_name);
-		$fields['last_name'] = pSQL($this->last_name);
+		$fields['name'] = pSQL($this->name);
 		$fields['id_country'] = (int)($this->id_country);
 		$fields['id_state'] = (int)($this->id_state);
 		$fields['is_default'] = (int)($this->is_default);
@@ -99,7 +97,7 @@ class Address extends ObjectBase{
 		if(!empty($filter['city']) && Validate::isCatalogName($filter['city']))
 			$where .= ' AND a.`city` LIKE "%'.pSQL($filter['city']).'%"';
 		if(!empty($filter['name']) && Validate::isCatalogName($filter['name']))
-			$where .= ' AND a.`first_name` LIKE "%'.pSQL($filter['name']).'%" OR a.`last_name` LIKE "%'.pSQL($filter['name']).'%"';
+			$where .= ' AND a.`name` LIKE "%'.pSQL($filter['name']).'%"';
 		if(!empty($filter['active']) && Validate::isInt($filter['active']))
 			$where .= ' AND a.`active`='.((int)($filter['active'])==1?'1':'0');
 		

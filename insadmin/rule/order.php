@@ -33,23 +33,22 @@ if(intval(Tools::getRequest('delete'))>0){
 $table = new UIAdminTable('order',  'Order', 'id_order');
 $table->header = array(
 	array('sort' => false ,'isCheckAll' => 'orderBox[]'),
-	array('name' => 'id_order','title' => 'ID','filter' => 'string'),
-	array('name' => 'reference','title' => '引用','filter' => 'string'),
-	array('name' => 'id_cart','title' => '购物车','filter' => 'string'),
-	array('name' => 'id_user','title' => '用户','filter' => 'string'),
-	array('name' => 'amount','title' => '金额','filter' => 'string'),
-	array('name' => 'carrier','title' => '物流','filter' => 'string'),
-	array('name' => 'id_module','title' => '支付','filter' => 'string'),
-	array('name' => 'status','title' => '状态','filter' => 'string'),
-	array('name' => 'add_date','title' => '添加时间'),
-	array('sort' => false ,'title' => '操作', 'class' => 'text-right', 'isAction'=> array( 'edit', 'delete')),
+	array('name' => 'id_order', 'title' => 'ID', 'width'=> '80px', 'filter' => 'string'),
+	array('name' => 'reference', 'title' => '引用', 'width'=> '110px', 'filter' => 'string'),
+	array('name' => 'name', 'title' => '用户', 'filter' => 'string'),
+	array('name' => 'amount', 'title' => '金额', 'width'=> '80px', 'filter' => 'string'),
+	array('name' => 'carrier', 'title' => '物流', 'filter' => 'string'),
+	array('name' => 'payment', 'title' => '支付', 'filter' => 'string'),
+	array('name' => 'status', 'title' => '状态', 'filter' => 'string', 'color' => true),
+	array('name' => 'add_date', 'title' => '添加时间'),
+	array('sort' => false , 'title' => '操作',  'class' => 'text-right',  'isAction'=> array( 'edit', 'delete')),
 );
 $filter = $table->initFilter();
 
-$orderBy 	= $cookie->getPost('orderOrderBy') ? $cookie->getPost('orderOrderBy') : 'id_order';
-$orderWay 	= $cookie->getPost('orderOrderWay') ? $cookie->getPost('orderOrderWay') : 'DESC';
+$orderBy 	= isset($_GET['orderby']) ? Tools::G('orderby') : 'id_order';
+$orderWay 	= isset($_GET['orderway']) ? Tools::G('orderway') : 'desc';
 $limit		= $cookie->getPost('pagination') ? $cookie->getPost('pagination') : '50';
-$p			= Tools::getRequest('orderPage') ? Tools::getRequest('orderPage'):1;
+$p			= Tools::G('p') ? (Tools::G('p') == 0 ? 1 : Tools::G('p')) : 1;
 
 $result  	= Order::getEntity(false,$p,$limit,$orderBy,$orderWay,$filter);
 require_once(dirname(__FILE__).'/../errors.php');
@@ -83,7 +82,7 @@ require_once(dirname(__FILE__).'/../errors.php');
 				定单
 			</div>
 			<div class="panel-body">
-				<form class="form" method="post" action="index.php?rule=order">
+				<form class="form" method="post" action="<?php echo Helper::urlByRule()?>">
 					<?php
 					//config table options
 					$table->data = $result['entitys'];

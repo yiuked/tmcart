@@ -36,6 +36,9 @@ abstract class ObjectBase{
 			if ($result)
 			{
 				$this->id = (int)($id);
+				if (isset($this->identifier)) {
+					$this->{$this->identifier} = (int)$id;
+				}
 				foreach($this->fields as $field){
 					if (key_exists($field, $result))
 						$this->{$field} = $result[$field];

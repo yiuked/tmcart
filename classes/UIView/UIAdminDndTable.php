@@ -43,18 +43,21 @@ class UIAdminDndTable extends UIAdminTable
                     } elseif (isset($head['isAction'])) {
                         //create filter and reset filter buttom group
                         $body .=  '<td'. $width . $class .'><div class="btn-group">';
+                        $body .=  '<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作 <span aria-hidden="true" class="glyphicon glyphicon-collapse-down"></span></button>';
+                        $body .=  '<ul class="dropdown-menu table-action-dropdown-menu">';
                         foreach ($head['isAction'] as $action) {
                             if ($action == 'view') {
-                                $body .=  '<a class="btn btn-default" href="' .Tools::getLink($row['rewrite']). '" target="_blank"><span class="glyphicon glyphicon-file" title="预览" aria-hidden="true"></span></a>';
+                                $body .=  '<li><a href="' .Tools::getLink($row['rewrite']). '" target="_blank"><span class="glyphicon glyphicon-file" title="查看" aria-hidden="true"></span> 查看</a></li>';
                             }
                             if ($action == 'edit') {
-                                $body .=  '<a class="btn btn-default" href="index.php?rule=' .  $this->rule . '_edit&id=' .  $row[$this->identifier] . '"><span class="glyphicon glyphicon-edit" title="编辑" aria-hidden="true"></span></a>';
+                                $body .=  '<li><a href="index.php?rule=' .  $this->rule . '_edit&id=' .  $row[$this->identifier] . '"><span class="glyphicon glyphicon-edit" title="编辑" aria-hidden="true"></span> 编辑</a></li>';
                             }
                             if ($action == 'delete') {
-                                $body .=  '<a class="btn btn-default" href="index.php?rule=' .  $this->rule . '&delete=' .  $row[$this->identifier] . '" onclick="return confirm(\'你确定要删除？\')"><span class="glyphicon glyphicon-trash" title="删除" aria-hidden="true"></span></a>';
+                                $body .=  '<li><a href="index.php?rule=' .  $this->rule . '&delete=' .  $row[$this->identifier] . '" onclick="return confirm(\'你确定要删除？\')"><span class="glyphicon glyphicon-trash" title="删除" aria-hidden="true"></span> 删除</a></li>';
                             }
                         }
-                        $body .=  '</div></td>';
+
+                        $body .=  '</ul></div></td>';
                     }
                 }
                 $body .= '</tr>';

@@ -1,6 +1,6 @@
 <?php 
 class Order extends ObjectBase{
-	protected $fields 			= array('id_cart','id_user','id_currency','id_address','id_carrier','id_module','track_number','product_total','shipping_total','discount','amount','conversion_rate','id_order_status','reference','add_date','upd_date');
+	protected $fields 			= array('id_cart','id_user','id_currency','id_address','id_carrier','id_module','payment','track_number','product_total','shipping_total','discount','amount','conversion_rate','id_order_status','reference','add_date','upd_date');
 	protected $fieldsRequired	= array('id_cart','id_user','id_currency','id_address','id_carrier','id_module','product_total','shipping_total','discount','amount','conversion_rate','id_order_status');
 	protected $fieldsValidate	= array(
 		'id_cart' => 'isUnsignedId',
@@ -9,7 +9,8 @@ class Order extends ObjectBase{
 		'id_address' => 'isUnsignedId', 
 		'id_carrier'=> 'isUnsignedId',
 		'id_order_status'=>'isUnsignedId',
-		'id_module' => 'isUnsignedId', 
+		'id_module' => 'isUnsignedId',
+		'payment' => 'isGenericName',
 		'product_total'=>'isPrice',
 		'shipping_total'=>'isPrice',
 		'amount' => 'isPrice',
@@ -48,6 +49,7 @@ class Order extends ObjectBase{
 		$fields['id_carrier'] = (int)($this->id_carrier);
 		$fields['id_order_status'] = (int)($this->id_order_status);
 		$fields['id_module'] = (int)($this->id_module);
+		$fields['payment'] = pSQL($this->payment);
 		$fields['track_number'] = pSQL($this->track_number);
 		$fields['product_total'] = floatval($this->product_total);
 		$fields['shipping_total'] = floatval($this->shipping_total);
@@ -119,12 +121,12 @@ class Order extends ObjectBase{
 			$where .= ' AND a.`id_order`='.intval($filter['id_order']);
 		if(!empty($filter['reference']) && Validate::isInt($filter['reference']))
 			$where .= ' AND a.`reference`='.intval($filter['reference']);
-		if(!empty($filter['subject']) && Validate::isCatalogName($filter['subject']))
-			$where .= ' AND a.`subject` LIKE "%'.pSQL($filter['subject']).'%"';
+		if(!empty($filter['payment']))
+			$where .= ' AND a.`payment` LIKE "%'.pSQL($filter['payment']).'%"';
 		if(!empty($filter['id_cart']) && Validate::isCatalogName($filter['id_cart']))
 			$where .= ' AND a.`id_cart` = '.intval($filter['id_cart']);
 		if(!empty($filter['name']) && Validate::isCatalogName($filter['name']))
-			$where .= ' AND a.`name` LIKE "%'.pSQL($filter['name']).'%"';
+			$where .= ' AND u.`name` LIKE "%'.pSQL($filter['name']).'%"';
 		if(!empty($filter['active']) && Validate::isInt($filter['active']))
 			$where .= ' AND a.`active`='.((int)($filter['active'])==1?'1':'0');
 		if(!empty($filter['email']) && Validate::isInt($filter['email']))
@@ -147,7 +149,7 @@ class Order extends ObjectBase{
 		if($total==0)
 			return false;
 
-		$result = Db::getInstance()->ExecuteS('SELECT a.*,u.first_name,u.last_name,c.name as carrier,os.name as status,os.color FROM `'._DB_PREFIX_.'order` a
+		$result = Db::getInstance()->ExecuteS('SELECT a.*,u.name,c.name as carrier,os.name as status,os.color FROM `'._DB_PREFIX_.'order` a
 				LEFT JOIN `'._DB_PREFIX_.'user` u ON (a.id_user = u.id_user)
 				LEFT JOIN `'._DB_PREFIX_.'carrier` c ON (a.id_carrier = c.id_carrier)
 				LEFT JOIN `'._DB_PREFIX_.'order_status` os ON (os.id_order_status = a.id_order_status)

@@ -63,62 +63,91 @@ function getTree($resultParents, $resultIds, $maxDepth, $id_category = 1, $curre
 }
 require_once(_TM_ADMIN_DIR_.'/errors.php');
 ?>
-<div class="path_bar">
-  <div class="path_title">
-    <h3> 
-		<span style="font-weight: normal;" id="current_obj">
-		<span class="breadcrumb item-1 ">产品管理</span><img src="<?php echo $_tmconfig['tm_img_dir'];?>admin/separator_breadcrum.png" style="margin-right:5px" alt="&gt;">
-		<span class="breadcrumb item-2 ">批量转移产品</span></span> 
-	</h3>
-  </div>
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="col-md-6">
+					<?php
+					$breadcrumb = new UIAdminBreadcrumb();
+					$breadcrumb->home();
+					$breadcrumb->add(array('title' => '批量换类', 'active' => true));
+					echo $breadcrumb->draw();
+					?>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-<div class="mianForm">
-	<form enctype="multipart/form-data" method="post" action="index.php?rule=product_to_category" class="defaultForm admincmscontent" id="seo_cate_meta_form" name="example">
-		  <fieldset class="small">
-  			<legend> <img alt="设置" src="<?php echo $_tmconfig['ico_dir'];?>edit.gif">批量转移产品</legend>
-				<label>选择需要转移的分类：</label>
-				<div class="margin-form">
-				<?php
-				$cate = array();
-				if(isset($_POST['categoryBox'])){
-					$cate = Tools::getRequest('categoryBox');
-				}
-				
-				$trads = array(
-					 'Home' 		=> '根分类', 
-					 'selected' 	=> '选择', 
-					 'Collapse All' => '关闭', 
-					 'Expand All' 	=> '展开',
-					 'Check All'	=> '全选',
-					 'Uncheck All'	=> '全不选'
-				);
-				echo Helper::renderAdminCategorieTree($trads,$cate, 'categoryBox', false,'Tree');
-			 ?>
-			  </div>
-			  <label>要转移到的分类：</label>
-			  <div class="margin-form">
-			  <?php
-			  	$tree_html = '<select name="id_category">';
-			  	foreach($blockCategTree['children'] as $node1)
-				{
-					if(count($node1['children'])>0)
-					{
-						$tree_html .= '<option value="'.$node1['id'].'">'.$node1['name'].'</option>';
-						foreach($node1['children'] as $node2){
-								$tree_html .= '<option value="'.$node2['id'].'">--'.$node2['name'].'</option>';
-						}
-					}
-				}
-				$tree_html .= '</select>';
-				echo $tree_html;
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+			批量转移分类
+			</div>
+			<div class="panel-body">
+				<form method="post" action="index.php?rule=product_to_category" class="form-horizontal">
+					<div class="form-group">
+						<label for="categoryBox" class="col-sm-2 control-label">要转移的分类</label>
+						<div class="col-sm-2">
+							<?php
+							$cate = array();
+							if(isset($_POST['categoryBox'])){
+								$cate = Tools::getRequest('categoryBox');
+							}
 
-			  ?>
-			  <input type="checkbox" value="1" name="isDefault"  />将新分类设为默认分类.
-			  <input type="checkbox" value="1" name="isDelete"  />取消原分类关联.
-			  </div>
-			  <div class="margin-form">
-			  	<input type="submit" name="changeProductCategory" value="开始转移产品" id="changeProductCategory" class="button" />
-			  </div>
-		  </fieldset>
-	</form>
+							$trads = array(
+								'Home' 		=> '根分类',
+								'selected' 	=> '选择',
+								'Collapse All' => '关闭',
+								'Expand All' 	=> '展开',
+								'Check All'	=> '全选',
+								'Uncheck All'	=> '全不选'
+							);
+							echo Helper::renderAdminCategorieTree($trads,$cate, 'categoryBox', false,'Tree');
+							?>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="id_category" class="col-sm-2 control-label">要转移到的分类</label>
+						<div class="col-sm-2">
+							<?php
+							$tree_html = '<select name="id_category"  class="form-control col-sm-1">';
+							foreach($blockCategTree['children'] as $node1)
+							{
+								if(count($node1['children'])>0)
+								{
+									$tree_html .= '<option value="'.$node1['id'].'">'.$node1['name'].'</option>';
+									foreach($node1['children'] as $node2){
+										$tree_html .= '<option value="'.$node2['id'].'">--'.$node2['name'].'</option>';
+									}
+								}
+							}
+							$tree_html .= '</select>';
+							echo $tree_html;
+
+							?>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="isDefault" class="col-sm-2 control-label">将新分类设为默认分类</label>
+						<div class="col-sm-10">
+							<input type="checkbox" value="1" name="isDefault"  />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="isDelete" class="col-sm-2 control-label">取消原分类关联</label>
+						<div class="col-sm-10">
+							<input type="checkbox" value="1" name="isDelete" />
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+							<buttom type="submit" name="changeProductCategory" id="changeProductCategory" class="btn btn-success" >开始转移产品</buttom>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </div>
