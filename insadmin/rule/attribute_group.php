@@ -78,11 +78,14 @@ require_once(dirname(__FILE__).'/../errors.php');
 					   </thead>
 					<?php
 					if(is_array($result['entitys']) && count($result['entitys'])>0){
-					foreach($result['entitys'] as $key => $row){?>
+					foreach($result['entitys'] as $key => $row){
+						$attributeGroup = new AttributeGroup($row['id_attribute_group']);
+						$attributes = $attributeGroup->getAttributes();
+					?>
 					<tr id="tr_<?php echo $row['id_attribute_group'];?>">
-						<td class="pointer" onclick="document.location = 'index.php?rule=attribute_group_edit&id=<?php echo $row['id_attribute_group'];?>'"><?php echo $row['id_attribute_group'];?></td>
-						<td class="pointer" onclick="document.location = 'index.php?rule=attribute_group_edit&id=<?php echo $row['id_attribute_group'];?>'"><?php echo $row['name'];?></td>
-						<td class="pointer" id="td_<?php echo $row['id_attribute_group'];?>">--</td>
+						<td><?php echo $row['id_attribute_group'];?></td>
+						<td><?php echo $row['name'];?> <span class="badge"><?php echo count($attributes); ?></span></td>
+						<td><?php echo $row['position'];?></td>
 						<td align="right">
 							<div class="btn-group">
 								<a href="index.php?rule=attribute_group_edit&id=<?php echo $row['id_attribute_group'];?>" class="btn btn-default" ><span class="glyphicon glyphicon-edit" title="编辑"></span> 编辑</a>
@@ -92,8 +95,6 @@ require_once(dirname(__FILE__).'/../errors.php');
 						</td>
 					</tr>
 					<?php
-						$attributeGroup = new AttributeGroup($row['id_attribute_group']);
-						$attributes = $attributeGroup->getAttributes();
 						if($attributes){
 					?>
 					<tr id="attribute_list_<?php echo $row['id_attribute_group'];?>" class="collapse"><td colspan="5">

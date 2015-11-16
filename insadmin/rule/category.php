@@ -67,7 +67,6 @@ $table->header = array(
 	array('sort' => false ,'title' => '操作', 'class' => 'text-right', 'isAction'=> array('view', 'edit', 'delete')),
 );
 $filter = $table->initFilter();
-
 $orderBy 	= isset($_GET['orderby']) ? Tools::G('orderby') : 'position';
 $orderWay 	= isset($_GET['orderway']) ? Tools::G('orderway') : 'asc';
 $limit		= $cookie->getPost('pagination') ? $cookie->getPost('pagination') : '50';

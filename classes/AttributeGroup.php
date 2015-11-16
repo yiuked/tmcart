@@ -54,7 +54,7 @@ class AttributeGroup extends ObjectBase{
 		{
 			$postion = 'ORDER BY '.pSQL($orderBy).' '.pSQL($orderWay);
 		}else{
-			$postion = 'ORDER BY `position` DESC';
+			$postion = 'ORDER BY `position` ASC';
 		}
 
 		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'attribute_group` a

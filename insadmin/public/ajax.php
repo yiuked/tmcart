@@ -6,6 +6,7 @@ if(isset($_GET['toggle']))
 		'Product' => array('active','in_stock','is_new','is_sale','is_top'),
 		'Category'=> array('active'),
 		'User'=> array('active'),
+		'Brand'=> array('active'),
 	);
 
 	$key    = Tools::G('key');

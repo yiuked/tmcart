@@ -1,7 +1,7 @@
 <?php 
 class Brand extends ObjectBase{
 	protected $fields 			= array('logo',
-		'name','description',
+		'name','description','active',
 		'meta_title','meta_keywords','meta_description','rewrite'
 		);
 	protected $fieldsRequired	= array('name','rewrite');
@@ -11,7 +11,8 @@ class Brand extends ObjectBase{
 		'name' => 'isCatalogName',
 		'meta_title' => 'isGenericName',
 		'meta_keywords' => 'isGenericName',
-		'meta_description' => 'isGenericName', 
+		'meta_description' => 'isGenericName',
+		'active' => 'isBool',
 		'rewrite' => 'isLinkRewrite', 
 		'description' => 'isCleanHtml');
 	
@@ -37,6 +38,7 @@ class Brand extends ObjectBase{
 		$fields['meta_keywords'] = pSQL($this->meta_keywords);
 		$fields['meta_description'] = pSQL($this->meta_description);
 		$fields['rewrite'] = pSQL($this->rewrite);
+		$fields['active'] = (int)($this->active);
 		return $fields;
 	}
 	

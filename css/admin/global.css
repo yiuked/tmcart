@@ -76,6 +76,7 @@ ul{ list-style-type:none; margin:0; padding:0;}
 .save-group{
  margin-right:10px;
 }
+
 /*---------------*/
 
 .leftColForm{
@@ -374,7 +375,7 @@ border: 1px solid #006633;
   border-color: #aaa;
   color: #fff;
 }
-.btn-grey.enabled.active{
+.btn-grey.enabled.active,.radio-group .btn-grey.active{
   background-color: #5cb85c;
   border-color: #4cae4c;
   color: #fff;
