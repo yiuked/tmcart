@@ -61,7 +61,9 @@ function getTree($resultParents, $resultIds, $maxDepth, $id_category = 1, $curre
 				 'name' => $resultIds[$id_category]['name'], 
 				 'children' => $children);
 }
-require_once(_TM_ADMIN_DIR_.'/errors.php');
+if (isset($errors)) {
+	UIAdminAlerts::MError($errors);
+}
 ?>
 <div class="row">
 	<div class="col-md-12">

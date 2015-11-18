@@ -19,7 +19,7 @@ if(isset($_POST['sveCategory']) && Tools::getRequest('sveCategory')=='add')
 		$errors = $cmscategory->_errors;
 	}else{
 		$_GET['id']	= $cmscategory->id;
-		AdminAlerts::conf('创建分类成功');
+		UIAdminAlerts::conf('创建分类成功');
 	}
 }
 
@@ -42,14 +42,13 @@ if(isset($_POST['sveCategory']) && Tools::getRequest('sveCategory')=='edit')
 	if(is_array($obj->_errors) AND count($obj->_errors)>0){
 		$errors = $obj->_errors;
 	}else{
-		AdminAlerts::conf('更新分类成功');
+		UIAdminAlerts::conf('更新分类成功');
 	}
  
 }
 if (isset($errors)) {
-	AdminAlerts::MError($errors);
+	UIAdminAlerts::MError($errors);
 }
-
 ?>
 <div class="row">
 	<div class="col-md-12">

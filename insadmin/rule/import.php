@@ -1,5 +1,5 @@
 <?php
-define('PRO_IMPORT_DIR',_TM_ADMIN_DIR_.'/upload/import/');
+define('PRO_IMPORT_DIR',ADMIN_DIR.'/upload/import/');
 
 if(Tools::isSubmit('updateCSV'))
 {
@@ -22,7 +22,9 @@ if(Tools::isSubmit('importCSV'))
 	else
 		$errors[] = '导入时验证文件失败!';
 }
-require_once(dirname(__FILE__).'/../errors.php');
+if (isset($errors)) {
+  UIAdminAlerts::MError($errors);
+}
 ?>
 <div class="row">
   <div class="col-md-12">

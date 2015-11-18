@@ -51,7 +51,10 @@ $limit		= $cookie->getPost('pagination') ? $cookie->getPost('pagination') : '50'
 $p			= Tools::G('p') ? (Tools::G('p') == 0 ? 1 : Tools::G('p')) : 1;
 
 $result  	= Order::getEntity(false,$p,$limit,$orderBy,$orderWay,$filter);
-require_once(dirname(__FILE__).'/../errors.php');
+
+if (isset($errors)) {
+	UIAdminAlerts::MError($errors);
+}
 ?>
 
 <div class="row">

@@ -531,6 +531,11 @@ class Tools{
 		echo "<br>";
 		printf('memory usage: %01.2f MB', memory_get_usage()/1024/1024);
 	}
+
+	public static function getFileType($filename)
+	{
+		return substr($filename, strrpos($filename, '.') + 1);
+	}
 }
 
 ?>

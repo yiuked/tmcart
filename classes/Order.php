@@ -146,8 +146,9 @@ class Order extends ObjectBase{
 				WHERE 1
 				'.$where);
 		
-		if($total==0)
+		if ($total == 0) {
 			return false;
+		}
 
 		$result = Db::getInstance()->ExecuteS('SELECT a.*,u.name,c.name as carrier,os.name as status,os.color FROM `'._DB_PREFIX_.'order` a
 				LEFT JOIN `'._DB_PREFIX_.'user` u ON (a.id_user = u.id_user)

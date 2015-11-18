@@ -77,74 +77,57 @@ function rand_time($star)
 }
 require_once(dirname(__FILE__).'/../errors.php');
 ?>
-<link href="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/themes/base/jquery.ui.theme.css" rel="stylesheet" type="text/css" media="all" />
-<link href="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/themes/base/jquery.ui.slider.css" rel="stylesheet" type="text/css" media="all" />
-<link href="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/themes/base/jquery.ui.datepicker.css" rel="stylesheet" type="text/css" media="all" />
-<link href="<?php echo $_tmconfig['tm_js_dir']?>jquery/plugins/timepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" media="all" />
-<link href="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/themes/base/jquery.ui.datepicker.css" rel="stylesheet" type="text/css" media="all" />
-<link href="<?php echo $_tmconfig['tm_js_dir']?>jquery/plugins/timepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" media="all" />
-<script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/jquery.ui.widget.min.js"></script>
-<script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/jquery.ui.mouse.min.js"></script>
-<script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/jquery.ui.slider.min.js"></script>
-<script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/jquery.ui.datepicker.min.js"></script>
-<script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/i18n/jquery.ui.datepicker-zh-CN.js"></script>
-<script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/plugins/timepicker/jquery-ui-timepicker-addon.js"></script>
+<link href="<?php echo BOOTSTRAP_CSS;?>bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<script type="text/javascript" src="<?php echo BOOTSTRAP_JS;?>bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="<?php echo BOOTSTRAP_JS;?>bootstrap-datetimepicker.zh-CN.js"></script>
 <script language="javascript">
-$(function() {
-	if ($(".datepicker").length > 0)
-			$('.datepicker').datetimepicker({
-				prevText: '',
-				nextText: '',
-				dateFormat: 'yy-mm-dd',
-
-				// Define a custom regional settings in order to use PrestaShop translation tools
-				currentText: '现在',
-				closeText: '完成',
-				ampm: false,
-				amNames: ['AM', 'A'],
-				pmNames: ['PM', 'P'],
-				timeFormat: 'hh:mm:ss tt',
-				timeSuffix: '',
-				timeOnlyTitle: '选择时间',
-				timeText: '时间',
-				hourText: '小时',
-				minuteText: '分钟',
-			});
-});
+$(document).ready(function(){
+	$('.tmdatatimepicker').datetimepicker({
+		language: 'zh-CN',
+		container: '.container-fluid',
+		format: 'yyyy-mm-dd hh:ii'
+	});
+})
 </script>
-<div class="path_bar">
-  <div class="path_title">
-    <h3> <span style="font-weight: normal;" id="current_obj"> <span class="breadcrumb item-1 ">数据<img src="<?php echo $_tmconfig['tm_img_dir'];?>admin/separator_breadcrum.png" style="margin-right:5px" alt="&gt;"> </span> <span class="breadcrumb item-2 ">导入</span> </span> </h3>
-  </div>
+<?php
+$breadcrumb = new UIAdminBreadcrumb();
+$breadcrumb->home();
+$breadcrumb->add(array('title' => '产品反馈', 'href' => 'index.php?rule=feedback'));
+$breadcrumb->add(array('title' => '导入', 'active' => true));
+$bread = $breadcrumb->draw();
+echo UIViewBlock::area(array('bread' => $bread), 'breadcrumb');
+?>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">导入反馈</div>
+			<div class="panel-body">
+				<div class="col-md-10 form-horizontal">
+					<form enctype="multipart/form-data" method="post" action="index.php?rule=feedback_import" class="defaultForm" id="import_form" name="import_form">
+						<div class="form-group">
+							<label for="time" class="col-md-2 control-label">开始时间</label>
+							<div class="col-md-6" id="datepicker">
+								<input type="text" class="tmdatatimepicker form-control" value="<?php echo Tools::getRequest('from_date');?>"  name="from_date" >
+								<p class="text-info">评论开始的时间</p>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="time" class="col-md-2 control-label">ID号</label>
+							<div class="col-md-6">
+								<input type="text" value="<?php echo Tools::getRequest('ali_productid');?>" name="ali_productid" class="form-control" />
+								<p class="text-info">逗号分隔多个ID</p>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-md-6 col-md-offset-2">
+								<button type="submit" class="btn btn-success" name="importFeedback"><span class="glyphicon glyphicon-save"></span> 导入</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
-<div class="mianForm">
-  <br/><br/>
-  <form enctype="multipart/form-data" method="post" action="index.php?rule=feedback_import" class="defaultForm" id="import_form" name="import_form">
-    <fieldset class="small">
-    <legend> <img alt="CMS 分类" src="<?php echo $_tmconfig['ico_dir'];?>category.png">导入产品</legend>
-	
-    <label>开始时间: </label>
-    <div class="margin-form">
-      <div style="display:block; float: left;">
-        <input type="text" class="text_input_sort datepicker" value="<?php echo Tools::getRequest('from_date');?>"  name="from_date">&nbsp;
-		<p class="preference_description">评论开始的时间</b></p>
-      </div>
-      <div class="clear"></div>
-    </div>
-	
-    <label>ID号: </label>
-    <div class="margin-form">
-      <div style="display:block; float: left;">
-		<input type="text" value="<?php echo Tools::getRequest('ali_productid');?>" name="ali_productid" size="60"/>
-		<p class="preference_description">逗号分隔多个ID</p>
-      </div>
-      <div class="clear"></div>
-    </div>
-	<div class="margin-form">
-		<input type="submit" class="button" value="导入" name="importFeedback">
-	</div>
-    </fieldset>
-  </form>
-</div>

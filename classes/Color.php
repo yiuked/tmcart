@@ -20,7 +20,7 @@ class Color extends ObjectBase{
 		return $fields;
 	}
 	
-	public function add()
+	public function add($nullValues = false)
 	{
 		$num = Db::getInstance()->getValue("SELECT * FROM `"._DB_PREFIX_."color` WHERE code='".pSQL(strtolower($this->code))."'");
 		if($num>0)
@@ -31,13 +31,13 @@ class Color extends ObjectBase{
 	
 	public static function getEntitys()
 	{
-		$result = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'color` ORDER BY `top` ASC');
+		$result = Db::getInstance()->ExecuteS('SELECT *,code as color  FROM `'._DB_PREFIX_.'color` ORDER BY `position` ASC');
 		return $result;
 	}
 	
-	public function getProducts($p=1,$limit=50,$orderBy = NULL,$orderWay = NULL)
+	public function getProducts($p = 1, $limit = 50, $orderBy = NULL, $orderWay = NULL)
 	{
-		$cache_key = 'color-'.md5($this->id.':'.$p.':'.$limit.':'.$orderBy.':'.$orderWay);
+		$cache_key = 'color-' . md5($this->id . ':' . $p . ':' . $limit . ':' . $orderBy . ':' . $orderWay);
 		if(!$rows = Cache::getInstance()->get($cache_key)){
 			if(!is_null($orderBy) AND !is_null($orderWay))
 			{

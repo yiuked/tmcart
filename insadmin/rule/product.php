@@ -111,7 +111,9 @@ $limit		= $cookie->getPost('pagination') ? $cookie->getPost('pagination') : '50'
 $p			= Tools::G('p') ? (Tools::G('p') == 0 ? 1 : Tools::G('p')) : 1;
 
 $result  	= Product::getProducts(false,$p,$limit,$orderBy,$orderWay,$filter);
-require_once(_TM_ADMIN_DIR_.'/errors.php');
+if (isset($errors)) {
+	UIAdminAlerts::MError($errors);
+}
 ?>
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/jquery.tablednd_0_5.js"></script>
 <script src="<?php echo $_tmconfig['tm_js_dir']?>admin/dnd.js" type="text/javascript"></script>
@@ -143,7 +145,7 @@ require_once(_TM_ADMIN_DIR_.'/errors.php');
 				$(document).ready(function(){
 					var base_url = 'index.php?rule=product';
 					// Load category products page when category is clicked
-					$('#categories-treeview :input').on('click', function(){
+					$('#categories-treeview input[type="radio"]').on('click', function(){
 						var brand_value = '';
 						if($("input[name='id_brands'][checked]").val()>0){
 							brand_value = '&id_brand='+$("input[name='id_brands'][checked]").val();

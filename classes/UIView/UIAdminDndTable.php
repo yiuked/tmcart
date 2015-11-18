@@ -19,7 +19,7 @@ class UIAdminDndTable extends UIAdminTable
             foreach ($this->data as $key => $row) {
                 $path = !empty($this->parent) ? $row[$this->parent] . '_' : '';
                 $path .= $row[$this->identifier];
-                $body .= '<tr id="tr_' . $path . '_' . $row['position'] . '">';
+                $body .= '<tr id="tr_' . $path . '_' . $row['position'] . '" >';
                 foreach($this->header as $head){
                     $width = isset($head['width']) ? ' width="' . $head['width'] . '" ' : '';
                     $class = isset($head['class']) ? ' class="' . $head['class'] . '" ' : '';
@@ -38,7 +38,8 @@ class UIAdminDndTable extends UIAdminTable
                             $body .= '<span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span></a>';
                             $body .= '</td>';
                         }else {
-                            $body .= '<td'. $width . $class .' onclick="document.location = \'index.php?rule=' .  $this->rule . (!$this->child ? '_edit' : '') . '&id=' .  $row[$this->identifier] . '\'" class="pointer">' .  $row[$head['name']] . '</td>';
+                            $title = isset($head['color']) ? '<span style="background-color:' .  $row['color'] . ';color:white" class="color_field">' .  $row[$head['name']] . '</span>' : $row[$head['name']];
+                            $body .= '<td'. $width . $class .' onclick="document.location = \'index.php?rule=' .  $this->rule . (!$this->child ? '_edit' : '') . '&id=' .  $row[$this->identifier] . '\'" class="pointer">' .   $title . '</td>';
                         }
                     } elseif (isset($head['isAction'])) {
                         //create filter and reset filter buttom group

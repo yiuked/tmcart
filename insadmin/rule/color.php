@@ -13,21 +13,26 @@ if(intval(Tools::getRequest('delete'))>0){
 }elseif(Tools::isSubmit('subDelete')){
 	$select_cat = Tools::getRequest('categoryBox');
 	$color	= new Color();
-		if($color->deleteSelection($select_cat))
-			echo '<div class="conf">删除管理员成功</div>';
-
+	if($color->deleteSelection($select_cat)){
+		echo '<div class="conf">删除管理员成功</div>';
+	}
 }
 
-$colors = Color::getEntitys();
+$table = new UIAdminDndTable('color',  'Color', 'id_color');
+$table->header = array(
+	array('sort' => false ,'isCheckAll' => 'colorBox[]'),
+	array('name' => 'id_color','title' => 'ID'),
+	array('name' => 'name','title' => '名称'),
+	array('name' => 'code','title' => '颜色','color' => true),
+	array('name' => 'position','title' => '排序'),
+	array('sort' => false ,'title' => '操作', 'class' => 'text-right', 'isAction'=> array('view', 'edit', 'delete')),
+);
+$result = Color::getEntitys();
 
 require_once(dirname(__FILE__).'/../errors.php');
 ?>
 <script type="text/javascript" src="../js/jquery/jquery.tablednd_0_5.js"></script>
-<script type="text/javascript">
-	var token = '1f0af725a0585d7827c059999fd2d35e';
-	var come_from = 'color';
-	var alternate = '0';
-</script>
+<script src="../js/admin/dnd.js" type="text/javascript"></script>
 <?php
 $breadcrumb = new UIAdminBreadcrumb();
 $breadcrumb->home();
@@ -41,45 +46,20 @@ $btn_group = array(
 );
 echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'breadcrumb');
 ?>
-
-<form class="form" method="post" action="index.php?rule=color">
-<table class="table_grid" name="list_table" width="100%">
-<tr><td>
-<div class="mianColForm">
-	<table class="tableList table tableDnD" width="40%" cellpadding="0" cellspacing="0" id="order">
-	<thead>
-		<tr>
-			<th><input type="checkbox" name="checkme" onclick="checkDelBoxes(this.form, 'categoryBox[]', this.checked)" ></th>
-			<th>编号</th>
-			<th>名称</th>
-			<th>颜色</th>
-			<th align="right" >操作</th>
-		</tr>
-	   </thead>
-		<?php 
-		if(is_array($colors) && count($colors)>0){
-		foreach($colors as $key => $row){?>
-		<tr class="<?php echo ($key%2?'alt_row':''); ?> row" id="tr_<?php echo $row['id_color'];?>">
-			<td><input type="checkbox" name="categoryBox[]" value="<?php echo $row['id_color'];?>" ></td>
-			<td><?php echo $row['id_color'];?></td>
-			<td class="pointer" onclick="document.location = 'index.php?rule=color_edit&id=<?php echo $row['id_color'];?>'"><?php echo $row['name'];?></td>
-			<td class="pointer" onclick="document.location = 'index.php?rule=color_edit&id=<?php echo $row['id_color'];?>'">
-				<span class="color_field" style="border:3px solid #333;background-color:<?php echo $row['code'];?>;color:white"><?php echo $row['code'];?></span></td>
-			<td align="right">
-				<a href="index.php?rule=color_edit&id=<?php echo $row['id_color'];?>"><img alt="编辑" src="<?php echo $_tmconfig['ico_dir'];?>edit.gif"></a>
-				<a onclick="return confirm('你确定要删除？')" href="index.php?rule=color&delete=<?php echo $row['id_color'];?>"><img alt="删除" src="<?php echo $_tmconfig['ico_dir'];?>delete.gif"></a>
-			</td>
-		</tr>
-		<?php }
-			}else{
-		?>
-		<tr><td colspan="6" align="center">暂无颜色</td></tr>
-		<?php }?>
-	</table>
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				颜色
+			</div>
+			<div class="panel-body">
+				<form class="form" method="post" action="index.php?rule=color">
+					<?php
+					$table->data = $result;
+					echo $table->draw();
+					?>
+				</form>
+			</div>
+		</div>
+	</div>
 </div>
-</td></tr>
-<tr><td>
-<p><input type="submit" onclick="return confirm('你确定要删除选中项目?');" value="删除选中项目" name="subDelete" class="button"></p>
-</td></tr>
-</table>
-</form>

@@ -75,14 +75,12 @@ $p			= Tools::G('p') ? (Tools::G('p') == 0 ? 1 : Tools::G('p')) : 1;
 $result  	= $category->getSubCategories(false,$limit,$p,$orderBy,$orderWay,$filter);
 $catBar = $category->getCatBar($category->id);
 krsort($catBar);
-require_once(_TM_ADMIN_DIR_.'/errors.php');
+
+if (isset($errors)) {
+	UIAdminAlerts::MError($errors);
+}
 ?>
 <script type="text/javascript" src="../js/jquery/jquery.tablednd_0_5.js"></script>
-<script type="text/javascript">
-	var token = '1f0af725a0585d7827c059999fd2d35e';
-	var come_from = 'cms_category';
-	var alternate = '0';
-</script>
 <script src="../js/admin/dnd.js" type="text/javascript"></script>
 
 <div class="row">

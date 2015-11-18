@@ -33,11 +33,6 @@ $result  	= AttributeGroup::getEntitys();
 require_once(dirname(__FILE__).'/../errors.php');
 ?>
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/jquery.tablednd_0_5.js"></script>
-<script type="text/javascript">
-	var token = '1f0af725a0585d7827c059999fd2d35e';
-	var come_from = 'attributeGroup';
-	var alternate = '0';
-</script>
 <script src="<?php echo $_tmconfig['tm_js_dir']?>admin/dnd.js" type="text/javascript"></script>
 <div class="row">
 	<div class="col-md-12">
@@ -101,14 +96,14 @@ require_once(dirname(__FILE__).'/../errors.php');
 						<table width="60%" class="table tableDnD" cellpadding="0" cellspacing="0" id="attribute_<?php echo $row['id_attribute_group'];?>">
 							<thead>
 							<tr>
-								<th><input type="checkbox" name="checkme" onclick="checkDelBoxes(this.form, 'attribute[]', this.checked)" ></th>
+								<th><input type="checkbox" name="checkme" data-name="attribute[]" class="check-all" ></th>
 								<th>编号</th>
 								<th width="80%">属性值</th>
 								<th>排序</th>
 								<th class="text-right" >操作</th>
 							</tr>
 							</thead>
-						  <?php foreach($attributes as $key => $row){?>
+						  <?php foreach($attributes as $key => $row){ ?>
 						  <tr id="tr_<?php echo $row['id_attribute_group'].'_'.$row['id_attribute'].'_'.(int)$row['position'];?>">
 								<td><input type="checkbox" name="attribute[]" value="<?php echo $row['id_attribute'];?>" ></td>
 								<td><?php echo $row['id_attribute'];?></td>

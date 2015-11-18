@@ -60,7 +60,9 @@ if(isset($_POST['sveProduct']) && Tools::getRequest('sveProduct')=='edit')
 	}
 
 }
-require_once(_TM_ADMIN_DIR_.'/errors.php');
+if (isset($errors)) {
+	UIAdminAlerts::MError($errors);
+}
 ?>
 <div class="row">
 	<div class="col-md-12">

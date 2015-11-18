@@ -288,8 +288,9 @@ span.color_field {
   border-radius: 3px 3px 3px 3px;
   color: #FFFFFF;
   font-size: 11px;
-  padding: 2px 5px;
+  padding: 5px;
   text-transform: uppercase;
+  border: 1px solid #333;
 }
 
 /*color product*/
@@ -397,4 +398,7 @@ border: 1px solid #006633;
 }
 .table-action-dropdown-menu > li > a{
   padding: 3px 10px;
+}
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+  line-height: 2.429;
 }
