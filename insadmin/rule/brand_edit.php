@@ -37,91 +37,89 @@ if(isset($_POST['sveBrand']) && Tools::getRequest('sveBrand')=='edit')
 }
 require_once(dirname(__FILE__).'/../errors.php');
 ?>
-
-<div class="path_bar">
-  <div class="path_title">
-    <h3> <span style="font-weight: normal;" id="current_obj"> <span class="breadcrumb item-1 ">品牌<img src="<?php echo $_tmconfig['tm_img_dir'];?>admin/separator_breadcrum.png" style="margin-right:5px" alt="&gt;"> </span> <span class="breadcrumb item-2 ">编辑 </span> </span> </h3>
-    <div class="cc_button">
-      <ul>
-        <li> <a title="Save" href="#" class="toolbar_btn" id="emploay-save"> <span class="process-icon-save "></span>
-          <div>保存</div>
-          </a> </li>
-        <li> <a title="Back to list" href="javascript:history.back();" class="toolbar_btn" id="desc-product-back"> <span class="process-icon-back "></span>
-          <div>返回列表</div>
-          </a> </li>
-      </ul>
-    </div>
-  </div>
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="col-md-6">
+					<?php
+					$breadcrumb = new UIAdminBreadcrumb();
+					$breadcrumb->home();
+					$breadcrumb->add(array('href' => 'index.php?rule=brand', 'title' => '品牌'));
+					$breadcrumb->add(array('title' => '编辑', 'active' => true));
+					echo $breadcrumb->draw();
+					?>
+				</div>
+				<div class="col-md-6">
+					<div class="btn-group save-group pull-right" role="group">
+						<a href="index.php?rule=brand"  class="btn btn-primary"><span aria-hidden="true" class="glyphicon glyphicon-level-up"></span> 返回</a>
+					</div>
+					<div class="btn-group save-group pull-right" role="group">
+						<a href="javascript:void(0)"  class="btn btn-success" id="brand-form"><span aria-hidden="true" class="glyphicon glyphicon-save"></span> 保存</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <script language="javascript">
-	$("#emploay-save").click(function(){
+	$("#brand-save").click(function(){
 		$("#brand_form").submit();
 	})
 </script>
-<div class="mianForm">
-  <form enctype="multipart/form-data" method="post" action="index.php?rule=brand_edit<?php echo isset($id)?'&id='.$id:''?>" class="defaultForm admincmscontent" id="brand_form" name="example">
-    <fieldset>
-    <legend> <img alt="CMS 分类" src="<?php echo $_tmconfig['ico_dir'];?>category.png">品牌</legend>
-    <label>品牌: </label>
-    <div class="margin-form">
-      <div style="display:block; float: left;">
-        <input type="text" value="<?php echo isset($obj)?$obj->name:Tools::getRequest('name');?>"  name="name" class="text_input" onchange="copy2friendlyURL()" id="name">
-        <span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span> </div>
-      <sup>*</sup>
-      <div class="clear"></div>
-    </div>
-    <label>LOGO: </label>
-    <div class="margin-form">
-      <div style="display:block; float: left;">
-        <input type="file" value=""  name="logo">
-       </div>
-	   <?php if(isset($obj) && strlen($obj->logo)>3){?>
-	   <div class="clear"></div>
-	   <p class="preference_description"><img src="<?php echo $_tmconfig['brand_dir'].$obj->logo;?>" alt="<?php echo $obj->name;?>" /></p>
-	   <?php }?>
-      <div class="clear"></div>
-    </div>
-	<label>内容描述: </label>
-	<div class="margin-form">
-		<div style="display:block; float: left;">
-			<textarea name="description" style="width:800px;height:100px;"><?php echo isset($obj)?$obj->description:Tools::getRequest('description');?></textarea>
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-body">
+			  <form method="post" action="index.php?rule=brand_edit<?php echo isset($id)?'&id='.$id:''?>" class="form-horizontal" id="brand_form" >
+				  <div class="form-group">
+					  <label for="name" class="col-md-2 control-label">品牌</label>
+					  <div class="col-md-5">
+						  <input type="text" class="form-control" name="name" onchange="copy2friendlyURL()" id="name" value="<?php echo isset($obj)?$obj->name:Tools::getRequest('name');?>">
+					  </div>
+				  </div>
+				  <div class="form-group">
+					  <label for="logo" class="col-md-2 control-label">LOGO</label>
+					  <div class="col-md-5">
+						  <input type="file" value=""  name="logo" >
+						  <?php if(isset($obj) && strlen($obj->logo)>3){?>
+						  <img src="<?php echo $_tmconfig['brand_dir'].$obj->logo;?>" alt="<?php echo $obj->name;?>" class="img-rounded">
+						  <?php }?>
+					  </div>
+				  </div>
+				  <div class="form-group">
+					  <label for="description" class="col-md-2 control-label">描述</label>
+					  <div class="col-md-8">
+						  <textarea name="description" class="form-control"><?php echo isset($obj)?$obj->description:Tools::getRequest('description');?></textarea>
+					  </div>
+				  </div>
+				  <div class="form-group">
+					  <label for="name" class="col-md-2 control-label">标题</label>
+					  <div class="col-md-5">
+						  <input type="text" class="form-control" name="name" value="<?php echo isset($obj)?$obj->meta_title:Tools::getRequest('meta_title');?>">
+					  </div>
+				  </div>
+				  <div class="form-group">
+					  <label for="name" class="col-md-2 control-label">关键词</label>
+					  <div class="col-md-5">
+						  <input type="text" class="form-control" name="name" value="<?php echo isset($obj)?$obj->meta_keywords:Tools::getRequest('meta_keywords');?>">
+					  </div>
+				  </div>
+				  <div class="form-group">
+					  <label for="name" class="col-md-2 control-label">Meta 描述</label>
+					  <div class="col-md-5">
+						  <input type="text" class="form-control" name="name" value="<?php echo isset($obj)?$obj->meta_description:Tools::getRequest('meta_description');?>">
+					  </div>
+				  </div>
+				  <div class="form-group">
+					  <label for="name" class="col-md-2 control-label">伪静态</label>
+					  <div class="col-md-5">
+						  <input type="text" class="form-control" name="rewrite" id="rewrite" value="<?php echo isset($obj)?$obj->rewrite:Tools::getRequest('rewrite');?>" onchange="this.value = str2url(this.value);">
+					  </div>
+				  </div>
+				<input type="hidden" value="<?php echo isset($id)?'edit':'add'?>"  name="sveBrand">
+			  </form>
+			</div>
 		</div>
-		<div class="clear"></div>
 	</div>
-	<label>Meta Title: </label>
-	<div class="margin-form">
-		<div style="display:block; float: left;">
-			<input type="text" class="text_input" value="<?php echo isset($obj)?$obj->meta_title:Tools::getRequest('meta_title');?>"  name="meta_title">
-			<span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span>
-		</div>
-		<div class="clear"></div>
-	</div>
-	<label>Meta Keywords: </label>
-	<div class="margin-form">
-		<div style="display:block; float: left;">
-			<input type="text" class="text_input" value="<?php echo isset($obj)?$obj->meta_keywords:Tools::getRequest('meta_keywords');?>"  name="meta_keywords">
-			<span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span>
-		</div>
-		<div class="clear"></div>
-	</div>
-	<label>Meta Description: </label>
-	<div class="margin-form">
-		<div style="display:block; float: left;">
-			<input type="text" class="text_input" value="<?php echo isset($obj)?$obj->meta_description:Tools::getRequest('meta_description');?>"  name="meta_description">
-			<span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span>
-		</div>
-		<div class="clear"></div>
-	</div>
-	<label>友好URL链接: </label>
-	<div class="margin-form">
-		<div style="display:block; float: left;">
-			<input type="text" class="text_input" value="<?php echo isset($obj)?$obj->rewrite:Tools::getRequest('rewrite');?>" onchange="this.value = str2url(this.value);" name="rewrite" id="rewrite">
-			<span name="help_box" class="hint" style="display: none;">只能包含数字,字母及"-"<span class="hint-pointer">&nbsp;</span></span>
-		</div>
-		<sup>*</sup>
-		<div class="clear"></div>
-	</div>
-    <input type="hidden" value="<?php echo isset($id)?'edit':'add'?>"  name="sveBrand">
-    </fieldset>
-  </form>
 </div>

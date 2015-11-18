@@ -1,5 +1,5 @@
 <?php
-include_once(dirname(__FILE__)."/init.php");
+include_once(dirname(__FILE__) . "/../config/init.php");
 
 if(Tools::getRequest('action') == 'addImage'){
 	ajaxProcessAddImage();

@@ -85,7 +85,7 @@ require_once(_TM_ADMIN_DIR_.'/errors.php');
 					</div>
 
 					<div class="btn-group save-group pull-right" role="group">
-						<a href="javascript:void(0)"  class="btn btn-success" id="desc-product-save"><span aria-hidden="true" class="glyphicon glyphicon-floppy-saved"></span> 保存</a>
+						<a href="javascript:void(0)"  class="btn btn-success" id="desc-product-save"><span aria-hidden="true" class="glyphicon glyphicon-save"></span> 保存</a>
 					</div>
 				</div>
 			</div>

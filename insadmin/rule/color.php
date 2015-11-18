@@ -28,30 +28,20 @@ require_once(dirname(__FILE__).'/../errors.php');
 	var come_from = 'color';
 	var alternate = '0';
 </script>
-<div class="path_bar">
-	<div class="path_title">
-		<h3> 
-			<span style="font-weight: normal;" id="current_obj">
-			<span class="breadcrumb item-1 ">颜色管理</span></span>
-		</h3>
-		<div class="cc_button">
-		<ul>
-			<li><a title="产品颜色管理" href="index.php?rule=color_cannel_product" class="toolbar_btn" id="color_product_onepage">
-				<span class="process-icon-tools"></span>
-				<div>取消产品颜色</div>
-			</a></li>
-			<li><a title="产品颜色管理" href="index.php?rule=color_product" class="toolbar_btn" id="color_product_onepage">
-				<span class="process-icon-tools"></span>
-				<div>产品颜色管理</div>
-			</a></li>
-        	<li><a title="添加颜色" href="index.php?rule=color_edit" class="toolbar_btn" id="add_onepage">
-				<span class="process-icon-new"></span>
-				<div>添加颜色</div>
-			</a></li>
-      	</ul>
-		</div>
-	</div>
-</div>
+<?php
+$breadcrumb = new UIAdminBreadcrumb();
+$breadcrumb->home();
+$breadcrumb->add(array('title' => '颜色', 'active' => true));
+$bread = $breadcrumb->draw();
+
+$btn_group = array(
+	array('type' => 'a', 'title' => '取消颜色', 'href' => 'index.php?rule=color_cannel_product', 'class' => 'btn-primary', 'icon' => 'level-up') ,
+	array('type' => 'a', 'title' => '产品颜色', 'href' => 'index.php?rule=color_product', 'class' => 'btn-primary', 'icon' => 'level-up') ,
+	array('type' => 'a', 'title' => '新颜色', 'href' => 'index.php?rule=color_edit', 'class' => 'btn-success', 'icon' => 'plus') ,
+);
+echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'breadcrumb');
+?>
+
 <form class="form" method="post" action="index.php?rule=color">
 <table class="table_grid" name="list_table" width="100%">
 <tr><td>

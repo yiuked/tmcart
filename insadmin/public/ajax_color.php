@@ -1,5 +1,5 @@
 <?php
-include_once(dirname(__FILE__)."/init.php");
+include_once(dirname(__FILE__) . "/../config/init.php");
 if(isset($_GET['action'])&&$_GET['action']=='loadmoreproduct')
 {
 	$products  = Db::getInstance()->ExecuteS('SELECT p.id_product,i.id_image FROM '._DB_PREFIX_.'product AS p 

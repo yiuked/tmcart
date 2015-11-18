@@ -24,60 +24,84 @@ if(Tools::isSubmit('importCSV'))
 }
 require_once(dirname(__FILE__).'/../errors.php');
 ?>
-
-<div class="path_bar">
-  <div class="path_title">
-    <h3> <span style="font-weight: normal;" id="current_obj"> <span class="breadcrumb item-1 ">数据<img src="<?php echo $_tmconfig['tm_img_dir'];?>admin/separator_breadcrum.png" style="margin-right:5px" alt="&gt;"> </span> <span class="breadcrumb item-2 ">导入</span> </span> </h3>
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="col-md-6">
+          <?php
+          $breadcrumb = new UIAdminBreadcrumb();
+          $breadcrumb->home();
+          $breadcrumb->add(array('title' => '批量导入产品', 'active' => true));
+          echo $breadcrumb->draw();
+          ?>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
-<div class="mianForm">
-  <form enctype="multipart/form-data" method="post" action="index.php?rule=import" class="defaultForm" id="import_uploaed_form" name="import_uploaed_form">
-    <fieldset class="small">
-    <legend> <img alt="CMS 分类" src="<?php echo $_tmconfig['ico_dir'];?>category.png">上传CSV文件</legend>
-    <label>文件: </label>
-    <div class="margin-form">
-      <div style="display:block; float: left;">
-        <input type="file" value=""  name="csv_name">
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        上传文件
       </div>
-      <div class="clear"></div>
-    </div>
-    <label>文件名: </label>
-    <div class="margin-form">
-      <div style="display:block; float: left;">
-        <input type="text" value="<?php echo Tools::getRequest('file_name');?>"  name="file_name">
-		<p class="preference_description">用于区别上传后的文件，若不填则自动生成以时间的文件名,<b>如：test</b></p>
+      <div class="panel-body">
+        <form enctype="multipart/form-data" method="post" action="index.php?rule=import" class="form-horizontal" id="import_uploaed_form" >
+          <div class="form-group">
+            <label for="csv_name" class="col-md-2 control-label">CSV文件</label>
+            <div class="col-md-5">
+              <input type="file" value=""  name="csv_name">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="file_name" class="col-md-2 control-label">文件名</label>
+            <div class="col-md-5">
+              <input type="text" value="<?php echo Tools::getRequest('file_name');?>"  name="file_name" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-5 col-md-offset-2">
+              <button type="submit"  class="btn btn-success" ><span aria-hidden="true" class="glyphicon glyphicon-open"></span> 上传</button>
+            </div>
+          </div>
+        </form>
       </div>
-      <div class="clear"></div>
     </div>
-	<div class="margin-form">
-		<input type="submit" class="button" value="上传" name="updateCSV">
-	</div>
-    </fieldset>
-  </form>
-  <br/><br/>
-  <form enctype="multipart/form-data" method="post" action="index.php?rule=import" class="defaultForm" id="import_form" name="import_form">
-    <fieldset class="small">
-    <legend> <img alt="CMS 分类" src="<?php echo $_tmconfig['ico_dir'];?>category.png">导入产品</legend>
-    <label>选择上传文件: </label>
-    <div class="margin-form">
-	  <?php
-	  	$csvs = glob(PRO_IMPORT_DIR.'*.csv');
-	  ?>
-      <div style="display:block; float: left;">
-        <select id="import_file" name="import_file" size="5">
-			<option value="NULL" selected="selected">--选择文件--</option>
-			<?php foreach($csvs as $csv){?>
-			<option value="<?php echo basename($csv);?>"><?php echo basename($csv);?></option>
-			<?php }?>
-		</select>
-		<p class="preference_description">若手动复制文件到目录，请确保文件为csv格式，且后缀csv为小写</p>
+   </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        导入文件
       </div>
-      <div class="clear"></div>
+      <div class="panel-body">
+        <form method="post" action="index.php?rule=import" class="form-horizontal" id="import_form" >
+          <div class="form-group">
+            <label for="file_name" class="col-md-2 control-label">文件名</label>
+            <div class="col-md-5">
+              <?php
+              $csvs = glob(PRO_IMPORT_DIR.'*.csv');
+              ?>
+              <select id="import_file" name="import_file" size="5" class="form-control">
+                <option value="NULL" selected="selected">--选择文件--</option>
+                <?php foreach($csvs as $csv){?>
+                  <option value="<?php echo basename($csv);?>"><?php echo basename($csv);?></option>
+                <?php }?>
+              </select>
+              <p class="text-info">若手动复制文件到目录，请确保文件为csv格式，且后缀csv为小写</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-5 col-md-offset-2">
+              <button type="submit"  class="btn btn-success" ><span aria-hidden="true" class="glyphicon glyphicon-open"></span> 导入</button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
-	<div class="margin-form">
-		<input type="submit" class="button" value="导入" name="importCSV">
-	</div>
-    </fieldset>
-  </form>
+  </div>
 </div>

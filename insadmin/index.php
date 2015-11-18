@@ -1,7 +1,6 @@
 <?php
 	ob_start();
-	define('_TM_ADMIN_DIR_', getcwd());
-	include_once(dirname(__FILE__)."/public/init.php");
+	include_once(dirname(__FILE__) . "/config/init.php");
 ?>
 <!DOCTYPE html>
 <html lang="zh">
@@ -130,7 +129,7 @@
 <div class="container-fluid">
 		<?php
 			$rule = Tools::getRequest('rule');
-			require_once(_TM_ADMIN_DIR_.'/rule/'.($rule?$rule:'index').'.php');
+			require_once(ADMIN_DIR.'/rule/'.($rule?$rule:'index').'.php');
 		?>
 </div>
 <div id="footer">
