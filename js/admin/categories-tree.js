@@ -189,7 +189,7 @@ function checkAllCategories()
 	else
 	{
 		$('input[name="categoryBox[]"]').not(':checked').each(function () {
-			$(this).attr('checked', 'checked');
+			$(this).prop('checked',true);
 			clickOnCategoryBox($(this));
 		});
 	}
@@ -242,11 +242,16 @@ function updateNbSubCategorySelected(category, add)
 		$('.nb_sub_cat_selected').hide();
 		return false;
 	}
+	var newValue = 0;
+	if (add) {
+		newValue = parseInt(parentNbSubCategorySelected) + 1;
+	}else{
+		newValue = parseInt(parentNbSubCategorySelected) - 1;
+		if (newValue < 0) {
+			newValue = 0;
+		}
+	}
 
-	if (add)
-		var newValue = parseInt(parentNbSubCategorySelected)+1;
-	else
-		var newValue = parseInt(parentNbSubCategorySelected)-1;
 	
 	currentSpan.children('.nb_sub_cat_selected_value').html(newValue);
 	currentSpan.children('.nb_sub_cat_selected_word').html(selectedLabel);

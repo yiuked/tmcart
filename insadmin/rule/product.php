@@ -114,10 +114,11 @@ $result  	= Product::getProducts(false,$p,$limit,$orderBy,$orderWay,$filter);
 if (isset($errors)) {
 	UIAdminAlerts::MError($errors);
 }
+
+
 ?>
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/jquery.tablednd_0_5.js"></script>
 <script src="<?php echo $_tmconfig['tm_js_dir']?>admin/dnd.js" type="text/javascript"></script>
-
 <div class="col-md-10 col-md-offset-2">
 	<div class="panel panel-default">
 		<div class="panel-body">
@@ -145,7 +146,7 @@ if (isset($errors)) {
 				$(document).ready(function(){
 					var base_url = 'index.php?rule=product';
 					// Load category products page when category is clicked
-					$('#categories-treeview input[type="radio"]').on('click', function(){
+					$(document).on('click','#categories-treeview input', function(){
 						var brand_value = '';
 						if($("input[name='id_brands'][checked]").val()>0){
 							brand_value = '&id_brand='+$("input[name='id_brands'][checked]").val();

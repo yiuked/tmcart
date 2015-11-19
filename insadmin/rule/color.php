@@ -29,7 +29,9 @@ $table->header = array(
 );
 $result = Color::getEntitys();
 
-require_once(dirname(__FILE__).'/../errors.php');
+if (isset($errors)) {
+	UIAdminAlerts::MError($errors);
+}
 ?>
 <script type="text/javascript" src="../js/jquery/jquery.tablednd_0_5.js"></script>
 <script src="../js/admin/dnd.js" type="text/javascript"></script>
@@ -40,8 +42,8 @@ $breadcrumb->add(array('title' => '颜色', 'active' => true));
 $bread = $breadcrumb->draw();
 
 $btn_group = array(
-	array('type' => 'a', 'title' => '取消颜色', 'href' => 'index.php?rule=color_cannel_product', 'class' => 'btn-primary', 'icon' => 'level-up') ,
-	array('type' => 'a', 'title' => '产品颜色', 'href' => 'index.php?rule=color_product', 'class' => 'btn-primary', 'icon' => 'level-up') ,
+	array('type' => 'a', 'title' => '取消关联', 'href' => 'index.php?rule=color_cannel_product', 'class' => 'btn-primary', 'icon' => 'level-up') ,
+	array('type' => 'a', 'title' => '产品关联', 'href' => 'index.php?rule=color_product', 'class' => 'btn-primary', 'icon' => 'level-up') ,
 	array('type' => 'a', 'title' => '新颜色', 'href' => 'index.php?rule=color_edit', 'class' => 'btn-success', 'icon' => 'plus') ,
 );
 echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'breadcrumb');

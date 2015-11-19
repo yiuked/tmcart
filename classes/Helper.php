@@ -62,12 +62,12 @@ class Helper
 		';
 		
 		$html .= '
-		<div style="background-color:#F4E6C9; width:99%;padding:5px 0 5px 5px;">
-			<a href="#" id="collapse_all" >'.$trads['Collapse All'].'</a>
-			 - <a href="#" id="expand_all" >'.$trads['Expand All'].'</a>
+		<div>
+			<a href="javascript:void(0)" id="collapse_all" ><span aria-hidden="true" class="glyphicon glyphicon-folder-close"></span>  '.$trads['Collapse All'].' </a>
+			 - <a href="javascript:void(0)" id="expand_all" ><span aria-hidden="true" class="glyphicon glyphicon-folder-open"></span> ' .$trads['Expand All'] . '</a>
 			'.(!$use_radio ? '
-			 - <a href="#" id="check_all" >'.$trads['Check All'].'</a>
-			 - <a href="#" id="uncheck_all" >'.$trads['Uncheck All'].'</a>
+			 - <a href="javascript:void(0)" id="check_all" ><span aria-hidden="true" class="glyphicon glyphicon-check"></span> '.$trads['Check All'].'</a>
+			 - <a href="javascript:void(0)" id="uncheck_all" ><span aria-hidden="true" class="glyphicon glyphicon-unchecked"></span> '.$trads['Uncheck All'].'</a>
 			' : '').'
 		</div>
 		';
@@ -130,7 +130,7 @@ class Helper
 		
 		$html .= '
 		<div style="background-color:#F4E6C9; width:99%;padding:5px 0 5px 5px;">
-			<a href="#" id="collapse_all" >'.$trads['Collapse All'].'</a>
+			<a href="#" id="collapse_all" ><span aria-hidden="true" class="glyphicon glyphicon-folder-close"></span>  ' . $trads['Collapse All'] . '</a>
 			 - <a href="#" id="expand_all" >'.$trads['Expand All'].'</a>
 			'.(!$use_radio ? '
 			 - <a href="#" id="check_all" >'.$trads['Check All'].'</a>

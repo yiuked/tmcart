@@ -68,6 +68,7 @@ if (isset($errors)) {
 					</div>
 
 					<div class="btn-group save-group pull-right" role="group">
+						<a href="index.php?rule=category_edit"  class="btn btn-success"><span aria-hidden="true" class="glyphicon glyphicon-plus"></span> 新分类</a>
 						<a href="javascript:void(0)"  class="btn btn-success" id="submit-form"><span aria-hidden="true" class="glyphicon glyphicon-floppy-saved"></span> 保存</a>
 					</div>
 				</div>
