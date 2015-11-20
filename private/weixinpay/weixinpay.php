@@ -353,7 +353,7 @@ class Weixinpay extends PaymentModule
 
         if (!$id_order_status) {
             $status = new OrderState();
-            foreach (Language::getLanguage() as $id_lang) {
+            foreach (Language::getLanguages() as $id_lang) {
                 $status->name[$id_lang['id_lang']] = 'Awaiting WeChat Payment';
             }
             $status->module_name = $this->name;

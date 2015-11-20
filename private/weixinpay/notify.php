@@ -88,16 +88,25 @@ class PayNotifyCallBack extends WxPayNotify
         Log::DEBUG("change:1.".$result_order);
         if ($order) {
             Log::DEBUG("change:2.".$order->id);
+            $lastHistory = OrderHistory::getLastOrderState($order->id);
+            if ($lastHistory->id == Configuration::get('PS_OS_PAYMENT')) {
+                Log::DEBUG("change:2.1.".$order->id);
+
+                return true;
+            }
+
             $history  = new OrderHistory();
-            $history->id_order = (int)$order->id;
-            $history->id_employee = (int)$order->id_customer;
-            $history->changeIdOrderState(Configuration::get('PS_OS_PAYMENT'), (int)$order->id);
+            $history->id_order = (int) $order->id;
+            $history->id_employee = (int) $order->id_customer;
+            $history->changeIdOrderState(Configuration::get('PS_OS_PAYMENT'), (int) $order->id);
             Log::DEBUG("change:3.".$order->id);
             if ($history->addWithemail()) {
                 Log::DEBUG("change:4.".$order->id);
+
                 return true;
             }
         }
+
         return false;
     }
 }
