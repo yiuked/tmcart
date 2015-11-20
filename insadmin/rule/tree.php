@@ -1,3 +1,4 @@
+<form method="post" action="index.php?rule=tree">
 <?php
 /**
  * Created by PhpStorm.
@@ -5,6 +6,7 @@
  * Date: 2015/11/19
  * Time: 16:42
  */
+print_r($_POST);
 
 echo UITreeView::load();
 $tree = new UITreeView();
@@ -63,13 +65,17 @@ function hookDisplay()
 $data = hookDisplay();
 $json = json_encode($data);
 ?>
+
 <script>
    var json = '[<?php echo $json; ?>]';
    var $expandibleTree = $('#treeview-expandible').treeview({
     data: json,
     enableLinks: true,
-    expandIcon: "glyphicon glyphicon-stop",
-    collapseIcon: "glyphicon glyphicon-unchecked",
+    showCheckbox: true,
+    expandIcon: "glyphicon glyphicon-folder-close",
+    collapseIcon: "glyphicon glyphicon-folder-open",
 });
    $expandibleTree.treeview('expandNode', [ expandibleNodes, { levels: levels, silent: $('#chk-expand-silent').is(':checked') }]);
 </script>
+    <input type="submit" value="submit">
+</form>
