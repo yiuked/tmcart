@@ -78,35 +78,36 @@ class PayNotifyCallBack extends WxPayNotify
     public function changeOrderStatus($result_order)
     {
         $orders = Order::getByReference($result_order);
-        $order = false;
+        $isOk = true;
         if ($orders) {
-            foreach ($orders as $obj) {
-                $order = $obj;
-                break;
+            foreach ($orders as $order) {
+                $isOk &= $this->changeOrderStatusSub($order->id);
             }
         }
-        Log::DEBUG("change:1.".$result_order);
-        if ($order) {
-            Log::DEBUG("change:2.".$order->id);
-            $lastHistory = OrderHistory::getLastOrderState($order->id);
+        return $isOk;
+    }
+
+    public function changeOrderStatusSub($id_order)
+    {
+        Log::DEBUG("change:1.".$id_order);
+        if ($id_order) {
+            Log::DEBUG("change:2.".$id_order);
+            $lastHistory = OrderHistory::getLastOrderState($id_order);
             if ($lastHistory->id == Configuration::get('PS_OS_PAYMENT')) {
-                Log::DEBUG("change:2.1.".$order->id);
+                Log::DEBUG("change:2.1.".$id_order);
 
                 return true;
             }
 
             $history  = new OrderHistory();
-            $history->id_order = (int) $order->id;
-            $history->id_employee = (int) $order->id_customer;
-            $history->changeIdOrderState(Configuration::get('PS_OS_PAYMENT'), (int) $order->id);
-            Log::DEBUG("change:3.".$order->id);
+            $history->id_order = (int) $id_order;
+            $history->changeIdOrderState(Configuration::get('PS_OS_PAYMENT'), (int) $id_order);
+            Log::DEBUG("change:3.".$id_order);
             if ($history->addWithemail()) {
-                Log::DEBUG("change:4.".$order->id);
-
+                Log::DEBUG("change:4.".$id_order);
                 return true;
             }
         }
-
         return false;
     }
 }

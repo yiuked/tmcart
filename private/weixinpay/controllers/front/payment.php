@@ -53,7 +53,7 @@ class WeixinpayPaymentModuleFrontController extends ModuleFrontController
         $order = new order($id_order);
 
         $filename = 'WXP-'.md5(md5($order->reference)).'.png';
-        $url = $this->unifiedOrder($order);
+        $url = $this->unifiedOrder($cart, $order->reference);
 
         if ($url) {
             QRcode::png($url, WXP_MODDULE_DIR.WXP_MODDULE_DATA.$filename, WXP_QRCODE_E_LEVEL, WXP_QRCODE_SIZE);
@@ -64,7 +64,7 @@ class WeixinpayPaymentModuleFrontController extends ModuleFrontController
             'cust_currency' => $cart->id_currency,
             'payimage' => $this->module->getPathUri().WXP_MODDULE_DATA.$filename,
             'expire_time' => WXP_TIMEOUT/60,
-            'rand_args' => $order->id,
+            'rand_args' => $order->reference,
             'return_url' => Context::getContext()->link->getModuleLink('weixinpay', 'return', array('id_cart' => $cart->id)),
             'currencies' => $this->module->getCurrency((int) $cart->id_currency),
             'total' => $cart->getOrderTotal(true, Cart::BOTH),
@@ -76,18 +76,18 @@ class WeixinpayPaymentModuleFrontController extends ModuleFrontController
         $this->setTemplate('payment_execution.tpl');
     }
 
-    public function unifiedOrder($order)
+    public function unifiedOrder($cart, $reference)
     {
-        $total = (int) ($order->total_paid * 100);
+        $total = (float)$cart->getOrderTotal(true, Cart::BOTH);
+        $total = (int)($total*100);
 
         $detail = '';
-        $products = $order->getProducts();
-        $nbProducts = count($products);
-        if ($nbProducts > 1) {
+        $nbProducts = $cart->nbProducts();
+        if ($nbProducts>1){
             $detail = $this->module->l('Cart').' '.$nbProducts.' '.$this->module->l('Products');
-        } else {
-            $product = array_pop($products);
-            $detail = $product['product_name'];
+        }else{
+            $products = $cart->getProducts();
+            $detail = $products[0]['name'];
         }
 
         $time_start = date("YmdHis");
@@ -108,13 +108,13 @@ class WeixinpayPaymentModuleFrontController extends ModuleFrontController
         $input = new WxPayUnifiedOrder();
         $input->SetBody($detail);
         $input->SetDetail($detail);
-        $input->SetOut_trade_no($order->reference);
+        $input->SetOut_trade_no($reference);
         $input->SetTotal_fee($total);
         $input->SetTime_start($time_start);
         $input->SetTime_expire($time_expire);
         $input->SetNotify_url(Configuration::get('WEIXIN_NOTIFY_URL'));
         $input->SetTrade_type("NATIVE");
-        $input->SetProduct_id($order->id);
+        $input->SetProduct_id($reference);
         $result = $notify->getPayUrl($input);
 
         if (isset($result["code_url"])) {

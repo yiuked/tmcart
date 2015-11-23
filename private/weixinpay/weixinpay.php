@@ -197,16 +197,24 @@ class Weixinpay extends PaymentModule
     public function ajaxCall()
     {
         if (Tools::getIsset('rangargs')) {
-            $id_order = (int) Tools::getValue('rangargs');
-            $status = OrderHistory::getLastOrderState($id_order);
-            if (Validate::isLoadedObject($status)) {
-                if ($status->id == Configuration::get('PS_OS_PAYMENT')) {
+            $reference = Tools::getValue('rangargs');
+            $orders = Order::getByReference($reference);
+            if ($orders) {
+                $isOK = true;
+                foreach ($orders as $obj) {
+                    $status = OrderHistory::getLastOrderState($obj->id);
+                    if ($status->id != Configuration::get('PS_OS_PAYMENT')) {
+                        $isOK &= false;
+                        break;
+                    }
+                }
+                if ($isOK) {
                     die(Tools::jsonEncode(array('status' => 1)));
                 }
             }
         }
         sleep(1);
-        die(Tools::jsonEncode(array('status' => 0, 'id_order' => $id_order ,'id'=>$status->id)));
+        die(Tools::jsonEncode(array('status' => 0, 'id_order' => $reference ,'id'=>$status->id)));
     }
 
     public function hookPaymentReturn($params)
