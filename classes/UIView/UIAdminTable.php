@@ -107,11 +107,11 @@ class UIAdminTable extends UIView
                 $headHtml .= '<th'. $width . $class .'>' . $head['title'] . '</th>';
             }else{
                 $headHtml .= '<th'. $width . $class .'>';
-                $headHtml .= '<a href="index.php?rule=' . $this->rule . '&orderby=' . $head['name'] . '&orderway=desc&token=' . $this->token . '">';
+                $headHtml .= '<a href="index.php?rule=' . $this->rule . '&orderby=' . (isset($head['sort']) ? $head['sort'] : $head['name']) . '&orderway=desc&token=' . $this->token . '">';
                 $headHtml .= '<span class="glyphicon glyphicon-sort-by-order-alt" aria-hidden="true"></span>';
                 $headHtml .= '</a>';
                 $headHtml .= $head['title'] ;
-                $headHtml .= '<a href="index.php?rule=' . $this->rule . '&orderby=' . $head['name'] . '&orderway=asc&token=' . $this->token . '">';
+                $headHtml .= '<a href="index.php?rule=' . $this->rule . '&orderby=' . (isset($head['sort']) ? $head['sort'] : $head['name']) . '&orderway=asc&token=' . $this->token . '">';
                 $headHtml .= '<span class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></span>';
                 $headHtml .= '</a>';
                 $headHtml .= '</th>';

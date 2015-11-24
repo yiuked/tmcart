@@ -69,28 +69,5 @@ class OrderStatus extends ObjectBase
 				'entitys'  => $result);
 		return $rows;
 	}
-	
-	public function toggle($key,$default='NULL')
-	{
-	 	if (!Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
-	 		die('Fatal error:Object not exist!');
-
-	 	/* Object must have a variable called 'active' */
-	 	elseif (!key_exists($key, $this))
-	 		die('Fatal error:No field \''.$key.'\'');
-
-	 	/* Update active status on object */
-		if($default == 'NULL'){
-	 		$this->{$key} = $this->{$key}==1?0:1;
-		}else{
-			$this->{$key} = (int)($default);
-		}
-
-		/* Change status to active/inactive */
-		return Db::getInstance()->Execute('
-		UPDATE `'.pSQL(_DB_PREFIX_.$this->table).'`
-		SET `'.pSQL($key).'` = '.(int)($this->{$key}).'
-		WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
-	}
 }
 ?>

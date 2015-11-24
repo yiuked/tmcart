@@ -12,19 +12,6 @@ class Cart extends ObjectBase{
 	const IS_OPEN 	= 0;
 	const IS_ORDER 	= 1;
 	const IS_CLOSE 	= 3;
-	
-	public function __construct($id=NULL)
-	{
-		parent::__construct($id);
-		if($id){
-			if($this->id_user)
-				$this->user 	= new User((int)($this->id_user));
-			if($this->id_address)
-				$this->address 	= new Address((int)($this->id_address));
-			if($this->id_carrier)
-				$this->carrier 	= new Carrier((int)($this->id_carrier));
-		}
-	}
 
 	public function getFields()
 	{
@@ -197,6 +184,22 @@ class Cart extends ObjectBase{
 		{
 			$cart 			= new Cart((int)($row['id_cart']));
 			$row['total'] 	= $cart->getOrderTotal();
+			$row['total_display'] 	= Tools::displayPrice($row['total']);
+			$row['shipping_display'] 	= Tools::displayPrice($row['shipping']);
+			switch ($row['status']) {
+				case Cart::IS_OPEN:
+					$row['color'] = '#E3BF16';
+					$row['status_label'] = '未结算';
+					break;
+				case Cart::IS_CLOSE:
+					$row['color'] = '#E10601';
+					$row['status_label'] = '定单已删除';
+					break;
+				case Cart::IS_ORDER:
+					$row['color'] = '#32CD32';
+					$row['status_label'] = ' 已结算';
+					break;
+			}
 		}
 		return $result;
 	}
@@ -234,7 +237,7 @@ class Cart extends ObjectBase{
 		if($total==0)
 			return false;
 
-		$result = Db::getInstance()->ExecuteS('SELECT a.id_cart,a.id_user,a.id_address,a.id_carrier,a.id_currency,u.first_name,u.last_name,r.name as carrier_name,r.shipping,a.status,a.add_date 
+		$result = Db::getInstance()->ExecuteS('SELECT a.id_cart,a.id_user,a.id_address,a.id_carrier,a.id_currency,u.name,r.name as carrier,r.shipping,a.status,a.add_date
 					FROM '._DB_PREFIX_.'cart AS a
 					Left JOIN '._DB_PREFIX_.'currency AS y ON a.id_currency = y.id_currency
 					Left JOIN '._DB_PREFIX_.'carrier AS r ON a.id_carrier = r.id_carrier
