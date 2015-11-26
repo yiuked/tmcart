@@ -9,7 +9,7 @@ define('_TM_ROOT_DIR_',realpath($currentDir.'/..'));
 
 //网站目录定义
 define('_TM_CORE_DIR', _TM_ROOT_DIR_.'/core/');
-define('_TM_CLASS_DIR', _TM_ROOT_DIR_.'/classes/');
+define('_TM_MODEL_DIR', _TM_ROOT_DIR_.'/model/');
 define('_TM_CONF_DIR', _TM_ROOT_DIR_.'/config/');
 define('_TM_THEMES_DIR', _TM_ROOT_DIR_.'/themes/'._TM_THEMES_.'/');
 define('_TM_TOOLS_DIR', _TM_ROOT_DIR_.'/tools/');

@@ -102,32 +102,12 @@ $(document).ready(function() {
 							var reg = /_[0-9][0-9]*$/g;
 							tableDrag.find('tbody tr').each(function(i) {
 								$(this).attr('id', $(this).attr('id').replace(reg, '_' + i));
-								
-								// Update link position
-								var up_reg  = new RegExp('position=[-]?[0-9]+&');
-								
-								// Up links
-								$(this).find('td.dragHandle a:odd').attr('href', $(this).find('td.dragHandle a:odd').attr('href').replace(up_reg, 'position='+ (i - 1) +'&'));
-								
-								// Down links
-								$(this).find('td.dragHandle a:even').attr('href', $(this).find('td.dragHandle a:even').attr('href').replace(up_reg, 'position='+ (i + 1) +'&'));
-								
 							});
 						}else {
 							var reg = /_[0-9]$/g;
 							$('#' + row.id).removeClass('alt_row');
 							tableDrag.find('tbody tr').each(function(i) {
 								$(this).attr('id', $(this).attr('id').replace(reg, '_' + i));
-								
-								// Update link position
-								var up_reg  = new RegExp('position=[-]?[0-9]+&');
-
-								// Up links
-								$(this).find('td.dragHandle a:odd').attr('href', $(this).find('td.dragHandle a:odd').attr('href').replace(up_reg, 'position='+ (i - 1) +'&'));
-								
-								// Down links
-								$(this).find('td.dragHandle a:even').attr('href', $(this).find('td.dragHandle a:even').attr('href').replace(up_reg, 'position='+ (i + 1) +'&'));
-								
 							});
 						}
 					}

@@ -72,13 +72,19 @@ echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'br
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="name" class="col-md-2 control-label">标题</label>
+						<label for="meta_title" class="col-md-2 control-label">标题</label>
 						<div class="col-md-5">
-							<input type="text" class="form-control" name="name" value="<?php echo isset($obj)?$obj->meta_title:Tools::getRequest('meta_title');?>">
+							<input type="text" class="form-control" name="meta_title" value="<?php echo isset($obj)?$obj->meta_title:Tools::getRequest('meta_title');?>">
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="name" class="col-md-2 control-label">Meta 描述</label>
+						<label for="meta_keywords" class="col-md-2 control-label">标题</label>
+						<div class="col-md-5">
+							<input type="text" class="form-control" name="name" value="<?php echo isset($obj)?$obj->meta_keywords:Tools::getRequest('meta_keywords');?>">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="meta_description" class="col-md-2 control-label">Meta 描述</label>
 						<div class="col-md-5">
 							<input type="text" class="form-control" name="name" value="<?php echo isset($obj)?$obj->meta_description:Tools::getRequest('meta_description');?>">
 						</div>

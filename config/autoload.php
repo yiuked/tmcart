@@ -30,9 +30,9 @@ function __autoload ($className)
     if (isset($class_index[$className]) && file_exists($class_index[$className])){
         require_once($class_index[$className]);
     }else{
-        if (file_exists(_TM_CLASS_DIR . $className . '.php')) {
-            require_once(_TM_CLASS_DIR . $className . '.php');
-            $class_index[$className] = _TM_CLASS_DIR . $className . '.php';
+        if (file_exists(_TM_MODEL_DIR . $className . '.php')) {
+            require_once(_TM_MODEL_DIR . $className . '.php');
+            $class_index[$className] = _TM_MODEL_DIR . $className . '.php';
         } elseif (file_exists(_TM_VIEWS_DIR . $className . '.php')) {
             require_once(_TM_VIEWS_DIR . $className . '.php');
             $class_index[$className] = _TM_VIEWS_DIR . $className . '.php';
@@ -42,7 +42,7 @@ function __autoload ($className)
         } else {
             if (!$extendsDir) {
                 getExtendsDir(_TM_CORE_DIR,$extendsDir);
-                getExtendsDir(_TM_CLASS_DIR,$extendsDir);
+                getExtendsDir(_TM_MODEL_DIR,$extendsDir);
             }
             $haveClass = false;
             foreach ($extendsDir as $dir ){

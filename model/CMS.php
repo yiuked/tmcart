@@ -5,11 +5,11 @@ class CMS extends ObjectBase{
 	protected $fieldsSize 		= array('meta_description' => 256, 'meta_keywords' => 256,
 		'meta_title' => 256, 'link_rewrite' => 256, 'title' => 256);
 	protected $fieldsValidate	= array(
-		'title' => 'isCatalogName',
+		'title' => 'isCleanHtml',
 		'active'=> 'isBool',
-		'meta_title' => 'isGenericName',
-		'meta_keywords' => 'isGenericName',
-		'meta_description' => 'isGenericName', 
+		'meta_title' => 'isCleanHtml',
+		'meta_keywords' => 'isCleanHtml',
+		'meta_description' => 'isCleanHtml',
 		'rewrite' => 'isLinkRewrite', 
 		'content' => 'isString');
 	

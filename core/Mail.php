@@ -25,10 +25,10 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-include_once(_TM_SWIFT_DIR.'Swift.php');
-include_once(_TM_SWIFT_DIR.'Swift/Connection/SMTP.php');
-include_once(_TM_SWIFT_DIR.'Swift/Connection/NativeMail.php');
-include_once(_TM_SWIFT_DIR.'Swift/Plugin/Decorator.php');
+include_once(_TM_SWIFT_DIR . 'Swift.php');
+include_once(_TM_SWIFT_DIR . 'Swift/Connection/SMTP.php');
+include_once(_TM_SWIFT_DIR . 'Swift/Connection/NativeMail.php');
+include_once(_TM_SWIFT_DIR . 'Swift/Plugin/Decorator.php');
 
 class Mail
 {

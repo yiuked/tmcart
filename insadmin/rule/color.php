@@ -17,7 +17,7 @@ if(intval(Tools::getRequest('delete'))>0){
 		echo '<div class="conf">删除管理员成功</div>';
 	}
 }
-
+echo UIAdminDndTable::loadHead();
 $table = new UIAdminDndTable('color',  'Color', 'id_color');
 $table->header = array(
 	array('sort' => false ,'isCheckAll' => 'colorBox[]'),
@@ -25,17 +25,16 @@ $table->header = array(
 	array('name' => 'name','title' => '名称'),
 	array('name' => 'code','title' => '颜色','color' => true),
 	array('name' => 'position','title' => '排序'),
-	array('sort' => false ,'title' => '操作', 'class' => 'text-right', 'isAction'=> array('view', 'edit', 'delete')),
+	array('sort' => false ,'title' => '操作', 'class' => 'text-right', 'isAction'=> array( 'edit', 'delete')),
 );
-$result = Color::getEntitys();
+$orderBy 	= isset($_GET['orderby']) ? Tools::G('orderby') : 'position';
+$orderWay 	= isset($_GET['orderway']) ? Tools::G('orderway') : 'asc';
+$result = Color::getEntitys($orderBy, $orderWay);
 
 if (isset($errors)) {
 	UIAdminAlerts::MError($errors);
 }
-?>
-<script type="text/javascript" src="../js/jquery/jquery.tablednd_0_5.js"></script>
-<script src="../js/admin/dnd.js" type="text/javascript"></script>
-<?php
+
 $breadcrumb = new UIAdminBreadcrumb();
 $breadcrumb->home();
 $breadcrumb->add(array('title' => '颜色', 'active' => true));
@@ -47,21 +46,5 @@ $btn_group = array(
 	array('type' => 'a', 'title' => '新颜色', 'href' => 'index.php?rule=color_edit', 'class' => 'btn-success', 'icon' => 'plus') ,
 );
 echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'breadcrumb');
-?>
-<div class="row">
-	<div class="col-md-12">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				颜色
-			</div>
-			<div class="panel-body">
-				<form class="form" method="post" action="index.php?rule=color">
-					<?php
-					$table->data = $result;
-					echo $table->draw();
-					?>
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
+echo UIViewBlock::area(array('title' => '颜色', 'table' => $table, 'result' => $result), 'table');
+
