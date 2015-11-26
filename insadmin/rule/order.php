@@ -55,59 +55,15 @@ $result  	= Order::getEntity(false,$p,$limit,$orderBy,$orderWay,$filter);
 if (isset($errors)) {
 	UIAdminAlerts::MError($errors);
 }
-?>
-
-<div class="row">
-	<div class="col-md-12">
-		<div class="panel panel-default">
-			<div class="panel-body">
-				<div class="col-md-6">
-					<?php
-					$breadcrumb = new UIAdminBreadcrumb();
-					$breadcrumb->home();
-					$breadcrumb->add(array('title' => '定单', 'active' => true));
-					echo $breadcrumb->draw();
-					?>
-				</div>
-				<div class="col-md-6">
-					<div class="btn-group save-group pull-right" role="group">
-						<a href="index.php?rule=sendorder"  class="btn btn-success" id="submit-form"><span aria-hidden="true" class="glyphicon glyphicon-wrench"></span>定单提交配置</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				定单
-			</div>
-			<div class="panel-body">
-				<form class="form" method="post" action="<?php echo Helper::urlByRule()?>">
-					<?php
-					//config table options
-					$table->data = $result['entitys'];
-					echo $table->draw();
-					?>
-
-					<div class="row">
-						<div class="col-md-4">
-							<div class="btn-group" role="group" >
-								<button type="submit" class="btn btn-default" onclick="return confirm('你确定要删除选中项目?');" name="subDelete">批量删除</button>
-								<button type="submit" class="btn btn-default" name="subActiveON">批量启用</button>
-								<button type="submit" class="btn btn-default" name="subActiveOFF">批量关闭</button>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<?php
-							$pagination = new UIAdminPagination($result['total'],$limit);
-							echo $pagination->draw();
-							?>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+$breadcrumb = new UIAdminBreadcrumb();
+$breadcrumb->home();
+$breadcrumb->add(array('title' => '定单', 'active' => true));
+$bread = $breadcrumb->draw();
+$btn_group = array(
+	array('type' => 'a', 'title' => '定单提交配置', 'href' => 'index.php?rule=sendorder', 'class' => 'btn-success', 'icon' => 'wrench') ,
+);
+echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'breadcrumb');
+$btn_group = array(
+	array('type' => 'button', 'title' => '批量删除', 'confirm' => '你确定要删除选中项?', 'name' => 'deleteItems', 'class' => 'btn-danger', 'icon' => 'remove') ,
+);
+echo UIViewBlock::area(array('title' => '定单状态', 'table' => $table, 'result' => $result, 'limit' => $limit, 'btn_groups' => $btn_group), 'table');

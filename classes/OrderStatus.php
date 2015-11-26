@@ -1,12 +1,11 @@
 <?php
 class OrderStatus extends ObjectBase
 {
-	protected $fields 			= array('name','color','send_mail','email_tpl','active');
+	protected $fields 			= array('name','color','send_mail','email_tpl');
 	protected $fieldsRequired	= array('name','color');
 	protected $fieldsSize 		= array('name' => 128,'color' => 56);
 	protected $fieldsValidate	= array(
 		'name' => 'isGenericName',
-		'active'=> 'isBool',
 		'color' => 'isColor', 
 		'send_mail' => 'isBool', 
 		'email_tpl' => 'isGenericName');
@@ -27,11 +26,8 @@ class OrderStatus extends ObjectBase
 		return $fields;
 	}
 	
-	public static function getEntity($active = true,$p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
+	public static function getEntity($p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
 	{
-	 	if (!Validate::isBool($active))
-	 		die(Tools::displayError());
-
 		$where = '';
 		if(!empty($filter['id_order_status']) && Validate::isInt($filter['id_order_status']))
 			$where .= ' AND a.`id_order_status`='.intval($filter['id_order_status']);
@@ -39,8 +35,6 @@ class OrderStatus extends ObjectBase
 			$where .= ' AND a.`color` LIKE "%'.pSQL($filter['color']).'%"';
 		if(!empty($filter['name']) && Validate::isCatalogName($filter['name']))
 			$where .= ' AND a.`name` LIKE "%'.pSQL($filter['name']).'%"';
-		if(!empty($filter['active']) && Validate::isInt($filter['active']))
-			$where .= ' AND a.`active`='.((int)($filter['active'])==1?'1':'0');
 		if(!empty($filter['send_mail']) && Validate::isInt($filter['send_mail']))
 			$where .= ' AND a.`send_mail`='.((int)($filter['send_mail'])==1?'1':'0');
 		if(!empty($filter['email_tpl']) && Validate::isInt($filter['email_tpl']))
@@ -54,14 +48,12 @@ class OrderStatus extends ObjectBase
 		}
 
 		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'order_status` a
-				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
-				'.$where);
+				WHERE 1 '.$where);
 		if($total==0)
 			return false;
 
 		$result = Db::getInstance()->ExecuteS('SELECT a.* FROM `'._DB_PREFIX_.'order_status` a
-				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
-				'.$where.'
+				WHERE 1 '.$where.'
 				'.$postion.'
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);
 		$rows   = array(

@@ -164,11 +164,8 @@ class User extends ObjectBase{
 		return $result;
 	}
 	
-	public static function getEntitys($active = true,$p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
+	public static function getEntitys($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
-	 	if (!Validate::isBool($active))
-	 		die(Tools::displayError());
-
 		$where = '';
 		if(!empty($filter['id_contact']) && Validate::isInt($filter['id_contact']))
 			$where .= ' AND a.`id_contact`='.intval($filter['id_contact']);
@@ -189,13 +186,13 @@ class User extends ObjectBase{
 		}
 
 		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'user` a
-				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
+				WHERE 1
 				'.$where);
 		if($total==0)
 			return false;
 
 		$result = Db::getInstance()->ExecuteS('SELECT a.* FROM `'._DB_PREFIX_.'user` a
-				WHERE 1 '.($active?' AND AND a.`active`=1 ':'').'
+				WHERE 1
 				'.$where.'
 				'.$postion.'
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);

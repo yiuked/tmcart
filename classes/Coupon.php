@@ -27,11 +27,8 @@ class Coupon extends ObjectBase{
 		return $fields;
 	}
 	
-	public static function getEntity($active = true,$p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
+	public static function getEntity($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
-	 	if (!Validate::isBool($active))
-	 		die(Tools::displayError());
-
 		$where = '';
 		if(!empty($filter['id_coupon']) && Validate::isInt($filter['id_coupon']))
 			$where .= ' AND a.`id_coupon`='.intval($filter['id_coupon']);

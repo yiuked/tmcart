@@ -29,11 +29,8 @@ class Paylog extends ObjectBase
 		$log->add();
 	}
 	
-	public static function getEntity($active = true,$p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
+	public static function getEntity($p = 1, $limit = 50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
-	 	if (!Validate::isBool($active))
-	 		die(Tools::displayError());
-
 		$where = '';
 		if(!empty($filter['id_pay']) && Validate::isInt($filter['id_pay']))
 			$where .= ' AND a.`id_pay`='.intval($filter['id_pay']);
@@ -49,7 +46,7 @@ class Paylog extends ObjectBase
 
 		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'paylog` a
 				WHERE 1'.$where);
-		if($total==0)
+		if($total == 0)
 			return false;
 
 		$result = Db::getInstance()->ExecuteS('SELECT a.* FROM `'._DB_PREFIX_.'paylog` a

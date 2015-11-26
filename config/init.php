@@ -7,7 +7,8 @@ if (!defined('_TM_MYSQL_REAL_ESCAPE_STRING_'))
 $currentDir = dirname(__FILE__);
 define('_TM_ROOT_DIR_',realpath($currentDir.'/..'));
 
-//本地决对路径
+//缃戠珯鐩綍瀹氫箟
+define('_TM_CORE_DIR', _TM_ROOT_DIR_.'/core/');
 define('_TM_CLASS_DIR', _TM_ROOT_DIR_.'/classes/');
 define('_TM_CONF_DIR', _TM_ROOT_DIR_.'/config/');
 define('_TM_THEMES_DIR', _TM_ROOT_DIR_.'/themes/'._TM_THEMES_.'/');
@@ -20,12 +21,13 @@ define('_TM_IMG_DIR', _TM_ROOT_DIR_.'/images/');
 define('_TM_PRO_IMG_DIR', _TM_IMG_DIR.'pro/');
 define('_TM_TMP_IMG_DIR', _TM_IMG_DIR.'tmp/');
 define('_TM_VIEWS_DIR', _TM_ROOT_DIR_.'/views/');
-define('_TM_FSO_DIR', _TM_ROOT_DIR_.'/cache/fso/');
+define('_TM_CACHE_DIR', _TM_ROOT_DIR_.'/cache/');
+define('_TM_FSO_DIR', _TM_CACHE_DIR.'fso/');
 
 //include auto load
 require_once(_TM_CONF_DIR . 'autoload.php');
 
-//URL链接形式
+//缃戠珯URL瀹氫箟
 define('_TM_BASE_URL_', Tools::getShopDomain(true));
 define('_TM_ROOT_URL_', _TM_BASE_URL_.__TM_BASE_URI__);
 define('_TM_JS_URL', _TM_ROOT_URL_.'js/');

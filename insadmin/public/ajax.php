@@ -7,6 +7,7 @@ if(isset($_GET['toggle']))
 		'Category'=> array('active'),
 		'User'=> array('active'),
 		'Brand'=> array('active'),
+		'OrderStatus'=> array('send_mail'),
 	);
 
 	$key    = Tools::G('key');

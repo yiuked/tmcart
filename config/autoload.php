@@ -21,30 +21,43 @@
  * @copyright 2010-2015 Yiuked
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+
 $extendsDir = false;
+require_once(_TM_CACHE_DIR . 'class_index.php');
 function __autoload ($className)
 {
-    global $extendsDir;
-    if (file_exists(_TM_CLASS_DIR . $className . '.php')) {
-        require_once(_TM_CLASS_DIR . $className . '.php');
-    } elseif (file_exists(_TM_VIEWS_DIR . $className . '.php')) {
-        require_once(_TM_VIEWS_DIR . $className . '.php');
-    } else {
-        if (!$extendsDir) {
-            getExtendsDir(_TM_CLASS_DIR,$extendsDir);
-        }
-        $haveClass = false;
-        foreach ($extendsDir as $dir ){
-            if (file_exists($dir . $className . '.php')) {
-                require_once($dir . $className . '.php');
-                $haveClass = true;
-                break;
+    global $extendsDir, $class_index;
+    if (isset($class_index[$className]) && file_exists($class_index[$className])){
+        require_once($class_index[$className]);
+    }else{
+        if (file_exists(_TM_CLASS_DIR . $className . '.php')) {
+            require_once(_TM_CLASS_DIR . $className . '.php');
+            $class_index[$className] = _TM_CLASS_DIR . $className . '.php';
+        } elseif (file_exists(_TM_VIEWS_DIR . $className . '.php')) {
+            require_once(_TM_VIEWS_DIR . $className . '.php');
+            $class_index[$className] = _TM_VIEWS_DIR . $className . '.php';
+        } elseif (file_exists(_TM_CORE_DIR . $className . '.php')) {
+            require_once(_TM_CORE_DIR . $className . '.php');
+            $class_index[$className] = _TM_CORE_DIR . $className . '.php';
+        } else {
+            if (!$extendsDir) {
+                getExtendsDir(_TM_CORE_DIR,$extendsDir);
+                getExtendsDir(_TM_CLASS_DIR,$extendsDir);
+            }
+            $haveClass = false;
+            foreach ($extendsDir as $dir ){
+                if (file_exists($dir . $className . '.php')) {
+                    require_once($dir . $className . '.php');
+                    $class_index[$className] = $dir . $className . '.php';
+                    $haveClass = true;
+                    break;
+                }
+            }
+            if (!$haveClass) {
+                die('Class \'' . $className . '\' not found!');
             }
         }
-
-        if (!$haveClass) {
-            die('Class \'' . $className . '\' not found!');
-        }
+        file_put_contents(_TM_CACHE_DIR . 'class_index.php', "<?php\n \$class_index = ". var_export($class_index, true) ."; \n");
     }
 }
 

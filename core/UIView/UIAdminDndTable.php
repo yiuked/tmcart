@@ -37,6 +37,9 @@ class UIAdminDndTable extends UIAdminTable
                             $body .= '<a href="index.php?rule=' . $this->rule . (!empty($this->parent) ? '&move_'. $this->parent . '=' . $row[$this->parent]: ''). '&move_' .$this->identifier . '=' . $row[$this->identifier] .'&way=0&position=' .($row['position'] - 1). '" ' .($key == 0 ? 'style="display:none"' : '') . '>';
                             $body .= '<span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span></a>';
                             $body .= '</td>';
+                        }elseif(isset($head['edit']) && $head['edit'] == false){
+                            $title = isset($head['color']) ? '<span style="background-color:' .  $row['color'] . ';color:white" class="color_field">' .  $row[$head['name']] . '</span>' : $row[$head['name']];
+                            $body .= '<td'. $width . $class .' class="pointer">' .  $title . '</td>';
                         }else {
                             $title = isset($head['color']) ? '<span style="background-color:' .  $row['color'] . ';color:white" class="color_field">' .  $row[$head['name']] . '</span>' : $row[$head['name']];
                             $body .= '<td'. $width . $class .' onclick="document.location = \'index.php?rule=' .  $this->rule . (!$this->child ? '_edit' : '') . '&id=' .  $row[$this->identifier] . '\'" class="pointer">' .   $title . '</td>';

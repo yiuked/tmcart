@@ -150,14 +150,17 @@ class Order extends ObjectBase{
 			return false;
 		}
 
-		$result = Db::getInstance()->ExecuteS('SELECT a.*,u.name,c.name as carrier,os.name as status,os.color FROM `'._DB_PREFIX_.'order` a
+		$result = Db::getInstance()->ExecuteS('SELECT a.*, m.name AS `payment`, u.name, c.name as carrier, os.name as status, os.color
+				FROM `'._DB_PREFIX_.'order` a
 				LEFT JOIN `'._DB_PREFIX_.'user` u ON (a.id_user = u.id_user)
+				LEFT JOIN `'._DB_PREFIX_.'module` m ON (a.id_module = m.id_module)
 				LEFT JOIN `'._DB_PREFIX_.'carrier` c ON (a.id_carrier = c.id_carrier)
 				LEFT JOIN `'._DB_PREFIX_.'order_status` os ON (os.id_order_status = a.id_order_status)
 				WHERE 1 
 				'.$where.'
 				'.$postion.'
-				LIMIT '.(($p-1)*$limit).','.(int)$limit);
+				LIMIT '.(($p-1)*$limit).','.(int)$limit
+		);
 		$rows   = array(
 				'total' => $total['total'],
 				'entitys'  => $result);

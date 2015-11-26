@@ -9,7 +9,7 @@
 class UIAdminTable extends UIView
 {
     /* @var string token 当前表格的校验 */
-    protected $token;
+    public $token;
 
     /* @var string rule 当前页的rule */
     public $rule;
@@ -171,6 +171,9 @@ class UIAdminTable extends UIView
                             $body .= '<td'. $width . $class .'><img src="' .  $row[$head['name']] . '" class="img-thumbnail"></td>';
                         } elseif (isset($head['filter']) && $head['filter'] == 'bool') {
                             $body .= '<td'. $width . $class .'><span class="glyphicon glyphicon-'. ($row[$head['name']] == 0 ? 'remove':'ok') .' active-toggle" onclick="setToggle($(this),\'' .  $this->className . '\',\'' .  $head['name'] . '\',' .  $row[$this->identifier] . ')"></span></td>';
+                        }elseif(isset($head['edit']) && $head['edit'] == false){
+                            $title = isset($head['color']) ? '<span style="background-color:' .  $row['color'] . ';color:white" class="color_field">' .  $row[$head['name']] . '</span>' : $row[$head['name']];
+                            $body .= '<td'. $width . $class .' class="pointer">' .  $title . '</td>';
                         }else{
                             $title = isset($head['color']) ? '<span style="background-color:' .  $row['color'] . ';color:white" class="color_field">' .  $row[$head['name']] . '</span>' : $row[$head['name']];
                             $body .= '<td'. $width . $class .' onclick="document.location = \'index.php?rule=' .  $this->rule . (!$this->child ? '_edit' : '') . '&id=' .  $row[$this->identifier] . '\'" class="pointer">' .  $title . '</td>';
