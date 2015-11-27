@@ -43,4 +43,5 @@
   'Rule' => 'D:\\wamp\\www\\red\\shoes/model/Rule.php',
   'UIAdminAlerts' => 'D:\\wamp\\www\\red\\shoes/core/UIView/UIAdminAlerts.php',
   'Tag' => 'D:\\wamp\\www\\red\\shoes/model/Tag.php',
+  'MYPDO' => 'D:\\wamp\\www\\red\\shoes/core/MYPDO.php',
 ); 

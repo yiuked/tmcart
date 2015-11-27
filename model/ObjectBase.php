@@ -14,16 +14,6 @@ abstract class ObjectBase{
 
 	/** @var string SQL Table identifier */
 	protected $identifier = NULL;
-
-	/** @var array Required fields for admin panel forms */
- 	protected $fieldsRequired = array();
-
- 	/** @var array Maximum fields size for admin panel forms */
- 	protected $fieldsSize = array();
-
- 	/** @var array Fields validity functions for admin panel forms */
- 	protected $fieldsValidate = array();
-	
 	
 	public function __construct($id = NULL)
 	{	
@@ -39,9 +29,10 @@ abstract class ObjectBase{
 				if (isset($this->identifier)) {
 					$this->{$this->identifier} = (int)$id;
 				}
-				foreach($this->fields as $field){
-					if (key_exists($field, $result))
-						$this->{$field} = $result[$field];
+				foreach($this->fields as $key => $more){
+					if (array_key_exists($key, $result)) {
+						$this->{$key} = $result[$key];
+					}
 				}
 			}
 		}
@@ -56,9 +47,13 @@ abstract class ObjectBase{
 
 			if ($result)
 			{
-				foreach($this->fields as $field){
-					if (key_exists($field, $result))
-						$this->{$field} = $result[$field];
+				if (isset($this->identifier)) {
+					$this->{$this->identifier} = (int)$this->id;
+				}
+				foreach($this->fields as $key => $more){
+					if (array_key_exists($key, $result)) {
+						$this->{$key} = $result[$key];
+					}
 				}
 			}
 		}
@@ -108,54 +103,69 @@ abstract class ObjectBase{
 	public function copyFromPost()
 	{
 		/* Classical fields */
-		foreach ($this->fields AS $key){
-			if (key_exists($key, $_POST))
+		foreach ($this->fields AS $key => $more) {
+			if (array_key_exists($key, $_POST))
 			{
 				/* Do not take care of password field if empty */
-				if ($key == 'passwd' AND empty($_POST[$key]))
+				if ($key == 'passwd' AND empty($_POST[$key])) {
 					continue;
+				}
 				/* Automatically encrypt password in MD5 */
-				if ($key == 'passwd' AND !empty($_POST[$key]))
+				if ($key == 'passwd' AND !empty($_POST[$key])) {
 					$this->{$key} = Tools::encrypt($_POST[$key]);
-				else
+				} else {
 					$this->{$key} = $_POST[$key];
-			}elseif(isset($this->{$key}) && !empty($this->{$key}))
+				}
+			} elseif (isset($this->{$key}) && !empty($this->{$key}) && $this->{$key} != null){
 				continue;
-			else
-				$this->{$key}=0;
+			} else {
+				$this->{$key} = null;
+			}
 		}
 	}
 
 	public function validation()
 	{
 		//Field Required
-		foreach($this->fieldsRequired as $field){
-			if (Tools::isEmpty($this->{$field}) AND (!is_numeric($this->{$field})))
-			{
-				$this->_errors[]  = 'Please enter a '.$field;
+		$fields = array();
+		foreach($this->fields as $key => $more){
+			if (isset($this->{$key})) {
+				if (isset($more['required']) && $more['required']) {
+					if(empty(trim($this->{$key})) || $this->{$key} == null) {
+						$this->_errors[] =  $key .' is required ';
+					}
+				}
+				if (isset($more['size']) && Tools::strlen($this->{$key}) > $more['size']) {
+					$this->_errors[] =  $key .' lenght overflow '.$more['size'];
+				}
+				$validate = new Validate();
+				if (isset($more['type'])) {
+					if (!method_exists($validate, $more['type'])) {
+						$this->_errors[] =  $key .' validation function not found '.$more['type'];
+					}elseif (!call_user_func(array('Validate', $more['type']), $this->{$key})){
+						$this->_errors[] = $key . ' Content has not allowed characters';
+					} else {
+						switch ($more['type']) {
+							case 'isInt':
+								$fields[$key]['value'] = intval($this->{$key});
+								break;
+							case 'isFloat';
+								$fields[$key]['value'] = floatval($this->{$key});
+								break;
+							case 'isCleanHtml';
+								$fields[$key]['value'] = pSQL($this->{$key}, true);
+								break;
+							default:
+								$fields[$key]['value'] = pSQL($this->{$key});
+								break;
+						}
+					}
+				} else {
+					$this->_errors[] = $key . ' type is not set';
+				}
 			}
 		}
-		if(count($this->_errors)>0) return;
-		
-		//Field Size
-		foreach($this->fieldsSize as $field=>$size){
-			if (isset($this->{$field}) AND Tools::strlen($this->{$field}) > $size)
-			{
-				$this->_errors[] =  $field.' lenght overflow '.$size;
-			}		
-		}
-		if(count($this->_errors)>0) return;
-		
-		//Field Format
-		$validate = new Validate();
-		foreach ($this->fieldsValidate as $field => $method){
-			if (!method_exists($validate, $method))
-				die ('Validation function not found '.$method);
-			elseif (isset($this->{$field}) AND !call_user_func(array('Validate', $method), $this->{$field}))
-			{
-				$this->_errors[] = $field.'Content has not allowed characters';
-			}
-		}
+		return $fields;
 	}
 	
 	/**
@@ -163,68 +173,42 @@ abstract class ObjectBase{
 	 *
 	 * return boolean Insertion result
 	 */
-	public function add($nullValues = false)
+	public function add()
 	{		
-		$fields = $this->getFields();
+		$fields = $this->validation();
 
 		if(count($this->_errors)>0 AND is_array($this->_errors))
 			return false;
 			
 		/* Automatically fill dates */
-		if (key_exists('add_date', $fields) AND $fields['add_date']==0){
+		if (array_key_exists('add_date', $fields) AND (empty($fields['add_date']) || $fields['add_date'] == null)){
 			$this->add_date 	= date('Y-m-d H:i:s');
 			$fields['add_date']	= $this->add_date;
 		}
-		if (key_exists('upd_date', $fields) AND $fields['upd_date']==0){
+		if (array_key_exists('upd_date', $fields) AND (empty($fields['upd_date']) || $fields['upd_date'] == null)){
 			$this->upd_date = date('Y-m-d H:i:s');
 			$fields['upd_date']	= $this->upd_date;
 		}
 
 		/* Database insertion */
-		if ($nullValues)
-			$result = Db::getInstance()->autoExecuteWithNullValues(_DB_PREFIX_.$this->table, $fields, 'INSERT');
-		else
-			$result = Db::getInstance()->autoExecute(_DB_PREFIX_.$this->table, $fields, 'INSERT');
+		$result = Db::getInstance()->autoExecute(_DB_PREFIX_.$this->table, $fields, 'INSERT');
 		
 		if (!$result)
 			return false;
 			
 		$this->id = Db::getInstance()->Insert_ID();
+		$this->identifier = $this->id;
 		
-		if (key_exists('rewrite', $fields)){
+		if (array_key_exists('rewrite', $fields)){
 			$rule = new Rule();
 			$rule->entity    = pSQL(get_class($this));
-			$rule->view_name = Tools::getRequest('view_name')?Tools::getRequest('view_name'):pSQL(get_class($this).'View');
+			$rule->view_name = Tools::getRequest('view_name') ? Tools::getRequest('view_name'):pSQL(get_class($this).'View');
 			$rule->id_entity = (int) $this->id;
 			$rule->rule_link = strtolower(pSQL($this->rewrite));
 			$rule->add();
 		}
 		
 		return $result;
-	}
-	
-	/**
-	 * Toggle object status in database
-	 *
-	 * return boolean Update result
-	 */
-	public function toggle($key = 'active')
-	{
-	 	if (!Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
-	 		die('Fatal error:Object not exist!');
-
-	 	/* Object must have a variable called 'active' */
-	 	elseif (!isset($this->active))
-	 		die('Fatal error:No field \'active\'');
-
-	 	/* Update active status on object */
-	 	$this->active = $this->active > 0 ? 0 : 1;
-
-		/* Change status to active/inactive */
-		return Db::getInstance()->Execute('
-		UPDATE `'.pSQL(_DB_PREFIX_.$this->table).'`
-		SET `active` = '.$this->active.'
-		WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
 	}
 	
 	/**
@@ -236,22 +220,22 @@ abstract class ObjectBase{
 	public function update($nullValues = false)
 	{
 
-		$fields = $this->getFields();
+		$fields = $this->validation();
 		if(count($this->_errors)>1 AND is_array($this->_errors))
 			return false;
 
 		// Automatically fill dates
-		if (array_key_exists('upd_date', $this))
+		if (array_key_exists('upd_date', $fields) AND (empty($fields['upd_date']) || $fields['upd_date'] == null)){
 			$this->upd_date = date('Y-m-d H:i:s');
+			$fields['upd_date']	= $this->upd_date;
+		}
 
-		if ($nullValues)
-			$result = Db::getInstance()->autoExecuteWithNullValues(_DB_PREFIX_.$this->table, $this->getFields(), 'UPDATE', '`'.pSQL($this->identifier).'` = '.(int)($this->id));
-		else
-			$result = Db::getInstance()->autoExecute(_DB_PREFIX_.$this->table, $this->getFields(), 'UPDATE', '`'.pSQL($this->identifier).'` = '.(int)($this->id));
+		$result = Db::getInstance()->autoExecute(_DB_PREFIX_.$this->table, $fields, 'UPDATE', '`'.pSQL($this->identifier).'` = '.(int)($this->id));
+
 		if (!$result)
 			return false;
 
-		if (key_exists('rewrite', $fields)){
+		if (array_key_exists('rewrite', $fields)){
 			$rule = Rule::loadRule(array(
 							'entity' => pSQL(get_class($this)),
 							'id_entity' => (int) $this->id
@@ -299,6 +283,30 @@ abstract class ObjectBase{
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Toggle object status in database
+	 *
+	 * return boolean Update result
+	 */
+	public function toggle($key = 'active')
+	{
+		if (!Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
+			die('Fatal error:Object not exist!');
+
+		/* Object must have a variable called 'active' */
+		elseif (!isset($this->active))
+			die('Fatal error:No field \'active\'');
+
+		/* Update active status on object */
+		$this->active = $this->active > 0 ? 0 : 1;
+
+		/* Change status to active/inactive */
+		return Db::getInstance()->Execute('
+		UPDATE `'.pSQL(_DB_PREFIX_.$this->table).'`
+		SET `active` = '.$this->active.'
+		WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
 	}
 	
 }

@@ -1,30 +1,18 @@
 <?php 
 class Color extends ObjectBase{
-	protected $fields 			= array('name', 'position', 'code', 'meta_title','meta_keywords', 'meta_description', 'rewrite');
-	protected $fieldsRequired	= array('name','code','rewrite');
-	protected $fieldsSize 		= array('name' => 56,'code'=>56);
-	protected $fieldsValidate	= array(
-		'name' => 'isGenericName',
-		'code' => 'isColor',
-		'position' => 'isInt',
-		'meta_title' => 'isCleanHtml',
-		'meta_keywords' => 'isCleanHtml',
-		'meta_description' => 'isCleanHtml',
-		'rewrite' => 'isLinkRewrite'
-	);
-	public $fieldss = array(
+	public $fields = array(
 		'name' => array(
-			'type' => 'isGenericName',
-			'size' => 56,
 			'required' => true,
+			'size' => 56,
+			'type' => 'isGenericName',
 		),
 		'position' => array(
 			'type' => 'isInt',
 		),
 		'name' => array(
-			'type' => 'isGenericName',
-			'size' => 56,
 			'required' => true,
+			'size' => 56,
+			'type' => 'isGenericName',
 		),
 		'code' => array(
 			'type' => 'isColor',
@@ -52,30 +40,6 @@ class Color extends ObjectBase{
 	
 	protected $identifier 		= 'id_color';
 	protected $table			= 'color';
-	
-	public function getFields()
-	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_color'] = (int)($this->id);
-		$fields['position'] = (int)($this->position);
-		$fields['code'] = pSQL($this->code);
-		$fields['meta_title'] = pSQL($this->meta_title);
-		$fields['meta_keywords'] = pSQL($this->meta_keywords);
-		$fields['meta_description'] = pSQL($this->meta_description);
-		$fields['rewrite'] = pSQL($this->rewrite);
-		$fields['name'] = pSQL($this->name);
-		return $fields;
-	}
-	
-	public function add($nullValues = false)
-	{
-		$num = Db::getInstance()->getValue("SELECT * FROM `"._DB_PREFIX_."color` WHERE code='".pSQL(strtolower($this->code))."'");
-		if($num>0)
-			return true;
-		else
-			return parent::add();
-	}
 	
 	public static function getEntitys($orderBy = NULL, $orderWay = NULL)
 	{
@@ -118,6 +82,7 @@ class Color extends ObjectBase{
 					'entitys'  => Product::reLoad($result));
 			Cache::getInstance()->set($cache_key,$rows);
 		}
+		
 		return $rows;
 	}
 	

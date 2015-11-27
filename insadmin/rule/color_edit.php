@@ -2,16 +2,14 @@
 if(isset($_POST['sveColor']) && Tools::getRequest('sveColor')=='add')
 {
 	$color = new Color();
-	$color->name = strtolower(Tools::getRequest('name'));
-	$color->code = strtolower(Tools::getRequest('code'));
-	$color->rewrite = strtolower(Tools::getRequest('rewrite'));
+	$color->copyFromPost();
 	$color->add();
 	
-	if(is_array($color->_errors) AND count($color->_errors)>0){
+	if(is_array($color->_errors) AND count($color->_errors) > 0){
 		$errors = $color->_errors;
 	}else{
 		$_GET['id']	= $color->id;
-		echo '<div class="conf">创建对象成功</div>';
+		UIAdminAlerts::conf('创建对象成功');
 	}
 }
 
@@ -30,15 +28,16 @@ if(isset($_POST['sveColor']) && Tools::getRequest('sveColor')=='edit')
 	if(is_array($obj->_errors) AND count($obj->_errors)>0){
 		$errors = $obj->_errors;
 	}else{
-		echo '<div class="conf">更新对象成功</div>';
+		UIAdminAlerts::conf('更新对象成功');
 	}
 }
 
 $colors = Color::getEntitys();
 
-require_once(dirname(__FILE__).'/../errors.php');
-?>
-<?php
+if (isset($errors)) {
+	UIAdminAlerts::MError($errors);
+}
+
 $breadcrumb = new UIAdminBreadcrumb();
 $breadcrumb->home();
 $breadcrumb->add(array('title' => '颜色', 'href' => 'index.php?rule=color'));
@@ -47,10 +46,24 @@ $bread = $breadcrumb->draw();
 
 $btn_group = array(
 	array('type' => 'a', 'title' => '返回', 'href' => 'index.php?rule=color', 'class' => 'btn-primary', 'icon' => 'level-up') ,
-	array('type' => 'a', 'title' => '保存', 'id' => 'save-color', 'href' => 'index.php?rule=color_edit', 'class' => 'btn-success', 'icon' => 'save') ,
+	array('type' => 'a', 'title' => '保存', 'id' => 'save-color', 'href' => '#', 'class' => 'btn-success', 'icon' => 'save') ,
 );
 echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'breadcrumb');
 ?>
+<script>
+	$(document).ready(function(){
+		$('#save-color').click(function(){
+			$('#color_form').submit();
+		})
+	})
+</script>
+<link href="<?php echo _TM_JS_URL; ?>boootstrap-colorpicker/css/colorpicker.css" rel="stylesheet" type="text/css" media="all" />
+<script type="text/javascript" src="<?php echo _TM_JS_URL; ?>boootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+<script>
+	$(document).ready(function() {
+		$('.colorpicker').colorpicker()
+	})
+</script>
 <div class="row">
 	<div class="col-md-12">
 		<div class="panel panel-default">
@@ -58,17 +71,17 @@ echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'br
 			颜色编辑
 			</div>
 			<div class="panel-body">
-				<form method="post" action="index.php?rule=color_edit<?php echo isset($id)?'&id='.$id:''?>" class="form-horizontal" id="entity_form">
+				<form method="post" action="index.php?rule=color_edit<?php echo isset($id)?'&id='.$id:''?>" class="form-horizontal" id="color_form">
 					<div class="form-group">
-						<label for="code" class="col-md-2 control-label">标题</label>
+						<label for="name" class="col-md-2 control-label">颜色</label>
 						<div class="col-md-5">
-							<input type="text" class="form-control" name="code" value="<?php echo isset($obj)?$obj->code:Tools::getRequest('code');?>">
+							<input type="text" class="form-control" name="name" value="<?php echo isset($obj)?$obj->name:Tools::getRequest('name');?>" id="name" onkeyup="if (isArrowKey(event)) return ;copy2friendlyURL();" onchange="copy2friendlyURL();">
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="code" class="col-md-2 control-label">颜色效果</label>
-						<div class="col-md-5">
-							<div id="showColor" style="width:60px;height:40px;border:2px solid #333;">点击查看</div>
+						<label for="code" class="col-md-2 control-label">颜色值</label>
+						<div class="col-md-1">
+							<input type="text" class="form-control colorpicker" name="code" value="<?php echo isset($obj)?$obj->code:Tools::getRequest('code');?>">
 						</div>
 					</div>
 					<div class="form-group">
@@ -78,26 +91,26 @@ echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'br
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="meta_keywords" class="col-md-2 control-label">标题</label>
+						<label for="meta_keywords" class="col-md-2 control-label">关键词</label>
 						<div class="col-md-5">
-							<input type="text" class="form-control" name="name" value="<?php echo isset($obj)?$obj->meta_keywords:Tools::getRequest('meta_keywords');?>">
+							<input type="text" class="form-control" name="meta_keywords" value="<?php echo isset($obj)?$obj->meta_keywords:Tools::getRequest('meta_keywords');?>">
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="meta_description" class="col-md-2 control-label">Meta 描述</label>
 						<div class="col-md-5">
-							<input type="text" class="form-control" name="name" value="<?php echo isset($obj)?$obj->meta_description:Tools::getRequest('meta_description');?>">
+							<input type="text" class="form-control" name="meta_description" value="<?php echo isset($obj)?$obj->meta_description:Tools::getRequest('meta_description');?>">
 						</div>
 					</div>
-						<input type="hidden" value="<?php echo isset($id)?'edit':'add'?>"  name="sveColor">
+					<div class="form-group">
+						<label for="rewrite" class="col-md-2 control-label">友好URL链接</label>
+						<div class="col-md-5">
+							<input type="text" class="form-control" name="rewrite" value="<?php echo isset($obj)?$obj->rewrite:Tools::getRequest('rewrite');?>" id="rewrite" onkeyup="if (isArrowKey(event)) return ;generateFriendlyURL();" onchange="generateFriendlyURL();">
+						</div>
+					</div>
+					<input type="hidden" value="<?php echo isset($id)?'edit':'add'?>"  name="sveColor">
 				</form>
 			</div>
 		</div>
 	</div>
 </div>
-<script language="javascript">
-	$("#showColor").click(function(){
-		var color = $("#code").val();
-		$(this).css("background-color",color);
-	})
-</script>

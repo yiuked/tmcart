@@ -1,10 +1,10 @@
 <?php
-define('_DB_SERVER_', 'localhost');
-define('_DB_TYPE_', 'MySQL');
-define('_DB_NAME_', 'red_shoes');
-define('_DB_USER_', 'root');
-define('_DB_PASSWD_', '');
-define('_DB_PREFIX_', 'tm_');
+define('DB_SERVER', 'localhost');
+define('DB_NAME', 'red_shoes');
+define('DB_USER', 'root');
+define('DB_TYPE', 'pdo');
+define('DB_PASSWD', '');
+define('DB_PREFIX', 'tm_');
 define('__TM_BASE_URI__', '/red/shoes/');
 define('_TM_THEMES_', 'shop');
 
