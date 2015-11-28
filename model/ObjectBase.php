@@ -21,7 +21,7 @@ abstract class ObjectBase{
 		if ($id)
 		{
 			$result = Db::getInstance()->getRow('
-				SELECT * FROM `'._DB_PREFIX_.$this->table.'`  WHERE `'.$this->identifier.'` = '.(int)($id));
+				SELECT * FROM `'.DB_PREFIX.$this->table.'`  WHERE `'.$this->identifier.'` = '.(int)($id));
 
 			if ($result)
 			{
@@ -43,7 +43,7 @@ abstract class ObjectBase{
 		if($this->id)
 		{
 			$result = Db::getInstance()->getRow('
-				SELECT * FROM `'._DB_PREFIX_.$this->table.'`  WHERE `'.$this->identifier.'` = '.(int)($this->id));
+				SELECT * FROM `'.DB_PREFIX.$this->table.'`  WHERE `'.$this->identifier.'` = '.(int)($this->id));
 
 			if ($result)
 			{
@@ -69,8 +69,8 @@ abstract class ObjectBase{
 		if (!Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
 			die('Fatal error:Object not exist!');
 
-		return Db::getInstance()->Execute('
-			UPDATE `' . _DB_PREFIX_ . $this->table .'`
+		return Db::getInstance()->exec('
+			UPDATE `' . DB_PREFIX . $this->table .'`
 			SET `active`= ' . (int)$action . '
 			WHERE `' . $this->identifier . '` IN(' . implode(',', array_map('intval',$ids)) . ')');
 	}
@@ -119,7 +119,7 @@ abstract class ObjectBase{
 			} elseif (isset($this->{$key}) && !empty($this->{$key}) && $this->{$key} != null){
 				continue;
 			} else {
-				$this->{$key} = null;
+				$this->{$key} = '';
 			}
 		}
 	}
@@ -128,10 +128,11 @@ abstract class ObjectBase{
 	{
 		//Field Required
 		$fields = array();
+
 		foreach($this->fields as $key => $more){
 			if (isset($this->{$key})) {
 				if (isset($more['required']) && $more['required']) {
-					if(empty(trim($this->{$key})) || $this->{$key} == null) {
+					if(empty(trim($this->{$key}))) {
 						$this->_errors[] =  $key .' is required ';
 					}
 				}
@@ -142,21 +143,21 @@ abstract class ObjectBase{
 				if (isset($more['type'])) {
 					if (!method_exists($validate, $more['type'])) {
 						$this->_errors[] =  $key .' validation function not found '.$more['type'];
-					}elseif (!call_user_func(array('Validate', $more['type']), $this->{$key})){
+					}elseif (!empty(trim($this->{$key})) && !call_user_func(array('Validate', $more['type']), $this->{$key})){
 						$this->_errors[] = $key . ' Content has not allowed characters';
 					} else {
 						switch ($more['type']) {
 							case 'isInt':
-								$fields[$key]['value'] = intval($this->{$key});
+								$fields[$key] = intval($this->{$key});
 								break;
 							case 'isFloat';
-								$fields[$key]['value'] = floatval($this->{$key});
+								$fields[$key] = floatval($this->{$key});
 								break;
 							case 'isCleanHtml';
-								$fields[$key]['value'] = pSQL($this->{$key}, true);
+								$fields[$key] = pSQL($this->{$key}, true);
 								break;
 							default:
-								$fields[$key]['value'] = pSQL($this->{$key});
+								$fields[$key] = pSQL($this->{$key});
 								break;
 						}
 					}
@@ -167,11 +168,10 @@ abstract class ObjectBase{
 		}
 		return $fields;
 	}
-	
+
 	/**
-	 * Add current object to database
-	 *
-	 * return boolean Insertion result
+	 * 添加对象到数据库
+	 * @return bool
 	 */
 	public function add()
 	{		
@@ -181,17 +181,18 @@ abstract class ObjectBase{
 			return false;
 			
 		/* Automatically fill dates */
-		if (array_key_exists('add_date', $fields) AND (empty($fields['add_date']) || $fields['add_date'] == null)){
+		if (array_key_exists('add_date', $fields) AND empty(trim($fields['add_date']))){
 			$this->add_date 	= date('Y-m-d H:i:s');
 			$fields['add_date']	= $this->add_date;
 		}
-		if (array_key_exists('upd_date', $fields) AND (empty($fields['upd_date']) || $fields['upd_date'] == null)){
+		if (array_key_exists('upd_date', $fields) AND empty(trim($fields['upd_date']))){
 			$this->upd_date = date('Y-m-d H:i:s');
 			$fields['upd_date']	= $this->upd_date;
 		}
 
+
 		/* Database insertion */
-		$result = Db::getInstance()->autoExecute(_DB_PREFIX_.$this->table, $fields, 'INSERT');
+		$result = Db::getInstance()->insert(DB_PREFIX.$this->table, $fields);
 		
 		if (!$result)
 			return false;
@@ -230,7 +231,7 @@ abstract class ObjectBase{
 			$fields['upd_date']	= $this->upd_date;
 		}
 
-		$result = Db::getInstance()->autoExecute(_DB_PREFIX_.$this->table, $fields, 'UPDATE', '`'.pSQL($this->identifier).'` = '.(int)($this->id));
+		$result = Db::getInstance()->update(DB_PREFIX.$this->table, $fields, 'UPDATE', '`'.pSQL($this->identifier).'` = '.(int)($this->id));
 
 		if (!$result)
 			return false;
@@ -268,7 +269,7 @@ abstract class ObjectBase{
 	 		die(Tools::displayError());
 
 		/* Database deletion */
-		$result = Db::getInstance()->Execute('DELETE FROM `'.pSQL(_DB_PREFIX_.$this->table).'` WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
+		$result = Db::getInstance()->exec('DELETE FROM `'.pSQL(DB_PREFIX.$this->table).'` WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
 		if (!$result)
 			return false;
 
@@ -303,8 +304,8 @@ abstract class ObjectBase{
 		$this->active = $this->active > 0 ? 0 : 1;
 
 		/* Change status to active/inactive */
-		return Db::getInstance()->Execute('
-		UPDATE `'.pSQL(_DB_PREFIX_.$this->table).'`
+		return Db::getInstance()->exec('
+		UPDATE `'.pSQL(DB_PREFIX.$this->table).'`
 		SET `active` = '.$this->active.'
 		WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
 	}

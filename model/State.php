@@ -48,13 +48,13 @@ class State extends ObjectBase{
 			$postion = 'ORDER BY `id_state` DESC';
 		}
 
-		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'state` a
+		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'state` a
 				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
 				'.$where);
 		if($total==0)
 			return false;
 
-		$result = Db::getInstance()->ExecuteS('SELECT a.* FROM `'._DB_PREFIX_.'state` a
+		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'state` a
 				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
 				'.$where.'
 				'.$postion.'

@@ -44,12 +44,12 @@ class Paylog extends ObjectBase
 			$postion = 'ORDER BY `id_pay` DESC';
 		}
 
-		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'paylog` a
+		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'paylog` a
 				WHERE 1'.$where);
 		if($total == 0)
 			return false;
 
-		$result = Db::getInstance()->ExecuteS('SELECT a.* FROM `'._DB_PREFIX_.'paylog` a
+		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'paylog` a
 				WHERE 1 '.$where.'
 				'.$postion.'
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);

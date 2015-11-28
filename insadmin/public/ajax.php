@@ -33,7 +33,7 @@ if (Tools::isSubmit('getChildrenCategories') && Tools::getRequest('id_category_p
 
 if (Tools::isSubmit('getChildrenCategories') && Tools::getRequest('id_category_parent'))
 {
-	if(Tools::getRequest('type')=='Tree'){
+	if(Tools::getRequest('type') == 'Tree'){
 		$children_categories = Category::getChildrenWithNbSelectedSubCat(Tools::getRequest('id_category_parent'), Tools::getRequest('selectedCat'));
 		die(json_encode($children_categories));
 	}

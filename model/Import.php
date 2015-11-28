@@ -52,7 +52,7 @@ class Import{
     private function _attributeExists($v){
     	$v = explode(":",$v);
         $result = Db::getInstance()->getRow(
-            'SELECT `id_attribute` FROM '._DB_PREFIX_.'attribute WHERE `name`="'.pSQL($v[1]).'"');
+            'SELECT `id_attribute` FROM '.DB_PREFIX.'attribute WHERE `name`="'.pSQL($v[1]).'"');
         if(isset($result['id_attribute'])){
         	return $result['id_attribute'];
         }else{
@@ -202,7 +202,7 @@ class Import{
 	private function _brandExists($name){
         $result = Db::getInstance()->getRow(
            'SELECT id_brand
-			FROM '._DB_PREFIX_.'brand
+			FROM '.DB_PREFIX.'brand
 			WHERE `name`="'.pSQL($name).'"');
         return isset($result['id_brand'])?$result['id_brand']:0;
     }
@@ -210,7 +210,7 @@ class Import{
     private function _catelogExists($name,$id_parent){
         $result = Db::getInstance()->getRow(
            'SELECT c.id_category
-			FROM '._DB_PREFIX_.'category AS c
+			FROM '.DB_PREFIX.'category AS c
 			WHERE c.`name`="'.pSQL($name).'" AND c.`id_parent`='.intval($id_parent));
         return isset($result['id_category'])?$result['id_category']:0;
     }

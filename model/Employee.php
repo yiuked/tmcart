@@ -47,7 +47,7 @@ class Employee extends ObjectBase
 
 		return (bool)Db::getInstance()->getValue('
 		SELECT `id_employee`
-		FROM `'._DB_PREFIX_.'employee`
+		FROM `'.DB_PREFIX.'employee`
 		WHERE `email` = \''.pSQL($email).'\'');
 	}
 	
@@ -65,7 +65,7 @@ class Employee extends ObjectBase
 
 		$result = Db::getInstance()->getRow('
 		SELECT *
-		FROM `'._DB_PREFIX_.'employee`
+		FROM `'.DB_PREFIX.'employee`
 		WHERE `active` = 1
 		AND `email` = \''.pSQL($email).'\'
 		'.($passwd ? 'AND `passwd` = \''.Tools::encrypt($passwd).'\'' : ''));
@@ -90,7 +90,7 @@ class Employee extends ObjectBase
 
 		return Db::getInstance()->getValue('
 		SELECT `id_employee`
-		FROM `'._DB_PREFIX_.'employee`
+		FROM `'.DB_PREFIX.'employee`
 		WHERE `id_employee` = '.(int)$id_employee.'
 		AND `passwd` = \''.pSQL($passwd).'\'
 		AND active = 1');
@@ -117,11 +117,11 @@ class Employee extends ObjectBase
 		}else{
 			$postion = 'ORDER BY `position` ASC';
 		}
-		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'employee` a
+		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'employee` a
 				WHERE 1 '.($active?' a.`active`=1 AND':'').'
 				'.$where);
 
-		$result = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'employee` a
+		$result = Db::getInstance()->getAll('SELECT * FROM `'.DB_PREFIX.'employee` a
 				WHERE 1 '.($active?' a.`active`=1 AND':'').'
 				'.$where.'
 				'.$postion.'

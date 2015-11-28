@@ -22,8 +22,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <?php echo $data['title']; ?>
-                <span class="badge"><?php echo $data['result']['total'];?></span>
+                <span class="badge"><?php echo $data['result']['total'];?></span> <?php echo $data['title']; ?>
             </div>
             <div class="panel-body">
                 <form class="form" method="post" action="index.php?rule=<?php echo isset($data['action']) ? $data['action'] : Tools::G('rule');?>">

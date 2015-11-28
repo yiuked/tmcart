@@ -22,7 +22,7 @@ class View{
 		$args = self::loadInit();
 		$r 	  = strtolower($args[0]);
 
-		$result = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'rule` WHERE `rule_link`="'.pSQL($r).'"');
+		$result = Db::getInstance()->getRow('SELECT * FROM `'.DB_PREFIX.'rule` WHERE `rule_link`="'.pSQL($r).'"');
 
 		if($result && file_exists(_TM_VIEWS_DIR.$result['view_name'].'.php')){
 			$entity     = new $result['entity'];

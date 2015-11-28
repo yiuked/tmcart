@@ -39,10 +39,6 @@ class UIAdminDndTable extends UIAdminTable
                             $body .= '<td'. $width . $class .'><span class="glyphicon glyphicon-'. ($row[$head['name']] == 0 ? 'remove':'ok') .' active-toggle" onclick="setToggle($(this),\'' .  $this->className . '\',\'' .  $head['name'] . '\',' .  $row[$this->identifier] . ')"></span></td>';
                         }elseif ($head['name'] == 'position'){
                             $body .= '<td'. $width . $class .' id="td_' . $path .'" class="pointer dragHandle center" >';
-                           /* $body .= '<a href="index.php?rule=' . $this->rule . (!empty($this->parent) ? '&move_'. $this->parent . '=' . $row[$this->parent]: ''). '&move_' .$this->identifier . '=' . $row[$this->identifier] .'&way=1&position=' .($row['position'] + 1). '" ' .($key + 1 == count($this->data) ? 'style="display:none"' : '') . '>';
-                            $body .= '<span aria-hidden="true" class="glyphicon glyphicon-triangle-bottom"></span></a>';
-                            $body .= '<a href="index.php?rule=' . $this->rule . (!empty($this->parent) ? '&move_'. $this->parent . '=' . $row[$this->parent]: ''). '&move_' .$this->identifier . '=' . $row[$this->identifier] .'&way=0&position=' .($row['position'] - 1). '" ' .($key == 0 ? 'style="display:none"' : '') . '>';
-                            $body .= '<span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span></a>';*/
                             $body .= '<div class="dragGroup"><span aria-hidden="true" class="glyphicon glyphicon-move"></span> <span class="positions">' . $row['position'] . '</span></div>';
                             $body .= '</td>';
                         }elseif(isset($head['edit']) && $head['edit'] == false){

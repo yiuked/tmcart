@@ -3,8 +3,8 @@
 		
 		public static function getNewCMS($n=10)
 		{
-			$result = Db::getInstance()->ExecuteS('
-				SELECT * FROM `'._DB_PREFIX_.'cms`
+			$result = Db::getInstance()->getAll('
+				SELECT * FROM `'.DB_PREFIX.'cms`
 				WHERE active = 1
 				ORDER BY `add_date` DESC
 				LIMIT 0,'.(int)($n));
@@ -13,10 +13,10 @@
 		
 		public static function getLastComment($n=10)
 		{
-			$result = Db::getInstance()->ExecuteS('
+			$result = Db::getInstance()->getAll('
 				SELECT cc.comment,c.rewrite
-				FROM '._DB_PREFIX_.'cms_comment AS cc
-				LEFT JOIN '._DB_PREFIX_.'cms AS c ON cc.id_cms = c.id_cms
+				FROM '.DB_PREFIX.'cms_comment AS cc
+				LEFT JOIN '.DB_PREFIX.'cms AS c ON cc.id_cms = c.id_cms
 				WHERE cc.active = 1
 				ORDER BY cc.`add_date` DESC
 				LIMIT 0,'.(int)($n));
@@ -27,10 +27,10 @@
 	
 		public static function getLevelCategory($leve=1)
 		{
-			$result = Db::getInstance()->ExecuteS('
+			$result = Db::getInstance()->getAll('
 						SELECT cc.`name`,cc.rewrite,
-						(SELECT COUNT(*) FROM '._DB_PREFIX_.'cms_to_category ctc WHERE ctc.id_cms_category=cc.id_cms_category) as t
-						FROM '._DB_PREFIX_.'cms_category AS cc
+						(SELECT COUNT(*) FROM '.DB_PREFIX.'cms_to_category ctc WHERE ctc.id_cms_category=cc.id_cms_category) as t
+						FROM '.DB_PREFIX.'cms_category AS cc
 						WHERE cc.active=1 AND cc.level_depth='.(int)($leve));
 			foreach($result as &$row)
 				$row['link'] = Tools::getLink($row['rewrite']);
@@ -39,8 +39,8 @@
 		
 		public static function getSreachCMS($query,$p=1,$m=50)
 		{
-			$result = Db::getInstance()->ExecuteS('
-				SELECT * FROM `'._DB_PREFIX_.'cms`
+			$result = Db::getInstance()->getAll('
+				SELECT * FROM `'.DB_PREFIX.'cms`
 				WHERE active = 1
 				AND (title LIKE "%'.pSQL($query).'%" OR meta_title LIKE "%'.pSQL($query).'%" OR `meta_keywords` LIKE "%'.pSQL($query).'%" OR `meta_description` LIKE "%'.pSQL($query).'%" OR `content` LIKE "%'.pSQL($query).'%")
 				ORDER BY `add_date` DESC
@@ -50,8 +50,8 @@
 		
 		public static function getDateCMSBlock()
 		{
-			$result = Db::getInstance()->ExecuteS('
-				SELECT FROM_UNIXTIME(UNIX_TIMESTAMP(add_date),"%Y/%m") AS d_date, COUNT(*) AS t FROM `'._DB_PREFIX_.'cms` 
+			$result = Db::getInstance()->getAll('
+				SELECT FROM_UNIXTIME(UNIX_TIMESTAMP(add_date),"%Y/%m") AS d_date, COUNT(*) AS t FROM `'.DB_PREFIX.'cms`
 				WHERE active = 1
 				GROUP BY d_date DESC');
 			foreach($result as &$row)
@@ -61,8 +61,8 @@
 		
 		public static function getDateCMS($date_query,$p=1,$m=50)
 		{
-			$result = Db::getInstance()->ExecuteS('
-				SELECT * FROM `'._DB_PREFIX_.'cms`
+			$result = Db::getInstance()->getAll('
+				SELECT * FROM `'.DB_PREFIX.'cms`
 				WHERE active = 1
 				AND FROM_UNIXTIME(UNIX_TIMESTAMP(add_date),"%Y-%m")="'.pSQL($date_query).'"
 				ORDER BY `add_date` DESC

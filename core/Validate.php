@@ -391,6 +391,16 @@ class Validate
 	{
 		return preg_match('/^[a-zA-Z_0-9-]+$/', $configName);
 	}
+
+	/**
+	 * 检测是否为数字或者字符串
+	 * @param $value
+	 * @return bool
+	 */
+	public static function isConfigValue($value)
+	{
+		return is_numeric($value) || is_string($value);
+	}
 	
 	/**
 	* Check date formats like http://php.net/manual/en/function.date.php

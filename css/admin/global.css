@@ -392,6 +392,9 @@ border: 1px solid #006633;
   font-weight: bold;
   margin: 0;
 }
+.panel-heading .breadcrumb.custom{
+  display: inline;
+}
 /*custom table*/
 .table-action-dropdown-menu{
   min-width:75px;

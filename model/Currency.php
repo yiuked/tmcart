@@ -79,7 +79,7 @@ class Currency extends ObjectBase
 	{
 		if ($this->id == Configuration::get('PS_CURRENCY_DEFAULT'))
 		{
-			$result = Db::getInstance()->getRow('SELECT `id_currency` FROM '._DB_PREFIX_.'currency WHERE `id_currency` != '.(int)($this->id).' AND `deleted` = 0');
+			$result = Db::getInstance()->getRow('SELECT `id_currency` FROM '.DB_PREFIX.'currency WHERE `id_currency` != '.(int)($this->id).' AND `deleted` = 0');
 			if (!$result['id_currency'])
 				return false;
 			Configuration::updateValue('PS_CURRENCY_DEFAULT', $result['id_currency']);
@@ -109,13 +109,13 @@ class Currency extends ObjectBase
 			$postion = 'ORDER BY `id_currency` DESC';
 		}
 
-		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'currency` a
+		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'currency` a
 				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
 				'.$where);
 		if($total==0)
 			return false;
 
-		$result = Db::getInstance()->ExecuteS('SELECT a.* FROM `'._DB_PREFIX_.'currency` a
+		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'currency` a
 				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
 				'.$where.'
 				'.$postion.'
@@ -156,9 +156,9 @@ class Currency extends ObjectBase
 	  */
 	public static function getCurrencies($object = false, $active = 1)
 	{
-		$tab = Db::getInstance()->ExecuteS('
+		$tab = Db::getInstance()->getAll('
 		SELECT *
-		FROM `'._DB_PREFIX_.'currency`
+		FROM `'.DB_PREFIX.'currency`
 		WHERE `deleted` = 0
 		'.($active == 1 ? 'AND `active` = 1' : '').'
 		ORDER BY `name` ASC');
@@ -172,7 +172,7 @@ class Currency extends ObjectBase
 	{
 		return Db::getInstance()->getRow('
 		SELECT *
-		FROM `'._DB_PREFIX_.'currency`
+		FROM `'.DB_PREFIX.'currency`
 		WHERE `id_currency` = '.(int)($id_currency));
 	}
 
@@ -180,7 +180,7 @@ class Currency extends ObjectBase
 	{
 		$result = Db::getInstance()->getRow('
 		SELECT `id_currency`
-		FROM `'._DB_PREFIX_.'currency`
+		FROM `'.DB_PREFIX.'currency`
 		WHERE `iso_code` = \''.pSQL($iso_code).'\'');
 		return $result['id_currency'];
 	}
@@ -188,7 +188,7 @@ class Currency extends ObjectBase
 	{
 		$result = Db::getInstance()->getRow('
 		SELECT `id_currency`
-		FROM `'._DB_PREFIX_.'currency`
+		FROM `'.DB_PREFIX.'currency`
 		WHERE `iso_code_num` = \''.pSQL($iso_code).'\'');
 		return (int)$result['id_currency'];
 	}

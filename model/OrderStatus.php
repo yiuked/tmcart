@@ -47,12 +47,12 @@ class OrderStatus extends ObjectBase
 			$postion = 'ORDER BY `id_order_status` DESC';
 		}
 
-		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'order_status` a
+		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'order_status` a
 				WHERE 1 '.$where);
 		if($total==0)
 			return false;
 
-		$result = Db::getInstance()->ExecuteS('SELECT a.* FROM `'._DB_PREFIX_.'order_status` a
+		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'order_status` a
 				WHERE 1 '.$where.'
 				'.$postion.'
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);

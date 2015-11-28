@@ -8,13 +8,13 @@ if(intval(Tools::getRequest('delete'))>0){
 	if(is_array($object->_errors) AND count($object->_errors)>0){
 		$errors = $object->_errors;
 	}else{
-		echo '<div class="conf">删除颜色成功</div>';
+		UIAdminAlerts::conf('颜色已删除');
 	}
 }elseif(Tools::isSubmit('subDelete')){
 	$select_cat = Tools::getRequest('categoryBox');
 	$color	= new Color();
 	if($color->deleteSelection($select_cat)){
-		echo '<div class="conf">删除管理员成功</div>';
+		UIAdminAlerts::conf('颜色已删除');
 	}
 }
 echo UIAdminDndTable::loadHead();

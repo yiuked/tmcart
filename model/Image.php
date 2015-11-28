@@ -59,9 +59,9 @@ class Image extends ObjectBase
 			return false;
 
 		// update positions
-		$result = Db::getInstance()->executeS('
+		$result = Db::getInstance()->getAll('
 			SELECT *
-			FROM `'._DB_PREFIX_.'image`
+			FROM `'.DB_PREFIX.'image`
 			WHERE `id_product` = '.(int)$this->id_product.'
 			ORDER BY `position`
 		');
@@ -85,9 +85,9 @@ class Image extends ObjectBase
 	 */
 	public static function getImages($id_product)
 	{
-		return Db::getInstance()->executeS('
+		return Db::getInstance()->getAll('
 		SELECT *
-		FROM `'._DB_PREFIX_.'image`
+		FROM `'.DB_PREFIX.'image`
 		WHERE `id_product` = '.(int)$id_product.'
 		ORDER BY `position` ASC');
 	}
@@ -108,9 +108,9 @@ class Image extends ObjectBase
 	 */
 	public static function getAllImages()
 	{
-		return Db::getInstance()->executeS('
+		return Db::getInstance()->getAll('
 		SELECT `id_image`, `id_product`
-		FROM `'._DB_PREFIX_.'image`
+		FROM `'.DB_PREFIX.'image`
 		ORDER BY `id_image` ASC');
 	}
 
@@ -124,7 +124,7 @@ class Image extends ObjectBase
 	{
 		$result = Db::getInstance()->getRow('
 		SELECT COUNT(`id_image`) AS total
-		FROM `'._DB_PREFIX_.'image`
+		FROM `'.DB_PREFIX.'image`
 		WHERE `id_product` = '.(int)$id_product);
 		return $result['total'];
 	}
@@ -139,7 +139,7 @@ class Image extends ObjectBase
 	{
 		$result = Db::getInstance()->getRow('
 		SELECT MAX(`position`) AS max
-		FROM `'._DB_PREFIX_.'image`
+		FROM `'.DB_PREFIX.'image`
 		WHERE `id_product` = '.(int)$id_product);
 		return $result['max'];
 	}
@@ -158,8 +158,8 @@ class Image extends ObjectBase
 		if (file_exists(_TM_TMP_IMG_DIR.'product_'.$id_product.'.jpg'))
 			unlink(_TM_TMP_IMG_DIR.'product_'.$id_product.'.jpg');
 		
-		return Db::getInstance()->execute('
-			UPDATE `'._DB_PREFIX_.'image`
+		return Db::getInstance()->exec('
+			UPDATE `'.DB_PREFIX.'image`
 			SET `cover` = 0
 			WHERE `id_product` = '.(int)$id_product);
 	}
@@ -173,7 +173,7 @@ class Image extends ObjectBase
 	public static function getCover($id_product)
 	{
 		return Db::getInstance()->getRow('
-			SELECT * FROM `'._DB_PREFIX_.'image`
+			SELECT * FROM `'.DB_PREFIX.'image`
 			WHERE `id_product` = '.(int)$id_product.'
 			AND `cover`= 1');
 	}
@@ -187,9 +187,9 @@ class Image extends ObjectBase
 	public static function duplicateProductImages($id_product_old, $id_product_new, $combination_images)
 	{
 		$images_types = ImageType::getImagesTypes('products');
-		$result = Db::getInstance()->executeS('
+		$result = Db::getInstance()->getAll('
 		SELECT `id_image`
-		FROM `'._DB_PREFIX_.'image`
+		FROM `'.DB_PREFIX.'image`
 		WHERE `id_product` = '.(int)$id_product_old);
 		foreach ($result as $row)
 		{
@@ -246,12 +246,12 @@ class Image extends ObjectBase
 	{
 		if (!isset($combination_images['new']) || !is_array($combination_images['new']))
 			return true;
-		$query = 'INSERT INTO `'._DB_PREFIX_.'product_attribute_image` (`id_product_attribute`, `id_image`) VALUES ';
+		$query = 'INSERT INTO `'.DB_PREFIX.'product_attribute_image` (`id_product_attribute`, `id_image`) VALUES ';
 		foreach ($combination_images['new'] as $id_product_attribute => $image_ids)
 			foreach ($image_ids as $image_id)
 				$query .= '('.(int)$id_product_attribute.', '.(int)$image_id.'), ';
 		$query = rtrim($query, ', ');
-		return DB::getInstance()->execute($query);
+		return Db::getInstance()->exec($query);
 	}
 
 	/**
@@ -271,19 +271,19 @@ class Image extends ObjectBase
 		// temporary position
 		$high_position = Image::getHighestPosition($this->id_product) + 1;
 
-		Db::getInstance()->execute('
-		UPDATE `'._DB_PREFIX_.'image`
+		Db::getInstance()->exec('
+		UPDATE `'.DB_PREFIX.'image`
 		SET `position` = '.(int)$high_position.'
 		WHERE `id_product` = '.(int)$this->id_product.'
 		AND `position` = '.($direction ? $position - 1 : $position + 1));
 
-		Db::getInstance()->execute('
-		UPDATE `'._DB_PREFIX_.'image`
+		Db::getInstance()->exec('
+		UPDATE `'.DB_PREFIX.'image`
 		SET `position` = `position`'.($direction ? '-1' : '+1').'
 		WHERE `id_image` = '.(int)$this->id);
 
-		Db::getInstance()->execute('
-		UPDATE `'._DB_PREFIX_.'image`
+		Db::getInstance()->exec('
+		UPDATE `'.DB_PREFIX.'image`
 		SET `position` = '.$this->position.'
 		WHERE `id_product` = '.(int)$this->id_product.'
 		AND `position` = '.(int)$high_position);
@@ -303,16 +303,16 @@ class Image extends ObjectBase
 
 		// < and > statements rather than BETWEEN operator
 		// since BETWEEN is treated differently according to databases
-		$result = (Db::getInstance()->execute('
-			UPDATE `'._DB_PREFIX_.'image`
+		$result = (Db::getInstance()->exec('
+			UPDATE `'.DB_PREFIX.'image`
 			SET `position`= `position` '.($way ? '- 1' : '+ 1').'
 			WHERE `position`
 			'.($way
 				? '> '.(int)$this->position.' AND `position` <= '.(int)$position
 				: '< '.(int)$this->position.' AND `position` >= '.(int)$position).'
 			AND `id_product`='.(int)$this->id_product)
-		&& Db::getInstance()->execute('
-			UPDATE `'._DB_PREFIX_.'image`
+		&& Db::getInstance()->exec('
+			UPDATE `'.DB_PREFIX.'image`
 			SET `position` = '.(int)$position.'
 			WHERE `id_image` = '.(int)$this->id_image));
 
@@ -324,7 +324,7 @@ class Image extends ObjectBase
 		if (!isset(self::$_cacheGetSize[$type]) || self::$_cacheGetSize[$type] === null)
 			self::$_cacheGetSize[$type] = Db::getInstance()->getRow('
 				SELECT `width`, `height`
-				FROM '._DB_PREFIX_.'image_type
+				FROM '.DB_PREFIX.'image_type
 				WHERE `name` = \''.pSQL($type).'\'
 			');
 	 	return self::$_cacheGetSize[$type];

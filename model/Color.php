@@ -1,6 +1,6 @@
 <?php 
 class Color extends ObjectBase{
-	public $fields = array(
+	protected $fields = array(
 		'name' => array(
 			'required' => true,
 			'size' => 56,
@@ -49,7 +49,7 @@ class Color extends ObjectBase{
 		}else{
 			$postion = 'ORDER BY `position` DESC';
 		}
-		$result = Db::getInstance()->ExecuteS('SELECT *,code as color  FROM `'._DB_PREFIX_.'color` '.$postion);
+		$result = Db::getInstance()->getAll('SELECT *,code as color  FROM `'.DB_PREFIX.'color` '.$postion);
 		return array(
 			'total' => count($result),
 			'entitys' => $result
@@ -67,13 +67,13 @@ class Color extends ObjectBase{
 				$postion = 'ORDER BY a.`id_product` DESC';
 			}
 
-			$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'product` a
+			$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'product` a
 					WHERE a.active=1 AND a.id_color='.(int)($this->id));
 			if($total==0)
 				return false;
 
-			$result = Db::getInstance()->ExecuteS('SELECT a.* 
-					FROM `'._DB_PREFIX_.'product` a
+			$result = Db::getInstance()->getAll('SELECT a.*
+					FROM `'.DB_PREFIX.'product` a
 					WHERE a.active=1 AND a.id_color='.(int)($this->id).'
 					'.$postion.'
 					LIMIT '.(($p-1)*$limit).','.(int)$limit);
@@ -90,7 +90,7 @@ class Color extends ObjectBase{
 	{
 		foreach($id_products as $id_product)
 		{
-			Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'color_product (`id_color`,`id_product`) VALUES('.(int)$id_color.','.(int)$id_product.')');
+			Db::getInstance()->exec('INSERT INTO '.DB_PREFIX.'color_product (`id_color`,`id_product`) VALUES('.(int)$id_color.','.(int)$id_product.')');
 		}
 		return;
 	}

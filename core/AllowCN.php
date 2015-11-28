@@ -44,7 +44,7 @@ class AllowCN
 			
 			if($this->open_ip=='YES')
 			{
-				include_once(_TM_TOOLS_DIR.'geoip/geoipcity.inc');
+				include_once(_TM_TOOLS_DIR . 'geoip/geoipcity.inc');
 				$gi = geoip_open(realpath(_TM_TOOLS_DIR.'geoip/GeoLiteCity.dat'), GEOIP_STANDARD);
 				$record = geoip_record_by_addr($gi,Tools::getClientIp());
 				if (is_object($record))

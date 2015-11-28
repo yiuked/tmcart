@@ -44,4 +44,8 @@
   'UIAdminAlerts' => 'D:\\wamp\\www\\red\\shoes/core/UIView/UIAdminAlerts.php',
   'Tag' => 'D:\\wamp\\www\\red\\shoes/model/Tag.php',
   'MYPDO' => 'D:\\wamp\\www\\red\\shoes/core/MYPDO.php',
+  'DbPdo' => 'D:\\wamp\\www\\red\\shoes/core/DbPdo.php',
+  'DbMySQLI' => 'D:\\wamp\\www\\red\\shoes/core/DbMySQLI.php',
+  'DbMySQL' => 'D:\\wamp\\www\\red\\shoes/core/DbMySQL.php',
+  'CategoryView' => 'D:\\wamp\\www\\red\\shoes/views/CategoryView.php',
 ); 

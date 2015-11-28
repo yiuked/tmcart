@@ -73,7 +73,7 @@ class Cart extends ObjectBase{
 	public function delete()
 	{
 		if(parent::delete()){
-			Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'cart_product WHERE id_cart='.(int)($this->id));
+			Db::getInstance()->exec('DELETE FROM '.DB_PREFIX.'cart_product WHERE id_cart='.(int)($this->id));
 		}
 	}
 	
@@ -91,13 +91,13 @@ class Cart extends ObjectBase{
 	public function getProductTotal()
 	{
 		return Db::getInstance()->getValue('
-			  SELECT SUM(`quantity`*`unit_price`) AS total FROM '._DB_PREFIX_.'cart_product 
+			  SELECT SUM(`quantity`*`unit_price`) AS total FROM '.DB_PREFIX.'cart_product
 			  WHERE id_cart='.(int)($this->id));
 	}
 	
 	public function getProductQantity()
 	{
-		return (int)Db::getInstance()->getValue('SELECT SUM(quantity) FROM '._DB_PREFIX_.'cart_product WHERE id_cart='.(int)($this->id));
+		return (int)Db::getInstance()->getValue('SELECT SUM(quantity) FROM '.DB_PREFIX.'cart_product WHERE id_cart='.(int)($this->id));
 	}
 	
 	public function getOrderTotal()
@@ -122,10 +122,10 @@ class Cart extends ObjectBase{
 	public function getProducts($image="small")
 	{
 		$products = array();
-		$result = Db::getInstance()->ExecuteS('
-				  SELECT c.*,p.`name`,p.`price`,p.`rewrite`,p.id_product,i.`id_image`,(c.`quantity`*p.`price`) AS total FROM '._DB_PREFIX_.'cart_product c 
-				  LEFT JOIN '._DB_PREFIX_.'product p ON (c.`id_product` = p.`id_product`)
-				  LEFT JOIN '._DB_PREFIX_.'image i ON (p.`id_product` = i.`id_product`)
+		$result = Db::getInstance()->getAll('
+				  SELECT c.*,p.`name`,p.`price`,p.`rewrite`,p.id_product,i.`id_image`,(c.`quantity`*p.`price`) AS total FROM '.DB_PREFIX.'cart_product c
+				  LEFT JOIN '.DB_PREFIX.'product p ON (c.`id_product` = p.`id_product`)
+				  LEFT JOIN '.DB_PREFIX.'image i ON (p.`id_product` = i.`id_product`)
 				  WHERE id_cart='.(int)($this->id).' AND i.`cover`=1');
 		if(!$result)
 			return 0;
@@ -142,16 +142,16 @@ class Cart extends ObjectBase{
 	{
 		if(is_array($id_attributes))
 			$id_attributes = implode(',',$id_attributes);
-		if(Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'cart_product WHERE id_cart='.(int)($this->id).' AND id_product='.(int)($id_product).' AND id_attributes="'.pSQL($id_attributes).'"'))
-			return Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'cart_product SET quantity=quantity+'.(int)($quantity).' WHERE id_cart='.(int)($this->id).' AND id_product='.(int)($id_product).' AND id_attributes="'.pSQL($id_attributes).'"');
+		if(Db::getInstance()->getValue('SELECT COUNT(*) FROM '.DB_PREFIX.'cart_product WHERE id_cart='.(int)($this->id).' AND id_product='.(int)($id_product).' AND id_attributes="'.pSQL($id_attributes).'"'))
+			return Db::getInstance()->exec('UPDATE '.DB_PREFIX.'cart_product SET quantity=quantity+'.(int)($quantity).' WHERE id_cart='.(int)($this->id).' AND id_product='.(int)($id_product).' AND id_attributes="'.pSQL($id_attributes).'"');
 		else
-			return Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'cart_product (id_cart,id_product,quantity,unit_price,id_attributes) VALUES('.(int)($this->id).','.(int)($id_product).','.(int)($quantity).','.(float)($price).',"'.pSQL($id_attributes).'")');
+			return Db::getInstance()->exec('INSERT INTO '.DB_PREFIX.'cart_product (id_cart,id_product,quantity,unit_price,id_attributes) VALUES('.(int)($this->id).','.(int)($id_product).','.(int)($quantity).','.(float)($price).',"'.pSQL($id_attributes).'")');
 			
 	}
 	
 	public function deleteProduct($id_cart_product)
 	{
-		if(Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'cart_product WHERE `id_cart_product`='.intval($id_cart_product))){
+		if(Db::getInstance()->exec('DELETE FROM '.DB_PREFIX.'cart_product WHERE `id_cart_product`='.intval($id_cart_product))){
 			$this->discount = 0;
 			return $this->update();
 		}
@@ -160,7 +160,7 @@ class Cart extends ObjectBase{
 	
 	public function updateProduct($id_cart_product,$quantity)
 	{
-		if(Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'cart_product SET `quantity`='.$quantity.' WHERE `id_cart_product`='.intval($id_cart_product))){
+		if(Db::getInstance()->exec('UPDATE '.DB_PREFIX.'cart_product SET `quantity`='.$quantity.' WHERE `id_cart_product`='.intval($id_cart_product))){
 			$this->discount = 0;
 			return $this->update();
 		}
@@ -170,7 +170,7 @@ class Cart extends ObjectBase{
 	public static function cartIsOrder($id_cart)
 	{
 		global $cookie;
-		$id_order = Db::getInstance()->getValue('SELECT id_order FROM '._DB_PREFIX_.'order WHERE id_cart='.(int)$id_cart);
+		$id_order = Db::getInstance()->getValue('SELECT id_order FROM '.DB_PREFIX.'order WHERE id_cart='.(int)$id_cart);
 		if($id_order>0){
 			unset($cookie->id_cart);
 			return true;
@@ -229,19 +229,19 @@ class Cart extends ObjectBase{
 		}
 
 		$total  = Db::getInstance()->getRow('SELECT COUNT(*) AS total
-					FROM '._DB_PREFIX_.'cart AS a
-					Left JOIN '._DB_PREFIX_.'currency AS y ON a.id_currency = y.id_currency
-					Left JOIN '._DB_PREFIX_.'carrier AS r ON a.id_carrier = r.id_carrier
-					Left JOIN '._DB_PREFIX_.'user AS u ON a.id_user = u.id_user
+					FROM '.DB_PREFIX.'cart AS a
+					Left JOIN '.DB_PREFIX.'currency AS y ON a.id_currency = y.id_currency
+					Left JOIN '.DB_PREFIX.'carrier AS r ON a.id_carrier = r.id_carrier
+					Left JOIN '.DB_PREFIX.'user AS u ON a.id_user = u.id_user
 					WHERE 1 '.$where);
 		if($total==0)
 			return false;
 
-		$result = Db::getInstance()->ExecuteS('SELECT a.id_cart,a.id_user,a.id_address,a.id_carrier,a.id_currency,u.name,r.name as carrier,r.shipping,a.status,a.add_date
-					FROM '._DB_PREFIX_.'cart AS a
-					Left JOIN '._DB_PREFIX_.'currency AS y ON a.id_currency = y.id_currency
-					Left JOIN '._DB_PREFIX_.'carrier AS r ON a.id_carrier = r.id_carrier
-					Left JOIN '._DB_PREFIX_.'user AS u ON a.id_user = u.id_user
+		$result = Db::getInstance()->getAll('SELECT a.id_cart,a.id_user,a.id_address,a.id_carrier,a.id_currency,u.name,r.name as carrier,r.shipping,a.status,a.add_date
+					FROM '.DB_PREFIX.'cart AS a
+					Left JOIN '.DB_PREFIX.'currency AS y ON a.id_currency = y.id_currency
+					Left JOIN '.DB_PREFIX.'carrier AS r ON a.id_carrier = r.id_carrier
+					Left JOIN '.DB_PREFIX.'user AS u ON a.id_user = u.id_user
 					WHERE 1 '.$where.'
 					'.$postion.'
 					LIMIT '.(($p-1)*$limit).','.(int)$limit);

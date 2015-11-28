@@ -7,7 +7,7 @@
  * Time: 15:30
  */
 
-class MySQL extends Db
+class DbMySQL extends Db
 {
 	public function connect()
 	{
@@ -48,10 +48,12 @@ class MySQL extends Db
 	{
 		if ($this->_link)
 		{
-			$result = mysql_query($query, $this->_link);
-			$nrows = mysql_num_rows($result);
-			return $nrows;
+			if ($result = mysql_query($query, $this->_link)) {
+				$nrows = mysql_num_rows($result);
+				return $nrows;
+			}
 		}
+		return false;
 	}
 
 	public function delete($table, $where = false, $limit = false)
@@ -85,9 +87,8 @@ class MySQL extends Db
 	{
 		if ($this->_link)
 		{
-			$result = mysql_query($query, $this->_link);
 			$resultArray = array();
-			if ($result !== true)
+			if ($result = mysql_query($query, $this->_link))
 				while ($row = mysql_fetch_assoc($result))
 					$resultArray[] = $row;
 			return $resultArray;
@@ -95,33 +96,45 @@ class MySQL extends Db
 		return false;
 	}
 
-	public function getValue($query,$filed)
+	public function getValue($query, $filed = false)
 	{
 		if ($this->_link)
 		{
-			$result = mysql_query($query, $this->_link);
-			$row = mysql_fetch_assoc($result);
-			return $row[$filed];
+			if ($result = mysql_query($query, $this->_link)) {
+				$value = '';
+				if ($filed) {
+					$row = $row = mysql_fetch_assoc($result);
+					$value = $row[$filed];
+				} else {
+					$row = $row = mysql_fetch_array($result, MYSQL_NUM);
+					$value = $row[0];
+				}
+				return $value;
+			}
 		}
 		return false;
 	}
 
-	public function getAllValue($query,$filed)
+	public function getAllValue($query, $filed = false)
 	{
 		if ($this->_link)
 		{
-			$result = mysql_query($query, $this->_link);
 			$resultArray = array();
 			// Only SELECT queries and a few others return a valid resource usable with mysql_fetch_assoc
-			if ($result !== true)
-				while ($row = mysql_fetch_assoc($result))
-					$resultArray[] = $row[$filed];
+			if ($result = mysql_query($query, $this->_link))
+				if ($filed) {
+					while ($row = mysql_fetch_assoc($result))
+						$resultArray[] = $row[$filed];
+				}else{
+					while ($row = mysql_fetch_array($result, MYSQL_NUM))
+						$resultArray[] = $row[0];
+				}
 			return $resultArray;
 		}
 		return false;
 	}
 
-	protected function exec($query)
+	public function exec($query)
 	{
 		if ($this->_link)
 		{

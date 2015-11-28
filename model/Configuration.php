@@ -2,39 +2,34 @@
 
 class Configuration extends ObjectBase
 {
-	/** @var string Key */
-	public 		$name;
-
-	/** @var string Value */
-	public 		$value;
-
-	/** @var string Object creation date */
-	public 		$add_date;
-
-	/** @var string Object last modification date */
-	public 		$upd_date;
-
-	protected	$fieldsRequired = array('name');
-	protected	$fieldsSize = array('name' => 256);
-	protected	$fieldsValidate = array('name' => 'isConfigName');
+	protected $fields = array(
+		'name' => array(
+			'required' => true,
+			'size' => 128,
+			'type' => 'isConfigName',
+		),
+		'value' => array(
+			'required' => true,
+			'size' => 512,
+			'type' => 'isConfigValue',
+		),
+		'add_date' => array(
+			'required' => true,
+			'size' => 32,
+			'type' => 'isDate',
+		),
+		'upd_date' => array(
+			'required' => true,
+			'size' => 32,
+			'type' => 'isDate',
+		),
+	);
 
 	protected	$table = 'configuration';
 	protected 	$identifier = 'id_configuration';
 
 	/** @var array Configuration cache */
 	protected static $_CONF;
-	
-	
-	
-	public function getFields()
-	{
-		parent::validation();
-		$fields['name'] = pSQL($this->name);
-		$fields['value'] = pSQL($this->value);
-		$fields['add_date'] = pSQL($this->add_date);
-		$fields['upd_date'] = pSQL($this->upd_date);
-		return $fields;
-	}
 
 	/**
 	  * Delete a configuration key in database (with or without language management)
@@ -47,7 +42,7 @@ class Configuration extends ObjectBase
 	 	if (!Validate::isConfigName($key))
 			return false;
 
-		if (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'configuration` WHERE `name` = \''.pSQL($key).'\''))
+		if (Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'configuration` WHERE `name` = \''.pSQL($key).'\''))
 		{
 			unset(self::$_CONF[$key]);
 			return true;
@@ -66,7 +61,7 @@ class Configuration extends ObjectBase
 	{
 		if (is_array(self::$_CONF) AND key_exists($key, self::$_CONF))
 			return self::$_CONF[$key];
-		elseif($value = Db::getInstance()->getValue('SELECT `value` FROM `'._DB_PREFIX_.'configuration` WHERE `name` = \''.pSQL($key).'\'')){
+		elseif($value = Db::getInstance()->getValue('SELECT `value` FROM `'.DB_PREFIX.'configuration` WHERE `name` = \''.pSQL($key).'\'')){
 			self::$_CONF[$key] = $value;
 			return $value;
 		}
@@ -144,7 +139,7 @@ class Configuration extends ObjectBase
 		{
 			$values = pSQL($values, $html);
 			$result = $db->AutoExecute(
-				_DB_PREFIX_.'configuration',
+				DB_PREFIX.'configuration',
 				array('value' => $values, 'upd_date' => date('Y-m-d H:i:s')),
 				'UPDATE', '`name` = \''.pSQL($key).'\'', true, true);
 			self::$_CONF[$key] = stripslashes($values);
@@ -163,8 +158,8 @@ class Configuration extends ObjectBase
 	public static function loadConfiguration()
 	{
 		self::$_CONF = array();
-		$result = Db::getInstance()->ExecuteS('
-		SELECT * FROM `'._DB_PREFIX_.'configuration`');
+		$result = Db::getInstance()->getAll('
+		SELECT * FROM `'.DB_PREFIX.'configuration`');
 		
 		if (is_array($result))
 			foreach ($result AS $row)

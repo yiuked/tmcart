@@ -20,10 +20,10 @@ class Wish extends ObjectBase
 	public static function getWishProductWithUser($id_user)
 	{
 		$products = array();
-		$result = Db::getInstance()->ExecuteS('
-				  SELECT p.*,i.`id_image` FROM '._DB_PREFIX_.'wish w
-				  LEFT JOIN '._DB_PREFIX_.'product p ON (w.`id_product` = p.`id_product`)
-				  LEFT JOIN '._DB_PREFIX_.'image i ON (p.`id_product` = i.`id_product`)
+		$result = Db::getInstance()->getAll('
+				  SELECT p.*,i.`id_image` FROM '.DB_PREFIX.'wish w
+				  LEFT JOIN '.DB_PREFIX.'product p ON (w.`id_product` = p.`id_product`)
+				  LEFT JOIN '.DB_PREFIX.'image i ON (p.`id_product` = i.`id_product`)
 				  WHERE w.id_user='.(int)($id_user).' AND i.`cover`=1');
 		if(!$result)
 			return 0;
@@ -39,7 +39,7 @@ class Wish extends ObjectBase
 				'array'=>array()
 				);
 		if(isset($cookie->id_user)&&$cookie->id_user>0){
-			$result = Db::getInstance()->ExecuteField('SELECT id_product FROM '._DB_PREFIX_.'wish WHERE id_user='.intval($cookie->id_user),'id_product');
+			$result = Db::getInstance()->ExecuteField('SELECT id_product FROM '.DB_PREFIX.'wish WHERE id_user='.intval($cookie->id_user),'id_product');
 			if($result)
 			{
 				$array['count'] = count($result);
@@ -58,7 +58,7 @@ class Wish extends ObjectBase
 		 if($id_user==0||$id_product==0)
 		 	return false;
 
-		 $id_wish = Db::getInstance()->getValue('SELECT id_wish FROM '._DB_PREFIX_.'wish WHERE id_user='.intval($id_user).' AND id_product='.intval($id_product));
+		 $id_wish = Db::getInstance()->getValue('SELECT id_wish FROM '.DB_PREFIX.'wish WHERE id_user='.intval($id_user).' AND id_product='.intval($id_product));
 		 if($id_wish>0){
 			$wish = new Wish($id_wish);
 			$wish->delete();

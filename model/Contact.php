@@ -54,13 +54,13 @@ class Contact extends ObjectBase{
 			$postion = 'ORDER BY `id_contact` DESC';
 		}
 
-		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'contact` a
+		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'contact` a
 				WHERE 1 AND `id_parent`=0 '.($active?' AND a.`active`=1 ':'').'
 				'.$where);
 		if($total==0)
 			return false;
 
-		$result = Db::getInstance()->ExecuteS('SELECT a.* FROM `'._DB_PREFIX_.'contact` a
+		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'contact` a
 				WHERE 1 AND `id_parent`=0 '.($active?' AND AND a.`active`=1 ':'').'
 				'.$where.'
 				'.$postion.'
@@ -75,7 +75,7 @@ class Contact extends ObjectBase{
 	{
 		if(intval($this->id_user)==0)
 			return false;
-		$result = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'contact` where id_user='.(int)$this->id_user);
+		$result = Db::getInstance()->getAll('SELECT * FROM `'.DB_PREFIX.'contact` where id_user='.(int)$this->id_user);
 		if(!$result)
 			return false;
 		$contacts = array();
@@ -91,7 +91,7 @@ class Contact extends ObjectBase{
 	
 	public function getSubMessage()
 	{
-		return Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'contact` WHERE `id_parent`='.(int)($this->id));
+		return Db::getInstance()->getAll('SELECT * FROM `'.DB_PREFIX.'contact` WHERE `id_parent`='.(int)($this->id));
 	}
 }
 ?>

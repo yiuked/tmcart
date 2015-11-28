@@ -33,14 +33,14 @@ class Feedback extends ObjectBase{
 	{
 		$rating_fields = array("one_star","two_star","three_star","four_star","five_star");
 		parent::statusSelection($ids,$action);
-		$result = Db::getInstance()->ExecuteS('SELECT * FROM '._DB_PREFIX_.'feedback WHERE id_feedback IN('.pSQL(implode(',',$ids)).')');
+		$result = Db::getInstance()->getAll('SELECT * FROM '.DB_PREFIX.'feedback WHERE id_feedback IN('.pSQL(implode(',',$ids)).')');
 		foreach($result as $row){
 			$field = pSQL($rating_fields[$row["rating"]-1]);
 			if($this->feedbackStateExists($row['id_product'])){
-				Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'feedback_state SET times=times+1,total_rating=total_rating+'.(int)$row["rating"].",`".$field."`=`".$field."`+1 
+				Db::getInstance()->exec('UPDATE '.DB_PREFIX.'feedback_state SET times=times+1,total_rating=total_rating+'.(int)$row["rating"].",`".$field."`=`".$field."`+1
 				WHERE id_product=".intval($row['id_product']));
 			}else{
-				Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'feedback_state SET id_product='.intval($row['id_product']).',times=1,total_rating='.(int)$row["rating"].",`".$field."`=`".$field."`+1");
+				Db::getInstance()->exec('INSERT INTO '.DB_PREFIX.'feedback_state SET id_product='.intval($row['id_product']).',times=1,total_rating='.(int)$row["rating"].",`".$field."`=`".$field."`+1");
 			}
 		}
 		return true;
@@ -70,13 +70,13 @@ class Feedback extends ObjectBase{
 			$postion = 'ORDER BY `id_feedback` DESC';
 		}
 
-		$total  = Db::getInstance()->getValue('SELECT count(*) AS total FROM `'._DB_PREFIX_.'feedback` a
+		$total  = Db::getInstance()->getValue('SELECT count(*) AS total FROM `'.DB_PREFIX.'feedback` a
 				WHERE a.`active`='.($active?'1':'0').'
 				'.$where);
 		if($total==0)
 			return false;
 
-		$result = Db::getInstance()->ExecuteS('SELECT a.* FROM `'._DB_PREFIX_.'feedback` a
+		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'feedback` a
 				WHERE a.`active`='.($active?'1':'0').'
 				'.$where.'
 				'.$postion.'
@@ -89,7 +89,7 @@ class Feedback extends ObjectBase{
 	
 	public function feedbackStateExists($id_product)
 	{
-		$total = Db::getInstance()->getValue('SELECT COUNT(*) AS total FROM `'._DB_PREFIX_.'feedback_state` WHERE id_product='.intval($id_product));
+		$total = Db::getInstance()->getValue('SELECT COUNT(*) AS total FROM `'.DB_PREFIX.'feedback_state` WHERE id_product='.intval($id_product));
 
 		if($total==0)
 			return false;
@@ -98,7 +98,7 @@ class Feedback extends ObjectBase{
 	
 	static public function haveFeedbackWithUser($id_user)
 	{
-		$result = Db::getInstance()->ExecuteS('SELECT md5_key FROM `'._DB_PREFIX_.'feedback` WHERE id_user='.intval($id_user));
+		$result = Db::getInstance()->getAll('SELECT md5_key FROM `'.DB_PREFIX.'feedback` WHERE id_user='.intval($id_user));
 		$product_ids = array();
 		if($result)
 			foreach($result as $row)
@@ -109,7 +109,7 @@ class Feedback extends ObjectBase{
 	
 	static public function feedbackWithProdict($id_product)
 	{
-		$state  = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'feedback_state` WHERE id_product='.intval($id_product));
+		$state  = Db::getInstance()->getRow('SELECT * FROM `'.DB_PREFIX.'feedback_state` WHERE id_product='.intval($id_product));
 		if($state){
 			$state['average'] 	= round($state['total_rating']/$state['times'],2);
 			$state['total_pt'] 	= round($state['average']/5,4)*100;
@@ -119,7 +119,7 @@ class Feedback extends ObjectBase{
 			$state['two_pt'] 	= round($state['two_star']/$state['times'],4)*100;
 			$state['one_pt'] 	= round($state['one_star']/$state['times'],4)*100;
 		}
-		$result = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'feedback` WHERE active=1 AND id_product='.intval($id_product));
+		$result = Db::getInstance()->getAll('SELECT * FROM `'.DB_PREFIX.'feedback` WHERE active=1 AND id_product='.intval($id_product));
 		$feedbacks = array();
 		$feedbacks['state'] = $state;
 		$feedbacks['rows']	= $result;

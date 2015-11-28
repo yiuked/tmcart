@@ -6,11 +6,11 @@
  * Time: 15:30
  */
 
-class MYPDO extends Db
+class DbPdo extends Db
 {
     public function connect(){
         try{
-            $this->_link = new PDO("mysql:host={$this->_server}; dbname={$this->_database}", $this->_user, $this->_password);
+            $this->_link = new PDO("mysql:host={$this->_server}; dbname={$this->_database};charset=utf8;charset=utf8", $this->_user, $this->_password);
             $this->_link->exec('SET NAMES \'utf8\'');
         } catch (PDOException $e) {
             die("Error: ".$e->__toString()."<br/>");
@@ -28,8 +28,9 @@ class MYPDO extends Db
     public function NumRows($query)
     {
         if ($this->_link) {
-            $st = $this->_link->query($query);
-            return $st->rowCount();
+            if($st = $this->_link->query($query)){
+                return $st->rowCount();
+            }
         }
         return false;
     }
@@ -54,8 +55,9 @@ class MYPDO extends Db
     {
         $query .= ' LIMIT 1';
         if ($this->_link){
-            $st = $this->_link->query($query);
-            return $st->fetch(PDO::FETCH_ASSOC);
+            if ($st = $this->_link->query($query)) {
+                return $st->fetch(PDO::FETCH_ASSOC);
+            }
         }
         return false;
     }
@@ -65,39 +67,58 @@ class MYPDO extends Db
         if ($this->_link)
         {
             $resultArray = array();
-            $st = $this->_link->query($query);
-            while ($row =  $st->fetch(PDO::FETCH_ASSOC))
-                $resultArray[] = $row;
-            return $resultArray;
+            if ($st = $this->_link->query($query)) {
+                while ($row =  $st->fetch(PDO::FETCH_ASSOC))
+                    $resultArray[] = $row;
+                return $resultArray;
+            }
         }
         return false;
     }
 
-    public function getValue($query,$filed)
+    public function getValue($query, $filed = false)
     {
         if ($this->_link)
         {
             $st = $this->_link->query($query);
-            $row = $row = $st->fetch(PDO::FETCH_ASSOC);
-            return $row[$filed];
+            if ($st) {
+                $value = '';
+                if ($filed) {
+                    $row = $row = $st->fetch(PDO::FETCH_ASSOC);
+                    $value = $row[$filed];
+                } else {
+                    $row = $row = $st->fetch(PDO::FETCH_NUM);
+                    $value = $row[0];
+                }
+                return $value;
+            }
         }
         return false;
     }
 
-    public function getAllValue($query,$filed)
+    public function getAllValue($query, $filed)
     {
         if ($this->_link)
         {
             $st = $this->_link->query($query);
-            $resultArray = array();
-            while ($row = $st->fetch(PDO::FETCH_ASSOC))
-                $resultArray[] = $row[$filed];
-            return $resultArray;
+            if ($st) {
+                $resultArray = array();
+                if ($filed) {
+                    while ($row = $st->fetch(PDO::FETCH_ASSOC)){
+                        $resultArray[] = $row[$filed];
+                    }
+                } else {
+                    while ($row = $st->fetch(PDO::FETCH_NUM)) {
+                        $resultArray[] = $row[0];
+                    }
+                }
+                return $resultArray;
+            }
         }
         return false;
     }
 
-    protected function exec($query)
+    public function exec($query)
     {
         if ($this->_link)
         {
@@ -105,5 +126,12 @@ class MYPDO extends Db
             return $result;
         }
         return false;
+    }
+
+    public function disconnect()
+    {
+        if ($this->_link)
+            unset($this->_link);
+        $this->_link = false;
     }
 }

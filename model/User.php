@@ -30,7 +30,7 @@ class User extends ObjectBase{
 	{
 		return (bool)Db::getInstance()->getValue('
 		SELECT `id_user`
-		FROM `'._DB_PREFIX_.'user`
+		FROM `'.DB_PREFIX.'user`
 		WHERE `email` = \''.pSQL($email).'\'');
 	}
 
@@ -50,7 +50,7 @@ class User extends ObjectBase{
 
 		$result = Db::getInstance()->getRow('
 		SELECT *
-		FROM `'._DB_PREFIX_.'user`
+		FROM `'.DB_PREFIX.'user`
 		WHERE `active` = 1
 		AND `email` = \''.pSQL($email).'\'
 		'.($passwd ? 'AND `passwd` = \''.Tools::encrypt($passwd).'\'' : ''));
@@ -100,7 +100,7 @@ class User extends ObjectBase{
 
 		return Db::getInstance()->getValue('
 		SELECT `id_user`
-		FROM `'._DB_PREFIX_.'user`
+		FROM `'.DB_PREFIX.'user`
 		WHERE `id_user` = '.(int)$id_user.'
 		AND `passwd` = \''.pSQL($passwd).'\'
 		AND active = 1');
@@ -109,7 +109,7 @@ class User extends ObjectBase{
 	public function getAddress()
 	{
 		$addresses	= array();
-		$result 	= Db::getInstance()->ExecuteS('SELECT `id_address` FROM `'._DB_PREFIX_.'address` WHERE `deleted`=0 AND `id_user`='.(int)($this->id));
+		$result 	= Db::getInstance()->getAll('SELECT `id_address` FROM `'.DB_PREFIX.'address` WHERE `deleted`=0 AND `id_user`='.(int)($this->id));
 		foreach($result as $row)
 		{
 			$addresses[] = new Address(intval($row['id_address']));
@@ -120,7 +120,7 @@ class User extends ObjectBase{
 	public function getDefaultAddress()
 	{
 		$addresses	= array();
-		$id_address 	= Db::getInstance()->getValue('SELECT `id_address` FROM `'._DB_PREFIX_.'address` WHERE `deleted`=0 AND is_default=1 AND `id_user`='.(int)($this->id));
+		$id_address 	= Db::getInstance()->getValue('SELECT `id_address` FROM `'.DB_PREFIX.'address` WHERE `deleted`=0 AND is_default=1 AND `id_user`='.(int)($this->id));
 		if($id_address)
 			return new Address(intval($id_address));
 		return false;
@@ -128,20 +128,20 @@ class User extends ObjectBase{
 
 	public function getCarts()
 	{
-		$result 	= Db::getInstance()->ExecuteS('SELECT `id_cart`,`add_date` FROM `'._DB_PREFIX_.'cart` WHERE `id_user`='.(int)($this->id));
+		$result 	= Db::getInstance()->getAll('SELECT `id_cart`,`add_date` FROM `'.DB_PREFIX.'cart` WHERE `id_user`='.(int)($this->id));
 		return $result;
 	}
 	
 	public function getContacts()
 	{
-		$result 	= Db::getInstance()->ExecuteS('SELECT `id_contact`,`add_date` FROM `'._DB_PREFIX_.'contact` WHERE `id_parent`=0 AND `id_user`='.(int)($this->id));
+		$result 	= Db::getInstance()->getAll('SELECT `id_contact`,`add_date` FROM `'.DB_PREFIX.'contact` WHERE `id_parent`=0 AND `id_user`='.(int)($this->id));
 		return $result;
 	}
 	
 	public function getOrders()
 	{
 		$orders	= array();
-		$result 	= Db::getInstance()->ExecuteS('SELECT `id_order` FROM `'._DB_PREFIX_.'order` WHERE `id_user`='.(int)($this->id));
+		$result 	= Db::getInstance()->getAll('SELECT `id_order` FROM `'.DB_PREFIX.'order` WHERE `id_user`='.(int)($this->id));
 		foreach($result as $row)
 		{
 			$orders[] = new Order(intval($row['id_order']));
@@ -151,7 +151,7 @@ class User extends ObjectBase{
 	
 	public function getPaymentedProduct()
 	{
-		$result= Db::getInstance()->ExecuteS('SELECT o.id_cart,c.id_product,c.id_attributes,c.unit_price,c.quantity,tm_product.name,i.id_image
+		$result= Db::getInstance()->getAll('SELECT o.id_cart,c.id_product,c.id_attributes,c.unit_price,c.quantity,tm_product.name,i.id_image
 					FROM tm_order AS o
 					Left Join tm_cart_product AS c ON o.id_cart = c.id_cart
 					Left Join tm_product ON c.id_product = tm_product.id_product
@@ -185,13 +185,13 @@ class User extends ObjectBase{
 			$postion = 'ORDER BY `id_user` DESC';
 		}
 
-		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'user` a
+		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'user` a
 				WHERE 1
 				'.$where);
 		if($total==0)
 			return false;
 
-		$result = Db::getInstance()->ExecuteS('SELECT a.* FROM `'._DB_PREFIX_.'user` a
+		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'user` a
 				WHERE 1
 				'.$where.'
 				'.$postion.'

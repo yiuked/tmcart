@@ -41,7 +41,7 @@ class Carrier extends ObjectBase{
 		$tmpName			= $this->img_dir.$filename;
 		if(in_array(strtolower($ext),$allowedExtensions))
 			!move_uploaded_file($_FILES['logo']['tmp_name'], $tmpName);
-		Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'carrier` SET `logo`="'.pSQL($filename).'" WHERE `id_carrier`='.(int)($this->id));
+		Db::getInstance()->exec('UPDATE `'.DB_PREFIX.'carrier` SET `logo`="'.pSQL($filename).'" WHERE `id_carrier`='.(int)($this->id));
 	}
 	
 	public static function getEntity($active = true,$p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
@@ -68,13 +68,13 @@ class Carrier extends ObjectBase{
 			$postion = 'ORDER BY `id_carrier` DESC';
 		}
 
-		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'carrier` a
+		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'carrier` a
 				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
 				'.$where);
 		if($total==0)
 			return false;
 
-		$result = Db::getInstance()->ExecuteS('SELECT a.* FROM `'._DB_PREFIX_.'carrier` a
+		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'carrier` a
 				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
 				'.$where.'
 				'.$postion.'

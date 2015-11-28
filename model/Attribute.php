@@ -29,39 +29,39 @@ class Attribute extends ObjectBase{
 	{
 		if(parent::delete())
 		{
-			return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'`product_to_attribute WHERE `id_attribute`='.(int)($this->id));
+			return Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'`product_to_attribute WHERE `id_attribute`='.(int)($this->id));
 		}
 	}
 	
 	public static function getLastPosition($id_attribute_group)
 	{
-		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'._DB_PREFIX_.'attribute` WHERE `id_attribute_group`='.(int)($id_attribute_group)));
+		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'.DB_PREFIX.'attribute` WHERE `id_attribute_group`='.(int)($id_attribute_group)));
 	}
 	
 	public static function cleanPositions($id_group)
 	{
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance()->getAll('
 		SELECT `id_attribute`
-		FROM `'._DB_PREFIX_.'attribute`
+		FROM `'.DB_PREFIX.'attribute`
 		WHERE `id_attribute_group` = '.(int)($id_group).'
 		ORDER BY `position`');
 		$sizeof = sizeof($result);
 		for ($i = 0; $i < $sizeof; ++$i){
 				$sql = '
-				UPDATE `'._DB_PREFIX_.'attribute`
+				UPDATE `'.DB_PREFIX.'attribute`
 				SET `position` = '.(int)($i).'
 				WHERE `id_attribute_group` = '.(int)($id_group).'
 				AND `id_attribute` = '.(int)($result[$i]['id_attribute']);
-				Db::getInstance()->Execute($sql);
+				Db::getInstance()->exec($sql);
 			}
 		return true;
 	}
 	
 	public function updatePosition($way, $position)
 	{	
-		if (!$res = Db::getInstance()->ExecuteS('
+		if (!$res = Db::getInstance()->getAll('
 			SELECT `id_attribute`, `position`, `id_attribute_group` 
-			FROM `'._DB_PREFIX_.'attribute`
+			FROM `'.DB_PREFIX.'attribute`
 			WHERE `id_attribute_group` = '.(int)$this->id_attribute_group.' 
 			ORDER BY `position` ASC'
 		))
@@ -74,16 +74,16 @@ class Attribute extends ObjectBase{
 			return false;
 		// < and > statements rather than BETWEEN operator
 		// since BETWEEN is treated differently according to databases
-		return (Db::getInstance()->Execute('
-			UPDATE `'._DB_PREFIX_.'attribute`
+		return (Db::getInstance()->exec('
+			UPDATE `'.DB_PREFIX.'attribute`
 			SET `position`= `position` '.($way ? '- 1' : '+ 1').'
 			WHERE `position` 
 			'.($way 
 				? '> '.(int)($movedAttribute['position']).' AND `position` <= '.(int)($position)
 				: '< '.(int)($movedAttribute['position']).' AND `position` >= '.(int)($position)).'
 			AND `id_attribute_group`='.(int)($movedAttribute['id_attribute_group']))
-		AND Db::getInstance()->Execute('
-			UPDATE `'._DB_PREFIX_.'attribute`
+		AND Db::getInstance()->exec('
+			UPDATE `'.DB_PREFIX.'attribute`
 			SET `position` = '.(int)($position).'
 			WHERE `id_attribute_group` = '.(int)($movedAttribute['id_attribute_group']).'
 			AND `id_attribute`='.(int)($movedAttribute['id_attribute'])));
@@ -93,8 +93,8 @@ class Attribute extends ObjectBase{
 	{
 		if(!strlen($attribute_str))
 			return;
-		return Db::getInstance()->ExecuteS('SELECT a.`id_attribute`,a.`id_attribute_group`,a.`name`,g.`name` AS group_name FROM `'._DB_PREFIX_.'attribute` a
-									 LEFT JOIN `'._DB_PREFIX_.'attribute_group` g ON (a.`id_attribute_group`=g.`id_attribute_group`)
+		return Db::getInstance()->getAll('SELECT a.`id_attribute`,a.`id_attribute_group`,a.`name`,g.`name` AS group_name FROM `'.DB_PREFIX.'attribute` a
+									 LEFT JOIN `'.DB_PREFIX.'attribute_group` g ON (a.`id_attribute_group`=g.`id_attribute_group`)
 									 WHERE a.`id_attribute` IN ('.pSQL($attribute_str).')');
 	}
 }

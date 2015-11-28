@@ -28,12 +28,12 @@ class Module extends ObjectBase{
 	
 	public static function existsModule($alias)
 	{
-		return Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'module` WHERE `alias`="'.pSQL($alias).'"');
+		return Db::getInstance()->getRow('SELECT * FROM `'.DB_PREFIX.'module` WHERE `alias`="'.pSQL($alias).'"');
 	}
 	
 	public static function loadModule($id)
 	{
-		$row = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'module` WHERE `id_module`='.(int)($id));
+		$row = Db::getInstance()->getRow('SELECT * FROM `'.DB_PREFIX.'module` WHERE `id_module`='.(int)($id));
 		include(_TM_MODULES_DIR.$row['type'].'/'.$row['alias'].'/'.$row['alias'].'.php');
 		$alias = $row['alias'];
 		return new $alias;

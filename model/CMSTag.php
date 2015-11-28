@@ -30,7 +30,7 @@ class CMSTag extends ObjectBase{
 	
 	public static function existsByTagName($name)
 	{
-		return Db::getInstance()->getValue('SELECT `id_cms_tag` FROM `'._DB_PREFIX_.'cms_tag` WHERE `name` = "'.pSQL($name).'"');
+		return Db::getInstance()->getValue('SELECT `id_cms_tag` FROM `'.DB_PREFIX.'cms_tag` WHERE `name` = "'.pSQL($name).'"');
 	}
 	
 	public static function tagsExists($name)
@@ -52,9 +52,9 @@ class CMSTag extends ObjectBase{
 	
 	public function getThisTags($p=1,$limit=50)
 	{
-		$result = Db::getInstance()->ExecuteS('SELECT c.* FROM `'._DB_PREFIX_.'cms` c
-				LEFT JOIN `'._DB_PREFIX_.'cms_to_tag` ctt ON (ctt.`id_cms` = c.`id_cms`)
-				LEFT JOIN `'._DB_PREFIX_.'cms_tag` ct ON (ct.`id_cms_tag` = ctt.`id_cms_tag`)
+		$result = Db::getInstance()->getAll('SELECT c.* FROM `'.DB_PREFIX.'cms` c
+				LEFT JOIN `'.DB_PREFIX.'cms_to_tag` ctt ON (ctt.`id_cms` = c.`id_cms`)
+				LEFT JOIN `'.DB_PREFIX.'cms_tag` ct ON (ct.`id_cms_tag` = ctt.`id_cms_tag`)
 				WHERE ct.`id_cms_tag`='.(int)($this->id).' AND c.active=1
 				ORDER BY c.`id_cms` DESC
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);
@@ -68,9 +68,9 @@ class CMSTag extends ObjectBase{
 	{
 		if(!intval($id_cms))
 			return;
-		$result = Db::getInstance()->ExecuteS('
-			SELECT `name` FROM `'._DB_PREFIX_.'cms_tag` ct 
-			LEFT JOIN `'._DB_PREFIX_.'cms_to_tag` ctt ON (ctt.`id_cms_tag` = ct.`id_cms_tag`)
+		$result = Db::getInstance()->getAll('
+			SELECT `name` FROM `'.DB_PREFIX.'cms_tag` ct
+			LEFT JOIN `'.DB_PREFIX.'cms_to_tag` ctt ON (ctt.`id_cms_tag` = ct.`id_cms_tag`)
 			WHERE ctt.`id_cms` = '.(int)($id_cms));
 		if(!$result)
 			return;
@@ -98,12 +98,12 @@ class CMSTag extends ObjectBase{
 			$postion = 'ORDER BY `id_cms_tag` DESC';
 		}
 		
-		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'cms_tag` a
+		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'cms_tag` a
 				WHERE 1 '.$where);
 		if($total==0)
 			return false;
 
-		$result = Db::getInstance()->ExecuteS('SELECT a.* FROM `'._DB_PREFIX_.'cms_tag` a
+		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'cms_tag` a
 				WHERE 1 '.$where.'
 				'.$postion.'
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);

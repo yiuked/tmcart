@@ -39,7 +39,7 @@ class CMS extends ObjectBase{
 	public function delete()
 	{
 		if(parent::delete())
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cms_to_category` WHERE `id_cms`='.(int)$this->id);
+			Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'cms_to_category` WHERE `id_cms`='.(int)$this->id);
 		return true;
 	}
 	
@@ -60,7 +60,7 @@ class CMS extends ObjectBase{
 		if(!empty($filter['is_top']) && Validate::isInt($filter['is_top']))
 			$where .= ' AND a.`is_top`='.((int)($filter['is_top'])==1?'1':'0');
 		if(!empty($filter['id_cms_category']) && Validate::isInt($filter['id_cms_category']) && $filter['id_cms_category']>1)
-			$where .= ' AND a.`id_cms` IN (SELECT `id_cms` FROM `'._DB_PREFIX_.'cms_to_category` WHERE `id_cms_category`='.intval($filter['id_cms_category']).')';
+			$where .= ' AND a.`id_cms` IN (SELECT `id_cms` FROM `'.DB_PREFIX.'cms_to_category` WHERE `id_cms_category`='.intval($filter['id_cms_category']).')';
 		
 		if(!is_null($orderBy) AND !is_null($orderWay))
 		{
@@ -69,13 +69,13 @@ class CMS extends ObjectBase{
 			$postion = 'ORDER BY `id_cms` DESC';
 		}
 		
-		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'cms` a
+		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'cms` a
 				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
 				'.$where);
 		if($total==0)
 			return false;
 
-		$result = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'cms` a
+		$result = Db::getInstance()->getAll('SELECT * FROM `'.DB_PREFIX.'cms` a
 				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
 				'.$where.'
 				'.$postion.'
@@ -99,9 +99,9 @@ class CMS extends ObjectBase{
 	
 	public static function getCMSTags($id_cms)
 	{
-		$result = Db::getInstance()->ExecuteS('
-		SELECT ct.* FROM `'._DB_PREFIX_.'cms_tag` ct
-		LEFT JOIN `'._DB_PREFIX_.'cms_to_tag` ctt ON (ct.`id_cms_tag` = ctt.`id_cms_tag`)
+		$result = Db::getInstance()->getAll('
+		SELECT ct.* FROM `'.DB_PREFIX.'cms_tag` ct
+		LEFT JOIN `'.DB_PREFIX.'cms_to_tag` ctt ON (ct.`id_cms_tag` = ctt.`id_cms_tag`)
 		WHERE ctt.`id_cms` = '.(int)$id_cms);
 		foreach($result as &$row)
 			$row['link'] = Tools::getLink($row['rewrite']);
@@ -110,8 +110,8 @@ class CMS extends ObjectBase{
 	
 	public static function getCMSCategoriesFullId($id_cms = ''){
 		$ret = array();
-		$row = Db::getInstance()->ExecuteS('
-		SELECT `id_cms_category` FROM `'._DB_PREFIX_.'cms_to_category`
+		$row = Db::getInstance()->getAll('
+		SELECT `id_cms_category` FROM `'.DB_PREFIX.'cms_to_category`
 		WHERE `id_cms` = '.(int)$id_cms);
 		
 		foreach ($row as $val)
@@ -123,9 +123,9 @@ class CMS extends ObjectBase{
 	{
 		$ret = array();
 		
-		$row = Db::getInstance()->ExecuteS('
-		SELECT ct.`id_cms_category`, c.`name`, c.`rewrite` FROM `'._DB_PREFIX_.'cms_to_category` ct
-		LEFT JOIN `'._DB_PREFIX_.'cms_category` c ON (ct.`id_cms_category` = c.`id_cms_category`)
+		$row = Db::getInstance()->getAll('
+		SELECT ct.`id_cms_category`, c.`name`, c.`rewrite` FROM `'.DB_PREFIX.'cms_to_category` ct
+		LEFT JOIN `'.DB_PREFIX.'cms_category` c ON (ct.`id_cms_category` = c.`id_cms_category`)
 		WHERE ct.`id_cms` = '.(int)$id_cms);
 		foreach ($row as $val)
 			$ret[$val['id_cms_category']] = $val;
@@ -140,8 +140,8 @@ class CMS extends ObjectBase{
 	public function getCMSCategories()
 	{
 		$ret = array();
-		if ($row = Db::getInstance()->ExecuteS('
-		SELECT `id_cms_category` FROM `'._DB_PREFIX_.'cms_to_category`
+		if ($row = Db::getInstance()->getAll('
+		SELECT `id_cms_category` FROM `'.DB_PREFIX.'cms_to_category`
 		WHERE `id_cms` = '.(int)$this->id)
 		)
 			foreach ($row as $val)
@@ -157,8 +157,8 @@ class CMS extends ObjectBase{
 	public function getTags()
 	{
 		$ret = array();
-		if ($row = Db::getInstance()->ExecuteS('
-		SELECT `id_cms_category` FROM `'._DB_PREFIX_.'cms_to_tag`
+		if ($row = Db::getInstance()->getAll('
+		SELECT `id_cms_category` FROM `'.DB_PREFIX.'cms_to_tag`
 		WHERE `id_cms` = '.(int)$this->id)
 		)
 			foreach ($row as $val)
@@ -190,8 +190,8 @@ class CMS extends ObjectBase{
 				$cmsCats[] = '('. $this->id.', '. $newIdCateg.')';
 
 		if (sizeof($cmsCats))
-			return Db::getInstance()->Execute('
-			INSERT INTO `'._DB_PREFIX_.'cms_to_category` (`id_cms`, `id_cms_category`)
+			return Db::getInstance()->exec('
+			INSERT INTO `'.DB_PREFIX.'cms_to_category` (`id_cms`, `id_cms_category`)
 			VALUES '.implode(',', $cmsCats));
 
 		return true;
@@ -212,8 +212,8 @@ class CMS extends ObjectBase{
 			}
 			
 			if (sizeof($tagCats))
-				return Db::getInstance()->Execute('
-				INSERT INTO `'._DB_PREFIX_.'cms_to_tag` (`id_cms`, `id_cms_tag`)
+				return Db::getInstance()->exec('
+				INSERT INTO `'.DB_PREFIX.'cms_to_tag` (`id_cms`, `id_cms_tag`)
 				VALUES '.implode(',', $tagCats));
 			
 			return true;
@@ -228,7 +228,7 @@ class CMS extends ObjectBase{
 	 */
 	public function deleteCategory($id_category)
 	{
-		$return = Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cms_to_category` WHERE `id_cms` = '.(int)($this->id).' AND id_cms_category = '.(int)$id_category .'' );
+		$return = Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'cms_to_category` WHERE `id_cms` = '.(int)($this->id).' AND id_cms_category = '.(int)$id_category .'' );
 		return $return;
 	}
 	
@@ -241,7 +241,7 @@ class CMS extends ObjectBase{
 	 */
 	public function deleteTag($id_cms_tag)
 	{
-		$return = Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cms_to_tag` WHERE `id_cms` = '.(int)($this->id).' AND id_cms_tag = '.(int)$id_cms_tag .'' );
+		$return = Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'cms_to_tag` WHERE `id_cms` = '.(int)($this->id).' AND id_cms_tag = '.(int)$id_cms_tag .'' );
 		return $return;
 	}
 	
@@ -259,8 +259,8 @@ class CMS extends ObjectBase{
 			return false;
 
 		// get max position in each categories
-		$result = Db::getInstance()->ExecuteS('SELECT `id_cms_category`
-				FROM `'._DB_PREFIX_.'cms_to_category`
+		$result = Db::getInstance()->getAll('SELECT `id_cms_category`
+				FROM `'.DB_PREFIX.'cms_to_category`
 				WHERE `id_cms_category` NOT IN('.implode(',', array_map('intval', $categories)).')
 				AND id_cms = '. $this->id .'');
 		if(is_array($result))
@@ -281,8 +281,8 @@ class CMS extends ObjectBase{
 			return;
 
 		// get max position in each categories
-		$result = Db::getInstance()->ExecuteS('SELECT `id_cms_tag`
-				FROM `'._DB_PREFIX_.'cms_to_tag`
+		$result = Db::getInstance()->getAll('SELECT `id_cms_tag`
+				FROM `'.DB_PREFIX.'cms_to_tag`
 				WHERE `id_cms_tag` NOT IN('.implode(',', array_map('intval', $tags)).')
 				AND id_cms = '. $this->id .'');
 		if(is_array($result))
@@ -297,8 +297,8 @@ class CMS extends ObjectBase{
 	
 	public function getComments($id_keep=0)
 	{
-		$result = Db::getInstance()->ExecuteS('SELECT *
-		FROM `'._DB_PREFIX_.'cms_comment`
+		$result = Db::getInstance()->getAll('SELECT *
+		FROM `'.DB_PREFIX.'cms_comment`
 		WHERE `id_keep`='.(int)($id_keep).' AND active=1
 		AND id_cms = '.(int) $this->id .'');
 		if($result)

@@ -21,15 +21,15 @@ class ProductStatic{
 				$postion = 'ORDER BY a.`id_product` DESC';
 			}
 
-			$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'product` a
-					'.($cid>0?'LEFT JOIN `'._DB_PREFIX_.'product_to_category` ptc ON a.id_product = ptc.id_product':'').'
+			$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'product` a
+					'.($cid>0?'LEFT JOIN `'.DB_PREFIX.'product_to_category` ptc ON a.id_product = ptc.id_product':'').'
 					WHERE a.active=1 AND a.is_sale=1 '.$where);
 			if($total==0)
 				return false;
 
-			$result = Db::getInstance()->ExecuteS('SELECT a.* 
-					FROM `'._DB_PREFIX_.'product` a
-					'.($cid>0?'LEFT JOIN `'._DB_PREFIX_.'product_to_category` ptc ON a.id_product = ptc.id_product':'').'
+			$result = Db::getInstance()->getAll('SELECT a.*
+					FROM `'.DB_PREFIX.'product` a
+					'.($cid>0?'LEFT JOIN `'.DB_PREFIX.'product_to_category` ptc ON a.id_product = ptc.id_product':'').'
 					WHERE a.active=1 AND a.is_sale=1 '.$where.'
 					'.$postion.'
 					LIMIT '.(($p-1)*$limit).','.(int)$limit);
@@ -68,15 +68,15 @@ class ProductStatic{
 				$postion = 'ORDER BY a.`id_product` DESC';
 			}
 
-			$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'product` a
-					'.($cid>0?'LEFT JOIN `'._DB_PREFIX_.'product_to_category` ptc ON a.id_product = ptc.id_product':'').'
+			$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'product` a
+					'.($cid>0?'LEFT JOIN `'.DB_PREFIX.'product_to_category` ptc ON a.id_product = ptc.id_product':'').'
 					WHERE a.active=1 '.$where);
 			if($total==0)
 				return false;
 
-			$result = Db::getInstance()->ExecuteS('SELECT a.* 
-					FROM `'._DB_PREFIX_.'product` a
-					'.($cid>0?'LEFT JOIN `'._DB_PREFIX_.'product_to_category` ptc ON a.id_product = ptc.id_product':'').'
+			$result = Db::getInstance()->getAll('SELECT a.*
+					FROM `'.DB_PREFIX.'product` a
+					'.($cid>0?'LEFT JOIN `'.DB_PREFIX.'product_to_category` ptc ON a.id_product = ptc.id_product':'').'
 					WHERE a.active=1 '.$where.'
 					'.$postion.'
 					LIMIT '.(($p-1)*$limit).','.(int)$limit);

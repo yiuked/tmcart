@@ -51,7 +51,7 @@ class Brand extends ObjectBase{
 		$tmpName			= $this->img_dir.$filename;
 		if(in_array(strtolower($ext),$allowedExtensions))
 			!move_uploaded_file($_FILES['logo']['tmp_name'], $tmpName);
-		Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.$this->table.'` SET `logo`="'.pSQL($filename).'" WHERE `'.$this->identifier.'`='.(int)($this->id));
+		Db::getInstance()->exec('UPDATE `'.DB_PREFIX.$this->table.'` SET `logo`="'.pSQL($filename).'" WHERE `'.$this->identifier.'`='.(int)($this->id));
 	}
 	
 	public function getProducts($p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
@@ -73,15 +73,15 @@ class Brand extends ObjectBase{
 				$postion = 'ORDER BY a.`id_product` DESC';
 			}
 
-			$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'product` a
-					'.($cid>0?'LEFT JOIN `'._DB_PREFIX_.'product_to_category` ptc ON a.id_product = ptc.id_product':'').'
+			$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'product` a
+					'.($cid>0?'LEFT JOIN `'.DB_PREFIX.'product_to_category` ptc ON a.id_product = ptc.id_product':'').'
 					WHERE a.active=1 AND a.id_brand='.(int)$this->id.' '.$where);
 			if($total==0)
 				return false;
 
-			$result = Db::getInstance()->ExecuteS('SELECT a.* 
-					FROM `'._DB_PREFIX_.'product` a
-					'.($cid>0?'LEFT JOIN `'._DB_PREFIX_.'product_to_category` ptc ON a.id_product = ptc.id_product':'').'
+			$result = Db::getInstance()->getAll('SELECT a.*
+					FROM `'.DB_PREFIX.'product` a
+					'.($cid>0?'LEFT JOIN `'.DB_PREFIX.'product_to_category` ptc ON a.id_product = ptc.id_product':'').'
 					WHERE a.active=1 AND a.id_brand='.(int)$this->id.' '.$where.'
 					'.$postion.'
 					LIMIT '.(($p-1)*$limit).','.(int)$limit);
@@ -117,12 +117,12 @@ class Brand extends ObjectBase{
 			$postion = 'ORDER BY `id_brand` DESC';
 		}
 
-		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'brand` a
+		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'brand` a
 				WHERE 1'.$where);
 		if($total==0)
 			return false;
 
-		$result = Db::getInstance()->ExecuteS('SELECT a.* FROM `'._DB_PREFIX_.'brand` a
+		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'brand` a
 				WHERE 1 '.$where.'
 				'.$postion.'
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);

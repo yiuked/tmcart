@@ -72,14 +72,14 @@ class CMSCategory extends ObjectBase{
 
 		/* Delete CMS Category and its child from database */
 		$list = sizeof($toDelete) > 1 ? implode(',', $toDelete) : (int)($this->id);
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cms_category` WHERE `id_cms_category` IN ('.$list.')');
+		Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'cms_category` WHERE `id_cms_category` IN ('.$list.')');
 
 		self::cleanPositions($this->id_parent);
 		
 		/* Delete pages which are in categories to delete */
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance()->getAll('
 		SELECT `id_rule`
-		FROM `'._DB_PREFIX_.'rule`
+		FROM `'.DB_PREFIX.'rule`
 		WHERE `id_entity` IN ('.$list.') AND entity="'.(get_class($this)).'"');
 		foreach ($result as $p)
 		{
@@ -93,7 +93,7 @@ class CMSCategory extends ObjectBase{
 	
 	public static function getLastPosition($id_category_parent)
 	{
-		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'._DB_PREFIX_.'cms_category` WHERE `id_parent` = '.(int)($id_category_parent)));
+		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'.DB_PREFIX.'cms_category` WHERE `id_parent` = '.(int)($id_category_parent)));
 	}
 	
 	/**
@@ -118,9 +118,9 @@ class CMSCategory extends ObjectBase{
 	 	if (!Validate::isBool($active))
 	 		die(Tools::displayError());
 
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance()->getAll('
 		SELECT *
-		FROM `'._DB_PREFIX_.'cms_category` c
+		FROM `'.DB_PREFIX.'cms_category` c
 		WHERE 1 '.$sql_filter.'
 		'.($active ? 'AND `active` = 1' : '').'
 		'.($sql_sort != '' ? $sql_sort : 'ORDER BY c.`position` ASC').'
@@ -139,9 +139,9 @@ class CMSCategory extends ObjectBase{
 	
 	public function getThisTags($p=1,$limit=50)
 	{
-		$result = Db::getInstance()->ExecuteS('SELECT c.* FROM `'._DB_PREFIX_.'cms` c
-				LEFT JOIN `'._DB_PREFIX_.'cms_to_category` ctc ON (ctc.`id_cms` = c.`id_cms`)
-				LEFT JOIN `'._DB_PREFIX_.'cms_category` cc ON (ctc.`id_cms_category` = cc.`id_cms_category`)
+		$result = Db::getInstance()->getAll('SELECT c.* FROM `'.DB_PREFIX.'cms` c
+				LEFT JOIN `'.DB_PREFIX.'cms_to_category` ctc ON (ctc.`id_cms` = c.`id_cms`)
+				LEFT JOIN `'.DB_PREFIX.'cms_category` cc ON (ctc.`id_cms_category` = cc.`id_cms_category`)
 				WHERE ctc.`id_cms_category`='.(int)($this->id).' AND c.active=1
 				ORDER BY c.`id_cms` DESC
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);
@@ -180,12 +180,12 @@ class CMSCategory extends ObjectBase{
 			$postion = 'ORDER BY `position` ASC';
 		}
 		
-		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'cms_category`
+		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'cms_category`
 		WHERE `id_cms_category` != 1 '.($active?' `active`=1 AND':'').'
 		'.$where);
 
-		$result = Db::getInstance()->ExecuteS('
-		SELECT * FROM `'._DB_PREFIX_.'cms_category`
+		$result = Db::getInstance()->getAll('
+		SELECT * FROM `'.DB_PREFIX.'cms_category`
 		WHERE `id_parent` = '.(int)($this->id).' '.$where.'
 		'.($active ? 'AND `active` = 1' : '').'
 		'.$postion.'
@@ -211,19 +211,19 @@ class CMSCategory extends ObjectBase{
 
 		$selectedCat = explode(',', str_replace(' ', '', $selectedCat));	
 	
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance()->getAll('
 		SELECT c.`id_cms_category` AS id_category, c.`level_depth`,c.`name`, IF((
 			SELECT COUNT(*)
-			FROM `'._DB_PREFIX_.'cms_category` c2
+			FROM `'.DB_PREFIX.'cms_category` c2
 			WHERE c2.`id_parent` = c.`id_cms_category`
 		) > 0, 1, 0) AS has_children, '.($selectedCat ? '(
 			SELECT count(c3.`id_cms_category`)
-			FROM `'._DB_PREFIX_.'cms_category` c3
+			FROM `'.DB_PREFIX.'cms_category` c3
 			WHERE c3.`nleft` > c.`nleft`
 			AND c3.`nright` < c.`nright`
 			AND c3.`id_cms_category`  IN ('.implode(',', array_map('intval', $selectedCat)).')
 		)' : '0').' AS nbSelectedSubCat
-		FROM `'._DB_PREFIX_.'cms_category` c
+		FROM `'.DB_PREFIX.'cms_category` c
 		WHERE c.`id_parent` = '.(int)($id_parent).'
 		ORDER BY `position` ASC');
 	}
@@ -239,9 +239,9 @@ class CMSCategory extends ObjectBase{
 	 	if (!is_array($toDelete) OR !$id_cms_category)
 	 		die(Tools::displayError());
 
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance()->getAll('
 		SELECT `id_cms_category`
-		FROM `'._DB_PREFIX_.'cms_category`
+		FROM `'.DB_PREFIX.'cms_category`
 		WHERE `id_parent` = '.(int)($id_cms_category));
 		foreach ($result AS $row)
 		{
@@ -252,28 +252,28 @@ class CMSCategory extends ObjectBase{
 	
 	public static function cleanPositions($id_category_parent)
 	{
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance()->getAll('
 		SELECT `id_cms_category`
-		FROM `'._DB_PREFIX_.'cms_category`
+		FROM `'.DB_PREFIX.'cms_category`
 		WHERE `id_parent` = '.(int)($id_category_parent).'
 		ORDER BY `position`');
 		$sizeof = sizeof($result);
 		for ($i = 0; $i < $sizeof; ++$i){
 				$sql = '
-				UPDATE `'._DB_PREFIX_.'cms_category`
+				UPDATE `'.DB_PREFIX.'cms_category`
 				SET `position` = '.(int)($i).'
 				WHERE `id_parent` = '.(int)($id_category_parent).'
 				AND `id_cms_category` = '.(int)($result[$i]['id_cms_category']);
-				Db::getInstance()->Execute($sql);
+				Db::getInstance()->exec($sql);
 			}
 		return true;
 	}
 	
 	public function updatePosition($way, $position)
 	{	
-		if (!$res = Db::getInstance()->ExecuteS('
+		if (!$res = Db::getInstance()->getAll('
 			SELECT cp.`id_cms_category`, cp.`position`, cp.`id_parent` 
-			FROM `'._DB_PREFIX_.'cms_category` cp
+			FROM `'.DB_PREFIX.'cms_category` cp
 			WHERE cp.`id_parent` = '.(int)$this->id_parent.' 
 			ORDER BY cp.`position` ASC'
 		))
@@ -286,16 +286,16 @@ class CMSCategory extends ObjectBase{
 			return false;
 		// < and > statements rather than BETWEEN operator
 		// since BETWEEN is treated differently according to databases
-		return (Db::getInstance()->Execute('
-			UPDATE `'._DB_PREFIX_.'cms_category`
+		return (Db::getInstance()->exec('
+			UPDATE `'.DB_PREFIX.'cms_category`
 			SET `position`= `position` '.($way ? '- 1' : '+ 1').'
 			WHERE `position` 
 			'.($way 
 				? '> '.(int)($movedCategory['position']).' AND `position` <= '.(int)($position)
 				: '< '.(int)($movedCategory['position']).' AND `position` >= '.(int)($position)).'
 			AND `id_parent`='.(int)($movedCategory['id_parent']))
-		AND Db::getInstance()->Execute('
-			UPDATE `'._DB_PREFIX_.'cms_category`
+		AND Db::getInstance()->exec('
+			UPDATE `'.DB_PREFIX.'cms_category`
 			SET `position` = '.(int)($position).'
 			WHERE `id_parent` = '.(int)($movedCategory['id_parent']).'
 			AND `id_cms_category`='.(int)($movedCategory['id_cms_category'])));
@@ -303,7 +303,7 @@ class CMSCategory extends ObjectBase{
 	
 	public function getCatBar($id_parent,$catBar=array())
 	{
-		$category = Db::getInstance()->getRow('SELECT `id_cms_category`,`id_parent`,`level_depth`,`name` FROM `'._DB_PREFIX_.'cms_category` WHERE `id_cms_category`='.intval($id_parent));
+		$category = Db::getInstance()->getRow('SELECT `id_cms_category`,`id_parent`,`level_depth`,`name` FROM `'.DB_PREFIX.'cms_category` WHERE `id_cms_category`='.intval($id_parent));
 		if(sizeof($category)>1)
 			$catBar[] = $category;
 		if($id_parent>0){
@@ -317,7 +317,7 @@ class CMSCategory extends ObjectBase{
 	  */
 	public static function regenerateEntireNtree()
 	{
-		$categories = Db::getInstance()->ExecuteS('SELECT id_cms_category, id_parent FROM '._DB_PREFIX_.'cms_category ORDER BY id_parent ASC, position ASC');
+		$categories = Db::getInstance()->getAll('SELECT id_cms_category, id_parent FROM '.DB_PREFIX.'cms_category ORDER BY id_parent ASC, position ASC');
 		$categoriesArray = array();
 		foreach ($categories AS $category)
 			$categoriesArray[(int)$category['id_parent']]['subcategories'][(int)$category['id_cms_category']] = 1;
@@ -333,7 +333,7 @@ class CMSCategory extends ObjectBase{
 				self::_subTree($categories, (int)$id_subcategory, $n);
 		$right = (int)$n++;
 
-		Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'cms_category SET nleft = '.(int)$left.', nright = '.(int)$right.' WHERE id_cms_category = '.(int)$id_category.' LIMIT 1');
+		Db::getInstance()->exec('UPDATE '.DB_PREFIX.'cms_category SET nleft = '.(int)$left.', nright = '.(int)$right.' WHERE id_cms_category = '.(int)$id_category.' LIMIT 1');
 	}
 	
 		/**
@@ -344,20 +344,20 @@ class CMSCategory extends ObjectBase{
 	public function recalculateLevelDepth($id_category)
 	{
 		/* Gets all children */
-		$categories = Db::getInstance()->ExecuteS('
+		$categories = Db::getInstance()->getAll('
 			SELECT id_cms_category, id_parent, level_depth
-			FROM '._DB_PREFIX_.'cms_category
+			FROM '.DB_PREFIX.'cms_category
 			WHERE id_parent = '.(int)$id_category);
 		/* Gets level_depth */
 		$level = Db::getInstance()->getRow('
 			SELECT level_depth
-			FROM '._DB_PREFIX_.'cms_category
+			FROM '.DB_PREFIX.'cms_category
 			WHERE id_cms_category = '.(int)$id_category);
 		/* Updates level_depth for all children */
 		foreach ($categories as $sub_category)
 		{
-			Db::getInstance()->Execute('
-				UPDATE '._DB_PREFIX_.'cms_category
+			Db::getInstance()->exec('
+				UPDATE '.DB_PREFIX.'cms_category
 				SET level_depth = '.(int)($level['level_depth'] + 1).'
 				WHERE id_cms_category = '.(int)$sub_category['id_cms_category']);
 			/* Recursive call */
@@ -378,9 +378,9 @@ class CMSCategory extends ObjectBase{
 			return;
 
 		$categories = array();
-		$results = Db::getInstance()->ExecuteS('
+		$results = Db::getInstance()->getAll('
 			SELECT c.`id_cms_category`, c.`name`, c.`rewrite`
-			FROM `'._DB_PREFIX_.'cms_category` c
+			FROM `'.DB_PREFIX.'cms_category` c
 			WHERE c.`id_cms_category` IN ('.implode(',', array_map('intval', $ids_category)).')
 		');
 

@@ -455,7 +455,7 @@ class Tools{
 
 		if(isset($filter['id_color'])&&count($filter['id_color'])>0)
 		{
-				$result = Db::getInstance()->ExecuteS('SELECT `id_color`,`name` FROM `'._DB_PREFIX_.'color` WHERE `id_color` IN('.pSQL(implode(',',$filter['id_color'])).')');
+				$result = Db::getInstance()->ExecuteS('SELECT `id_color`,`name` FROM `'.DB_PREFIX.'color` WHERE `id_color` IN('.pSQL(implode(',',$filter['id_color'])).')');
 				if($result){
 					if(count($result)==1){
 						$filters['color']['name'] 		=  $result[0]['name'];
@@ -477,7 +477,7 @@ class Tools{
 		
 		if(isset($filter['id_brand'])&&count($filter['id_brand'])>0)
 		{
-				$result = Db::getInstance()->ExecuteS('SELECT `id_brand`,`name` FROM `'._DB_PREFIX_.'brand` WHERE `id_brand` IN('.pSQL(implode(',',$filter['id_brand'])).')');
+				$result = Db::getInstance()->ExecuteS('SELECT `id_brand`,`name` FROM `'.DB_PREFIX.'brand` WHERE `id_brand` IN('.pSQL(implode(',',$filter['id_brand'])).')');
 				if($result){
 					if(count($result)==1){
 						$filters['brand']['name'] 		=  $result[0]['name'];
@@ -499,7 +499,7 @@ class Tools{
 		
 		if(isset($filter['id_style'])&&count($filter['id_style'])>0)
 		{
-				$result = Db::getInstance()->getRow('SELECT `id_category` as id_style,`name` FROM `'._DB_PREFIX_.'category` WHERE `id_category` ='.intval($filter['id_style']));
+				$result = Db::getInstance()->getRow('SELECT `id_category` as id_style,`name` FROM `'.DB_PREFIX.'category` WHERE `id_category` ='.intval($filter['id_style']));
 				if($result){
 					$filters['style']['name'] 		=  $result['name'];
 					$filters['style']['id'] 		=  $result['id_style'];

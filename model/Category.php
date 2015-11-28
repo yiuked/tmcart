@@ -1,51 +1,67 @@
 <?php 
 class Category extends ObjectBase{
-	protected $fields 			= array('id_parent','level_depth','nleft','nright','position','name','description',
-		'meta_title','meta_keywords','meta_description','rewrite','active','add_date','upd_date');
-	protected $fieldsRequired	= array('name','rewrite');
-	protected $fieldsSize 		= array('meta_description' => 256, 'meta_keywords' => 256,
-		'meta_title' => 256, 'link_rewrite' => 256, 'name' => 256);
-	protected $fieldsValidate	= array(
-		'name' => 'isCatalogName',
-		'active'=> 'isBool',
-		'meta_title' => 'isGenericName',
-		'meta_keywords' => 'isGenericName',
-		'meta_description' => 'isGenericName', 
-		'rewrite' => 'isLinkRewrite', 
-		'description' => 'isCleanHtml');
+	protected $fields = array(
+		'id_parent' => array(
+			'type' => 'isInt',
+		),
+		'level_depth' => array(
+			'type' => 'isInt',
+		),
+		'nleft' => array(
+			'type' => 'isInt',
+		),
+		'nright' => array(
+			'type' => 'isInt',
+		),
+		'position' => array(
+			'type' => 'isInt',
+		),
+		'name' => array(
+			'required' => true,
+			'type' => 'isGenericName',
+			'size' => 256
+		),
+		'description' => array(
+			'type' => 'isCleanHtml',
+		),
+		'meta_title' => array(
+			'type' => 'isGenericName',
+			'size' => 256
+		),
+		'meta_keywords' => array(
+			'type' => 'isGenericName',
+			'size' => 256
+		),
+		'meta_description' => array(
+			'type' => 'isGenericName',
+			'size' => 256
+		),
+		'rewrite' => array(
+			'required' => true,
+			'type' => 'isGenericName',
+			'size' => 256
+		),
+		'active' => array(
+			'type' => 'isInt',
+		),
+		'add_date' => array(
+			'type' => 'isDate',
+		),
+		'upd_date' => array(
+			'type' => 'isDate',
+		),
+	);
 	
 	protected $identifier 		= 'id_category';
 	protected $table			= 'category';
 	
-	public function getFields()
-	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_category'] = (int)($this->id);
-		$fields['id_parent'] = (int)($this->id_parent);
-		$fields['level_depth'] = (int)($this->level_depth);
-		$fields['nleft'] = (int)($this->nleft);
-		$fields['nright'] = (int)($this->nright);
-		$fields['position'] = (int)($this->position);
-		$fields['name'] = pSQL($this->name);
-		$fields['description'] = pSQL($this->description);
-		$fields['meta_title'] = pSQL($this->meta_title);
-		$fields['meta_keywords'] = pSQL($this->meta_keywords);
-		$fields['meta_description'] = pSQL($this->meta_description);
-		$fields['rewrite'] = pSQL($this->rewrite);
-		$fields['active'] = (int)($this->active);
-		$fields['add_date'] = pSQL($this->add_date);
-		$fields['upd_date'] = pSQL($this->upd_date);
-		return $fields;
-	}
-	
-	public	function add($nullValues = false)
+	public	function add()
 	{
 		$this->position = self::getLastPosition((int)$this->id_parent);
 		if (!isset($this->level_depth) OR !$this->level_depth){
 			$this->level_depth = $this->calcLevelDepth();
 		}
-		$ret = parent::add($nullValues);
+		$ret = parent::add();
 		if (!isset($this->doNotRegenerateNTree) OR !$this->doNotRegenerateNTree)
 			self::regenerateEntireNtree();
 		return $ret;
@@ -58,7 +74,7 @@ class Category extends ObjectBase{
 		if (!isset($this->doNotRegenerateNTree) OR !$this->doNotRegenerateNTree)
 		{
 			self::regenerateEntireNtree();
-			$this->recalculateLevelDepth($this->id);
+			self::recalculateLevelDepth($this->id);
 		}
 		return $ret;
 	}
@@ -74,15 +90,15 @@ class Category extends ObjectBase{
 
 		/* Delete CMS Category and its child from database */
 		$list = sizeof($toDelete) > 1 ? implode(',', $toDelete) : (int)($this->id);
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category` WHERE `id_category` IN ('.$list.')');
+		Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'category` WHERE `id_category` IN ('.$list.')');
 		
 		/*取消排序可大大加快删除速度*/
 		//self::cleanPositions($this->id_parent);
 		
 		/* Delete pages which are in categories to delete */
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance()->getAll('
 		SELECT `id_rule`
-		FROM `'._DB_PREFIX_.'rule`
+		FROM `'.DB_PREFIX.'rule`
 		WHERE `id_entity` IN ('.$list.') AND entity="'.(get_class($this)).'"');
 		foreach ($result as $p)
 		{
@@ -92,9 +108,9 @@ class Category extends ObjectBase{
 		}
 		
 		/* Delete pages which are in categories to delete */
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance()->getAll('
 		SELECT `id_product`
-		FROM `'._DB_PREFIX_.'product`
+		FROM `'.DB_PREFIX.'product`
 		WHERE `id_category_default` IN ('.$list.')');
 		$products = array();
 		foreach ($result as $p)
@@ -104,7 +120,7 @@ class Category extends ObjectBase{
 		
 		/*采用批量删除产品方法*/
 		Product::batchDeleteProduct($products);
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_to_category` WHERE `id_product` IN('.pSQL($list).')');
+		Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'product_to_category` WHERE `id_product` IN('.pSQL($list).')');
 		return true;
 	}
 	
@@ -124,15 +140,15 @@ class Category extends ObjectBase{
 				$postion = 'ORDER BY a.`id_product` DESC';
 			}
 
-			$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'product` a
-					LEFT JOIN `'._DB_PREFIX_.'product_to_category` ptc ON a.id_product = ptc.id_product
+			$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'product` a
+					LEFT JOIN `'.DB_PREFIX.'product_to_category` ptc ON a.id_product = ptc.id_product
 					WHERE active=1 AND id_category='.(int)($this->id).' '.$where);
 			if($total==0)
 				return false;
 
-			$result = Db::getInstance()->ExecuteS('SELECT a.* 
-					FROM `'._DB_PREFIX_.'product` a
-					LEFT JOIN `'._DB_PREFIX_.'product_to_category` ptc ON a.id_product = ptc.id_product
+			$result = Db::getInstance()->getAll('SELECT a.*
+					FROM `'.DB_PREFIX.'product` a
+					LEFT JOIN `'.DB_PREFIX.'product_to_category` ptc ON a.id_product = ptc.id_product
 					WHERE active=1 AND id_category='.(int)($this->id).' '.$where.'
 					'.$postion.'
 					LIMIT '.(($p-1)*$limit).','.(int)$limit);
@@ -149,17 +165,23 @@ class Category extends ObjectBase{
 		}*/
 		return $rows;
 	}
-	
+
+	/**
+	 * 获得最大的postion,并且自动加1
+	 *
+	 * @param $id_category_parent
+	 * @return int
+	 */
 	public static function getLastPosition($id_category_parent)
 	{
-		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'._DB_PREFIX_.'category` WHERE `id_parent` = '.(int)($id_category_parent)));
+		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'.DB_PREFIX.'category` WHERE `id_parent` = '.(int)($id_category_parent)));
 	}
-	
+
 	/**
-	  * Get the depth level for the category
-	  *
-	  * @return integer Depth level
-	  */
+	 * 获得当前分类的级别
+	 *
+	 * @return int
+	 */
 	public function calcLevelDepth()
 	{
 		/* Root category */
@@ -177,9 +199,9 @@ class Category extends ObjectBase{
 	 	if (!Validate::isBool($active))
 	 		die(Tools::displayError());
 
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance()->getAll('
 		SELECT *
-		FROM `'._DB_PREFIX_.'category` c
+		FROM `'.DB_PREFIX.'category` c
 		WHERE `id_category` != 1 '.$sql_filter.'
 		'.($active ? 'AND `active` = 1' : '').'
 		'.($sql_sort != '' ? $sql_sort : 'ORDER BY c.`position` ASC').'
@@ -203,7 +225,7 @@ class Category extends ObjectBase{
 	  * @param boolean $active return only active categories
 	  * @return array Categories
 	  */
-	public function getSubCategories($active = true,$limit=20,$p=20,$orderBy = NULL,$orderWay = NULL,$filter=array())
+	public function getSubCategories($active = true,$limit=20, $p=20, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
 	 	if (!Validate::isBool($active))
 	 		die(Tools::displayError());
@@ -223,12 +245,12 @@ class Category extends ObjectBase{
 			$postion = 'ORDER BY `position` ASC';
 		}
 		
-		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'category`
+		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'category`
 		WHERE `id_parent` = '.(int)($this->id).' '.($active?' `active`=1 AND':'').'
 		'.$where);
 
-		$result = Db::getInstance()->ExecuteS('
-		SELECT * FROM `'._DB_PREFIX_.'category`
+		$result = Db::getInstance()->getAll('
+		SELECT * FROM `'.DB_PREFIX.'category`
 		WHERE `id_parent` = '.(int)($this->id).' '.$where.'
 		'.($active ? 'AND `active` = 1' : '').'
 		'.$postion.'
@@ -240,13 +262,11 @@ class Category extends ObjectBase{
 
 		return $rows;
 	}
-	
+
 	/**
-	 * This method allow to return children categories with the number of sub children selected for a product
-	 *
-	 * @param int $id_parent
-	 * @param int $id_product
-	 * @param int $id_lang
+	 * 查询指定分类下的子分类，并返回子分类是否还有子分类，以及子分类下下有多少被选中的分类
+	 * @param $id_parent
+	 * @param $selectedCat
 	 * @return array
 	 */
 	public static function getChildrenWithNbSelectedSubCat($id_parent, $selectedCat)
@@ -254,19 +274,19 @@ class Category extends ObjectBase{
 
 		$selectedCat = explode(',', str_replace(' ', '', $selectedCat));	
 	
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance()->getAll('
 		SELECT c.`id_category` AS id_category, c.`level_depth`,c.`name`, IF((
 			SELECT COUNT(*)
-			FROM `'._DB_PREFIX_.'category` c2
+			FROM `'.DB_PREFIX.'category` c2
 			WHERE c2.`id_parent` = c.`id_category`
 		) > 0, 1, 0) AS has_children, '.($selectedCat ? '(
 			SELECT count(c3.`id_category`)
-			FROM `'._DB_PREFIX_.'category` c3
+			FROM `'.DB_PREFIX.'category` c3
 			WHERE c3.`nleft` > c.`nleft`
 			AND c3.`nright` < c.`nright`
 			AND c3.`id_category`  IN ('.implode(',', array_map('intval', $selectedCat)).')
 		)' : '0').' AS nbSelectedSubCat
-		FROM `'._DB_PREFIX_.'category` c
+		FROM `'.DB_PREFIX.'category` c
 		WHERE c.`id_parent` = '.(int)($id_parent).'
 		ORDER BY `position` ASC');
 	}
@@ -282,9 +302,9 @@ class Category extends ObjectBase{
 	 	if (!is_array($toDelete) OR !$id_category)
 	 		die(Tools::displayError());
 
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance()->getAll('
 		SELECT `id_category`
-		FROM `'._DB_PREFIX_.'category`
+		FROM `'.DB_PREFIX.'category`
 		WHERE `id_parent` = '.(int)($id_category));
 		foreach ($result AS $row)
 		{
@@ -295,28 +315,28 @@ class Category extends ObjectBase{
 	
 	public static function cleanPositions($id_category_parent)
 	{
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance()->getAll('
 		SELECT `id_category`
-		FROM `'._DB_PREFIX_.'category`
+		FROM `'.DB_PREFIX.'category`
 		WHERE `id_parent` = '.(int)($id_category_parent).'
 		ORDER BY `position`');
 		$sizeof = sizeof($result);
 		for ($i = 0; $i < $sizeof; ++$i){
 				$sql = '
-				UPDATE `'._DB_PREFIX_.'category`
+				UPDATE `'.DB_PREFIX.'category`
 				SET `position` = '.(int)($i).'
 				WHERE `id_parent` = '.(int)($id_category_parent).'
 				AND `id_category` = '.(int)($result[$i]['id_category']);
-				Db::getInstance()->Execute($sql);
+				Db::getInstance()->exec($sql);
 			}
 		return true;
 	}
 	
 	public function updatePosition($way, $position)
 	{	
-		if (!$res = Db::getInstance()->ExecuteS('
+		if (!$res = Db::getInstance()->getAll('
 			SELECT cp.`id_category`, cp.`position`, cp.`id_parent` 
-			FROM `'._DB_PREFIX_.'category` cp
+			FROM `'.DB_PREFIX.'category` cp
 			WHERE cp.`id_parent` = '.(int)$this->id_parent.' 
 			ORDER BY cp.`position` ASC'
 		))
@@ -329,16 +349,16 @@ class Category extends ObjectBase{
 			return false;
 		// < and > statements rather than BETWEEN operator
 		// since BETWEEN is treated differently according to databases
-		return (Db::getInstance()->Execute('
-			UPDATE `'._DB_PREFIX_.'category`
+		return (Db::getInstance()->exec('
+			UPDATE `'.DB_PREFIX.'category`
 			SET `position`= `position` '.($way ? '- 1' : '+ 1').'
 			WHERE `position` 
 			'.($way 
 				? '> '.(int)($movedCategory['position']).' AND `position` <= '.(int)($position)
 				: '< '.(int)($movedCategory['position']).' AND `position` >= '.(int)($position)).'
 			AND `id_parent`='.(int)($movedCategory['id_parent']))
-		AND Db::getInstance()->Execute('
-			UPDATE `'._DB_PREFIX_.'category`
+		AND Db::getInstance()->exec('
+			UPDATE `'.DB_PREFIX.'category`
 			SET `position` = '.(int)($position).'
 			WHERE `id_parent` = '.(int)($movedCategory['id_parent']).'
 			AND `id_category`='.(int)($movedCategory['id_category'])));
@@ -346,7 +366,7 @@ class Category extends ObjectBase{
 	
 	public function getCatBar($id_parent,$catBar=array())
 	{
-		$category = Db::getInstance()->getRow('SELECT `id_category`,`id_parent`,`level_depth`,`name` FROM `'._DB_PREFIX_.'category` WHERE `id_category`='.intval($id_parent));
+		$category = Db::getInstance()->getRow('SELECT `id_category`,`id_parent`,`level_depth`,`name` FROM `'.DB_PREFIX.'category` WHERE `id_category`='.intval($id_parent));
 		if(sizeof($category)>1)
 			$catBar[] = $category;
 		if($id_parent>0){
@@ -360,7 +380,7 @@ class Category extends ObjectBase{
 	  */
 	public static function regenerateEntireNtree()
 	{
-		$categories = Db::getInstance()->ExecuteS('SELECT id_category, id_parent FROM '._DB_PREFIX_.'category ORDER BY id_parent ASC, position ASC');
+		$categories = Db::getInstance()->getAll('SELECT id_category, id_parent FROM '.DB_PREFIX.'category ORDER BY id_parent ASC, position ASC');
 		$categoriesArray = array();
 		foreach ($categories AS $category)
 			$categoriesArray[(int)$category['id_parent']]['subcategories'][(int)$category['id_category']] = 1;
@@ -376,35 +396,35 @@ class Category extends ObjectBase{
 				self::_subTree($categories, (int)$id_subcategory, $n);
 		$right = (int)$n++;
 
-		Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'category SET nleft = '.(int)$left.', nright = '.(int)$right.' WHERE id_category = '.(int)$id_category.' LIMIT 1');
+		Db::getInstance()->exec('UPDATE '.DB_PREFIX.'category SET nleft = '.(int)$left.', nright = '.(int)$right.' WHERE id_category = '.(int)$id_category.' LIMIT 1');
 	}
-	
-		/**
-	  * Updates level_depth for all children of the given id_category
-	  *
-	  * @param integer $id_category parent category
-	  */
-	public function recalculateLevelDepth($id_category)
+
+	/**
+	 * 重置一个分类下所有子分类的深度.
+	 * 这是一个迭代函数
+	 *
+	 * @param $id_category
+	 */
+	public static function recalculateLevelDepth($id_category)
 	{
-		/* Gets all children */
-		$categories = Db::getInstance()->ExecuteS('
+		$categories = Db::getInstance()->getAll('
 			SELECT id_category, id_parent, level_depth
-			FROM '._DB_PREFIX_.'category
+			FROM '.DB_PREFIX.'category
 			WHERE id_parent = '.(int)$id_category);
-		/* Gets level_depth */
+
 		$level = Db::getInstance()->getRow('
 			SELECT level_depth
-			FROM '._DB_PREFIX_.'category
+			FROM '.DB_PREFIX.'category
 			WHERE id_category = '.(int)$id_category);
-		/* Updates level_depth for all children */
+
 		foreach ($categories as $sub_category)
 		{
-			Db::getInstance()->Execute('
-				UPDATE '._DB_PREFIX_.'category
+			Db::getInstance()->exec('
+				UPDATE '.DB_PREFIX.'category
 				SET level_depth = '.(int)($level['level_depth'] + 1).'
 				WHERE id_category = '.(int)$sub_category['id_category']);
-			/* Recursive call */
-			$this->recalculateLevelDepth($sub_category['id_category']);
+
+			self::recalculateLevelDepth($sub_category['id_category']);
 		}
 	}
 	
@@ -421,9 +441,9 @@ class Category extends ObjectBase{
 			return;
 
 		$categories = array();
-		$results = Db::getInstance()->ExecuteS('
+		$results = Db::getInstance()->getAll('
 			SELECT c.`id_category`, c.`name`, c.`rewrite`
-			FROM `'._DB_PREFIX_.'category` c
+			FROM `'.DB_PREFIX.'category` c
 			WHERE c.`id_category` IN ('.implode(',', array_map('intval', $ids_category)).')
 		');
 

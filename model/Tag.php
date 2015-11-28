@@ -30,7 +30,7 @@ class Tag extends ObjectBase{
 	
 	public static function existsByTagName($name)
 	{
-		return Db::getInstance()->getValue('SELECT `id_tag` FROM `'._DB_PREFIX_.'tag` WHERE `name` = "'.pSQL($name).'"');
+		return Db::getInstance()->getValue('SELECT `id_tag` FROM `'.DB_PREFIX.'tag` WHERE `name` = "'.pSQL($name).'"');
 	}
 	
 	public static function tagsExists($name)
@@ -52,9 +52,9 @@ class Tag extends ObjectBase{
 	
 	public function getThisTags($p=1,$limit=50)
 	{
-		$result = Db::getInstance()->ExecuteS('SELECT p.* FROM `'._DB_PREFIX_.'product` p
-				LEFT JOIN `'._DB_PREFIX_.'product_to_tag` ptt ON (ptt.`id_product` = p.`id_product`)
-				LEFT JOIN `'._DB_PREFIX_.'tag` t ON (t.`id_tag` = ptt.`id_tag`)
+		$result = Db::getInstance()->getAll('SELECT p.* FROM `'.DB_PREFIX.'product` p
+				LEFT JOIN `'.DB_PREFIX.'product_to_tag` ptt ON (ptt.`id_product` = p.`id_product`)
+				LEFT JOIN `'.DB_PREFIX.'tag` t ON (t.`id_tag` = ptt.`id_tag`)
 				WHERE t.`id_tag`='.(int)($this->id).' AND p.active=1
 				ORDER BY p.`id_product` DESC
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);
@@ -68,9 +68,9 @@ class Tag extends ObjectBase{
 	{
 		if(!intval($id_product))
 			return;
-		$result = Db::getInstance()->ExecuteS('
-			SELECT `name` FROM `'._DB_PREFIX_.'tag` t 
-			LEFT JOIN `'._DB_PREFIX_.'product_to_tag` ptt ON (ptt.`id_tag` = t.`id_tag`)
+		$result = Db::getInstance()->getAll('
+			SELECT `name` FROM `'.DB_PREFIX.'tag` t
+			LEFT JOIN `'.DB_PREFIX.'product_to_tag` ptt ON (ptt.`id_tag` = t.`id_tag`)
 			WHERE ptt.`id_product` = '.(int)($id_product));
 		if(!$result)
 			return;
@@ -98,12 +98,12 @@ class Tag extends ObjectBase{
 			$postion = 'ORDER BY `id_tag` DESC';
 		}
 		
-		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'tag` a
+		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'tag` a
 				WHERE 1 '.$where);
 		if($total==0)
 			return false;
 
-		$result = Db::getInstance()->ExecuteS('SELECT a.* FROM `'._DB_PREFIX_.'tag` a
+		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'tag` a
 				WHERE 1 '.$where.'
 				'.$postion.'
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);

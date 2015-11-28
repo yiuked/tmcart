@@ -37,8 +37,8 @@ class ImageType extends ObjectBase
 		if(!empty($type))
 			$where .= ' AND `type`="'.pSQL($type).'"';
 
-		$query = 'SELECT * FROM `'._DB_PREFIX_.'image_type` '.$where.' ORDER BY `name` ASC';
-		return Db::getInstance()->executeS($query);
+		$query = 'SELECT * FROM `'.DB_PREFIX.'image_type` '.$where.' ORDER BY `name` ASC';
+		return Db::getInstance()->getAll($query);
 	}
 
 	public function reloadImages()
@@ -68,9 +68,9 @@ class ImageType extends ObjectBase
 		if (!Validate::isImageTypeName($typeName))
 			die(Tools::displayError());
 
-		Db::getInstance()->executeS('
+		Db::getInstance()->getAll('
 		SELECT `id_image_type`
-		FROM `'._DB_PREFIX_.'image_type`
+		FROM `'.DB_PREFIX.'image_type`
 		WHERE `name` = \''.pSQL($typeName).'\'');
 
 		return Db::getInstance()->NumRows();
@@ -83,7 +83,7 @@ class ImageType extends ObjectBase
 	 */
 	public static function getByNameNType($name, $type)
 	{
-		return Db::getInstance()->getRow('SELECT `id_image_type`, `name`, `width`, `height`, `products`, `categories`, `manufacturers`, `suppliers`, `scenes` FROM `'._DB_PREFIX_.'image_type` WHERE `name` = \''.pSQL($name).'\' AND `'.pSQL($type).'` = 1');
+		return Db::getInstance()->getRow('SELECT `id_image_type`, `name`, `width`, `height`, `products`, `categories`, `manufacturers`, `suppliers`, `scenes` FROM `'.DB_PREFIX.'image_type` WHERE `name` = \''.pSQL($name).'\' AND `'.pSQL($type).'` = 1');
 	}
 	
 	public static function getEntity($active = true,$p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
@@ -104,12 +104,12 @@ class ImageType extends ObjectBase
 			$postion = 'ORDER BY `position` DESC';
 		}
 
-		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'image_type` a
+		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'image_type` a
 				WHERE 1 '.$where);
 		if($total==0)
 			return false;
 
-		$result = Db::getInstance()->ExecuteS('SELECT a.* FROM `'._DB_PREFIX_.'image_type` a
+		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'image_type` a
 				WHERE 1 '.$where.'
 				'.$postion.'
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);

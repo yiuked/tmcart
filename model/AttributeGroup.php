@@ -57,12 +57,12 @@ class AttributeGroup extends ObjectBase{
 			$postion = 'ORDER BY `position` ASC';
 		}
 
-		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'attribute_group` a
+		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'attribute_group` a
 				WHERE 1 '.$where);
 		if($total==0)
 			return false;
 
-		$result = Db::getInstance()->ExecuteS('SELECT a.* FROM `'._DB_PREFIX_.'attribute_group` a
+		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'attribute_group` a
 				WHERE 1 '.$where.'
 				'.$postion.'
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);
@@ -74,8 +74,8 @@ class AttributeGroup extends ObjectBase{
 	
 	public function getAttributes()
 	{
-		return Db::getInstance()->ExecuteS('
-				   SELECT * FROM `'._DB_PREFIX_.'attribute`
+		return Db::getInstance()->getAll('
+				   SELECT * FROM `'.DB_PREFIX.'attribute`
 				   WHERE `id_attribute_group`='.(int)($this->id).'
 				   ORDER BY position ASC
 		');
@@ -84,9 +84,9 @@ class AttributeGroup extends ObjectBase{
 	public static function getAttributeAndGrop()
 	{
 		$attributes = array();
-		$result = Db::getInstance()->ExecuteS('SELECT a.id_attribute,a.`name`,a.id_attribute_group,g.`name` AS g_name
-			FROM '._DB_PREFIX_.'attribute AS a
-			LEFT JOIN '._DB_PREFIX_.'attribute_group AS g ON a.id_attribute_group = g.id_attribute_group
+		$result = Db::getInstance()->getAll('SELECT a.id_attribute,a.`name`,a.id_attribute_group,g.`name` AS g_name
+			FROM '.DB_PREFIX.'attribute AS a
+			LEFT JOIN '.DB_PREFIX.'attribute_group AS g ON a.id_attribute_group = g.id_attribute_group
 			ORDER BY a.position ASC');
 		if(!$result)
 			return $attributes;
@@ -103,7 +103,7 @@ class AttributeGroup extends ObjectBase{
 	
 	public static function getLastPosition()
 	{
-		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'._DB_PREFIX_.'attribute_group`'));
+		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'.DB_PREFIX.'attribute_group`'));
 	}
 }
 ?>

@@ -31,7 +31,7 @@ class Alert extends ObjectBase
 	
 	public static function alerts($id_user)
 	{
-		$result = Db::getInstance()->ExecuteS('SELECT * FROM '._DB_PREFIX_.'alert
+		$result = Db::getInstance()->getAll('SELECT * FROM '.DB_PREFIX.'alert
 				  WHERE id_user='.(int)($id_user).' ORDER BY id_alert DESC');
 		if(!$result)
 			return 0;
@@ -45,7 +45,7 @@ class Alert extends ObjectBase
 				'count'=>0
 				);
 		if(isset($cookie->id_user)&&$cookie->id_user>0){
-			$result = Db::getInstance()->getValue('SELECT count(*) FROM '._DB_PREFIX_.'alert WHERE is_read=0 AND id_user='.intval($cookie->id_user));
+			$result = Db::getInstance()->getValue('SELECT count(*) FROM '.DB_PREFIX.'alert WHERE is_read=0 AND id_user='.intval($cookie->id_user));
 			if($result)
 			{
 				$array['count'] = (int)($result);

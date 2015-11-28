@@ -2,7 +2,7 @@
 class SEOHelper{
 	public function updateCategoryMeta($post)
 	{
-		$rows = Db::getInstance()->ExecuteS("SELECT id_category,name FROM " . _DB_PREFIX_ . "category WHERE id_category IN(".implode(",",$post["categoryBox"]).")");
+		$rows = Db::getInstance()->getAll("SELECT id_category,name FROM " . DB_PREFIX . "category WHERE id_category IN(".implode(",",$post["categoryBox"]).")");
 
 		foreach($rows as $row)
 		{
@@ -12,14 +12,14 @@ class SEOHelper{
 			$rewrite 		= preg_replace("/[^a-zA-Z0-9\.]/","-",self::replaceCategory($post["rewrite"],$row));
 			$rewrite		= strtolower(preg_replace("/(\-{2,})/","-",$rewrite));
 			if(!empty($title))
-				Db::getInstance()->Execute("UPDATE "._DB_PREFIX_."category SET meta_title='".pSQL($title)."' WHERE id_category=".intval($row['id_category']));
+				Db::getInstance()->exec("UPDATE ".DB_PREFIX."category SET meta_title='".pSQL($title)."' WHERE id_category=".intval($row['id_category']));
 			if(!empty($keyword))
-				Db::getInstance()->Execute("UPDATE "._DB_PREFIX_."category SET meta_keywords='".pSQL($keyword)."' WHERE id_category=".intval($row['id_category']));
+				Db::getInstance()->exec("UPDATE ".DB_PREFIX."category SET meta_keywords='".pSQL($keyword)."' WHERE id_category=".intval($row['id_category']));
 			if(!empty($description))
-				Db::getInstance()->Execute("UPDATE "._DB_PREFIX_."category SET meta_description='".pSQL($description)."' WHERE id_category=".intval($row['id_category']));
+				Db::getInstance()->exec("UPDATE ".DB_PREFIX."category SET meta_description='".pSQL($description)."' WHERE id_category=".intval($row['id_category']));
 			if(!empty($rewrite)){
-				Db::getInstance()->Execute("UPDATE "._DB_PREFIX_."category SET rewrite='".pSQL($rewrite)."' WHERE id_category=".intval($row['id_category']));
-				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'rule` SET `rule_link`="'.pSQL($rewrite).'" WHERE `entity`="Category" AND `id_entity` ='.intval($row['id_category']));
+				Db::getInstance()->exec("UPDATE ".DB_PREFIX."category SET rewrite='".pSQL($rewrite)."' WHERE id_category=".intval($row['id_category']));
+				Db::getInstance()->exec('UPDATE `'.DB_PREFIX.'rule` SET `rule_link`="'.pSQL($rewrite).'" WHERE `entity`="Category" AND `id_entity` ='.intval($row['id_category']));
 			}
 		}
 	}
@@ -43,10 +43,10 @@ class SEOHelper{
 		if(is_array($pbrands))
 			$brand_where = ' AND p.id_brand IN('.implode(",",$pbrands).')';
 
-		$rows = Db::getInstance()->ExecuteS("SELECT p.id_product,p.ean13,p.special_price,p.price,p.name,c.name AS category,cl.name AS color
-				FROM "._DB_PREFIX_."product AS p
-				Left Join "._DB_PREFIX_."category AS c ON p.id_category_default = c.id_category
-				Left Join "._DB_PREFIX_."color AS cl ON p.id_color = cl.id_color
+		$rows = Db::getInstance()->getAll("SELECT p.id_product,p.ean13,p.special_price,p.price,p.name,c.name AS category,cl.name AS color
+				FROM ".DB_PREFIX."product AS p
+				Left Join ".DB_PREFIX."category AS c ON p.id_category_default = c.id_category
+				Left Join ".DB_PREFIX."color AS cl ON p.id_color = cl.id_color
 				WHERE p.id_category_default IN(".implode(",",$post["categoryBox"]).")".$brand_where);
 		foreach($rows as $row)
 		{
@@ -57,14 +57,14 @@ class SEOHelper{
 			$rewrite		= strtolower(preg_replace("/(\-{2,})/","-",$rewrite));
 
 			if(!empty($title))
-				Db::getInstance()->Execute("UPDATE "._DB_PREFIX_."product SET meta_title='".pSQL($title)."' WHERE id_product=".intval($row['id_product']));
+				Db::getInstance()->exec("UPDATE ".DB_PREFIX."product SET meta_title='".pSQL($title)."' WHERE id_product=".intval($row['id_product']));
 			if(!empty($keyword))
-				Db::getInstance()->Execute("UPDATE "._DB_PREFIX_."product SET meta_keywords='".pSQL($keyword)."' WHERE id_product=".intval($row['id_product']));
+				Db::getInstance()->exec("UPDATE ".DB_PREFIX."product SET meta_keywords='".pSQL($keyword)."' WHERE id_product=".intval($row['id_product']));
 			if(!empty($description))
-				Db::getInstance()->Execute("UPDATE "._DB_PREFIX_."product SET meta_description='".pSQL($description)."' WHERE id_product=".intval($row['id_product']));
+				Db::getInstance()->exec("UPDATE ".DB_PREFIX."product SET meta_description='".pSQL($description)."' WHERE id_product=".intval($row['id_product']));
 			if(!empty($rewrite)){
-				Db::getInstance()->Execute("UPDATE "._DB_PREFIX_."product SET rewrite='".pSQL($rewrite)."' WHERE id_product=".intval($row['id_product']));
-				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'rule` SET `rule_link`="'.pSQL($rewrite).'" WHERE `entity`="Product" AND `id_entity` ='.intval($row['id_product']));
+				Db::getInstance()->exec("UPDATE ".DB_PREFIX."product SET rewrite='".pSQL($rewrite)."' WHERE id_product=".intval($row['id_product']));
+				Db::getInstance()->exec('UPDATE `'.DB_PREFIX.'rule` SET `rule_link`="'.pSQL($rewrite).'" WHERE `entity`="Product" AND `id_entity` ='.intval($row['id_product']));
 			}
 		}
 	}

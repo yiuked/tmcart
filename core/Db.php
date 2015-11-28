@@ -26,6 +26,8 @@ abstract class Db
 	/** @var mixed Ressource link */
 	protected $_link;
 
+	/** @var mixed Object 数据库单列类 */
+	protected static $_instance = false;
 	/**
 	 * 获取一个数据库的单列
 	 *
@@ -33,15 +35,20 @@ abstract class Db
 	 */
 	public static function getInstance()
 	{
-		if (DB_TYPE == 'pdo') {
-			return new MYPDO(DB_SERVER, DB_USER, DB_PASSWD, DB_NAME);
-		}else{
-			return new MySQL(DB_SERVER, DB_USER, DB_PASSWD, DB_NAME);
+		if (!self::$_instance) {
+			if (DB_TYPE == 'pdo') {
+				self::$_instance = new DbPdo(DB_SERVER, DB_USER, DB_PASSWD, DB_NAME);
+			}elseif (DB_TYPE == 'mysqli') {
+				self::$_instance = new DbMySQLI(DB_SERVER, DB_USER, DB_PASSWD, DB_NAME);
+			}else{
+				self::$_instance = new DbMySQL(DB_SERVER, DB_USER, DB_PASSWD, DB_NAME);
+			}
 		}
+		return self::$_instance;
 	}
 	
 	public function getRessource() { return $this->_link;}
-	
+
 	public function __destruct()
 	{
 		$this->disconnect();
@@ -161,7 +168,7 @@ abstract class Db
 	 * @param $filed
 	 * @return string
 	 */
-	abstract public function getValue($query,$filed);
+	abstract public function getValue($query, $filed = false);
 
 	/**
 	 * 用于查询某一数据表中某一指定的字段指定条件的所有结果集
@@ -169,14 +176,14 @@ abstract class Db
 	 * @param $filed
 	 * @return array() 返回一个一维数组的结果集
 	 */
-	abstract public function getAllValue($query,$filed);
+	abstract public function getAllValue($query, $filed);
 
 	/**
 	 * 用于执行插入、更新等无返回结果集的$query
 	 * @param string $query 需要执行的SQL语句
 	 * @return int 返回受影响的数目
 	 */
-	abstract  protected function exec($query);
+	abstract  public function exec($query);
 }
 
 /**
@@ -188,12 +195,9 @@ abstract class Db
  */
 function pSQL($string, $htmlOK = false)
 {
-	if (_TM_MAGIC_QUOTES_GPC_)
-		$string = stripslashes($string);
 	if (!is_numeric($string))
 	{
-		$link = Db::getInstance()->getRessource();
-		$string = _TM_MYSQL_REAL_ESCAPE_STRING_ ? mysql_real_escape_string($string, $link) : addslashes($string);
+		$string = addslashes($string);
 		if (!$htmlOK)
 			$string = strip_tags(nl2br2($string));
 	}

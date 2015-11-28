@@ -42,12 +42,12 @@ class Coupon extends ObjectBase{
 			$postion = 'ORDER BY `id_coupon` DESC';
 		}
 
-		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'coupon` a
+		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'coupon` a
 				WHERE 1'.$where);
 		if($total==0)
 			return false;
 
-		$result = Db::getInstance()->ExecuteS('SELECT a.* FROM `'._DB_PREFIX_.'coupon` a
+		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'coupon` a
 				WHERE 1 '.$where.'
 				'.$postion.'
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);

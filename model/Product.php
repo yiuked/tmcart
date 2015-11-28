@@ -67,9 +67,9 @@ class Product extends ObjectBase{
 	public function delete()
 	{
 		if(parent::delete()){
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_to_category` WHERE `id_product`='.(int)$this->id);
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_to_tag` WHERE `id_product`='.(int)$this->id);
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_to_attribute` WHERE `id_product`='.(int)$this->id);
+			Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'product_to_category` WHERE `id_product`='.(int)$this->id);
+			Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'product_to_tag` WHERE `id_product`='.(int)$this->id);
+			Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'product_to_attribute` WHERE `id_product`='.(int)$this->id);
 			$this->deleteImages();
 		}
 		return true;
@@ -77,19 +77,19 @@ class Product extends ObjectBase{
 	
 	public static function batchDeleteProduct($id_products = array())
 	{
-		$ids_string = implode(",",$id_products);
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product` WHERE `id_product` IN('.pSQL($ids_string).')');
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'rule` WHERE `entity`="Product" AND `id_entity` IN('.pSQL($ids_string).')');
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_to_category` WHERE `id_product` IN('.pSQL($ids_string).')');
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_to_tag` WHERE `id_product` IN('.pSQL($ids_string).')');
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_to_attribute` WHERE `id_product` IN('.pSQL($ids_string).')');
-		$result = Db::getInstance()->ExecuteS('SELECT `id_image` FROM `'._DB_PREFIX_.'image` WHERE `id_product` IN('.pSQL($ids_string).')');
+		$ids_string = implode("," ,$id_products);
+		Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'product` WHERE `id_product` IN('.pSQL($ids_string).')');
+		Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'rule` WHERE `entity`="Product" AND `id_entity` IN('.pSQL($ids_string).')');
+		Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'product_to_category` WHERE `id_product` IN('.pSQL($ids_string).')');
+		Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'product_to_tag` WHERE `id_product` IN('.pSQL($ids_string).')');
+		Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'product_to_attribute` WHERE `id_product` IN('.pSQL($ids_string).')');
+		$result = Db::getInstance()->getAll('SELECT `id_image` FROM `'.DB_PREFIX.'image` WHERE `id_product` IN('.pSQL($ids_string).')');
 		if ($result)
 			foreach ($result as $row)
 			{
 				Image::deleteAllImages(Image::getImgFolderStatic($row['id_image']));
 			}
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'image` WHERE `id_product` IN('.pSQL($ids_string).')');
+		Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'image` WHERE `id_product` IN('.pSQL($ids_string).')');
 		return true;
 	}
 
@@ -100,9 +100,9 @@ class Product extends ObjectBase{
 	*/
 	public function deleteImages()
 	{
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance()->getAll('
 		SELECT `id_image`
-		FROM `'._DB_PREFIX_.'image`
+		FROM `'.DB_PREFIX.'image`
 		WHERE `id_product` = '.(int)($this->id));
 
 		$status = true;
@@ -126,17 +126,17 @@ class Product extends ObjectBase{
 	
 	public function getAlsoProduct($number=12)
 	{
-		$leftResult = Db::getInstance()->ExecuteS('SELECT p.id_product,p.id_image_default,p.price,p.special_price,p.`name`,p.rewrite,b.name AS brand 
-		FROM '._DB_PREFIX_.'product p
-		LEFT JOIN `'._DB_PREFIX_.'brand` b ON b.id_brand=p.id_brand
+		$leftResult = Db::getInstance()->getAll('SELECT p.id_product,p.id_image_default,p.price,p.special_price,p.`name`,p.rewrite,b.name AS brand
+		FROM '.DB_PREFIX.'product p
+		LEFT JOIN `'.DB_PREFIX.'brand` b ON b.id_brand=p.id_brand
 		WHERE p.id_product > '.$this->id.'
 		AND p.active=1 AND p.id_category_default='.(int)($this->id_category_default).'
 		ORDER BY p.id_product LIMIT '.intval($number/2));
 		$leftNumber = count($leftResult);
 		$rightNumber = $number - $leftNumber;
-		$rightResult = Db::getInstance()->ExecuteS('SELECT p.id_product,p.id_image_default,p.price,p.special_price,p.`name`,p.rewrite,b.name AS brand 
-		FROM '._DB_PREFIX_.'product p
-		LEFT JOIN `'._DB_PREFIX_.'brand` b ON b.id_brand=p.id_brand
+		$rightResult = Db::getInstance()->getAll('SELECT p.id_product,p.id_image_default,p.price,p.special_price,p.`name`,p.rewrite,b.name AS brand
+		FROM '.DB_PREFIX.'product p
+		LEFT JOIN `'.DB_PREFIX.'brand` b ON b.id_brand=p.id_brand
 		WHERE p.id_product < '.$this->id.'
 		AND p.active=1 AND p.id_category_default='.(int)($this->id_category_default).'
 		ORDER BY p.id_product LIMIT '.intval($rightNumber));
@@ -157,13 +157,13 @@ class Product extends ObjectBase{
 				$postion = 'ORDER BY `id_product` DESC';
 			}
 
-			$total  = Db::getInstance()->getValue('SELECT count(*) FROM `'._DB_PREFIX_.'product` WHERE active = 1
+			$total  = Db::getInstance()->getValue('SELECT count(*) FROM `'.DB_PREFIX.'product` WHERE active = 1
 				AND (name LIKE "%'.pSQL($query).'%" OR meta_title LIKE "%'.pSQL($query).'%" OR `meta_keywords` LIKE "%'.pSQL($query).'%" OR `meta_description` LIKE "%'.pSQL($query).'%" OR `description` LIKE "%'.pSQL($query).'%")');
 			if($total==0)
 				return false;
 
-			$result = Db::getInstance()->ExecuteS('
-				SELECT * FROM `'._DB_PREFIX_.'product` WHERE active = 1
+			$result = Db::getInstance()->getAll('
+				SELECT * FROM `'.DB_PREFIX.'product` WHERE active = 1
 				AND (name LIKE "%'.pSQL($query).'%" OR meta_title LIKE "%'.pSQL($query).'%" OR `meta_keywords` LIKE "%'.pSQL($query).'%" OR `meta_description` LIKE "%'.pSQL($query).'%" OR `description` LIKE "%'.pSQL($query).'%")
 				ORDER BY `add_date` DESC
 				LIMIT '.(($p-1)*$limit).','.(int)($limit));
@@ -187,12 +187,12 @@ class Product extends ObjectBase{
 				$postion = 'ORDER BY `id_product` DESC';
 			}
 			
-			$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'product`
+			$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'product`
 					WHERE active=1 AND is_new=1 ');
 			if($total==0)
 				return false;
 	
-			$result = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'product`
+			$result = Db::getInstance()->getAll('SELECT * FROM `'.DB_PREFIX.'product`
 					WHERE active=1 AND is_new=1
 					'.$postion.'
 					LIMIT '.(($p-1)*$limit).','.(int)$limit);
@@ -223,7 +223,7 @@ class Product extends ObjectBase{
 		if(!empty($filter['is_stock']) && Validate::isInt($filter['is_stock']))
 			$where .= ' AND a.`is_stock`='.((int)($filter['is_stock'])==1?'1':'0');
 		if(!empty($filter['id_category']) && Validate::isInt($filter['id_category']) && $filter['id_category']>1)
-			$where .= ' AND (a.`id_product` IN (SELECT `id_product` FROM `'._DB_PREFIX_.'product_to_category` WHERE `id_category`='.intval($filter['id_category']).') OR a.id_category_default ='.intval($filter['id_category']).')';
+			$where .= ' AND (a.`id_product` IN (SELECT `id_product` FROM `'.DB_PREFIX.'product_to_category` WHERE `id_category`='.intval($filter['id_category']).') OR a.id_category_default ='.intval($filter['id_category']).')';
 		
 		if(!is_null($orderBy) AND !is_null($orderWay))
 		{
@@ -232,15 +232,15 @@ class Product extends ObjectBase{
 			$postion = 'ORDER BY `id_product` DESC';
 		}
 
-		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'product` a
-				LEFT JOIN `'._DB_PREFIX_.'category` AS c ON a.id_category_default = c.id_category
+		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'product` a
+				LEFT JOIN `'.DB_PREFIX.'category` AS c ON a.id_category_default = c.id_category
 				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
 				'.$where);
 		if($total==0)
 			return false;
 
-		$result = Db::getInstance()->ExecuteS('SELECT a.*,c.name AS c_name FROM `'._DB_PREFIX_.'product` a
-				LEFT JOIN `'._DB_PREFIX_.'category` AS c ON a.id_category_default = c.id_category
+		$result = Db::getInstance()->getAll('SELECT a.*,c.name AS c_name FROM `'.DB_PREFIX.'product` a
+				LEFT JOIN `'.DB_PREFIX.'category` AS c ON a.id_category_default = c.id_category
 				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
 				'.$where.'
 				'.$postion.'
@@ -276,10 +276,10 @@ class Product extends ObjectBase{
 	public static function getAttributeAndGrop($id_product)
 	{
 		$attributes = array();
-		$result = Db::getInstance()->ExecuteS('SELECT t.id_attribute_product,t.id_product,t.id_attribute,a.`name`,g.id_attribute_group,g.`name` AS g_name 
-			FROM '._DB_PREFIX_.'product_to_attribute AS t
-			LEFT JOIN '._DB_PREFIX_.'attribute AS a ON t.id_attribute = a.id_attribute
-			LEFT JOIN '._DB_PREFIX_.'attribute_group AS g ON a.id_attribute_group = g.id_attribute_group
+		$result = Db::getInstance()->getAll('SELECT t.id_attribute_product,t.id_product,t.id_attribute,a.`name`,g.id_attribute_group,g.`name` AS g_name
+			FROM '.DB_PREFIX.'product_to_attribute AS t
+			LEFT JOIN '.DB_PREFIX.'attribute AS a ON t.id_attribute = a.id_attribute
+			LEFT JOIN '.DB_PREFIX.'attribute_group AS g ON a.id_attribute_group = g.id_attribute_group
 			WHERE t.id_product = '.(int)($id_product).'
 			ORDER BY a.position ASC');
 		if(!$result)
@@ -297,9 +297,9 @@ class Product extends ObjectBase{
 	
 	public static function getProductTags($id_product)
 	{
-		$result = Db::getInstance()->ExecuteS('
-		SELECT pt.* FROM `'._DB_PREFIX_.'product_tag` pt
-		LEFT JOIN `'._DB_PREFIX_.'product_to_tag` ptt ON (pt.`id_product_tag` = ptt.`id_product_tag`)
+		$result = Db::getInstance()->getAll('
+		SELECT pt.* FROM `'.DB_PREFIX.'product_tag` pt
+		LEFT JOIN `'.DB_PREFIX.'product_to_tag` ptt ON (pt.`id_product_tag` = ptt.`id_product_tag`)
 		WHERE ptt.`id_product` = '.(int)$id_product);
 		
 		if(!$result)
@@ -312,8 +312,8 @@ class Product extends ObjectBase{
 	
 	public static function getProductCategoriesFullId($id_product = ''){
 		$ret = array();
-		$row = Db::getInstance()->ExecuteS('
-		SELECT `id_category` FROM `'._DB_PREFIX_.'product_to_category`
+		$row = Db::getInstance()->getAll('
+		SELECT `id_category` FROM `'.DB_PREFIX.'product_to_category`
 		WHERE `id_product` = '.(int)$id_product);
 		
 		foreach ($row as $val)
@@ -325,9 +325,9 @@ class Product extends ObjectBase{
 	{
 		$ret = array();
 		
-		$row = Db::getInstance()->ExecuteS('
-		SELECT ptc.`id_category`, c.`name`, c.`rewrite` FROM `'._DB_PREFIX_.'product_to_category` ptc
-		LEFT JOIN `'._DB_PREFIX_.'category` c ON (ptc.`id_category` = c.`id_category`)
+		$row = Db::getInstance()->getAll('
+		SELECT ptc.`id_category`, c.`name`, c.`rewrite` FROM `'.DB_PREFIX.'product_to_category` ptc
+		LEFT JOIN `'.DB_PREFIX.'category` c ON (ptc.`id_category` = c.`id_category`)
 		WHERE ptc.`id_product` = '.(int)$id_product);
 		
 		if(!$row)
@@ -341,8 +341,8 @@ class Product extends ObjectBase{
 	public function getAttributes()
 	{
 		$ret = array();
-		if ($row = Db::getInstance()->ExecuteS('
-		SELECT `id_attribute` FROM `'._DB_PREFIX_.'product_to_attribute`
+		if ($row = Db::getInstance()->getAll('
+		SELECT `id_attribute` FROM `'.DB_PREFIX.'product_to_attribute`
 		WHERE `id_product` = '.(int)$this->id)
 		)
 			foreach ($row as $val)
@@ -358,8 +358,8 @@ class Product extends ObjectBase{
 	public function getCategories()
 	{
 		$ret = array();
-		if ($row = Db::getInstance()->ExecuteS('
-		SELECT `id_category` FROM `'._DB_PREFIX_.'product_to_category`
+		if ($row = Db::getInstance()->getAll('
+		SELECT `id_category` FROM `'.DB_PREFIX.'product_to_category`
 		WHERE `id_product` = '.(int)$this->id)
 		)
 			foreach ($row as $val)
@@ -375,8 +375,8 @@ class Product extends ObjectBase{
 	public function getTags()
 	{
 		$ret = array();
-		if ($row = Db::getInstance()->ExecuteS('
-		SELECT `id_tag` FROM `'._DB_PREFIX_.'product_to_tag`
+		if ($row = Db::getInstance()->getAll('
+		SELECT `id_tag` FROM `'.DB_PREFIX.'product_to_tag`
 		WHERE `id_product` = '.(int)$this->id)
 		)
 			foreach ($row as $val)
@@ -402,8 +402,8 @@ class Product extends ObjectBase{
 				$Cats[] = '('. $this->id.', '. $newIdAtt.')';
 
 		if (sizeof($Cats))
-			return Db::getInstance()->Execute('
-			INSERT INTO `'._DB_PREFIX_.'product_to_attribute` (`id_product`, `id_attribute`)
+			return Db::getInstance()->exec('
+			INSERT INTO `'.DB_PREFIX.'product_to_attribute` (`id_product`, `id_attribute`)
 			VALUES '.implode(',', $Cats));
 
 		return true;
@@ -427,8 +427,8 @@ class Product extends ObjectBase{
 				$Cats[] = '('. $this->id.', '. $newIdCateg.')';
 
 		if (sizeof($Cats))
-			return Db::getInstance()->Execute('
-			INSERT INTO `'._DB_PREFIX_.'product_to_category` (`id_product`, `id_category`)
+			return Db::getInstance()->exec('
+			INSERT INTO `'.DB_PREFIX.'product_to_category` (`id_product`, `id_category`)
 			VALUES '.implode(',', $Cats));
 
 		return true;
@@ -449,8 +449,8 @@ class Product extends ObjectBase{
 			}
 			
 			if (sizeof($tagCats))
-				return Db::getInstance()->Execute('
-				INSERT INTO `'._DB_PREFIX_.'product_to_tag` (`id_product`, `id_tag`)
+				return Db::getInstance()->exec('
+				INSERT INTO `'.DB_PREFIX.'product_to_tag` (`id_product`, `id_tag`)
 				VALUES '.implode(',', $tagCats));
 			
 			return true;
@@ -458,19 +458,19 @@ class Product extends ObjectBase{
 	
 	public function deleteAttribute($id_attribute)
 	{
-		$return = Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_to_attribute` WHERE `id_product` = '.(int)($this->id).' AND `id_attribute` = '.(int)$id_attribute .'' );
+		$return = Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'product_to_attribute` WHERE `id_product` = '.(int)($this->id).' AND `id_attribute` = '.(int)$id_attribute .'' );
 		return $return;
 	}
 	
 	public function deleteCategory($id_category)
 	{
-		$return = Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_to_category` WHERE `id_product` = '.(int)($this->id).' AND id_category = '.(int)$id_category .'' );
+		$return = Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'product_to_category` WHERE `id_product` = '.(int)($this->id).' AND id_category = '.(int)$id_category .'' );
 		return $return;
 	}
 	
 	public function deleteTag($id_tag)
 	{
-		$return = Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_to_tag` WHERE `id_product` = '.(int)($this->id).' AND id_tag = '.(int)$id_tag .'' );
+		$return = Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'product_to_tag` WHERE `id_product` = '.(int)($this->id).' AND id_tag = '.(int)$id_tag .'' );
 		return $return;
 	}
 	
@@ -480,8 +480,8 @@ class Product extends ObjectBase{
 			$attributes = explode(',',$attributes);
 		$attributes = array_unique($attributes);
 		// get max position in each categories
-		$result = Db::getInstance()->ExecuteS('SELECT `id_attribute`
-				FROM `'._DB_PREFIX_.'product_to_attribute`
+		$result = Db::getInstance()->getAll('SELECT `id_attribute`
+				FROM `'.DB_PREFIX.'product_to_attribute`
 				WHERE `id_attribute` NOT IN('.implode(',', array_map('intval', $attributes)).')
 				AND `id_product` = '. $this->id );
 		if(is_array($result))
@@ -510,8 +510,8 @@ class Product extends ObjectBase{
 			$categories = array($categories);
 
 		// get max position in each categories
-		$result = Db::getInstance()->ExecuteS('SELECT `id_category`
-				FROM `'._DB_PREFIX_.'product_to_category`
+		$result = Db::getInstance()->getAll('SELECT `id_category`
+				FROM `'.DB_PREFIX.'product_to_category`
 				WHERE `id_category` NOT IN('.implode(',', array_map('intval', $categories)).')
 				AND `id_product` = '. $this->id );
 		if(is_array($result))
@@ -532,8 +532,8 @@ class Product extends ObjectBase{
 			return;
 
 		// get max position in each categories
-		$result = Db::getInstance()->ExecuteS('SELECT `id_tag`
-				FROM `'._DB_PREFIX_.'product_to_tag`
+		$result = Db::getInstance()->getAll('SELECT `id_tag`
+				FROM `'.DB_PREFIX.'product_to_tag`
 				WHERE `id_tag` NOT IN('.implode(',', array_map('intval', $tags)).')
 				AND `id_product` = '. $this->id .'');
 		if(is_array($result))
@@ -548,8 +548,8 @@ class Product extends ObjectBase{
 	
 	public function getComments($id_keep=0)
 	{
-		$result = Db::getInstance()->ExecuteS('SELECT *
-		FROM `'._DB_PREFIX_.'cms_comment`
+		$result = Db::getInstance()->getAll('SELECT *
+		FROM `'.DB_PREFIX.'cms_comment`
 		WHERE `id_keep`='.(int)($id_keep).' AND active=1
 		AND id_cms = '.(int) $this->id .'');
 		if($result)
@@ -571,23 +571,23 @@ class Product extends ObjectBase{
 	 	$this->{$key} = $this->{$key} > 0 ? 0 : 1;
 
 		/* Change status to active/inactive */
-		return Db::getInstance()->Execute('
-		UPDATE `'.pSQL(_DB_PREFIX_.$this->table).'`
+		return Db::getInstance()->exec('
+		UPDATE `'.pSQL(DB_PREFIX.$this->table).'`
 		SET `'.pSQL($key).'` = '.$this->{$key}.',`upd_date`="'.date('Y-m-d H:i:s').'"
 		WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
 	}
 	
 	static public function updateOrders($id)
 	{
-		return Db::getInstance()->Execute('
-		UPDATE `'._DB_PREFIX_.'product`
+		return Db::getInstance()->exec('
+		UPDATE `'.DB_PREFIX.'product`
 		SET `orders`=`orders`+1
 		WHERE `id_product` = '.(int)($id));
 	}
 	
 	static public function feedbacStateWithProduct($id_product)
 	{
-		$state  = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'feedback_state` WHERE id_product='.intval($id_product));
+		$state  = Db::getInstance()->getRow('SELECT * FROM `'.DB_PREFIX.'feedback_state` WHERE id_product='.intval($id_product));
 		if($state){
 			$state['average'] 	= round($state['total_rating']/$state['times'],2);
 			$state['total_pt'] 	= round($state['average']/5,4)*100;
@@ -598,7 +598,7 @@ class Product extends ObjectBase{
 	//获取产品定单数
 	static public function ordersWithProduct($id_product)
 	{
-		$state = Db::getInstance()->getValue('SELECT orders FROM `'._DB_PREFIX_.'product` WHERE id_product='.intval($id_product));
+		$state = Db::getInstance()->getValue('SELECT orders FROM `'.DB_PREFIX.'product` WHERE id_product='.intval($id_product));
 		return $state;
 	}
 }

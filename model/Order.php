@@ -103,7 +103,7 @@ class Order extends ObjectBase{
 	
 	public static function getByReference($reference)
 	{
-		$row = Db::getInstance()->getRow('SELECT id_order FROM `'._DB_PREFIX_.'order` WHERE reference="'.pSQL($reference).'"');
+		$row = Db::getInstance()->getRow('SELECT id_order FROM `'.DB_PREFIX.'order` WHERE reference="'.pSQL($reference).'"');
 		if(isset($row['id_order'])){
 			$order = new Order($row['id_order']);
 			return $order;
@@ -139,10 +139,10 @@ class Order extends ObjectBase{
 			$postion = 'ORDER BY `id_order` DESC';
 		}
 
-		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'order` a
-				LEFT JOIN `'._DB_PREFIX_.'user` u ON (a.id_user = u.id_user)
-				LEFT JOIN `'._DB_PREFIX_.'carrier` c ON (a.id_carrier = c.id_carrier)
-				LEFT JOIN `'._DB_PREFIX_.'order_status` os ON (os.id_order_status = a.id_order_status)
+		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'order` a
+				LEFT JOIN `'.DB_PREFIX.'user` u ON (a.id_user = u.id_user)
+				LEFT JOIN `'.DB_PREFIX.'carrier` c ON (a.id_carrier = c.id_carrier)
+				LEFT JOIN `'.DB_PREFIX.'order_status` os ON (os.id_order_status = a.id_order_status)
 				WHERE 1
 				'.$where);
 		
@@ -150,12 +150,12 @@ class Order extends ObjectBase{
 			return false;
 		}
 
-		$result = Db::getInstance()->ExecuteS('SELECT a.*, m.name AS `payment`, u.name, c.name as carrier, os.name as status, os.color
-				FROM `'._DB_PREFIX_.'order` a
-				LEFT JOIN `'._DB_PREFIX_.'user` u ON (a.id_user = u.id_user)
-				LEFT JOIN `'._DB_PREFIX_.'module` m ON (a.id_module = m.id_module)
-				LEFT JOIN `'._DB_PREFIX_.'carrier` c ON (a.id_carrier = c.id_carrier)
-				LEFT JOIN `'._DB_PREFIX_.'order_status` os ON (os.id_order_status = a.id_order_status)
+		$result = Db::getInstance()->getAll('SELECT a.*, m.name AS `payment`, u.name, c.name as carrier, os.name as status, os.color
+				FROM `'.DB_PREFIX.'order` a
+				LEFT JOIN `'.DB_PREFIX.'user` u ON (a.id_user = u.id_user)
+				LEFT JOIN `'.DB_PREFIX.'module` m ON (a.id_module = m.id_module)
+				LEFT JOIN `'.DB_PREFIX.'carrier` c ON (a.id_carrier = c.id_carrier)
+				LEFT JOIN `'.DB_PREFIX.'order_status` os ON (os.id_order_status = a.id_order_status)
 				WHERE 1 
 				'.$where.'
 				'.$postion.'

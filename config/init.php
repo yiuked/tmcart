@@ -1,9 +1,4 @@
 <?php
-if (!defined('_TM_MAGIC_QUOTES_GPC_'))
-	define('_TM_MAGIC_QUOTES_GPC_',         get_magic_quotes_gpc());
-if (!defined('_TM_MYSQL_REAL_ESCAPE_STRING_'))
-	define('_TM_MYSQL_REAL_ESCAPE_STRING_', function_exists('mysql_real_escape_string'));
-
 $currentDir = dirname(__FILE__);
 define('_TM_ROOT_DIR_',realpath($currentDir.'/..'));
 

@@ -54,15 +54,15 @@ class CMSComment extends ObjectBase{
 			$postion = 'ORDER BY `id_cms_comment` DESC';
 		}
 		
-		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'._DB_PREFIX_.'cms_comment` a
-				LEFT JOIN `'._DB_PREFIX_.'cms` b ON (a.`id_cms` = b.`id_cms`)
+		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'cms_comment` a
+				LEFT JOIN `'.DB_PREFIX.'cms` b ON (a.`id_cms` = b.`id_cms`)
 				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
 				'.$where);
 		if($total==0)
 			return false;
 
-		$result = Db::getInstance()->ExecuteS('SELECT a.*,b.title FROM `'._DB_PREFIX_.'cms_comment` a
-				LEFT JOIN `'._DB_PREFIX_.'cms` b ON (a.`id_cms` = b.`id_cms`)
+		$result = Db::getInstance()->getAll('SELECT a.*,b.title FROM `'.DB_PREFIX.'cms_comment` a
+				LEFT JOIN `'.DB_PREFIX.'cms` b ON (a.`id_cms` = b.`id_cms`)
 				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
 				'.$where.'
 				'.$postion.'
