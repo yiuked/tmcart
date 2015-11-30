@@ -1,28 +1,28 @@
 <?php 
 class Attribute extends ObjectBase{
-	protected $fields 			= array('name','id_attribute_group','position');
-	protected $fieldsRequired	= array('name','id_attribute_group');
-	protected $fieldsSize 		= array('name' => 56);
-	protected $fieldsValidate	= array('name' => 'isGenericName');
+
+	protected $fields	= array(
+		'id_attribute_group' => array(
+			'required' => true,
+			'type' => 'isInt',
+		),
+		'name' => array(
+			'required' => true,
+			'size' => 56,
+			'type' => 'isGenericName',
+		),
+		'position' => array(
+			'type' => 'isInt',
+		),
+	);
 	
 	protected $identifier 		= 'id_attribute';
 	protected $table			= 'attribute';
 	
-	public function getFields()
-	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_attribute'] = (int)($this->id);
-		$fields['id_attribute_group'] = (int)($this->id_attribute_group);
-		$fields['position'] = (int)($this->position);
-		$fields['name'] = pSQL($this->name);
-		return $fields;
-	}
-	
-	public function add($nullValues = false)
+	public function add()
 	{
 		$this->position = self::getLastPosition($this->id_attribute_group);
-		return parent::add($nullValues);
+		return parent::add();
 	}
 	
 	public function delete()

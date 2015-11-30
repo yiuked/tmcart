@@ -367,9 +367,9 @@ class Category extends ObjectBase{
 	public function getCatBar($id_parent,$catBar=array())
 	{
 		$category = Db::getInstance()->getRow('SELECT `id_category`,`id_parent`,`level_depth`,`name` FROM `'.DB_PREFIX.'category` WHERE `id_category`='.intval($id_parent));
-		if(sizeof($category)>1)
+		if (sizeof($category) > 1)
 			$catBar[] = $category;
-		if($id_parent>0){
+		if ($id_parent > 0){
 			$catBar = $this->getCatBar($category['id_parent'],$catBar);
 		}
 		return $catBar;

@@ -167,10 +167,10 @@ if (array_key_exists('ajaxAttributePositions', $_POST))
 
 if (isset($_GET['ajaxStates']) AND isset($_GET['id_country']))
 {
-	$states = Db::getInstance()->ExecuteS('
+	$states = Db::getInstance()->getAll('
 	SELECT s.id_state, s.name
-	FROM '._DB_PREFIX_.'state s
-	LEFT JOIN '._DB_PREFIX_.'country c ON (s.`id_country` = c.`id_country`)
+	FROM '.DB_PREFIX.'state s
+	LEFT JOIN '.DB_PREFIX.'country c ON (s.`id_country` = c.`id_country`)
 	WHERE s.id_country = '.(int)(Tools::getRequest('id_country')).' AND s.active = 1 AND c.`need_state` = 1
 	ORDER BY s.`name` ASC');
 
@@ -178,7 +178,7 @@ if (is_array($states) AND !empty($states))
 	{
 		$list = '';
 		if (Tools::getRequest('no_empty') != true)
-			$list = '<option value="0">-----------</option>'."\n";
+			$list = '<option value="0">--选择--</option>'."\n";
 
 		foreach ($states AS $state)
 			$list .= '<option value="'.(int)($state['id_state']).'"'.((isset($_GET['id_state']) AND $_GET['id_state'] == $state['id_state']) ? ' selected="selected"' : '').'>'.$state['name'].'</option>'."\n";

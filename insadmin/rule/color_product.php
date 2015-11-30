@@ -1,5 +1,5 @@
 <?php
-$colors 	= Color::getEntitys();
+$result	= Color::getEntitys();
 if (isset($errors)) {
 	UIAdminAlerts::MError($errors);
 }
@@ -36,8 +36,8 @@ echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'br
 						   <td id="color_block" valign="top">
 						   <ul>
 							<?php
-							if(is_array($colors) && count($colors)>0){
-							foreach($colors as $key => $row){?>
+							if (is_array($result['entitys']) && count($result['entitys']) > 0) {
+							foreach($result['entitys'] as $key => $row){?>
 							<li class="color_item">
 								<span class="color_field_big" style="background-color:<?php echo $row['code'];?>;"></span>
 								<input type="radio" name="productColor" value="<?php echo $row['id_color'];?>" />

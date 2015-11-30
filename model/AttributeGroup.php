@@ -1,23 +1,27 @@
 <?php 
 class AttributeGroup extends ObjectBase{
-	protected $fields 			= array('name','group_type','position');
-	protected $fieldsRequired	= array('name','group_type');
-	protected $fieldsSize 		= array('name' => 56);
-	protected $fieldsValidate	= array('name' => 'isGenericName');
-	
+
+	const GROUP_TYPE_SELECT = 1;
+	const GROUP_TYPE_RADIO = 2;
+	const GROUP_TYPE_CHECKBOX = 3;
+
+	protected $fields	= array(
+		'name' => array(
+			'required' => true,
+			'size' => 56,
+			'type' => 'isGenericName',
+		),
+		'group_type' => array(
+			'required' => true,
+			'type' => 'isInt',
+		),
+		'position' => array(
+			'type' => 'isInt',
+		),
+	);
+
 	protected $identifier 		= 'id_attribute_group';
 	protected $table			= 'attribute_group';
-	
-	public function getFields()
-	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_attribute_group'] = (int)($this->id);
-		$fields['position'] = (int)($this->position);
-		$fields['name'] = pSQL($this->name);
-		$fields['group_type'] = pSQL($this->group_type);
-		return $fields;
-	}
 	
 	public function add($nullValues = false)
 	{

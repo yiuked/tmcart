@@ -1,35 +1,31 @@
 <?php 
 class Country extends ObjectBase{
-	protected $fields 			= array('iso_code','name','active','need_state','position');
-	protected $fieldsRequired	= array('iso_code','name');
-	protected $fieldsSize 		= array('name' => 64);
-	protected $fieldsValidate	= array(
-		'iso_code' => 'isLanguageIsoCode',
-		'active' => 'isBool',
-		'need_state' => 'isBool',
-		'name'=> 'isGenericName');
+	protected $fields = array(
+		'iso_code' => array(
+			'type' => 'isLanguageIsoCode',
+			'required' => true,
+		),
+		'name' => array(
+			'type' => 'isGenericName',
+			'required' => true,
+			'size' => 64
+		),
+		'active' => array(
+			'type' => 'isBool',
+		),
+		'need_state' => array(
+			'type' => 'isBool',
+		),
+		'position' => array(
+			'type' => 'isInt',
+		),
+	);
 	
 	protected $identifier 		= 'id_country';
 	protected $table			= 'country';
 	
-	public function getFields()
+	public static function getEntity($p = 1, $limit = 50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_country'] = (int)($this->id);
-		$fields['iso_code'] = pSQL($this->iso_code);
-		$fields['name'] = pSQL($this->name);
-		$fields['active'] = (int)($this->active);
-		$fields['position'] = (int)($this->position);
-		$fields['need_state'] = (int)($this->need_state);
-		return $fields;
-	}
-	
-	public static function getEntity($active = true,$p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
-	{
-	 	if (!Validate::isBool($active))
-	 		die(Tools::displayError());
-
 		$where = '';
 		if(!empty($filter['id_country']) && Validate::isInt($filter['id_country']))
 			$where .= ' AND a.`id_country`='.intval($filter['id_country']);
@@ -38,7 +34,7 @@ class Country extends ObjectBase{
 		if(!empty($filter['name']) && Validate::isCatalogName($filter['name']))
 			$where .= ' AND a.`name` LIKE "%'.pSQL($filter['name']).'%"';
 		if(!empty($filter['active']) && Validate::isInt($filter['active']))
-			$where .= ' AND a.`active`='.((int)($filter['active'])==1?'1':'0');
+			$where .= ' AND a.`active`='.((int)($filter['active']) == 1 ? '1' : '0');
 		if(!empty($filter['need_state']) && Validate::isInt($filter['need_state']))
 			$where .= ' AND a.`need_state`='.((int)($filter['need_state'])==1?'1':'0');
 
@@ -50,13 +46,13 @@ class Country extends ObjectBase{
 		}
 
 		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'country` a
-				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
+				WHERE 1
 				'.$where);
 		if($total==0)
 			return false;
 
 		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'country` a
-				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
+				WHERE 1
 				'.$where.'
 				'.$postion.'
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);
@@ -64,25 +60,6 @@ class Country extends ObjectBase{
 				'total' => $total['total'],
 				'entitys'  => $result);
 		return $rows;
-	}
-	
-	public function toggle($key,$default=NULL)
-	{
-	 	if (!Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
-	 		die('Fatal error:Object not exist!');
-
-	 	/* Object must have a variable called 'active' */
-	 	elseif (!key_exists($key, $this))
-	 		die('Fatal error:No field \''.$key.'\'');
-
-	 	/* Update active status on object */
-	 	$this->{$key} = is_null($default)?(int)(!$this->{$key}):(int)($default);
-
-		/* Change status to active/inactive */
-		return Db::getInstance()->exec('
-		UPDATE `'.pSQL(DB_PREFIX.$this->table).'`
-		SET `'.pSQL($key).'` = '.$this->{$key}.' 
-		WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
 	}
 	
 	public static function cleanPositions()

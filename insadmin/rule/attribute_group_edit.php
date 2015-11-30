@@ -9,7 +9,7 @@ if(isset($_POST['sveAttributeGroup']) && Tools::getRequest('sveAttributeGroup')=
 		$errors = $attribute_group->_errors;
 	}else{
 		$_GET['id']	= $attribute_group->id;
-		echo '<div class="conf">创建对象失败</div>';
+		UIAdminAlerts::conf('已添加属性组');
 	}
 }
 
@@ -28,10 +28,14 @@ if(isset($_POST['sveAttributeGroup']) && Tools::getRequest('sveAttributeGroup')=
 	if(is_array($obj->_errors) AND count($obj->_errors)>0){
 		$errors = $obj->_errors;
 	}else{
-		echo '<div class="conf">更新对象成功</div>';
+		UIAdminAlerts::conf('已更新属性组');
 	}
 }
-require_once(dirname(__FILE__).'/../errors.php');
+
+if (isset($errors)) {
+	UIAdminAlerts::MError($errors);
+}
+
 ?>
 <div class="row">
 	<div class="col-md-12">
@@ -82,19 +86,16 @@ require_once(dirname(__FILE__).'/../errors.php');
 							<label for="group_type" class="col-md-2 control-label">类别</label>
 							<div class="col-md-5">
 								<div class="btn-group radio-group" data-toggle="buttons">
-									<label class="btn btn-grey<?php echo isset($obj) && $obj->group_type == 'select' ? ' active' : ''; ?>">
-										<input type="radio" name="group_type" id="option2" value="select" > 下单菜单
+									<label class="btn btn-grey<?php echo isset($obj) && $obj->group_type == AttributeGroup::GROUP_TYPE_SELECT ? ' active' : ''; ?>">
+										<input type="radio" name="group_type" id="option2" value="<?php echo AttributeGroup::GROUP_TYPE_SELECT;?>" > 下单菜单
 									</label>
-									<label class="btn btn-grey<?php echo isset($obj) && $obj->group_type == 'radio' ? ' active' : ''; ?>">
-										<input type="radio" name="group_type" id="option3" value="radio" > 单选按钮
+									<label class="btn btn-grey<?php echo isset($obj) && $obj->group_type == AttributeGroup::GROUP_TYPE_RADIO ? ' active' : ''; ?>">
+										<input type="radio" name="group_type" id="option3" value="<?php echo AttributeGroup::GROUP_TYPE_RADIO;?>" > 单选按钮
+									</label>
+									<label class="btn btn-grey<?php echo isset($obj) && $obj->group_type == AttributeGroup::GROUP_TYPE_CHECKBOX ? ' active' : ''; ?>">
+										<input type="radio" name="group_type" id="option4" value="<?php echo AttributeGroup::GROUP_TYPE_CHECKBOX;?>" > 复选框
 									</label>
 								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="group_type" class="col-md-2 control-label">排序</label>
-							<div class="col-md-5">
-								<input type="text" value="<?php echo isset($obj) ? $obj->position : Tools::P('position');?>"  name="position" class="form-control" >
 							</div>
 						</div>
 						<input type="hidden" value="<?php echo isset($id)?'edit':'add'?>"  name="sveAttributeGroup">

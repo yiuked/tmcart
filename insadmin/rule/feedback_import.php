@@ -82,7 +82,7 @@ require_once(dirname(__FILE__).'/../errors.php');
 <script type="text/javascript" src="<?php echo BOOTSTRAP_JS;?>bootstrap-datetimepicker.zh-CN.js"></script>
 <script language="javascript">
 $(document).ready(function(){
-	$('.tmdatatimepicker').datetimepicker({
+	$('.datatimepicker').datetimepicker({
 		language: 'zh-CN',
 		container: '.container-fluid',
 		format: 'yyyy-mm-dd hh:ii'
@@ -97,37 +97,28 @@ $breadcrumb->add(array('title' => '导入', 'active' => true));
 $bread = $breadcrumb->draw();
 echo UIViewBlock::area(array('bread' => $bread), 'breadcrumb');
 ?>
-
-<div class="row">
-	<div class="col-md-12">
-		<div class="panel panel-default">
-			<div class="panel-heading">导入反馈</div>
-			<div class="panel-body">
-				<div class="col-md-10 form-horizontal">
-					<form enctype="multipart/form-data" method="post" action="index.php?rule=feedback_import" class="defaultForm" id="import_form" name="import_form">
-						<div class="form-group">
-							<label for="time" class="col-md-2 control-label">开始时间</label>
-							<div class="col-md-6" id="datepicker">
-								<input type="text" class="tmdatatimepicker form-control" value="<?php echo Tools::getRequest('from_date');?>"  name="from_date" >
-								<p class="text-info">评论开始的时间</p>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="time" class="col-md-2 control-label">ID号</label>
-							<div class="col-md-6">
-								<input type="text" value="<?php echo Tools::getRequest('ali_productid');?>" name="ali_productid" class="form-control" />
-								<p class="text-info">逗号分隔多个ID</p>
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="col-md-6 col-md-offset-2">
-								<button type="submit" class="btn btn-success" name="importFeedback"><span class="glyphicon glyphicon-save"></span> 导入</button>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
+<?php
+$form = new UIAdminEditForm('post', 'index.php?rule=feedback_import', 'form-horizontal', 'import-form');
+$form->items = array(
+	'from_date' => array(
+		'title' => '开始时间',
+		'type' => 'text',
+		'class' => 'datatimepicker',
+		'value' => Tools::Q('from_date') ,
+		'info'=> '评论开始的时间',
+	),
+	'ali_productid' => array(
+		'title' => 'ID号',
+		'type' => 'text',
+		'value' => Tools::Q('ali_productid') ,
+		'info'=> '逗号分隔多个ID',
+	),
+	'importFeedback' => array(
+		'type' => 'submit',
+		'class'=> 'btn-success',
+		'icon' => 'glyphicon-save',
+		'title' => '导入',
+	),
+);
+echo UIViewBlock::area(array('col' => 'col-md-12', 'title' => '编辑', 'body' => $form->draw()), 'panel');
+?>

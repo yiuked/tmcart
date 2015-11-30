@@ -92,9 +92,8 @@ class UIAdminDndTable extends UIAdminTable
 
     public function draw()
     {
-        $header = $this->drawHeader();
-        $body   = $this->drawBody();
-        $table = '<table class="table tableDnD"' . ' id="'.strtolower($this->className).'" >' . $header .  $body . '</table>';
+        $this->addAttribte('class', $this->getAttribute('class') . ' tableDnD');
+        $table = '<table '. $this->drawAttribute() .'>' . $this->drawHeader() .  $this->drawBody() . '</table>';
         return $table;
     }
 }

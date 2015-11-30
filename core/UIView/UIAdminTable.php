@@ -8,6 +8,9 @@
 
 class UIAdminTable extends UIView
 {
+    /* @var string domclass table 的class值 */
+    public $domclass = 'table';
+
     /* @var string token 当前表格的校验 */
     public $token;
 
@@ -43,8 +46,8 @@ class UIAdminTable extends UIView
         $this->rule = $rule;
         $this->className = $className;
         $this->identifier = $identifier;
-
         $this->token =  md5($rule . $className . $identifier);
+        $this->addAttribte('class', 'table');
     }
 
     /**
@@ -220,9 +223,7 @@ class UIAdminTable extends UIView
 
     public function draw()
     {
-        $header = $this->drawHeader();
-        $body   = $this->drawBody();
-        $table = '<table class="table"'. (!empty($this->domID) ? ' id="' . $this->domID . '"':'') .'>' . $header .  $body . '</table>';
+        $table = '<table '. $this->drawAttribute() .'>' . $this->drawHeader() .  $this->drawBody() . '</table>';
         return $table;
     }
 
