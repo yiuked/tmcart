@@ -1,17 +1,14 @@
 <?php
-if(isset($_POST['sveBrand']) && Tools::getRequest('sveBrand')=='add')
+if(isset($_POST['sveBrand']) && Tools::getRequest('sveBrand') == 'add')
 {
 	$brand = new Brand();
 	$brand->copyFromPost();
-	if($brand->add() && !empty($_FILES['logo']['name'])){
-			$brand->updateLogo();
+	if ($brand->add()) {
+		UIAdminAlerts::conf('品牌已更新');
 	}
 
 	if(is_array($brand->_errors) AND count($brand->_errors)>0){
 		$errors = $brand->_errors;
-	}else{
-		$_GET['id']	= $brand->id;
-		echo '<div class="conf">创建对象成功</div>';
 	}
 }
 
@@ -24,18 +21,20 @@ if(isset($_POST['sveBrand']) && Tools::getRequest('sveBrand')=='edit')
 {
 	if(Validate::isLoadedObject($obj)){
 		$obj->copyFromPost();
-		if($obj->update() && !empty($_FILES['logo']['name'])){
-			$obj->updateLogo();
+		if ($obj->update()) {
+			if (!isset($_FILES['qqfile']['name']) || (isset($_FILES['qqfile']['name']) && $obj->updateLogo())) {
+				UIAdminAlerts::conf('品牌已更新');
+			}
 		}
 	}
 	
 	if(is_array($obj->_errors) AND count($obj->_errors)>0){
 		$errors = $obj->_errors;
-	}else{
-		echo '<div class="conf">更新对象成功</div>';
 	}
 }
-require_once(dirname(__FILE__).'/../errors.php');
+if (isset($errors)) {
+	UIAdminAlerts::MError($errors);
+}
 ?>
 <div class="row">
 	<div class="col-md-12">
@@ -71,11 +70,11 @@ require_once(dirname(__FILE__).'/../errors.php');
 	<div class="col-md-12">
 		<div class="panel panel-default">
 			<div class="panel-body">
-			  <form method="post" action="index.php?rule=brand_edit<?php echo isset($id)?'&id='.$id:''?>" class="form-horizontal" id="brand-form" >
+			  <form method="post" action="index.php?rule=brand_edit<?php echo isset($id)?'&id='.$id:''?>" class="form-horizontal" id="brand-form" enctype="multipart/form-data" >
 				  <div class="form-group">
 					  <label for="name" class="col-md-2 control-label">品牌</label>
 					  <div class="col-md-5">
-						  <input type="text" class="form-control" name="name" onchange="copy2friendlyURL()" id="name" value="<?php echo isset($obj)?$obj->name:Tools::getRequest('name');?>">
+						  <input type="text" class="form-control" name="name" onchange="copy2friendlyURL()" id="name" value="<?php echo isset($obj) ? $obj->name : Tools::P('name');?>">
 					  </div>
 				  </div>
 				  <div class="form-group">
@@ -96,19 +95,19 @@ require_once(dirname(__FILE__).'/../errors.php');
 				  <div class="form-group">
 					  <label for="name" class="col-md-2 control-label">标题</label>
 					  <div class="col-md-5">
-						  <input type="text" class="form-control" name="name" value="<?php echo isset($obj)?$obj->meta_title:Tools::getRequest('meta_title');?>">
+						  <input type="text" class="form-control" name="meta_title" value="<?php echo isset($obj)?$obj->meta_title:Tools::getRequest('meta_title');?>">
 					  </div>
 				  </div>
 				  <div class="form-group">
 					  <label for="name" class="col-md-2 control-label">关键词</label>
 					  <div class="col-md-5">
-						  <input type="text" class="form-control" name="name" value="<?php echo isset($obj)?$obj->meta_keywords:Tools::getRequest('meta_keywords');?>">
+						  <input type="text" class="form-control" name="meta_keywords" value="<?php echo isset($obj)?$obj->meta_keywords:Tools::getRequest('meta_keywords');?>">
 					  </div>
 				  </div>
 				  <div class="form-group">
 					  <label for="name" class="col-md-2 control-label">Meta 描述</label>
 					  <div class="col-md-5">
-						  <input type="text" class="form-control" name="name" value="<?php echo isset($obj)?$obj->meta_description:Tools::getRequest('meta_description');?>">
+						  <input type="text" class="form-control" name="meta_description" value="<?php echo isset($obj)?$obj->meta_description:Tools::getRequest('meta_description');?>">
 					  </div>
 				  </div>
 				  <div class="form-group">

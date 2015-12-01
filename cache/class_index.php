@@ -59,4 +59,6 @@
   'ProductView' => 'D:\\wamp\\www\\red\\shoes/views/ProductView.php',
   'BrandView' => 'D:\\wamp\\www\\red\\shoes/views/BrandView.php',
   'ImageType' => 'D:\\wamp\\www\\red\\shoes/model/ImageType.php',
+  'FileUploader' => 'D:\\wamp\\www\\red\\shoes/core/FileUploader.php',
+  'ImageManager' => 'D:\\wamp\\www\\red\\shoes/model/ImageManager.php',
 ); 

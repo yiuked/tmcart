@@ -37,15 +37,27 @@ class Brand extends ObjectBase{
 	
 	protected $identifier 		= 'id_brand';
 	protected $table			= 'brand';
-	
+
+	/**
+	 * ¸üÐÂÆ·ÅÆÍ¼Æ¬
+	 *
+	 * @return bool
+	 */
 	public function updateLogo()
 	{
-		// max file size in bytes
 		$uploader = new FileUploader();
 		$result = $uploader->handleUpload('brand');
 		if (isset($result['success'])) {
-			Db::getInstance()->exec('UPDATE `'.DB_PREFIX.$this->table.'` SET `id_image`="'.intval($result['success']['id_image']).'" WHERE `'.$this->identifier.'`='.(int)($this->id));
+			if ($this->id_image > 0 ) {
+				$image = new Image($this->id_image);
+				if (Validate::isLoadedObject($image)) {
+					$image->delete();
+				}
+			}
+			$this->id_image = $result['success']['id_image'];
+			return $this->update();
 		}
+		return false;
 	}
 	
 	public function getProducts($p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())

@@ -1,6 +1,11 @@
 <?php
 class Image extends ObjectBase
 {
+	protected $fields = array(
+		'add_date' => array(
+			'type' => 'isDate'
+		)
+	);
 	/** @var string image extension */
 	public $image_format = 'jpg';
 
@@ -115,9 +120,6 @@ class Image extends ObjectBase
 		$files_to_delete[] = $this->image_dir.$this->getExistingImgPath().'-watermark.'.$this->image_format;
 		// delete index.php
 		$files_to_delete[] = $this->image_dir.$this->getImgFolder().'index.php';
-		// Delete tmp images
-		$files_to_delete[] = _TM_TMP_IMG_DIR.'product_'.$this->id_product.'.'.$this->image_format;
-		$files_to_delete[] = _TM_TMP_IMG_DIR.'product_mini_'.$this->id_product.'.'.$this->image_format;
 
 		foreach ($files_to_delete as $file)
 			if (file_exists($file) && !@unlink($file))

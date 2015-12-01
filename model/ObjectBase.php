@@ -218,7 +218,7 @@ abstract class ObjectBase{
 	 * @param bool $null_values
 	 * @return boolean Update result
 	 */
-	public function update($nullValues = false)
+	public function update()
 	{
 
 		$fields = $this->validation();
@@ -231,9 +231,9 @@ abstract class ObjectBase{
 			$fields['upd_date']	= $this->upd_date;
 		}
 
-		$result = Db::getInstance()->update(DB_PREFIX.$this->table, $fields, 'UPDATE', '`'.pSQL($this->identifier).'` = '.(int)($this->id));
+		$result = Db::getInstance()->update(DB_PREFIX.$this->table, $fields, '`'.pSQL($this->identifier).'` = '.(int)($this->id));
 
-		if (!$result)
+		if ($result === false)
 			return false;
 
 		if (array_key_exists('rewrite', $fields)){
@@ -255,7 +255,7 @@ abstract class ObjectBase{
 			}
 		}
 		
-		return $result;
+		return true;
 	}
 	
 	/**

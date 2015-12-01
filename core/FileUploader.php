@@ -71,6 +71,7 @@ class QqUploadedFileForm
 	public function save($type)
 	{
 			$image = new Image();
+			$image->copyFromPost();
 			if (!$image->add())
 				return array('error' => Tools::displayError('Error while creating additional image'));
 			else
