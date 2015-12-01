@@ -1,9 +1,9 @@
 <?php
-if(isset($_POST['sveImageType']) && Tools::getRequest('sveImageType')=='add')
+if(Tools::P('imageTypeSaveType') == 'add')
 {
 	$image_type = new ImageType();
 	$image_type->copyFromPost();
-	if($image_type->add() && intval($_POST['reloadImages'])){
+	if($image_type->add() && Tools::P('reloadImages')){
 			$image_type->reloadImages();
 	}
 	
@@ -11,7 +11,7 @@ if(isset($_POST['sveImageType']) && Tools::getRequest('sveImageType')=='add')
 		$errors = $image_type->_errors;
 	}else{
 		$_GET['id']	= $image_type->id;
-		echo '<div class="conf">创建对象成功</div>';
+		UIAdminAlerts::conf('图片类型已添加');
 	}
 }
 
@@ -20,12 +20,12 @@ if(isset($_GET['id'])){
 	$obj = new ImageType($id);
 }
 
-if(isset($_POST['sveImageType']) && Tools::getRequest('sveImageType')=='edit')
+if(Tools::P('imageTypeSaveType') == 'edit')
 {
 	if(Validate::isLoadedObject($obj)){
 		$obj->copyFromPost();
 		
-		if($obj->update() && isset($_POST['reloadImages'])){
+		if($obj->update() && Tools::P('reloadImages')){
 			$obj->reloadImages();
 		}
 	}
@@ -33,77 +33,64 @@ if(isset($_POST['sveImageType']) && Tools::getRequest('sveImageType')=='edit')
 	if(is_array($obj->_errors) AND count($obj->_errors)>0){
 		$errors = $obj->_errors;
 	}else{
-		echo '<div class="conf">更新对象成功</div>';
+		UIAdminAlerts::conf('图片类型已更新');
 	}
 }
-
-require_once(dirname(__FILE__).'/../errors.php');
 ?>
+<?php
+if (isset($errors)) {
+UIAdminAlerts::MError($errors);
+}
 
-<div class="path_bar">
-  <div class="path_title">
-    <h3> <span style="font-weight: normal;" id="current_obj"> <span class="breadcrumb item-1 ">图片配置<img src="<?php echo $_tmconfig['tm_img_dir'];?>admin/separator_breadcrum.png" style="margin-right:5px" alt="&gt;"> </span> <span class="breadcrumb item-2 ">编辑 </span> </span> </h3>
-    <div class="cc_button">
-      <ul>
-        <li> <a title="Save" href="#" class="toolbar_btn" id="image_type-save"> <span class="process-icon-save "></span>
-          <div>保存</div>
-          </a> </li>
-        <li> <a title="Back to list" href="index.php?rule=image_type" class="toolbar_btn" id="desc-product-back"> <span class="process-icon-back "></span>
-          <div>返回列表</div>
-          </a> </li>
-      </ul>
-    </div>
-  </div>
-</div>
+$breadcrumb = new UIAdminBreadcrumb();
+$breadcrumb->home();
+$breadcrumb->add(array('title' => '图片类别', 'href' => 'index.php?rule=image_type'));
+$breadcrumb->add(array('title' => '编辑', 'active' => true));
+$bread = $breadcrumb->draw();
+
+$btn_group = array(
+array('type' => 'a', 'title' => '返回', 'href' => 'index.php?rule=image_type', 'class' => 'btn-primary', 'icon' => 'level-up') ,
+array('type' => 'a', 'title' => '保存', 'id' => 'save-image-type', 'href' => '#', 'class' => 'btn-success', 'icon' => 'save') ,
+);
+echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'breadcrumb');
+?>
 <script language="javascript">
-	$("#image_type-save").click(function(){
-		$("#image_type_form").submit();
-	})
+  $("#save-image-type").click(function(){
+    $("#image-type-form").submit();
+  })
 </script>
-<div class="mianForm">
-  <form enctype="multipart/form-data" method="post" action="index.php?rule=image_type_edit<?php echo isset($id)?'&id='.$id:''?>" class="defaultForm admincmscontent" id="image_type_form" name="example">
-    <fieldset>
-    <legend> <img alt="CMS 分类" src="<?php echo $_tmconfig['ico_dir'];?>category.png">配送</legend>
-    <label>名称: </label>
-    <div class="margin-form">
-      <div style="display:block; float: left;">
-        <input type="text" value="<?php echo isset($obj)?$obj->name:Tools::getRequest('name');?>"  name="name">
-        <span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span> </div>
-      <sup>*</sup>
-      <div class="clear"></div>
-    </div>
-    <label>高: </label>
-    <div class="margin-form">
-      <div style="display:block; float: left;">
-        <input type="text" value="<?php echo isset($obj)?$obj->height:Tools::getRequest('height');?>"  name="height">
-       </div>
-      <div class="clear"></div>
-    </div>
-	<label>宽: </label>
-    <div class="margin-form">
-      <div style="display:block; float: left;">
-        <input type="text" value="<?php echo isset($obj)?$obj->width:Tools::getRequest('width');?>"  name="width">
-        <span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span> </div>
-      <sup>*</sup>
-      <div class="clear"></div>
-    </div>
-    <label>应用： </label>
-    <div class="margin-form">
-      <div style="display:block; float: left;">
-        <input type="text" value="<?php echo isset($obj)?$obj->type:Tools::getRequest('type');?>"  name="type" size="8">
-        <span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span> </div>
-      <sup>*</sup>
-	  <p class="preference_description">可选：product,category</p>
-      <div class="clear"></div>
-    </div>
-	<label>重新生成图片： </label>
-    <div class="margin-form">
-      <div style="display:block; float: left;">
-        <input type="checkbox" value="1" name="reloadImages" />
-      </div>
-      <div class="clear"></div>
-    </div>
-    <input type="hidden" value="<?php echo isset($id)?'edit':'add'?>"  name="sveImageType">
-    </fieldset>
-  </form>
-</div>
+<?php
+$form = new UIAdminEditForm('post', 'index.php?rule=image_type_edit'. (isset($id) ? '&id=' . $id : ''), 'form-horizontal', 'image-type-form');
+$form->items = array(
+    'name' => array(
+        'title' => '名称',
+        'type' => 'text',
+        'value' => isset($obj) ? $obj->name : Tools::Q('name')
+    ),
+    'height' => array(
+        'title' => '高',
+        'type' => 'text',
+        'value' => isset($obj) ? $obj->height : Tools::Q('height'),
+    ),
+    'width' => array(
+        'title' => '宽',
+        'type' => 'text',
+        'value' => isset($obj) ? $obj->width : Tools::Q('width'),
+    ),
+    'type' => array(
+        'title' => '应用',
+        'type' => 'text',
+        'value' => isset($obj) ? $obj->type : Tools::Q('type'),
+    ),
+    'reloadImages' => array(
+        'title' => '重载图片',
+        'type' => 'bool',
+        'info' => '重载图片将删除以前图片按新的属性重新生成图片,这个过程可能会需要一些时间'
+    ),
+    'imageTypeSaveType' => array(
+        'type' => 'hidden',
+        'value' => isset($id) ? 'edit' : 'add',
+    ),
+);
+echo UIViewBlock::area(array('col' => 'col-md-12', 'title' => '编辑', 'body' => $form->draw()), 'panel');
+?>

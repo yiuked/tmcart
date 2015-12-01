@@ -2,23 +2,29 @@
 
 class ImageType extends ObjectBase
 {
-	protected $fields 			= array('name','width','height','type');
-	protected $fieldsRequired	= array('name','width','height','type');
+	protected $fields = array(
+		'name' => array(
+			'type' => 'isGenericName',
+			'required' => true,
+			'size' => 128
+		),
+		'width' => array(
+			'type' => 'isInt',
+			'required' => true,
+		),
+		'height' => array(
+			'type' => 'isInt',
+			'required' => true,
+		),
+		'type' => array(
+			'type' => 'isGenericName',
+			'required' => true,
+			'size' => 128
+		),
+	);
 	
 	protected $identifier 		= 'id_image_type';
 	protected $table			= 'image_type';
-
-	public function getFields()
-	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_image_type'] = (int)($this->id);
-		$fields['name'] 		= pSQL($this->name);
-		$fields['width'] 		= pSQL($this->width);
-		$fields['height'] 		= pSQL($this->height);
-		$fields['type'] 		= pSQL($this->type);
-		return $fields;
-	}
 
 	/**
 	 * @var array Image types cache
@@ -86,11 +92,8 @@ class ImageType extends ObjectBase
 		return Db::getInstance()->getRow('SELECT `id_image_type`, `name`, `width`, `height`, `products`, `categories`, `manufacturers`, `suppliers`, `scenes` FROM `'.DB_PREFIX.'image_type` WHERE `name` = \''.pSQL($name).'\' AND `'.pSQL($type).'` = 1');
 	}
 	
-	public static function getEntity($active = true,$p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
+	public static function getEntity($p=1 ,$limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
-	 	if (!Validate::isBool($active))
-	 		die(Tools::displayError());
-
 		$where = '';
 		if(!empty($filter['id_image_type']) && Validate::isInt($filter['id_image_type']))
 			$where .= ' AND a.`id_image_type`='.intval($filter['id_image_type']);
@@ -101,7 +104,7 @@ class ImageType extends ObjectBase
 		{
 			$postion = 'ORDER BY '.pSQL($orderBy).' '.pSQL($orderWay);
 		}else{
-			$postion = 'ORDER BY `position` DESC';
+			$postion = 'ORDER BY `id_image_type` DESC';
 		}
 
 		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'image_type` a

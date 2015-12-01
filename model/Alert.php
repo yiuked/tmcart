@@ -1,23 +1,23 @@
 <?php
 class Alert extends ObjectBase
 {
-	protected 	$fields 			= array('id_user','content','is_read','add_date');
- 	protected 	$fieldsRequired 	= array('id_user', 'content');
+	protected 	$fields = array(
+		'id_user' => array(
+			'type' => 'isInt',
+		),
+		'is_read' => array(
+			'type' => 'isInt',
+		),
+		'content' => array(
+			'type' => 'isString',
+		),
+		'add_date' => array(
+			'type' => 'isDate',
+		),
+	);
 	
 	protected 	$table = 'alert';
 	protected 	$identifier = 'id_alert';
-
-	public function getFields()
-	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_alert'] = (int)($this->id);
-		$fields['id_user'] = (int)($this->id_user);
-		$fields['is_read'] = (int)($this->is_read);
-		$fields['content'] = pSQL($this->content);
-		$fields['add_date'] = pSQL($this->add_date);
-		return $fields;
-	}
 	
 	public static function send($id_user,$content)
 	{

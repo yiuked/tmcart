@@ -15,9 +15,6 @@ class Image extends ObjectBase
 
 	/** @var int access rights of created folders (octal) */
 	protected static $access_rights = 0775;
-
-	protected $fields 			= array('id_product','position','cover');
-	protected $fieldsRequired	= array('id_product');
 	
 	protected $identifier 		= 'id_image';
 	protected $table			= 'image';
@@ -30,25 +27,6 @@ class Image extends ObjectBase
 		$this->image_dir = _TM_PRO_IMG_DIR;
 		$this->source_index = _TM_PRO_IMG_DIR.'index.php';
 	}
-	
-	public function getFields()
-	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_image'] = (int)($this->id);
-		$fields['id_product'] = (int)($this->id_product);
-		$fields['position'] = (int)($this->position);
-		$fields['cover'] = (int)($this->cover);
-		return $fields;
-	}
-
-	public function add($autodate = true, $null_values = false)
-	{
-		if ($this->position <= 0)
-			$this->position = Image::getHighestPosition($this->id_product) + 1;
-
-		return parent::add($autodate, $null_values);
-	}
 
 	public function delete()
 	{
@@ -58,40 +36,16 @@ class Image extends ObjectBase
 		if (!$this->deleteImage())
 			return false;
 
-		// update positions
-		$result = Db::getInstance()->getAll('
-			SELECT *
-			FROM `'.DB_PREFIX.'image`
-			WHERE `id_product` = '.(int)$this->id_product.'
-			ORDER BY `position`
-		');
-		$i = 1;
-		if ($result)
-			foreach ($result as $row)
-			{
-				$row['position'] = $i++;
-				Db::getInstance()->update($this->table, $row, '`id_image` = '.(int)$row['id_image'], 1);
-			}
-
 		return true;
 	}
 
 	/**
-	 * Return available images for a product
+	 * 取得一张图片的HTTP访问链接
 	 *
-	 * @param integer $id_lang Language ID
-	 * @param integer $id_product Product ID
-	 * @return array Images
+	 * @param $id_image
+	 * @param $type
+	 * @return bool|string
 	 */
-	public static function getImages($id_product)
-	{
-		return Db::getInstance()->getAll('
-		SELECT *
-		FROM `'.DB_PREFIX.'image`
-		WHERE `id_product` = '.(int)$id_product.'
-		ORDER BY `position` ASC');
-	}
-	
 	public static function getImageLink($id_image,$type)
 	{
 		if(!$id_image)
@@ -109,214 +63,8 @@ class Image extends ObjectBase
 	public static function getAllImages()
 	{
 		return Db::getInstance()->getAll('
-		SELECT `id_image`, `id_product`
-		FROM `'.DB_PREFIX.'image`
-		ORDER BY `id_image` ASC');
-	}
-
-	/**
-	 * Return number of images for a product
-	 *
-	 * @param integer $id_product Product ID
-	 * @return integer number of images
-	 */
-	public static function getImagesTotal($id_product)
-	{
-		$result = Db::getInstance()->getRow('
-		SELECT COUNT(`id_image`) AS total
-		FROM `'.DB_PREFIX.'image`
-		WHERE `id_product` = '.(int)$id_product);
-		return $result['total'];
-	}
-
-	/**
-	 * Return highest position of images for a product
-	 *
-	 * @param integer $id_product Product ID
-	 * @return integer highest position of images
-	 */
-	public static function getHighestPosition($id_product)
-	{
-		$result = Db::getInstance()->getRow('
-		SELECT MAX(`position`) AS max
-		FROM `'.DB_PREFIX.'image`
-		WHERE `id_product` = '.(int)$id_product);
-		return $result['max'];
-	}
-
-	/**
-	 * Delete product cover
-	 *
-	 * @param integer $id_product Product ID
-	 * @return boolean result
-	 */
-	public static function deleteCover($id_product)
-	{
-		if (!Validate::isUnsignedId($id_product))
-			die(Tools::displayError());
-
-		if (file_exists(_TM_TMP_IMG_DIR.'product_'.$id_product.'.jpg'))
-			unlink(_TM_TMP_IMG_DIR.'product_'.$id_product.'.jpg');
-		
-		return Db::getInstance()->exec('
-			UPDATE `'.DB_PREFIX.'image`
-			SET `cover` = 0
-			WHERE `id_product` = '.(int)$id_product);
-	}
-
-	/**
-	 *Get product cover
-	 *
-	 * @param integer $id_product Product ID
-	 * @return boolean result
-	 */
-	public static function getCover($id_product)
-	{
-		return Db::getInstance()->getRow('
-			SELECT * FROM `'.DB_PREFIX.'image`
-			WHERE `id_product` = '.(int)$id_product.'
-			AND `cover`= 1');
-	}
-
-	/**
-	 * Copy images from a product to another
-	 *
-	 * @param integer $id_product_old Source product ID
-	 * @param boolean $id_product_new Destination product ID
-	 */
-	public static function duplicateProductImages($id_product_old, $id_product_new, $combination_images)
-	{
-		$images_types = ImageType::getImagesTypes('products');
-		$result = Db::getInstance()->getAll('
 		SELECT `id_image`
-		FROM `'.DB_PREFIX.'image`
-		WHERE `id_product` = '.(int)$id_product_old);
-		foreach ($result as $row)
-		{
-			$image_old = new Image($row['id_image']);
-			$image_new = clone $image_old;
-			unset($image_new->id);
-			$image_new->id_product = (int)$id_product_new;
-
-			// A new id is generated for the cloned image when calling add()
-			if ($image_new->add())
-			{
-				$new_path = $image_new->getPathForCreation();
-				foreach ($images_types as $image_type)
-				{
-					if (file_exists(_TM_PRO_IMG_DIR.$image_old->getExistingImgPath().'-'.$image_type['name'].'.jpg'))
-					{
-						if (!Configuration::get('PS_LEGACY_IMAGES'))
-						$image_new->createImgFolder();
-						copy(_TM_PRO_IMG_DIR.$image_old->getExistingImgPath().'-'.$image_type['name'].'.jpg',
-						$new_path.'-'.$image_type['name'].'.jpg');
-					}
-				}
-
-				if (file_exists(_TM_PRO_IMG_DIR.$image_old->getExistingImgPath().'.jpg'))
-					copy(_TM_PRO_IMG_DIR.$image_old->getExistingImgPath().'.jpg', $new_path.'.jpg');
-
-				Image::replaceAttributeImageAssociationId($combination_images, (int)$image_old->id, (int)$image_new->id);
-
-				// Duplicate shop associations for images
-				$image_new->duplicateShops($id_product_old);
-			}
-			else
-				return false;
-		}
-		return Image::duplicateAttributeImageAssociations($combination_images);
-	}
-
-	protected static function replaceAttributeImageAssociationId(&$combination_images, $saved_id, $id_image)
-	{
-		if (!isset($combination_images['new']) || !is_array($combination_images['new']))
-			return;
-		foreach ($combination_images['new'] as $id_product_attribute => $image_ids)
-			foreach ($image_ids as $key => $image_id)
-				if ((int)$image_id == (int)$saved_id)
-					$combination_images['new'][$id_product_attribute][$key] = (int)$id_image;
-	}
-
-	/**
-	 * Duplicate product attribute image associations
-	 * @param integer $id_product_attribute_old
-	 * @return boolean
-	 */
-	public static function duplicateAttributeImageAssociations($combination_images)
-	{
-		if (!isset($combination_images['new']) || !is_array($combination_images['new']))
-			return true;
-		$query = 'INSERT INTO `'.DB_PREFIX.'product_attribute_image` (`id_product_attribute`, `id_image`) VALUES ';
-		foreach ($combination_images['new'] as $id_product_attribute => $image_ids)
-			foreach ($image_ids as $image_id)
-				$query .= '('.(int)$id_product_attribute.', '.(int)$image_id.'), ';
-		$query = rtrim($query, ', ');
-		return Db::getInstance()->exec($query);
-	}
-
-	/**
-	 * Reposition image
-	 *
-	 * @param integer $position Position
-	 * @param boolean $direction Direction
-	 * @deprecated since version 1.5.0.1 use Image::updatePosition() instead
-	 */
-	public function	positionImage($position, $direction)
-	{
-		Tools::displayAsDeprecated();
-
-		$position = (int)$position;
-		$direction = (int)$direction;
-
-		// temporary position
-		$high_position = Image::getHighestPosition($this->id_product) + 1;
-
-		Db::getInstance()->exec('
-		UPDATE `'.DB_PREFIX.'image`
-		SET `position` = '.(int)$high_position.'
-		WHERE `id_product` = '.(int)$this->id_product.'
-		AND `position` = '.($direction ? $position - 1 : $position + 1));
-
-		Db::getInstance()->exec('
-		UPDATE `'.DB_PREFIX.'image`
-		SET `position` = `position`'.($direction ? '-1' : '+1').'
-		WHERE `id_image` = '.(int)$this->id);
-
-		Db::getInstance()->exec('
-		UPDATE `'.DB_PREFIX.'image`
-		SET `position` = '.$this->position.'
-		WHERE `id_product` = '.(int)$this->id_product.'
-		AND `position` = '.(int)$high_position);
-	}
-
-	/**
-	 * Change an image position and update relative positions
-	 *
-	 * @param int $way position is moved up if 0, moved down if 1
-	 * @param int $position new position of the moved image
-	 * @return int success
-	 */
-	public function updatePosition($way, $position)
-	{
-		if (!isset($this->id) || !$position)
-			return false;
-
-		// < and > statements rather than BETWEEN operator
-		// since BETWEEN is treated differently according to databases
-		$result = (Db::getInstance()->exec('
-			UPDATE `'.DB_PREFIX.'image`
-			SET `position`= `position` '.($way ? '- 1' : '+ 1').'
-			WHERE `position`
-			'.($way
-				? '> '.(int)$this->position.' AND `position` <= '.(int)$position
-				: '< '.(int)$this->position.' AND `position` >= '.(int)$position).'
-			AND `id_product`='.(int)$this->id_product)
-		&& Db::getInstance()->exec('
-			UPDATE `'.DB_PREFIX.'image`
-			SET `position` = '.(int)$position.'
-			WHERE `id_image` = '.(int)$this->id_image));
-
-		return $result;
+		FROM `'.DB_PREFIX.'image`');
 	}
 
 	public static function getSize($type)
@@ -393,7 +141,7 @@ class Image extends ObjectBase
 	}
 
 	/**
-	 * Recursively deletes all product images in the given folder tree and removes empty folders.
+	 * 删除指定路径下的所有文件与目录
 	 *
 	 * @param string $path folder containing the product images to delete
 	 * @param string $format image format
@@ -435,7 +183,7 @@ class Image extends ObjectBase
 	}
 
 	/**
-	 * Returns image path in the old or in the new filesystem
+	 * 判断图片是否存
 	 *
 	 * @ returns string image path
 	 */
@@ -453,7 +201,7 @@ class Image extends ObjectBase
 	}
 
 	/**
-	 * Returns the path to the folder containing the image in the new filesystem
+	 * 获取图片文件夹
 	 *
 	 * @return string path to folder
 	 */
@@ -462,14 +210,16 @@ class Image extends ObjectBase
 		if (!$this->id)
 			return false;
 
-		if (!$this->folder)
-			$this->folder = Image::getImgFolderStatic($this->id);
+		if (!$this->folder){
+			$folders = str_split((string)$this->id);
+			$this->folder = implode('/', $folders).'/';
+		}
 
 		return $this->folder;
 	}
 
 	/**
-	 * Create parent folders for the image in the new filesystem
+	 * 创建图片文件夹
 	 *
 	 * @return bool success
 	 */
@@ -494,7 +244,7 @@ class Image extends ObjectBase
 	}
 
 	/**
-	 * Returns the path to the image without file extension
+	 * 取得图片路径
 	 *
 	 * @return string path
 	 */
@@ -508,124 +258,17 @@ class Image extends ObjectBase
 	}
 
 	/**
-	 * Returns the path to the folder containing the image in the new filesystem
-	 *
-	 * @param mixed $id_image
-	 * @return string path to folder
-	 */
-	public static function getImgFolderStatic($id_image)
-	{
-		if (!is_numeric($id_image))
-			return false;
-		$folders = str_split((string)$id_image);
-		return implode('/', $folders).'/';
-	}
-
-	/**
-	 * Move all legacy product image files from the image folder root to their subfolder in the new filesystem.
-	 * If max_execution_time is provided, stops before timeout and returns string "timeout".
-	 * If any image cannot be moved, stops and returns "false"
-	 *
-	 * @param int max_execution_time
-	 * @return mixed success or timeout
-	 */
-	public static function moveToNewFileSystem($max_execution_time = 0)
-	{
-		$start_time = time();
-		$image = null;
-		$tmp_folder = 'duplicates/';
-		foreach (scandir(_TM_PRO_IMG_DIR) as $file)
-		{
-			// matches the base product image or the thumbnails
-			if (preg_match('/^([0-9]+\-)([0-9]+)(\-(.*))?\.jpg$/', $file, $matches))
-			{
-				// don't recreate an image object for each image type
-				if (!$image || $image->id !== (int)$matches[2])
-					$image = new Image((int)$matches[2]);
-				// image exists in DB and with the correct product?
-				if (Validate::isLoadedObject($image) && $image->id_product == (int)rtrim($matches[1], '-'))
-				{
-					// create the new folder if it does not exist
-					if (!$image->createImgFolder())
-						return false;
-
-					// if there's already a file at the new image path, move it to a dump folder
-					// most likely the preexisting image is a demo image not linked to a product and it's ok to replace it
-					$new_path = _TM_PRO_IMG_DIR.$image->getImgPath().(isset($matches[3]) ? $matches[3] : '').'.jpg';
-				if (file_exists($new_path))
-				{
-					if (!file_exists(_TM_PRO_IMG_DIR.$tmp_folder))
-					{
-						@mkdir(_TM_PRO_IMG_DIR.$tmp_folder, self::$access_rights);
-						@chmod(_TM_PRO_IMG_DIR.$tmp_folder, self::$access_rights);
-					}
-					$tmp_path = _TM_PRO_IMG_DIR.$tmp_folder.basename($file);
-					if (!@rename($new_path, $tmp_path) || !file_exists($tmp_path))
-						return false;
-				}
-					// move the image
-				if (!@rename(_TM_PRO_IMG_DIR.$file, $new_path) || !file_exists($new_path))
-					return false;
-				}
-			}
-			if ((int)$max_execution_time != 0 && (time() - $start_time > (int)$max_execution_time - 4))
-				return 'timeout';
-		}
-		return true;
-	}
-
-	/**
-	 * Try to create and delete some folders to check if moving images to new file system will be possible
-	 *
-	 * @return boolean success
-	 */
-	public static function testFileSystem()
-	{
-		$safe_mode = ini_get('safe_mode');
-		if ($safe_mode)
-			return false;
-		$folder1 = _TM_PRO_IMG_DIR.'testfilesystem/';
-		$test_folder = $folder1.'testsubfolder/';
-		// check if folders are already existing from previous failed test
-		if (file_exists($test_folder))
-		{
-			@rmdir($test_folder);
-			@rmdir($folder1);
-		}
-		if (file_exists($test_folder))
-			return false;
-
-		@mkdir($test_folder, self::$access_rights, true);
-		@chmod($test_folder, self::$access_rights);
-		if (!is_writeable($test_folder))
-			return false;
-		@rmdir($test_folder);
-		@rmdir($folder1);
-		if (file_exists($folder1))
-			return false;
-		return true;
-	}
-
-	/**
-	 * Returns the path where a product image should be created (without file format)
-	 *
-	 * @return string path
+	 * 初始化图片路径 - 获取图片绝对路径，以及创建图片所需要的目录
+	 * @return bool|string
 	 */
 	public function getPathForCreation()
 	{
 		if (!$this->id)
 			return false;
-		if (Configuration::get('PS_LEGACY_IMAGES'))
-		{
-			if (!$this->id_product)
-				return false;
-			$path = $this->id_product.'-'.$this->id;
-		}
-		else
-		{
-			$path = $this->getImgPath();
-			$this->createImgFolder();
-		}
+
+		$path = $this->getImgPath();
+		$this->createImgFolder();
+
 		return _TM_PRO_IMG_DIR.$path;
 	}
 }

@@ -55,7 +55,7 @@ require_once(dirname(__FILE__).'/../errors.php');
 						<a href="index.php?rule=brand"  class="btn btn-primary"><span aria-hidden="true" class="glyphicon glyphicon-level-up"></span> 返回</a>
 					</div>
 					<div class="btn-group save-group pull-right" role="group">
-						<a href="javascript:void(0)"  class="btn btn-success" id="brand-form"><span aria-hidden="true" class="glyphicon glyphicon-save"></span> 保存</a>
+						<a href="javascript:void(0)"  class="btn btn-success" id="brand-save"><span aria-hidden="true" class="glyphicon glyphicon-save"></span> 保存</a>
 					</div>
 				</div>
 			</div>
@@ -64,14 +64,14 @@ require_once(dirname(__FILE__).'/../errors.php');
 </div>
 <script language="javascript">
 	$("#brand-save").click(function(){
-		$("#brand_form").submit();
+		$("#brand-form").submit();
 	})
 </script>
 <div class="row">
 	<div class="col-md-12">
 		<div class="panel panel-default">
 			<div class="panel-body">
-			  <form method="post" action="index.php?rule=brand_edit<?php echo isset($id)?'&id='.$id:''?>" class="form-horizontal" id="brand_form" >
+			  <form method="post" action="index.php?rule=brand_edit<?php echo isset($id)?'&id='.$id:''?>" class="form-horizontal" id="brand-form" >
 				  <div class="form-group">
 					  <label for="name" class="col-md-2 control-label">品牌</label>
 					  <div class="col-md-5">
@@ -81,9 +81,9 @@ require_once(dirname(__FILE__).'/../errors.php');
 				  <div class="form-group">
 					  <label for="logo" class="col-md-2 control-label">LOGO</label>
 					  <div class="col-md-5">
-						  <input type="file" value=""  name="logo" >
-						  <?php if(isset($obj) && strlen($obj->logo)>3){?>
-						  <img src="<?php echo $_tmconfig['brand_dir'].$obj->logo;?>" alt="<?php echo $obj->name;?>" class="img-rounded">
+						  <input type="file" value=""  name="qqfile" >
+						  <?php if(isset($obj) && $obj->id_image > 0 ){?>
+						  <img src="<?php echo Image::getImageLink($obj->id_image, 'large');?>" alt="<?php echo $obj->name;?>" class="img-rounded">
 						  <?php }?>
 					  </div>
 				  </div>

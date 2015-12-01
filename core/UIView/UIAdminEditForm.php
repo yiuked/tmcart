@@ -62,7 +62,22 @@ class UIAdminEditForm extends UIView
                         '.  $info .'
                     </div>
                 </div>';
-            } elseif ($item['type'] == 'hidden') {
+            }elseif ($item['type'] == 'bool'){
+                $html .= '<div class="form-group">
+                    <label class="col-md-2 control-label" for="' .$key . '">' . $item['title'] . '</label>
+                    <div class="col-md-8">
+                        <div data-toggle="buttons" class="btn-group">
+							<label class="btn btn-grey enabled">
+								<input type="radio" autocomplete="off" value="1" name="' . $key . '">启用
+							</label>
+							<label class="btn btn-grey">
+								<input type="radio" autocomplete="off" value="0" name="' . $key . '">关闭
+							</label>
+						</div>
+                        '.  $info .'
+                    </div>
+                </div>';
+            }elseif ($item['type'] == 'hidden') {
                 $html .= '<input type="hidden" value="' . $item['value'] . '"  name="' . $key . '">';
             } elseif ($item['type'] == 'submit' || $item['type'] == 'cannel') {
                 $html .= '<div class="form-group">

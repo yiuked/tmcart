@@ -1,57 +1,51 @@
 <?php 
 class Brand extends ObjectBase{
-	protected $fields 			= array('logo',
-		'name','description','active',
-		'meta_title','meta_keywords','meta_description','rewrite'
-		);
-	protected $fieldsRequired	= array('name','rewrite');
-	protected $fieldsSize 		= array('meta_description' => 256, 'meta_keywords' => 256,
-		'meta_title' => 256, 'link_rewrite' => 256, 'name' => 256);
-	protected $fieldsValidate	= array(
-		'name' => 'isCatalogName',
-		'meta_title' => 'isGenericName',
-		'meta_keywords' => 'isGenericName',
-		'meta_description' => 'isGenericName',
-		'active' => 'isBool',
-		'rewrite' => 'isLinkRewrite', 
-		'description' => 'isCleanHtml');
+
+	protected $fields = array(
+		'id_image' => array(
+			'type' => 'isInt'
+		),
+		'name' => array(
+			'required' => true,
+			'size' => 256,
+			'type' => 'isCatalogName'
+		),
+		'description' => array(
+			'type' => 'isCleanHtml'
+		),
+		'meta_title' => array(
+			'type' => 'isCleanHtml',
+			'size' => 256,
+		),
+		'meta_keywords' => array(
+			'type' => 'isCleanHtml',
+			'size' => 256,
+		),
+		'meta_description' => array(
+			'type' => 'isCleanHtml',
+			'size' => 256,
+		),
+		'rewrite' => array(
+			'type' => 'isLinkRewrite',
+			'size' => 256,
+			'required' => true,
+		),
+		'active' => array(
+			'type' => 'isInt',
+		),
+	);
 	
 	protected $identifier 		= 'id_brand';
 	protected $table			= 'brand';
-	public 	  $img_dir;
-	
-	public function __construct($id = NULL)
-	{
-		parent::__construct($id);
-		$this->img_dir = _TM_IMG_DIR.'brand/';
-	}
-	
-	public function getFields()
-	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_brand'] = (int)($this->id);
-		$fields['logo'] = pSQL($this->logo);
-		$fields['name'] = pSQL($this->name);
-		$fields['description'] = pSQL($this->description);
-		$fields['meta_title'] = pSQL($this->meta_title);
-		$fields['meta_keywords'] = pSQL($this->meta_keywords);
-		$fields['meta_description'] = pSQL($this->meta_description);
-		$fields['rewrite'] = pSQL($this->rewrite);
-		$fields['active'] = (int)($this->active);
-		return $fields;
-	}
 	
 	public function updateLogo()
 	{
-		$allowedExtensions 	= array('jpg','png','gif');
-		$filename 			= $this->id.'-'.$_FILES['logo']['name'];
-		$pathinfo 			= pathinfo($filename);
-		$ext 				= $pathinfo['extension'];
-		$tmpName			= $this->img_dir.$filename;
-		if(in_array(strtolower($ext),$allowedExtensions))
-			!move_uploaded_file($_FILES['logo']['tmp_name'], $tmpName);
-		Db::getInstance()->exec('UPDATE `'.DB_PREFIX.$this->table.'` SET `logo`="'.pSQL($filename).'" WHERE `'.$this->identifier.'`='.(int)($this->id));
+		// max file size in bytes
+		$uploader = new FileUploader();
+		$result = $uploader->handleUpload('brand');
+		if (isset($result['success'])) {
+			Db::getInstance()->exec('UPDATE `'.DB_PREFIX.$this->table.'` SET `id_image`="'.intval($result['success']['id_image']).'" WHERE `'.$this->identifier.'`='.(int)($this->id));
+		}
 	}
 	
 	public function getProducts($p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())

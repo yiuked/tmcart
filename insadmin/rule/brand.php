@@ -36,7 +36,7 @@ $table->header = array(
 	array('name' => 'id_brand','title' => 'ID','filter' => 'string'),
 	array('name' => 'name','title' => '名称','filter' => 'string'),
 	array('name' => 'active','title' => '状态','filter' => 'bool'),
-	array('sort' => false ,'title' => '操作', 'class' => 'text-right', 'isAction'=> array('view', 'edit', 'delete')),
+	array('sort' => false ,'title' => '操作', 'class' => 'text-right', 'isAction'=> array('edit', 'view', 'delete')),
 );
 $filter = $table->initFilter();
 

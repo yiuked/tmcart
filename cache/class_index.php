@@ -56,4 +56,7 @@
   'UIAdminEditForm' => 'D:\\wamp\\www\\red\\shoes/core/UIView/UIAdminEditForm.php',
   'CMSCategory' => 'D:\\wamp\\www\\red\\shoes/model/CMSCategory.php',
   'State' => 'D:\\wamp\\www\\red\\shoes/model/State.php',
+  'ProductView' => 'D:\\wamp\\www\\red\\shoes/views/ProductView.php',
+  'BrandView' => 'D:\\wamp\\www\\red\\shoes/views/BrandView.php',
+  'ImageType' => 'D:\\wamp\\www\\red\\shoes/model/ImageType.php',
 ); 

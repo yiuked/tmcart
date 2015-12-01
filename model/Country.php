@@ -11,10 +11,10 @@ class Country extends ObjectBase{
 			'size' => 64
 		),
 		'active' => array(
-			'type' => 'isBool',
+			'type' => 'isInt',
 		),
 		'need_state' => array(
-			'type' => 'isBool',
+			'type' => 'isInt',
 		),
 		'position' => array(
 			'type' => 'isInt',
