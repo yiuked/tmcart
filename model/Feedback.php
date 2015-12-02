@@ -1,33 +1,19 @@
 <?php 
 class Feedback extends ObjectBase{
-	protected $fields 			= array('id_user','id_product','unit_price','quantity','md5_key','rating','name','flag_code','feedback','active','add_date');
-	protected $fieldsRequired	= array('id_product','rating','name','flag_code','feedback','unit_price','quantity','md5_key');
-	protected $fieldsSize 		= array('feedback' => 256);
-	protected $fieldsValidate	= array(
-		'active'=> 'isBool',
-		'feedback' => 'isGenericName');
-	
-	protected $identifier 		= 'id_feedback';
-	protected $table			= 'feedback';
-	
-	public function getFields()
-	{
-		if (isset($this->id))
-			$fields['id_feedback'] 	= (int)($this->id);
-		$fields['id_user'] 			= (int)($this->id_user);
-		$fields['id_product'] 		= (int)($this->id_product);
-		$fields['rating'] 			= (int)($this->rating);
-		$fields['unit_price'] 		= (float)($this->unit_price);
-		$fields['quantity'] 		= (int)($this->quantity);
-		$fields['name'] 			= pSQL($this->name);
-		$fields['flag_code']		= pSQL($this->flag_code);
-		$fields['feedback'] 		= pSQL($this->feedback);
-		$fields['md5_key'] 			= pSQL($this->md5_key);
-		$fields['active'] 			= (int)($this->active);
-		$fields['add_date'] 		= pSQL($this->add_date);
-		parent::validation();
-		return $fields;
-	}
+
+	protected $fields = array(
+		'id_user' => array('type' => 'isInt'),
+		'id_product' => array('type' => 'isInt'),
+		'rating' => array('type' => 'isInt'),
+		'unit_price' => array('type' => 'isPrice'),
+		'quantity' => array('type' => 'isInt'),
+		'name' => array('type' => 'isName'),
+		'flag_code' => array('type' => 'isLanguageIsoCode'),
+		'feedback' => array('type' => 'isMessage'),
+		'md5_key' => array('type' => 'isMd5'),
+		'active' => array('type' => 'isInt'),
+		'add_date' => array('type' => 'isDate'),
+	);
 	
 	public function statusSelection($ids,$action)
 	{
@@ -46,21 +32,20 @@ class Feedback extends ObjectBase{
 		return true;
 	}
 	
-	public static function getEntity($active = true,$p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
+	public static function getEntity($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
-	 	if (!Validate::isBool($active))
-	 		die(Tools::displayError());
-
 		$where = '';
-		if(!empty($filter['id_feedback']) && Validate::isInt($filter['id_feedback']))
+		if(!empty($filter['id_feedback']))
 			$where .= ' AND a.`id_feedback`='.intval($filter['id_feedback']);
-		if(!empty($filter['name']) && Validate::isInt($filter['name']))
+		if(!empty($filter['name']))
 			$where .= ' AND a.`name`='.intval($filter['name']);
-		if(!empty($filter['id_product']) && Validate::isInt($filter['id_product']))
+		if(!empty($filter['id_product']))
 			$where .= ' AND a.`id_product`='.intval($filter['id_product']);
-		if(!empty($filter['rating']) && Validate::isInt($filter['rating']))
+		if(!empty($filter['active']))
+			$where .= ' AND a.`active`='.intval($filter['active']);
+		if(!empty($filter['rating']))
 			$where .= ' AND a.`rating`='.intval($filter['rating']);
-		if(!empty($filter['flag_code']) && Validate::isCatalogName($filter['flag_code']))
+		if(!empty($filter['flag_code']))
 			$where .= ' AND a.`flag_code` ="'.pSQL($filter['flag_code']).'"';
 		
 		if(!is_null($orderBy) AND !is_null($orderWay))
@@ -71,18 +56,18 @@ class Feedback extends ObjectBase{
 		}
 
 		$total  = Db::getInstance()->getValue('SELECT count(*) AS total FROM `'.DB_PREFIX.'feedback` a
-				WHERE a.`active`='.($active?'1':'0').'
+				WHERE 1
 				'.$where);
-		if($total==0)
+		if($total == 0)
 			return false;
 
 		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'feedback` a
-				WHERE a.`active`='.($active?'1':'0').'
+				WHERE 1
 				'.$where.'
 				'.$postion.'
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);
 		$rows   = array(
-				'total' => $total['total'],
+				'total' => $total,
 				'entitys'  => $result);
 		return $rows;
 	}

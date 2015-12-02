@@ -1,32 +1,33 @@
 <?php 
 class Tag extends ObjectBase{
-	protected $fields 			= array('id_tag','name','meta_title','meta_keywords','meta_description','rewrite','add_date','upd_date');
-	protected $fieldsRequired	= array('name','rewrite');
-	protected $fieldsSize 		= array('name' => 256);
-	protected $fieldsValidate	= array(
-		'name' => 'isGenericName',
-		'meta_title' => 'isGenericName',
-		'meta_keywords' => 'isGenericName',
-		'meta_description' => 'isGenericName', 
-		'rewrite' => 'isLinkRewrite');
+
+	protected $fields = array(
+		'name' => array(
+			'type' => 'isGenericName',
+			'size' => 128,
+			'required' => true,
+		),
+		'meta_title' => array(
+			'type' => 'isGenericName',
+			'size' => 256,
+		),
+		'meta_keywords' => array(
+			'type' => 'isGenericName',
+			'size' => 256,
+		),
+		'meta_description' => array(
+			'type' => 'isGenericName',
+			'size' => 256,
+		),
+		'rewrite' => array(
+			'type' => 'isGenericName',
+			'size' => 256,
+			'required' => true,
+		),
+	);
 	
 	protected $identifier 		= 'id_tag';
 	protected $table			= 'tag';
-	
-	public function getFields()
-	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_tag'] = (int)($this->id);
-		$fields['name'] = pSQL($this->name);
-		$fields['meta_title'] = pSQL($this->meta_title);
-		$fields['meta_keywords'] = pSQL($this->meta_keywords);
-		$fields['meta_description'] = pSQL($this->meta_description);
-		$fields['rewrite'] = pSQL($this->rewrite);
-		$fields['add_date'] = pSQL($this->add_date);
-		$fields['upd_date'] = pSQL($this->upd_date);
-		return $fields;
-	}
 	
 	public static function existsByTagName($name)
 	{
@@ -35,6 +36,7 @@ class Tag extends ObjectBase{
 	
 	public static function tagsExists($name)
 	{
+		$name = trim($name);
 		if(empty($name))
 			return;
 		
@@ -82,7 +84,7 @@ class Tag extends ObjectBase{
 		return $tags_str;
 	}
 	
-	public static function getTags($p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
+	public static function getTags($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
 
 		$where = '';

@@ -12,54 +12,80 @@ if(Tools::getRequest('action') == 'addImage'){
 }
 
 
-/* @todo rename to processaddproductimage */
+/**
+ * 上传图片并更新排序
+ */
 function ajaxProcessAddImage()
 {
-
-	$allowedExtensions = array('jpeg', 'gif', 'png', 'jpg');
-	$max_image_size    = 2048000;
 	// max file size in bytes
-	$uploader = new FileUploader($allowedExtensions, $max_image_size);
-	
-	$result = $uploader->handleUpload();
+	$uploader = new FileUploader();
+	$result = $uploader->handleUpload(ImageType::IMAGE_PRDOCUT);
 	if (isset($result['success']))
 	{
-		$obj = new Image((int)$result['success']['id_image']);
-
+		$image = $result['success'];
+		$row['id_product'] = Tools::Q('id_product');
+		$row['id_image'] = (int) $image['id_image'];
+		$row['position'] = (int) Product::getImageLastPosition($row['id_product']);
+		if ($row['position'] == 1) {
+			$row['cover'] = 1;
+		} else {
+			$row['cover'] = 0;
+		}
+		Db::getInstance()->insert(DB_PREFIX . 'product_to_image', $row);
 		$json = array(
-			'name' => $result['success']['name'],
 			'status' => 'ok',
-			'id'=>$obj->id,
-			'path' => $obj->getExistingImgPath(),
-			'position' => $obj->position,
-			'cover' => $obj->cover
+			'id' => $row['id_image'],
+			'path' => Image::getImageLink($row['id_image'] ,'small'),
+			'position' => $row['position'],
+			'cover' => $row['cover']
 		);
-		@unlink(_TM_TMP_IMG_DIR.'product_'.(int)$obj->id_product.'.jpg');
-		@unlink(_TM_TMP_IMG_DIR.'product_mini_'.(int)$obj->id_product.'.jpg');
 		die(json_encode($json));
 	}
 	else
 		die(json_encode($result));
 }
 
+/**
+ * 删除图片并更新排序
+ * */
 function ajaxProcessDeleteProductImage()
 {
 	$res = true;
 	/* Delete product image */
-	$image = new Image((int)Tools::getRequest('id_image'));
-	$res &= $image->delete();
-
-
-	if (file_exists(_TM_TMP_IMG_DIR.'product_'.$image->id_product.'.jpg'))
-		$res &= @unlink(_TM_TMP_IMG_DIR.'product_'.$image->id_product.'.jpg');
-	if (file_exists(_TM_TMP_IMG_DIR.'product_mini_'.$image->id_product.'.jpg'))
-		$res &= @unlink(_TM_TMP_IMG_DIR.'product_mini_'.$image->id_product.'.jpg');
+	$id_image = (int) Tools::Q('id_image');
+	$id_product = (int) Tools::Q('id_product');
+	$image = new Image($id_image);
+	if ($image->delete()) {
+		if( Db::getInstance()->exec('DELETE FROM ' . DB_PREFIX . 'product_to_image WHERE id_image='.$id_image)){
+			// update positions
+			$result = Db::getInstance()->getAll('
+			SELECT *
+			FROM `' . DB_PREFIX . 'product_to_image`
+			WHERE `id_product` = ' . $id_product .'
+			ORDER BY `position`
+			');
+			$i = 1;
+			if ($result) {
+				foreach ($result as $row) {
+					if ($row['id_image'] == $id_image && $row['cover'] == 1 && $i == 1) {
+						$row['cover'] = 1;
+					}
+					$row['position'] = $i++;
+					Db::getInstance()->update(DB_PREFIX . 'product_to_image', $row, '`id_image` = ' . (int)$row['id_image'], 1);
+				}
+			}
+		} else {
+			$res &= false;
+		}
+	} else {
+		$res &= false;
+	}
 
 	if ($res)
 		die(json_encode(array(
 				'status'=>'ok',
 				'confirmations'=>'操作成功！',
-				'content'=>array('id'=>$image->id),
+				'content'=>array('id' => $image->id),
 		)));
 	else
 		die(json_encode(array(
@@ -68,39 +94,43 @@ function ajaxProcessDeleteProductImage()
 		)));
 }
 
+/**
+ * 更新产品默认图片
+ */
 function ajaxProcessUpdateCover()
 {
-	Image::deleteCover((int)Tools::getRequest('id_product'));
-	$img = new Image((int)Tools::getRequest('id_image'));
-	$img->cover = 1;
-	$product = new Product((int)($img->id_product));
-	$product->id_image_default = (int)Tools::getRequest('id_image');
-	$product->update();
-	
-	@unlink(_TM_TMP_IMG_DIR.'product_'.(int)$img->id_product.'.jpg');
-	@unlink(_TM_TMP_IMG_DIR.'product_mini_'.(int)$img->id_product.'.jpg');
-
-	if ($img->update())
-		die(json_encode(array(
-				'status'=>'ok',
-				'confirmations'=>'更新成功！'
-		)));
-	else
-		die(json_encode(array(
-				'status'=>'error',
-				'confirmations'=>'更新失败！'
-		)));
+	$id_image = (int) Tools::Q('id_image');
+	$id_product = (int) Tools::Q('id_product');
+	$product = new Product($id_product);
+	if (false !== Db::getInstance()->exec('UPDATE '.DB_PREFIX . 'product_to_image SET cover=0 WHERE id_image='. (int) $product->id_image)) {
+		if (false !== Db::getInstance()->exec('UPDATE '.DB_PREFIX . 'product_to_image SET cover=1 WHERE id_image='. (int) $id_image)) {
+			$product->id_image = $id_image;
+			if ($product->update()) {
+				die(json_encode(array(
+					'status'=>'ok',
+					'confirmations'=>'更新成功！'
+				)));
+			}
+		}
+	}
+	die(json_encode(array(
+			'status'=>'error',
+			'confirmations'=>'更新失败！'
+	)));
 }
 
+/**
+ * 更新排序
+ */
 function ajaxProcessUpdatePosition()
 {
 	$json = json_decode($_GET['json'],true);
 
 	$isOk = true;
 	foreach ($json as $id_image => $position) {
-		$image = new Image((int)$id_image);
-		$image->position = (int)$position;
-		$isOk &= $image->update();
+		if (false === Db::getInstance()->exec('UPDATE '.DB_PREFIX . 'product_to_image SET position=' . (int) $position .' WHERE id_image='. (int) $id_image)) {
+			$isOk &= false;
+		}
 	}
 
 	if ($isOk) {

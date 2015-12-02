@@ -34,6 +34,7 @@ $table = new UIAdminTable('brand',  'Brand', 'id_brand');
 $table->header = array(
 	array('sort' => false ,'isCheckAll' => 'brandBox[]'),
 	array('name' => 'id_brand','title' => 'ID','filter' => 'string'),
+	array('sort' => false ,'name' => 'image_small','isImage' => true,'title' => '图片'),
 	array('name' => 'name','title' => '名称','filter' => 'string'),
 	array('name' => 'active','title' => '状态','filter' => 'bool'),
 	array('sort' => false ,'title' => '操作', 'class' => 'text-right', 'isAction'=> array('edit', 'view', 'delete')),
@@ -45,7 +46,7 @@ $orderWay 	= isset($_GET['orderway']) ? Tools::G('orderway') : 'asc';
 $limit		= $cookie->getPost('pagination') ? $cookie->getPost('pagination') : '50';
 $p			= Tools::G('p') ? (Tools::G('p') == 0 ? 1 : Tools::G('p')) : 1;
 
-$result  	= Brand::getEntity(false,$p,$limit,$orderBy,$orderWay,$filter);
+$result  	= Brand::getEntity($p, $limit, $orderBy, $orderWay, $filter);
 
 require_once(dirname(__FILE__).'/../errors.php');
 ?>

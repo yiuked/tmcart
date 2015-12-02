@@ -59,10 +59,13 @@ class UIAdminDndTable extends UIAdminTable
                                 $body .= '<a class="btn btn-default" href="index.php?rule=' .  $this->rule . '_edit&id=' .  $row[$this->identifier] . '"><span class="glyphicon glyphicon-edit" title="编辑" aria-hidden="true"></span> 编辑</a>';
                                 break;
                             case 'delete':
-                                $body .= '<a href="index.php?rule=' .  $this->rule . '&delete=' .  $row[$this->identifier] . '" onclick="return confirm(\'你确定要删除？\')"><span class="glyphicon glyphicon-trash" title="删除" aria-hidden="true"></span> 删除</a>';
+                                $body .= '<a class="btn btn-default" href="index.php?rule=' .  $this->rule . '&delete=' .  $row[$this->identifier] . '" onclick="return confirm(\'你确定要删除？\')"><span class="glyphicon glyphicon-trash" title="删除" aria-hidden="true"></span> 删除</a>';
                                 break;
                         }
-
+                        if (count($head['isAction']) == 1){
+                            $body .=  '</div></td>';
+                            continue;
+                        }
                         $body .=  '<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span><span class="sr-only">操作</span></button>';
                         $body .=  '<ul class="dropdown-menu table-action-dropdown-menu">';
                         foreach ($head['isAction'] as $key => $action) {

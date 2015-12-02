@@ -2,6 +2,8 @@
 
 class ImageType extends ObjectBase
 {
+	const IMAGE_PRDOCUT = 'product';
+	const IMAGE_BRAND = 'brand';
 	protected $fields = array(
 		'name' => array(
 			'type' => 'isGenericName',

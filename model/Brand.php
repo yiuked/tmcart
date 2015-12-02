@@ -39,7 +39,7 @@ class Brand extends ObjectBase{
 	protected $table			= 'brand';
 
 	/**
-	 * ����Ʒ��ͼƬ
+	 * ����Ʒ��ͼƬ
 	 *
 	 * @return bool
 	 */
@@ -104,15 +104,32 @@ class Brand extends ObjectBase{
 		}*/
 		return $rows;
 	}
+
+	/**
+	 * 重载品牌数组
+	 * @param $result
+	 * @return mixd
+	 */
+	public static function reLoad($result) {
+		if (!is_array($result) || !$result) {
+			return false;
+		}
+
+		foreach($result as &$row) {
+			$row['image_small'] = Image::getImageLink($row['id_image'], 'small');
+		}
+
+		return $result;
+	}
 	
-	public static function getEntity($active = true,$p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
+	public static function getEntity($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
-	 	if (!Validate::isBool($active))
-	 		die(Tools::displayError());
 
 		$where = '';
 		if(!empty($filter['id_brand']) && Validate::isInt($filter['id_brand']))
 			$where .= ' AND a.`id_brand`='.intval($filter['id_brand']);
+		if(!empty($filter['active']) && Validate::isInt($filter['active']))
+			$where .= ' AND a.`active`='.intval($filter['active']);
 		if(!empty($filter['name']) && Validate::isCatalogName($filter['name']))
 			$where .= ' AND a.`name` LIKE "%'.pSQL($filter['name']).'%"';
 		
@@ -125,7 +142,7 @@ class Brand extends ObjectBase{
 
 		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'brand` a
 				WHERE 1'.$where);
-		if($total==0)
+		if($total == 0 )
 			return false;
 
 		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'brand` a
@@ -134,7 +151,7 @@ class Brand extends ObjectBase{
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);
 		$rows   = array(
 				'total' => $total['total'],
-				'entitys'  => $result);
+				'entitys'  => self::reLoad($result));
 		return $rows;
 	}
 }

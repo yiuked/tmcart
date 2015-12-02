@@ -7,7 +7,6 @@
 <link href="<?php echo $_tmconfig['tm_js_dir']?>jquery/plugins/ajaxfileupload/jquery.ajaxfileupload.css" rel="stylesheet" type="text/css" media="all" />
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>kindeditor/kindeditor-min.js"></script>
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>kindeditor/lang/zh_CN.js"></script>
-
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/jquery.ui.core.min.js"></script>
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/jquery.ui.widget.min.js"></script>
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/jquery.ui.mouse.min.js"></script>
@@ -27,7 +26,7 @@ if(isset($_POST['sveProduct']) && Tools::getRequest('sveProduct')=='add')
 	$product = new Product();
 	$product->copyFromPost();
 	if($product->add())
-		if(!$product->updateCategories($_POST['categoryBox']) OR !$product->updateTags($_POST['tags']) OR !$product->updateAttribute($_POST['attribute_items']))
+		if(!$product->updateCategories($_POST['categoryBox']) OR !$product->addToTags($_POST['tags']) OR !$product->updateAttribute($_POST['attribute_items']))
 			$product->_errors = '添加产品内容时发生了一个错误';
 	
 	if(is_array($product->_errors) AND count($product->_errors)>0){
@@ -41,7 +40,7 @@ if(isset($_POST['sveProduct']) && Tools::getRequest('sveProduct')=='add')
 if(isset($_GET['id'])){
 	$id  = (int)$_GET['id'];
 	$obj = new Product($id);
-	$images = Image::getImages($id);
+	$images = $obj->getImages($id);
 }
 
 if(isset($_POST['sveProduct']) && Tools::getRequest('sveProduct')=='edit')
@@ -49,7 +48,7 @@ if(isset($_POST['sveProduct']) && Tools::getRequest('sveProduct')=='edit')
 	if(Validate::isLoadedObject($obj)){
 		$obj->copyFromPost();
 		if($obj->update()){
-			if(!$obj->updateCategories($_POST['categoryBox']) OR !$obj->updateTags($_POST['tags']) OR !$obj->updateAttribute($_POST['attribute_items']))
+			if(!$obj->updateCategories($_POST['categoryBox']) OR !$obj->addToTags($_POST['tags']) OR !$obj->updateAttribute($_POST['attribute_items']))
 				$obj->_errors = '更新产品内容时发生了一个错误';
 		}
 	}
@@ -64,37 +63,24 @@ if (isset($errors)) {
 	UIAdminAlerts::MError($errors);
 }
 ?>
-<div class="row">
-	<div class="col-md-12">
-		<div class="panel panel-default">
-			<div class="panel-body">
-				<div class="col-md-6">
-					<?php
-					$breadcrumb = new UIAdminBreadcrumb();
-					$breadcrumb->home();
-					$breadcrumb->add(array('href' => 'index.php?rule=product', 'title' => '商品'));
-					$breadcrumb->add(array('title' => '编辑', 'active' => true));
-					echo $breadcrumb->draw();
-					?>
-				</div>
-				<div class="col-md-6">
-					<div class="btn-group pull-right" role="group">
-						<?php if (isset($obj)){ ?>
-						<a href="<?php echo $link->getPage('ProductView',$obj->id);?>"  class="btn btn-warning" target="_blank">
-							<span aria-hidden="true" class="glyphicon glyphicon-eye-open"></span> 浏览</a>
-						<?php } ?>
-						<a href="index.php?rule=product"  class="btn btn-primary"><span aria-hidden="true" class="glyphicon glyphicon-level-up"></span> 返回</a>
-					</div>
+<?php
+//导航
+$breadcrumb = new UIAdminBreadcrumb();
+$breadcrumb->home();
+$breadcrumb->add(array('href' => 'index.php?rule=product', 'title' => '商品'));
+$breadcrumb->add(array('title' => '编辑', 'active' => true));
+$bread = $breadcrumb->draw();
 
-					<div class="btn-group save-group pull-right" role="group">
-						<a href="javascript:void(0)"  class="btn btn-success" id="desc-product-save"><span aria-hidden="true" class="glyphicon glyphicon-save"></span> 保存</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
+$btn_group = array();
+if (isset($obj)){
+	$btn_group[] = array('type' => 'a', 'title' => '浏览', 'href' => $link->getPage('ProductView', $obj->id), 'class' => 'btn-warning', 'icon' => 'eye-open');
+}
+$btn_group = array(
+	array('type' => 'a', 'title' => '返回', 'href' => 'index.php?rule=product', 'class' => 'btn-primary', 'icon' => 'level-up'),
+	array('type' => 'button', 'title' => '保存', 'id' => 'desc-product-save', 'class' => 'btn-success', 'icon' => 'plus'),
+);
+echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group,), 'breadcrumb');
+?>
 <script language="javascript">
 	$("#desc-product-save").click(function(){
 		$("#product_form").submit();
@@ -527,7 +513,7 @@ $(document).ready(function(){
 							<table id="lineType" style="display:none;">
 								<tr id="image_id">
 									<td style="padding: 4px;">
-										<a href="<?php echo $_tmconfig['pro_dir']; ?>image_path.jpg">
+										<a class="line-image" href="<?php echo $_tmconfig['pro_dir']; ?>image_path.jpg">
 											<img src="<?php echo $_tmconfig['pro_dir']; ?>en-default-small.jpg" alt="image_id" title="image_id" />
 										</a>
 									</td>
@@ -553,9 +539,8 @@ $(document).ready(function(){
 								//Ready Function
 								$(document).ready(function(){
 									<?php
-										 foreach($images as $r){
-											 $image = new Image($r['id_image']);
-											 echo 'imageLine('.$image->id.', "'.$image->getExistingImgPath().'", '.$image->position.', "'.(($image->cover)?'ok':'remove').'");';
+										 foreach($images as $img){
+											 echo 'imageLine(' . $img['id_image'] . ', "' . $img['small'] . '", ' . $img['position'] . ', "'.($img['cover'] ? 'ok' : 'remove').'");';
 										 }
 									?>
 
@@ -583,7 +568,6 @@ $(document).ready(function(){
 											debug: false,
 											params: {
 												id_product : <?php echo $id;?>,
-												id_category : <?php echo $obj->id_category_default;?>,
 												action : 'addImage',
 												ajax: 1
 											},
@@ -664,7 +648,6 @@ $(document).ready(function(){
 													"action":"deleteProductImage",
 													"id_image":id,
 													"id_product" : <?php echo $id;?>,
-													"id_category" : <?php echo $obj->id_category_default;?>,
 													"ajax" : 1 },'public/ajax-img.php', afterDeleteProductImage
 											);
 									});
@@ -707,10 +690,10 @@ $(document).ready(function(){
 
 									function imageLine(id, path, position, cover)
 									{
+										$("#lineType .line-image").attr('href', path)
+										$("#lineType .line-image img").attr('src', path)
 										line = $("#lineType").html();
 										line = line.replace(/image_id/g, id);
-										line = line.replace(/en-default/g, path);
-										line = line.replace(/image_path/g, path);
 										line = line.replace(/image_position/g, position);
 										line = line.replace(/remove/g, cover);
 										line = line.replace("<tbody>", "");

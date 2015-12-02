@@ -97,7 +97,7 @@ $table->header = array(
 		'sort' => false ,
 		'title' => '操作',
 		'class' => 'text-right',
-		'isAction'=> array('view', 'edit', 'delete')
+		'isAction'=> array('edit', 'view', 'delete')
 	),
 );
 $filter = $table->initFilter();
@@ -110,34 +110,21 @@ $orderWay 	= isset($_GET['orderway']) ? Tools::G('orderway') : 'desc';
 $limit		= $cookie->getPost('pagination') ? $cookie->getPost('pagination') : '50';
 $p			= Tools::G('p') ? (Tools::G('p') == 0 ? 1 : Tools::G('p')) : 1;
 
-$result  	= Product::getProducts(false,$p,$limit,$orderBy,$orderWay,$filter);
+$result  	= Product::getProducts($p, $limit, $orderBy, $orderWay, $filter);
 if (isset($errors)) {
 	UIAdminAlerts::MError($errors);
 }
 
-
+//导航
+$breadcrumb = new UIAdminBreadcrumb();
+$breadcrumb->home();
+$breadcrumb->add(array('title' => '商品', 'active' => true));
+$bread = $breadcrumb->draw();
+$btn_group = array(
+	array('type' => 'a', 'title' => '新产品', 'href' => 'index.php?rule=product_edit', 'class' => 'btn-success', 'icon' => 'plus')
+);
+echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group, 'class' => 'col-md-10 col-md-offset-2'), 'breadcrumb');
 ?>
-<script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/jquery.tablednd_0_5.js"></script>
-<script src="<?php echo $_tmconfig['tm_js_dir']?>admin/dnd.js" type="text/javascript"></script>
-<div class="col-md-10 col-md-offset-2">
-	<div class="panel panel-default">
-		<div class="panel-body">
-			<div class="col-md-6">
-				<?php
-				$breadcrumb = new UIAdminBreadcrumb();
-				$breadcrumb->home();
-				$breadcrumb->add(array('title' => '商品', 'active' => true));
-				echo $breadcrumb->draw();
-				?>
-			</div>
-			<div class="col-md-6">
-				<div class="btn-group save-group pull-right" role="group">
-					<a href="<?php echo Helper::urlByRule(array('rule' => 'product_edit')); ?>"  class="btn btn-success" id="submit-form"><span aria-hidden="true" class="glyphicon glyphicon-plus"></span> 新商品</a>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
 
 <div class="col-md-2 sidebar">
 	<div class="panel panel-default">
@@ -199,58 +186,12 @@ if (isset($errors)) {
 		</div>
 	</div>
 </div>
-
-<div class="col-md-10 col-md-offset-2">
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			产品列表
-		</div>
-		<div class="panel-body">
-			<form class="form" method="post" action="<?php echo Helper::urlByRule()?>">
-				<?php
-				//config table options
-				$table->data = $result['entitys'];
-				echo $table->draw();
-				?>
-
-				<div class="row">
-					<div class="col-md-4">
-						<div class="btn-group" role="group" >
-							<button type="submit" class="btn btn-default" onclick="return confirm('你确定要删除选中项目?');" name="subDelete">批量删除</button>
-							<button type="submit" class="btn btn-default" name="subActiveON">批量启用</button>
-							<button type="submit" class="btn btn-default" name="subActiveOFF">批量关闭</button>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<?php
-						$pagination = new UIAdminPagination($result['total'],$limit);
-						echo $pagination->draw();
-						?>
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
-
-<script type="text/javascript">
-	$(document).ready(function(){
-		$(".price_value").change(function(){
-			var id_product = $(this).attr("name").replace("change_price_","");
-			changePrice(id_product,$(this).val(),"YES");
-		})
-	});
-	function changePrice(id_product,value,type)
-	{
-		$.ajax({
-			url: 'public/ajax.php',
-			cache: false,
-			data: "action=changePrice&id_product="+id_product+"&value="+value+"&type="+type,
-			dataType: "json",
-			success: function(data)
-				{
-
-				}
-			}); 	
-	}; 
-</script>
+<?php
+//生成表格
+$btn_groups = array(
+	array('type' => 'button', 'title' => '删除选中', 'confirm' => '确定要删除选中项?', 'name' => 'subDelete', 'btn_type' => 'submit', 'class' => 'btn-default'),
+	array('type' => 'button', 'title' => '激活选中',  'name' => 'subActiveON', 'btn_type' => 'submit', 'class' => 'btn-default'),
+	array('type' => 'button', 'title' => '关闭选中',  'name' => 'subActiveOFF', 'btn_type' => 'submit', 'class' => 'btn-default'),
+);
+echo UIViewBlock::area(array('title' => '产品列表', 'table' => $table, 'result' => $result, $limit => $limit, 'btn_groups' => $btn_groups, 'class' => 'col-md-10 col-md-offset-2'), 'table');
+?>

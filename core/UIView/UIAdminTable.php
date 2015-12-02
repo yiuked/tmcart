@@ -169,7 +169,11 @@ class UIAdminTable extends UIView
                         $body .= '<td><input type="checkbox" name="' . $head['isCheckAll']. '" value="' . $row[$this->identifier]. '" ></td>';
                     } elseif (isset($head['name'])) {
                         if (isset($head['isImage'])) {
-                            $body .= '<td'. $width . $class .'><img src="' .  $row[$head['name']] . '" class="img-thumbnail"></td>';
+                            if (empty(trim($row[$head['name']]))) {
+                                $body .= '<td'. $width . $class .'>--</td>';
+                            }else{
+                                $body .= '<td'. $width . $class .'><img src="' .  $row[$head['name']] . '" class="img-thumbnail"></td>';
+                            }
                         } elseif (isset($head['filter']) && $head['filter'] == 'bool') {
                             $body .= '<td'. $width . $class .'><span class="glyphicon glyphicon-'. ($row[$head['name']] == 0 ? 'remove':'ok') .' active-toggle" onclick="setToggle($(this),\'' .  $this->className . '\',\'' .  $head['name'] . '\',' .  $row[$this->identifier] . ')"></span></td>';
                         }elseif(isset($head['edit']) && $head['edit'] == false){
@@ -190,8 +194,12 @@ class UIAdminTable extends UIView
                                 $body .= '<a class="btn btn-default" href="index.php?rule=' .  $this->rule . '_edit&id=' .  $row[$this->identifier] . '"><span class="glyphicon glyphicon-edit" title="编辑" aria-hidden="true"></span> 编辑</a>';
                                 break;
                             case 'delete':
-                                $body .= '<a href="index.php?rule=' .  $this->rule . '&delete=' .  $row[$this->identifier] . '" onclick="return confirm(\'你确定要删除？\')"><span class="glyphicon glyphicon-trash" title="删除" aria-hidden="true"></span> 删除</a>';
+                                $body .= '<a class="btn btn-default" href="index.php?rule=' .  $this->rule . '&delete=' .  $row[$this->identifier] . '" onclick="return confirm(\'你确定要删除？\')"><span class="glyphicon glyphicon-trash" title="删除" aria-hidden="true"></span> 删除</a>';
                                 break;
+                        }
+                        if (count($head['isAction']) == 1){
+                            $body .=  '</div></td>';
+                            continue;
                         }
 
                         $body .=  '<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span><span class="sr-only">操作</span></button>';

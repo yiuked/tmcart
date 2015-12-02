@@ -231,7 +231,7 @@ abstract class ObjectBase{
 			$fields['upd_date']	= $this->upd_date;
 		}
 
-		$result = Db::getInstance()->update(DB_PREFIX.$this->table, $fields, '`'.pSQL($this->identifier).'` = '.(int)($this->id));
+		$result = Db::getInstance()->update(DB_PREFIX . $this->table, $fields, '`'.pSQL($this->identifier).'` = '.(int)($this->id));
 
 		if ($result === false)
 			return false;
@@ -269,11 +269,11 @@ abstract class ObjectBase{
 	 		die(Tools::displayError());
 
 		/* Database deletion */
-		$result = Db::getInstance()->exec('DELETE FROM `'.pSQL(DB_PREFIX.$this->table).'` WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
+		$result = Db::getInstance()->exec('DELETE FROM `'.pSQL(DB_PREFIX . $this->table).'` WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
 		if (!$result)
 			return false;
 
-		if (key_exists('rewrite', $this)){
+		if (array_key_exists('rewrite', $this)){
 			$rule = Rule::loadRule(array(
 							'entity' => pSQL(get_class($this)),
 							'id_entity' => (int) $this->id

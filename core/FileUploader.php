@@ -12,7 +12,9 @@ class FileUploader
 		$this->allowedExtensions = $allowedExtensions;
 		$this->sizeLimit = $sizeLimit;
 
-		if (isset($_FILES['qqfile']))
+		if (isset($_GET['qqfile']))
+			$this->file = new QqUploadedFileXhr();
+		elseif (isset($_FILES['qqfile']))
             $this->file = new QqUploadedFileForm();
         else
             $this->file = false;
@@ -111,4 +113,76 @@ class QqUploadedFileForm
     {
         return $_FILES['qqfile']['size'];
     }
+}
+
+/**
+ * Handle file uploads via XMLHttpRequest
+ */
+class QqUploadedFileXhr
+{
+	/**
+	 * Save the file to the specified path
+	 * @return boolean TRUE on success
+	 */
+	public function upload($path)
+	{
+		$input = fopen('php://input', 'r');
+		$temp = tmpfile();
+		$realSize = stream_copy_to_stream($input, $temp);
+		fclose($input);
+		if ($realSize != $this->getSize())
+			return false;
+		$target = fopen($path, 'w');
+		fseek($temp, 0, SEEK_SET);
+		stream_copy_to_stream($temp, $target);
+		fclose($target);
+
+		return true;
+	}
+
+	public function save($type)
+	{
+		$image = new Image();
+		$image->copyFromPost();
+		if (!$image->add())
+			return array('error' => Tools::displayError('Error while creating additional image'));
+		else
+			return $this->copyImage($image->id, $type);
+	}
+
+	public function copyImage($id_image, $type = 'product')
+	{
+		$image = new Image($id_image);
+		if (!$new_path = $image->getPathForCreation())
+			return array('error' => Tools::displayError('An error occurred during new folder creation'));
+		if (!($tmpName = tempnam(_TM_PRO_IMG_DIR, 'PS')) || !$this->upload($tmpName))
+			return array('error' => Tools::displayError('An error occurred during the image upload'));
+		elseif (!ImageManager::resize($tmpName, $new_path.'.'.$image->image_format))
+			return array('error' => Tools::displayError('An error occurred while copying image.'));
+		else{
+			$imagesTypes = ImageType::getImagesTypes($type);
+			foreach ($imagesTypes as $imageType)
+			{
+				if (!ImageManager::resize($tmpName, $new_path.'-'.stripslashes($imageType['name']).'.'.$image->image_format, $imageType['width'], $imageType['height'], $image->image_format))
+					return array('error' => Tools::displayError('An error occurred while copying image:').' '.stripslashes($imageType['name']));
+			}
+		}
+		unlink($tmpName);
+
+		$img = array('id_image' => $image->id, 'name' => $this->getName());
+		return array('success' => $img);
+	}
+
+	public function getName()
+	{
+		return $_GET['qqfile'];
+	}
+
+	public function getSize()
+	{
+		if (isset($_SERVER['CONTENT_LENGTH']))
+			return (int)$_SERVER['CONTENT_LENGTH'];
+		else
+			throw new Exception('Getting content length is not supported.');
+	}
 }

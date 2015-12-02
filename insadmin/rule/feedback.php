@@ -25,26 +25,24 @@ if(intval(Tools::getRequest('delete'))>0){
 
 }
 
-$table = new UIAdminDndTable('feedback',  'Feedback', 'id_feedback');
-$table->parent = 'id_parent';
-$table->child = true;
+$table = new UIAdminTable('feedback',  'Feedback', 'id_feedback');
 $table->header = array(
 	array('sort' => false ,'isCheckAll' => 'categoryBox[]'),
 	array('name' => 'name','title' => 'ID','filter' => 'string'),
 	array('name' => 'flag_code','title' => '国家','filter' => 'string'),
-	array('name' => 'id_product','title' => '产品ID','filter' => 'bool'),
-	array('name' => 'rating','title' => '评分','filter' => 'bool'),
+	array('name' => 'id_product','title' => '产品ID','filter' => 'string'),
+	array('name' => 'rating','title' => '评分','filter' => 'string'),
 	array('name' => 'feedback','title' => '内容'),
 	array('name' => 'add_date','title' => '时间'),
-	array('sort' => false ,'title' => '操作', 'class' => 'text-right', 'isAction'=> array('view', 'edit', 'delete')),
+	array('sort' => false ,'title' => '操作', 'class' => 'text-right','width' => '120px', 'isAction'=> array('delete')),
 );
 $filter = $table->initFilter();
-$orderBy 	= isset($_GET['orderby']) ? Tools::G('orderby') : 'position';
+$orderBy 	= isset($_GET['orderby']) ? Tools::G('orderby') : 'id_feedback';
 $orderWay 	= isset($_GET['orderway']) ? Tools::G('orderway') : 'asc';
 $limit		= $cookie->getPost('pagination') ? $cookie->getPost('pagination') : '50';
 $p			= Tools::G('p') ? (Tools::G('p') == 0 ? 1 : Tools::G('p')) : 1;
 
-$result  	= Feedback::getEntity(false,$p,$limit,$orderBy,$orderWay,$filter);
+$result  	= Feedback::getEntity($p, $limit, $orderBy, $orderWay, $filter);
 
 require_once(dirname(__FILE__).'/../errors.php');
 ?>
@@ -58,37 +56,10 @@ $btn_group = array(
 	array('type' => 'a', 'title' => '批量导入', 'href' => 'index.php?rule=feedback_import', 'class' => 'btn-primary', 'icon' => 'random') ,
 );
 echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'breadcrumb');
+$btn_group = array(
+	array('type' => 'button', 'title' => '批量删除', 'confirm' => '你确定要删除选中项?', 'name' => 'deleteItems', 'class' => 'btn-danger', 'icon' => 'remove') ,
+	array('type' => 'button', 'title' => '批量启用',  'name' => 'subActiveON', 'class' => 'btn-danger', 'icon' => 'ok') ,
+	array('type' => 'button', 'title' => '批量关闭',  'name' => 'subActiveOFF', 'class' => 'btn-danger', 'icon' => 'remove') ,
+);
+echo UIViewBlock::area(array('title' => '用户列表', 'table' => $table, 'result' => $result, 'limit' => $limit, 'btn_groups' => $btn_group), 'table');
 ?>
-<div class="row">
-	<div class="col-md-12">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				反馈列表
-			</div>
-			<div class="panel-body">
-				<form class="form-inline" method="post" action="index.php?rule=feedback">
-					<?php
-					//config table options
-					$table->data = $result['entitys'];
-					echo $table->draw();
-					?>
-					<div class="row">
-						<div class="col-md-4">
-							<div class="btn-group" role="group" >
-								<button type="submit" class="btn btn-default" onclick="return confirm('你确定要删除选中项目?');" name="subDelete">批量删除</button>
-								<button type="submit" class="btn btn-default" name="subActiveON">批量启用</button>
-								<button type="submit" class="btn btn-default" name="subActiveOFF">批量关闭</button>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<?php
-							$pagination = new UIAdminPagination($result['total'],$limit);
-							echo $pagination->draw();
-							?>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-</div>

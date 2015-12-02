@@ -1,74 +1,44 @@
 <?php 
 class Product extends ObjectBase{
-	protected $fields 			= array(
-		'id_category_default','id_image_default','id_color','id_brand',
-		'price','special_price',
-		'ean13','weight','quantity',
-		'name','meta_title','meta_keywords','meta_description','rewrite','description','description_short',
-		'active','is_sale','is_new','in_stock','is_top','orders',
-		'from_date','to_date','add_date','upd_date');
-	protected $fieldsRequired	= array('id_category_default','price','name','rewrite');
-	protected $fieldsSize 		= array('meta_description' => 256, 'meta_keywords' => 256,
-		'meta_title' => 256, 'rewrite' => 256, 'name' => 256);
-	protected $fieldsValidate	= array(
-		'id_brand'=>'isInt',
-		'price' => 'isPrice',
-		'special_price' => 'isPrice',
-		'ean13' => 'isEan13',
-		'weight' => 'isUnsignedFloat',
-		'quantity' => 'isUnsignedId',
-		'is_sale' => 'isBool',
-		'is_new' => 'isBool',
-		'in_stock' => 'isBool',
-		'active' => 'isBool',
-		'name' => 'isCatalogName',
-		'meta_title' => 'isGenericName',
-		'meta_keywords' => 'isGenericName',
-		'meta_description' => 'isGenericName',
-		'rewrite' => 'isLinkRewrite');
+
+	protected $fields = array(
+		'id_color' => array('type' => 'isInt'),
+		'id_brand' => array('type' => 'isInt'),
+		'id_category_default' => array('type' => 'isInt'),
+		'id_image' => array('type' => 'isInt'),
+		'price' => array('type' => 'isPrice', 'required' => true),
+		'special_price' => array('type' => 'isPrice', 'required' => true),
+		'ean13' => array('type' => 'isEan13'),
+		'weight' => array('type' => 'isFloat'),
+		'quantity' => array('type' => 'isInt'),
+		'is_sale' => array('type' => 'isInt'),
+		'is_new' => array('type' => 'isInt'),
+		'is_top' => array('type' => 'isInt'),
+		'in_stock' => array('type' => 'isInt'),
+		'active' => array('type' => 'isInt'),
+		'orders' => array('type' => 'isInt'),
+		'name' => array('type' => 'isCatalogName', 'required' => true, 'size' => 256),
+		'description_short' => array('type' => 'isCleanHtml'),
+		'description' => array('type' => 'isCleanHtml'),
+		'meta_title' => array('type' => 'isGenericName', 'size' => 256),
+		'meta_keywords' => array('type' => 'isGenericName', 'size' => 256),
+		'meta_description' => array('type' => 'isGenericName', 'size' => 256),
+		'rewrite' => array('type' => 'isLinkRewrite', 'required' => true, 'size' => 256),
+		'from_date' => array('type' => 'isDate'),
+		'to_date' => array('type' => 'isDate'),
+		'add_date' => array('type' => 'isDate'),
+		'upd_date' => array('type' => 'isDate'),
+	);
 	
 	protected $identifier 		= 'id_product';
 	protected $table			= 'product';
-	
-	public function getFields()
-	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_product'] = (int)($this->id);
-		$fields['id_color'] = (int)($this->id_color);
-		$fields['id_brand'] = (int)($this->id_brand);
-		$fields['id_category_default'] = (int)($this->id_category_default);
-		$fields['id_image_default'] = (int)($this->id_image_default);
-		$fields['price'] = (float)($this->price);
-		$fields['special_price'] = (float)($this->special_price);
-		$fields['ean13'] = pSQL($this->ean13);
-		$fields['weight'] = (float)($this->weight);
-		$fields['quantity'] = (int)($this->quantity);
-		$fields['name'] = pSQL($this->name);
-		$fields['description_short'] = pSQL($this->description_short,true);
-		$fields['description'] = pSQL($this->description,true);
-		$fields['meta_title'] = pSQL($this->meta_title);
-		$fields['meta_keywords'] = pSQL($this->meta_keywords);
-		$fields['meta_description'] = pSQL($this->meta_description);
-		$fields['rewrite'] = pSQL($this->rewrite);
-		$fields['active'] = (int)($this->active);
-		$fields['is_sale'] = (int)($this->is_sale);
-		$fields['is_new'] = (int)($this->is_new);
-		$fields['is_top'] = (int)($this->is_top);
-		$fields['orders'] = (int)($this->orders);
-		$fields['in_stock'] = (int)($this->in_stock);
-		$fields['from_date'] = pSQL($this->from_date);
-		$fields['to_date'] = pSQL($this->to_date);
-		$fields['add_date'] = pSQL($this->add_date);
-		$fields['upd_date'] = pSQL($this->upd_date);
-		return $fields;
-	}
 	
 	public function delete()
 	{
 		if(parent::delete()){
 			Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'product_to_category` WHERE `id_product`='.(int)$this->id);
 			Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'product_to_tag` WHERE `id_product`='.(int)$this->id);
+			Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'product_to_image` WHERE `id_product`='.(int)$this->id);
 			Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'product_to_attribute` WHERE `id_product`='.(int)$this->id);
 			$this->deleteImages();
 		}
@@ -94,7 +64,41 @@ class Product extends ObjectBase{
 	}
 
 	/**
-	* Delete product images from database
+	 * 获取产品图片position的最大值
+	 *
+	 * @param $id_product
+	 * @return mixed
+	 */
+	public static function getImageLastPosition($id_product)
+	{
+		$result = Db::getInstance()->getRow('
+		SELECT MAX(`position`) AS max
+		FROM `' . DB_PREFIX . 'product_to_image`
+		WHERE `id_product` = '.(int)$id_product);
+		return (int) $result['max'] + 1;
+	}
+
+	/**
+	 * 获取产品图片
+	 */
+	public function getImages()
+	{
+		$result = Db::getInstance()->getAll('
+		SELECT *
+		FROM `'.DB_PREFIX.'product_to_image`
+		WHERE `id_product` = '.(int)($this->id) . ' ORDER BY position ASC');
+		if ($result == false)
+			return false;
+		$imageType = ImageType::getImagesTypes(ImageType::IMAGE_PRDOCUT);
+		foreach ($result as &$row) {
+			foreach($imageType as $type) {
+				$row[$type['name']] = Image::getImageLink($row['id_image'], $type['name']);
+			}
+		}
+		return $result;
+	}
+	/**
+	* 删除所有产品图片
 	*
 	* @return bool success
 	*/
@@ -102,26 +106,24 @@ class Product extends ObjectBase{
 	{
 		$result = Db::getInstance()->getAll('
 		SELECT `id_image`
-		FROM `'.DB_PREFIX.'image`
+		FROM `'.DB_PREFIX.'product_to_image`
 		WHERE `id_product` = '.(int)($this->id));
 
-		$status = true;
-		if ($result)
+		$deleted = array();
+		if ($result) {
 			foreach ($result as $row)
 			{
 				$image = new Image($row['id_image']);
-				$status &= $image->delete();
+				if ($image->delete()) {
+					$deleted[] = (int) $row['id_image'];
+				}
 			}
-		return $status;
-	}
+		}
 
-	public function copyFromPost()
-	{
-		parent::copyFromPost();
-		if(empty($this->from_date))
-			$this->from_date = '000-00-00 00:00:00';
-		if(empty($this->to_date))
-			$this->to_date   = '000-00-00 00:00:00';
+		if (count($deleted) > 0) {
+			return Db::getInstance()->exec('DELETE FROM ' . DB_PREFIX . 'product_to_image WHERE id_image IN(' . implode(',', $deleted) . ')');
+		}
+		return false;
 	}
 	
 	public function getAlsoProduct($number=12)
@@ -204,11 +206,8 @@ class Product extends ObjectBase{
 		return $rows;
 	}
 	
-	public static function getProducts($active = true,$p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
+	public static function getProducts($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
-	 	if (!Validate::isBool($active))
-	 		die(Tools::displayError());
-
 		$where = '';
 		if(!empty($filter['id_product']) && Validate::isInt($filter['id_product']))
 			$where .= ' AND a.`id_product`='.intval($filter['id_product']);
@@ -219,7 +218,7 @@ class Product extends ObjectBase{
 		if(!empty($filter['rewrite']) && Validate::isCatalogName($filter['rewrite']))
 			$where .= ' AND a.`rewrite` LIKE "%'.pSQL($filter['rewrite']).'%"';
 		if(!empty($filter['active']) && Validate::isInt($filter['active']))
-			$where .= ' AND a.`active`='.((int)($filter['active'])==1?'1':'0');
+			$where .= ' AND a.`active`='.((int)($filter['active']) == 1 ? '1' : '0');
 		if(!empty($filter['is_stock']) && Validate::isInt($filter['is_stock']))
 			$where .= ' AND a.`is_stock`='.((int)($filter['is_stock'])==1?'1':'0');
 		if(!empty($filter['id_category']) && Validate::isInt($filter['id_category']) && $filter['id_category']>1)
@@ -234,14 +233,14 @@ class Product extends ObjectBase{
 
 		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'product` a
 				LEFT JOIN `'.DB_PREFIX.'category` AS c ON a.id_category_default = c.id_category
-				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
+				WHERE 1
 				'.$where);
 		if($total==0)
 			return false;
 
 		$result = Db::getInstance()->getAll('SELECT a.*,c.name AS c_name FROM `'.DB_PREFIX.'product` a
 				LEFT JOIN `'.DB_PREFIX.'category` AS c ON a.id_category_default = c.id_category
-				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
+				WHERE 1
 				'.$where.'
 				'.$postion.'
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);
@@ -259,8 +258,8 @@ class Product extends ObjectBase{
 			$row['link'] = Tools::getLink($row['rewrite']);
 			$row['name'] = stripslashes($row['name']);
 			$row['tags'] = self::getProductTags($row['id_product']);
-			$row['image_home'] = Image::getImageLink($row['id_image_default'],'home');
-			$row['image_small'] = Image::getImageLink($row['id_image_default'],'small');
+			$row['image_home'] = Image::getImageLink($row['id_image'],'home');
+			$row['image_small'] = Image::getImageLink($row['id_image'],'small');
 			$row['attributes'] = self::getAttributeAndGrop($row['id_product']);
 			$row['rating']= self::feedbacStateWithProduct($row['id_product']);
 			$row['price_save'] = 0;
@@ -367,23 +366,6 @@ class Product extends ObjectBase{
 		return $ret;
 	}
 	
-	/**
-	 * getProductCategories return an array of categories which this product belongs to
-	 *
-	 * @return array of categories
-	 */
-	public function getTags()
-	{
-		$ret = array();
-		if ($row = Db::getInstance()->getAll('
-		SELECT `id_tag` FROM `'.DB_PREFIX.'product_to_tag`
-		WHERE `id_product` = '.(int)$this->id)
-		)
-			foreach ($row as $val)
-				$ret[] = $val['id_tag'];
-		return $ret;
-	}
-	
 	public function addToAttribute($attributes = array())
 	{
 		if (empty($attributes))
@@ -432,28 +414,6 @@ class Product extends ObjectBase{
 			VALUES '.implode(',', $Cats));
 
 		return true;
-	}
-	
-	public function addToTags($tags)
-	{		
-			if (empty($tags))
-			return false;
-			
-			$currenTags = $this->getTags();
-			$tagCats = array();
-
-			foreach($tags as $t){
-				$id_tag = Tag::tagsExists($t);
-				if (!in_array($t,$currenTags) && $id_tag)
-					$tagCats[] = '('. $this->id.', '. $id_tag.')';
-			}
-			
-			if (sizeof($tagCats))
-				return Db::getInstance()->exec('
-				INSERT INTO `'.DB_PREFIX.'product_to_tag` (`id_product`, `id_tag`)
-				VALUES '.implode(',', $tagCats));
-			
-			return true;
 	}
 	
 	public function deleteAttribute($id_attribute)
@@ -523,27 +483,66 @@ class Product extends ObjectBase{
 
 		return true;
 	}
-	
-	public function updateTags($tags_str)
+
+	/**
+	 * 获取产品的tag id
+	 * @return array
+	 */
+	public function getTags()
 	{
+		$ret = array();
+		if ($row = Db::getInstance()->getAll('
+		SELECT `id_tag` FROM `'.DB_PREFIX.'product_to_tag`
+		WHERE `id_product` = '.(int)$this->id)
+		)
+			foreach ($row as $val)
+				$ret[] = $val['id_tag'];
+		return $ret;
+	}
 
-		$tags = explode(',',trim($tags_str,','));
-		if(!is_array($tags))
-			return;
-
-		// get max position in each categories
-		$result = Db::getInstance()->getAll('SELECT `id_tag`
-				FROM `'.DB_PREFIX.'product_to_tag`
-				WHERE `id_tag` NOT IN('.implode(',', array_map('intval', $tags)).')
-				AND `id_product` = '. $this->id .'');
-		if(is_array($result))
-			foreach ($result as $tagToDelete)
-				$this->deleteTag($tagToDelete['id_tag']);
-
-		if (!$this->addToTags($tags))
+	/**
+	 * 添加tags
+	 * @param $tags
+	 * @return bool
+	 */
+	public function addToTags($tags)
+	{
+		if (empty($tags))
 			return false;
 
-		return true;
+		$tags = explode(',', $tags);
+
+		$currenTags = $this->getTags();
+		$newTags = array();
+
+		foreach($tags as $t){
+			$id_tag = Tag::tagsExists($t);
+			if ($id_tag){
+				$newTags[] = $id_tag;
+			}
+		}
+
+		$needDelete = array_diff($currenTags, $newTags);
+		$needAdd = array_diff($newTags, $currenTags);
+
+		$ret = true;
+		if (count($needDelete)) {
+			$ret &= Db::getInstance()->exec('
+				DELETE FROM `'.DB_PREFIX.'product_to_tag`
+				WHERE id_tag IN (' .implode(',', $needDelete) . ') AND id_product ='.(int) $this->id);
+		}
+
+		if (count($needAdd)){
+			$insert = array();
+			foreach ($needAdd as $id_temp) {
+				$insert[] = '(' . $this->id . ',' . $id_temp . ')';
+			}
+			$ret &=  Db::getInstance()->exec('
+				INSERT INTO `'.DB_PREFIX.'product_to_tag` (`id_product`, `id_tag`)
+				VALUES '.implode(',', $insert));
+		}
+
+		return $ret;
 	}
 	
 	public function getComments($id_keep=0)

@@ -19,7 +19,7 @@
  * */
 ?>
 <div class="row">
-    <div class="col-md-12">
+    <div class="<?php echo isset($data['class']) ? $data['class'] : 'col-md-12';?>">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <span class="badge"><?php echo $data['result']['total'];?></span> <?php echo $data['title']; ?>

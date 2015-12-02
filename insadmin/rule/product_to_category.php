@@ -3,34 +3,34 @@
 if(isset($_POST['changeProductCategory']))
 {
 	if(count($_POST['categoryBox'])>0){
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance()->getAll('
 			SELECT `id_product`
-			FROM `'._DB_PREFIX_.'product_to_category`
+			FROM `'.DB_PREFIX.'product_to_category`
 			WHERE id_category IN('.pSQL(implode(",",$_POST['categoryBox'])).')');
 		foreach($result as $row){
-			$ret = Db::getInstance()->getRow('SELECT `id_product` FROM `'._DB_PREFIX_.'product_to_category` WHERE `id_product`='.intval($row['id_product']).' AND `id_category`='.intval($_POST['id_category']));
+			$ret = Db::getInstance()->getRow('SELECT `id_product` FROM `'.DB_PREFIX.'product_to_category` WHERE `id_product`='.intval($row['id_product']).' AND `id_category`='.intval($_POST['id_category']));
 			if(!$ret){
-				Db::getInstance()->Execute('
-				INSERT INTO `'._DB_PREFIX_.'product_to_category` (`id_product`, `id_category`)
+				Db::getInstance()->exec('
+				INSERT INTO `'.DB_PREFIX.'product_to_category` (`id_product`, `id_category`)
 				VALUES ('.$row['id_product'].','.(int)$_POST['id_category'].')');
 			}
 			if($_POST['isDefault']==1){
-				Db::getInstance()->Execute('
-				UPDATE `'._DB_PREFIX_.'product` SET `id_category_default`='.(int)$_POST['id_category'].'
+				Db::getInstance()->exec('
+				UPDATE `'.DB_PREFIX.'product` SET `id_category_default`='.(int)$_POST['id_category'].'
 				WHERE `id_product`='.intval($row['id_product']));
 			}
 			if($_POST['isDelete']==1){
-				Db::getInstance()->Execute('
-				DELETE  FROM `'._DB_PREFIX_.'product_to_category` WHERE `id_category` IN('.implode(',',$_POST['categoryBox']).') AND
+				Db::getInstance()->exec('
+				DELETE  FROM `'.DB_PREFIX.'product_to_category` WHERE `id_category` IN('.implode(',',$_POST['categoryBox']).') AND
 				`id_product`='.intval($row['id_product']));
 			}
 		}
 	}
 }
 
-$result = Db::getInstance()->ExecuteS('
+$result = Db::getInstance()->getAll('
 	SELECT *
-	FROM `'._DB_PREFIX_.'category`
+	FROM `'.DB_PREFIX.'category`
 	WHERE (`active` = 1 OR `id_category` = 1)
 	GROUP BY id_category
 	ORDER BY `level_depth` ASC, `position` ASC');

@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-12">
+    <div class="<?php echo isset($data['class']) ? $data['class'] : 'col-md-12';?>">
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="col-md-6">
@@ -19,7 +19,7 @@
                             <?php echo $item['title'];?>
                             </a>
                         <?php }else{ ?>
-                            <button  class="btn btn-<?php echo $item['class'];?>" <?php echo isset($item['id']) ? 'id="' .$item['id']. '"' : '';?>>
+                            <button  class="btn <?php echo $item['class'];?>" <?php echo isset($item['id']) ? 'id="' .$item['id']. '"' : '';?>>
                                 <span aria-hidden="true" class="glyphicon glyphicon-<?php echo $item['icon'];?>"></span>
                                 <?php echo $item['title'];?>
                             </button>

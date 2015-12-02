@@ -1,4 +1,5 @@
 <?php
+	$start=explode(" ",microtime());
 	ob_start();
 	include_once(dirname(__FILE__) . "/config/init.php");
 ?>
@@ -133,7 +134,7 @@
 		?>
 </div>
 <div id="footer">
-	<div class="version"><b>Version:TM Shop <?php echo _TM_VERSION_;?></b></div>
+	<div class="version"><b>Version:TM Shop <?php echo _TM_VERSION_;?></b> <?php $end=explode(" ",microtime());echo "Time:".($end[1]+$end[0]-$start[1]-$start[0]);printf(' memory usage: %01.2f MB', memory_get_usage()/1024/1024);?></div>
 	<div class="copyright">Power by TM Shop</div>
 </div>
 <div id="ajax_confirmation" style="display:none"></div>
