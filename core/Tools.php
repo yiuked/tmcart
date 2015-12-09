@@ -15,8 +15,8 @@ class Tools{
 		$host = (isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : $_SERVER['HTTP_HOST']);
 		if ($entities)
 			$host = htmlspecialchars($host, ENT_COMPAT, 'UTF-8');
-		//if ($http)
-		//	$host = (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$host;
+		if ($http)
+			$host = (Configuration::get('SSL_ENABLED') ? 'https://' : 'http://').$host;
 		return $host;
 	}
 	/*

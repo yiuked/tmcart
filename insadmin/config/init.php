@@ -10,3 +10,5 @@ if(!$cookie->__isset('ad_id_employee') || !$cookie->__isset('ad_passwd')){
 
 define('ADMIN_DIR', realpath(dirname(__FILE__) . '/../'));
 define('ADMIN_BLOCK_DIR', ADMIN_DIR . '/block/');
+
+define('ADMIN_URL', _TM_ROOT_URL_ . basename(ADMIN_DIR) . '/');

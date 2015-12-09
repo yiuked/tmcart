@@ -1,75 +1,27 @@
 <?php 
 class Cart extends ObjectBase{
-	protected $fields 			= array('id_user','id_address','id_carrier','id_currency','discount','msg','status','add_date','upd_date');
+	protected $fields = array(
+		'id_user' => array('type' => 'isInt'),
+		'id_address' => array('type' => 'isInt'),
+		'id_carrier' => array('type' => 'isInt'),
+		'id_currency' => array('type' => 'isInt'),
+		'discount' => array('type' => 'isPrice'),
+		'msg' => array('type' => 'isMessage', 'size'=>500),
+		'add_date' => array('type' => 'isMessage'),
+		'upd_date' => array('type' => 'isMessage'),
+	);
+
 	protected $identifier 		= 'id_cart';
 	protected $table			= 'cart';
-	
-	/*
-	购物车默认为IS_OPEN状态，表示可操作增删改产品,
-	IS_ORDER状态为，购物轩已生成定单状态，不可更改,
-	IS_CLOSE用于定单被删除时的状态.
-	*/
+
+	/**
+	 * 购物车默认为IS_OPEN状态，表示可操作增删改产品
+	 * IS_ORDER状态为，购物轩已生成定单状态，不可更改,
+	 * IS_CLOSE用于定单被删除时的状态.
+	 */
 	const IS_OPEN 	= 0;
 	const IS_ORDER 	= 1;
 	const IS_CLOSE 	= 3;
-
-	public function getFields()
-	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_cart'] = (int)($this->id);
-		$fields['id_user'] = (int)($this->id_user);
-		$fields['id_address'] = (int)($this->id_address);
-		$fields['id_carrier'] = (int)($this->id_carrier);
-		$fields['id_currency'] = (int)($this->id_currency);
-		$fields['discount'] = (float)($this->discount);
-		$fields['msg'] = pSQL($this->msg);
-		$fields['status'] = (int)$this->status;
-		$fields['add_date'] = pSQL($this->add_date);
-		$fields['upd_date'] = pSQL($this->upd_date);
-		return $fields;
-	}
-	
-	public function copyFromPost()
-	{
-		global $cookie;
-		parent::copyFromPost();
-		if(empty($this->id_user) && isset($cookie->id_user))
-			$this->id_user = (int)($cookie->id_user);
-		else
-			$this->id_user = 0;
-		if(empty($this->id_carrier))
-			$this->id_carrier = (int)Configuration::get('TM_DEFAULT_CARRIER_ID');
-		if(empty($this->id_address))
-			$this->id_address   = 0;
-		if(empty($this->id_currency) && isset($cookie->id_currency))
-			$this->id_currency = (int)($cookie->id_currency);
-		else
-			$this->id_currency = 0;
-		if(empty($this->from_date))
-			$this->from_date = '';
-		if(empty($this->to_date))
-			$this->to_date   = '';
-	}
-	
-	public function add($nullValues = false)
-	{
-		global $cookie;
-		if(isset($cookie->id_user))
-		{
-			$user    = new User($cookie->id_user);
-			$address = $user->getDefaultAddress();
-			if($address->id){
-				$this->id_address = (int)$address->id;
-			} 
-		}
-		if(parent::add($nullValues))
-		{
-			$cookie->id_cart = (int)($this->id);
-			$cookie->write();
-		}
-	}
-	
 	public function delete()
 	{
 		if(parent::delete()){
@@ -119,16 +71,17 @@ class Cart extends ObjectBase{
 		return $carrier->shipping;
 	}
 	
-	public function getProducts($image="small")
+	public function getProducts($image = "small")
 	{
 		$products = array();
 		$result = Db::getInstance()->getAll('
 				  SELECT c.*,p.`name`,p.`price`,p.`rewrite`,p.id_product,i.`id_image`,(c.`quantity`*p.`price`) AS total FROM '.DB_PREFIX.'cart_product c
 				  LEFT JOIN '.DB_PREFIX.'product p ON (c.`id_product` = p.`id_product`)
-				  LEFT JOIN '.DB_PREFIX.'image i ON (p.`id_product` = i.`id_product`)
+				  LEFT JOIN '.DB_PREFIX.'product_to_image i ON (p.`id_product` = i.`id_product`)
 				  WHERE id_cart='.(int)($this->id).' AND i.`cover`=1');
+
 		if(!$result)
-			return 0;
+			return false;
 		foreach($result as &$row)
 		{
 			$row['image'] = Image::getImageLink($row['id_image'],$image);
@@ -138,7 +91,7 @@ class Cart extends ObjectBase{
 		return $result;
 	}
 	
-	public function addProduct($id_product,$quantity,$price,$id_attributes='')
+	public function addProduct($id_product, $quantity, $price, $id_attributes = '')
 	{
 		if(is_array($id_attributes))
 			$id_attributes = implode(',',$id_attributes);
@@ -204,11 +157,8 @@ class Cart extends ObjectBase{
 		return $result;
 	}
 	
-	public static function getEntity($active = true,$p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
+	public static function getEntity($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
-	 	if (!Validate::isBool($active))
-	 		die(Tools::displayError());
-
 		$where = '';
 		if(!empty($filter['id_cart']) && Validate::isInt($filter['id_cart']))
 			$where .= ' AND a.`id_cart`='.intval($filter['id_cart']);
@@ -251,4 +201,3 @@ class Cart extends ObjectBase{
 		return $rows;
 	}
 }
-?>

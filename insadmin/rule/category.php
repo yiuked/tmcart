@@ -36,6 +36,7 @@ if(intval(Tools::getRequest('delete'))>0){
 
 echo UIAdminDndTable::loadHead();
 $table = new UIAdminDndTable('category',  'Category', 'id_category');
+$table->addAttribte('id', 'category');
 $table->parent = 'id_parent';
 $table->child = true;
 $table->header = array(
@@ -90,4 +91,4 @@ $btn_groups = array(
 	array('type' => 'button', 'title' => '激活选中',  'name' => 'subActiveON', 'btn_type' => 'submit', 'class' => 'btn-default'),
 	array('type' => 'button', 'title' => '关闭选中',  'name' => 'subActiveOFF', 'btn_type' => 'submit', 'class' => 'btn-default'),
 );
-echo UIViewBlock::area(array('title' => $panelHead, 'table' => $table, 'result' => $result, $limit => $limit, 'btn_groups' => $btn_groups), 'table');
+echo UIViewBlock::area(array('title' => $panelHead, 'table' => $table, 'result' => $result, 'limit' => $limit, 'btn_groups' => $btn_groups), 'table');

@@ -1,43 +1,23 @@
 <?php 
 class CMSCategory extends ObjectBase{
-	protected $fields 			= array('id_parent','level_depth','nleft','nright','position','name','description',
-		'meta_title','meta_keywords','meta_description','rewrite','active','add_date','upd_date');
-	protected $fieldsRequired	= array('name','rewrite');
-	protected $fieldsSize 		= array('meta_description' => 256, 'meta_keywords' => 256,
-		'meta_title' => 256, 'link_rewrite' => 256, 'name' => 256);
-	protected $fieldsValidate	= array(
-		'name' => 'isCatalogName',
-		'active'=> 'isBool',
-		'meta_title' => 'isGenericName',
-		'meta_keywords' => 'isGenericName',
-		'meta_description' => 'isGenericName', 
-		'rewrite' => 'isLinkRewrite', 
-		'description' => 'isString');
-	
+	protected $fields = array(
+		'id_parent' => array('type' => 'isInt'),
+		'level_depth' => array('type' => 'isInt'),
+		'nleft' => array('type' => 'isInt'),
+		'nright' => array('type' => 'isInt'),
+		'position' => array('type' => 'isInt'),
+		'name' => array('required' => true,'type' => 'isGenericName', 'size' => 256),
+		'description' => array('type' => 'isCleanHtml'),
+		'meta_title' => array('type' => 'isString','size' => 256),
+		'meta_keywords' => array('type' => 'isString','size' => 256),
+		'meta_description' => array('type' => 'isString', 'size' => 256),
+		'rewrite' => array('required' => true, 'type' => 'isLinkRewrite', 'size' => 256),
+		'active' => array('type' => 'isInt'),
+		'add_date' => array('type' => 'isDate'),
+		'upd_date' => array('type' => 'isDate'),
+	);
 	protected $identifier 		= 'id_cms_category';
 	protected $table			= 'cms_category';
-	
-	public function getFields()
-	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_cms_category'] = (int)($this->id);
-		$fields['id_parent'] = (int)($this->id_parent);
-		$fields['level_depth'] = (int)($this->level_depth);
-		$fields['nleft'] = (int)($this->nleft);
-		$fields['nright'] = (int)($this->nright);
-		$fields['position'] = (int)($this->position);
-		$fields['name'] = pSQL($this->name);
-		$fields['description'] = pSQL($this->description);
-		$fields['meta_title'] = pSQL($this->meta_title);
-		$fields['meta_keywords'] = pSQL($this->meta_keywords);
-		$fields['meta_description'] = pSQL($this->meta_description);
-		$fields['rewrite'] = pSQL($this->rewrite);
-		$fields['active'] = (int)($this->active);
-		$fields['add_date'] = pSQL($this->add_date);
-		$fields['upd_date'] = pSQL($this->upd_date);
-		return $fields;
-	}
 	
 	public	function add($nullValues = false)
 	{
@@ -158,10 +138,8 @@ class CMSCategory extends ObjectBase{
 	  * @param boolean $active return only active categories
 	  * @return array Categories
 	  */
-	public function getSubCMSCategories($active = true,$limit=20,$p=20,$orderBy = NULL,$orderWay = NULL,$filter=array())
+	public function getSubCMSCategories($limit=20, $p=20, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
-	 	if (!Validate::isBool($active))
-	 		die(Tools::displayError());
 		
 		$where = '';
 		if(!empty($filter['id_cms_category']) && Validate::isInt($filter['id_cms_category']))
@@ -181,19 +159,18 @@ class CMSCategory extends ObjectBase{
 		}
 		
 		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'cms_category`
-		WHERE `id_cms_category` != 1 '.($active?' `active`=1 AND':'').'
+		WHERE `id_cms_category` != 1
 		'.$where);
 
 		$result = Db::getInstance()->getAll('
 		SELECT * FROM `'.DB_PREFIX.'cms_category`
 		WHERE `id_parent` = '.(int)($this->id).' '.$where.'
-		'.($active ? 'AND `active` = 1' : '').'
 		'.$postion.'
 		LIMIT '.(($p-1)*$limit).','.(int)$limit);
 
 		$rows   = array(
-				'total' => $total['total'],
-				'list'  => $result);
+			'total' => $total['total'],
+			'entitys'  => $result);
 
 		return $rows;
 	}
@@ -301,7 +278,7 @@ class CMSCategory extends ObjectBase{
 			AND `id_cms_category`='.(int)($movedCategory['id_cms_category'])));
 	}
 	
-	public function getCatBar($id_parent,$catBar=array())
+	public function getCatBar($id_parent, $catBar=array())
 	{
 		$category = Db::getInstance()->getRow('SELECT `id_cms_category`,`id_parent`,`level_depth`,`name` FROM `'.DB_PREFIX.'cms_category` WHERE `id_cms_category`='.intval($id_parent));
 		if(sizeof($category)>1)

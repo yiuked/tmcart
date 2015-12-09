@@ -1,53 +1,73 @@
 <?php 
 class Carrier extends ObjectBase{
-	protected $fields 			= array('name','logo','description','shipping','active');
-	protected $fieldsRequired	= array('name');
-	protected $fieldsSize 		= array('name' => 56, 'description' => 256);
-	protected $fieldsValidate	= array(
-		'active'=> 'isBool',
-		'name' => 'isName', 
-		'shipping' => 'isPrice', 
-		'description' => 'isMessage');
-	
+	protected $fields = array(
+		'name' => array(
+			'type' => 'isName',
+			'size' => '56',
+			'required' => true,
+		),
+		'id_image' => array(
+			'type' => 'isInt',
+		),
+		'description' => array(
+			'type' => 'isMessage',
+		),
+		'shipping' => array(
+			'type' => 'isPrice',
+		),
+		'active' => array(
+			'type' => 'isInt',
+		),
+	);
+
 	protected $identifier 		= 'id_carrier';
 	protected $table			= 'carrier';
-	public 	  $img_dir;
-	
-	public function __construct($id = NULL)
+
+	/**
+	 * 更新LOGO
+	 *
+	 * @return bool
+	 */
+	public function updateLogo()
 	{
-		parent::__construct($id);
-		$this->img_dir = _TM_IMG_DIR.'car/';
+		if (!isset($_FILES['qqfile'])) {
+			return true;
+		}
+
+		$uploader = new FileUploader();
+		$result = $uploader->handleUpload('brand');
+		if (isset($result['success'])) {
+			if ($this->id_image > 0 ) {
+				$image = new Image($this->id_image);
+				if (Validate::isLoadedObject($image)) {
+					$image->delete();
+				}
+			}
+			$this->id_image = $result['success']['id_image'];
+			return $this->update();
+		}
+		return false;
+	}
+
+	/**
+	 * 重载品牌数组
+	 * @param $result
+	 * @return mixd
+	 */
+	public static function reLoad($result) {
+		if (!is_array($result) || !$result) {
+			return false;
+		}
+
+		foreach($result as &$row) {
+			$row['image_small'] = Image::getImageLink($row['id_image'], 'small');
+		}
+
+		return $result;
 	}
 	
-	public function getFields()
+	public static function getEntity($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_carrier'] = (int)($this->id);
-		$fields['name'] = pSQL($this->name);
-		$fields['logo'] = pSQL($this->logo);
-		$fields['description'] = pSQL($this->description);
-		$fields['shipping'] = floatval($this->shipping);
-		$fields['active'] = isset($this->active);
-		return $fields;
-	}
-	
-	public function updateCarrierLogo()
-	{
-		$allowedExtensions 	= array('jpg','png','gif');
-		$filename 			= $this->id.'-'.$_FILES['logo']['name'];
-		$pathinfo 			= pathinfo($filename);
-		$ext 				= $pathinfo['extension'];
-		$tmpName			= $this->img_dir.$filename;
-		if(in_array(strtolower($ext),$allowedExtensions))
-			!move_uploaded_file($_FILES['logo']['tmp_name'], $tmpName);
-		Db::getInstance()->exec('UPDATE `'.DB_PREFIX.'carrier` SET `logo`="'.pSQL($filename).'" WHERE `id_carrier`='.(int)($this->id));
-	}
-	
-	public static function getEntity($active = true,$p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
-	{
-	 	if (!Validate::isBool($active))
-	 		die(Tools::displayError());
 
 		$where = '';
 		if(!empty($filter['id_carrier']) && Validate::isInt($filter['id_carrier']))
@@ -69,19 +89,19 @@ class Carrier extends ObjectBase{
 		}
 
 		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'carrier` a
-				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
+				WHERE 1
 				'.$where);
-		if($total==0)
+		if($total == 0)
 			return false;
 
 		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'carrier` a
-				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
+				WHERE 1
 				'.$where.'
 				'.$postion.'
-				LIMIT '.(($p-1)*$limit).','.(int)$limit);
+				LIMIT '.(($p - 1) * $limit) . ','.(int) $limit);
 		$rows   = array(
 				'total' => $total['total'],
-				'entitys'  => $result);
+				'entitys'  => self::reLoad($result));
 		return $rows;
 	}
 }

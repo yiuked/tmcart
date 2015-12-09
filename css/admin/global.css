@@ -428,3 +428,6 @@ border: 1px solid #006633;
   text-shadow: 1px 1px #fff;
   width: 43px;
 }
+/*custom form*/
+.form-group .text-info{margin-top: 5px;}
+.form-group .text-info img{border: 1px solid #ccc}

@@ -1,5 +1,5 @@
 <?php
-if(isset($_POST['sveAttributeGroup']) && Tools::getRequest('sveAttributeGroup')=='add')
+if(Tools::Q('saveAttributeGroup') == 'add')
 {
 	$attribute_group = new AttributeGroup();
 	$attribute_group->copyFromPost();
@@ -14,11 +14,11 @@ if(isset($_POST['sveAttributeGroup']) && Tools::getRequest('sveAttributeGroup')=
 }
 
 if(isset($_GET['id'])){
-	$id  = (int)$_GET['id'];
+	$id  = (int) Tools::G('id');
 	$obj = new AttributeGroup($id);
 }
 
-if(isset($_POST['sveAttributeGroup']) && Tools::getRequest('sveAttributeGroup')=='edit')
+if(Tools::Q('saveAttributeGroup') == 'edit')
 {
 	if(Validate::isLoadedObject($obj)){
 		$obj->copyFromPost();
@@ -36,71 +36,51 @@ if (isset($errors)) {
 	UIAdminAlerts::MError($errors);
 }
 
-?>
-<div class="row">
-	<div class="col-md-12">
-		<div class="panel panel-default">
-			<div class="panel-body">
-				<div class="col-md-6">
-					<?php
-					$breadcrumb = new UIAdminBreadcrumb();
-					$breadcrumb->home();
-					$breadcrumb->add(array('title' => '属性组', 'href' => 'index.php?rule=attribute_group'));
-					$breadcrumb->add(array('title' => '编辑', 'active' => true));
-					echo $breadcrumb->draw();
-					?>
-				</div>
-				<div class="col-md-6">
-					<div class="btn-group pull-right" role="group">
-						<a href="index.php?rule=attribute_group"  class="btn btn-primary"><span aria-hidden="true" class="glyphicon glyphicon-level-up"></span> 返回</a>
-					</div>
+$breadcrumb = new UIAdminBreadcrumb();
+$breadcrumb->home();
+$breadcrumb->add(array('title' => '属性组', 'href' => 'index.php?rule=attribute_group'));
+$breadcrumb->add(array('title' => '编辑', 'active' => true));
+$bread = $breadcrumb->draw();
 
-					<div class="btn-group save-group pull-right" role="group">
-						<a href="javascript:void(0)"  class="btn btn-success" id="attribute-group-save"><span aria-hidden="true" class="glyphicon glyphicon-floppy-saved"></span> 保存</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+$btn_group = array(
+	array('type' => 'a', 'title' => '返回', 'href' => 'index.php?rule=attribute_group', 'class' => 'btn-primary', 'icon' => 'level-up') ,
+	array('type' => 'button', 'title' => '保存', 'id' => 'save-attribute-group', 'class' => 'btn-success', 'icon' => 'saved') ,
+);
+echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'breadcrumb');
+?>
 <script language="javascript">
-	$("#attribute-group-save").click(function(){
-		$("#attribute_group_form").submit();
+	$("#save-attribute-group").click(function(){
+		$("#attribute-group-form").submit();
 	})
 </script>
-<div class="row">
-	<div class="col-md-12">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				属性组
-			</div>
-			<div class="panel-body">
-				<form method="post"  action="index.php?rule=attribute_group_edit<?php echo isset($id)?'&id='.$id:''?>" id="attribute_group_form" class="form-horizontal">
-						<div class="form-group">
-							<label for="name" class="col-md-2 control-label">名称</label>
-							<div class="col-md-5">
-								<input type="text" value="<?php echo isset($obj) ? $obj->name : Tools::P('name');?>"  name="name" class="form-control" >
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="group_type" class="col-md-2 control-label">类别</label>
-							<div class="col-md-5">
-								<div class="btn-group radio-group" data-toggle="buttons">
-									<label class="btn btn-grey<?php echo isset($obj) && $obj->group_type == AttributeGroup::GROUP_TYPE_SELECT ? ' active' : ''; ?>">
-										<input type="radio" name="group_type" id="option2" value="<?php echo AttributeGroup::GROUP_TYPE_SELECT;?>" > 下单菜单
-									</label>
-									<label class="btn btn-grey<?php echo isset($obj) && $obj->group_type == AttributeGroup::GROUP_TYPE_RADIO ? ' active' : ''; ?>">
-										<input type="radio" name="group_type" id="option3" value="<?php echo AttributeGroup::GROUP_TYPE_RADIO;?>" > 单选按钮
-									</label>
-									<label class="btn btn-grey<?php echo isset($obj) && $obj->group_type == AttributeGroup::GROUP_TYPE_CHECKBOX ? ' active' : ''; ?>">
-										<input type="radio" name="group_type" id="option4" value="<?php echo AttributeGroup::GROUP_TYPE_CHECKBOX;?>" > 复选框
-									</label>
-								</div>
-							</div>
-						</div>
-						<input type="hidden" value="<?php echo isset($id)?'edit':'add'?>"  name="sveAttributeGroup">
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
+<?php
+$form = new UIAdminEditForm('post', 'index.php?rule=attribute_group_edit'. (isset($id) ? '&id=' . $id : ''), 'form-horizontal', 'attribute-group-form');
+$attributeGroup = AttributeGroup::getEntitys();
+$groups = array();
+foreach($attributeGroup['entitys'] as $group){
+	$groups[$group['id_attribute_group']] = $group['name'];
+}
+$items = array(
+	AttributeGroup::GROUP_TYPE_SELECT => '下单菜单',
+	AttributeGroup::GROUP_TYPE_RADIO => '单选按钮',
+	AttributeGroup::GROUP_TYPE_CHECKBOX => '复选框',
+);
+$form->items = array(
+	'name' => array(
+		'title' => '属性值',
+		'type' => 'text',
+		'value' => isset($obj) ? $obj->name : Tools::Q('name'),
+	),
+	'group_type' => array(
+		'title' => '类别',
+		'type' => 'radio',
+		'value' => isset($obj) ? $obj->group_type : Tools::Q('group_type'),
+		'items' => $items,
+	),
+	'saveAttributeGroup' => array(
+		'type' => 'hidden',
+		'value' => isset($id) ? 'edit' : 'add',
+	),
+);
+echo UIViewBlock::area(array( 'title' => '编辑', 'body' => $form->draw()), 'panel');
+?>

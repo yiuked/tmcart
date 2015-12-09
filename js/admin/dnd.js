@@ -26,7 +26,7 @@
 
 $(document).ready(function() {
 	$('table.tableDnD').tableDnD({
-	
+
 		onDragStart: function(table, row) {
 			originalOrder = $.tableDnD.serialize();
 			$('#' + row.id).parent().addClass('alt_row');

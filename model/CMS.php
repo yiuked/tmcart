@@ -1,40 +1,19 @@
 <?php 
 class CMS extends ObjectBase{
-	protected $fields 			= array('id_category_default','title','content','meta_title','meta_keywords','meta_description','rewrite','active','is_top','is_page','add_date','upd_date');
-	protected $fieldsRequired	= array('id_category_default','title','rewrite');
-	protected $fieldsSize 		= array('meta_description' => 256, 'meta_keywords' => 256,
-		'meta_title' => 256, 'link_rewrite' => 256, 'title' => 256);
-	protected $fieldsValidate	= array(
-		'title' => 'isCleanHtml',
-		'active'=> 'isBool',
-		'meta_title' => 'isCleanHtml',
-		'meta_keywords' => 'isCleanHtml',
-		'meta_description' => 'isCleanHtml',
-		'rewrite' => 'isLinkRewrite', 
-		'content' => 'isString');
+	protected $fields = array(
+		'id_category_default' => array('type' => 'isInt'),
+		'title' => array('type' => 'isString','size' => 256, 'required' => true),
+		'active' => array('type' => 'isInt'),
+		'is_top' => array('type' => 'isInt'),
+		'meta_title' => array('type' => 'isString','size' => 256),
+		'meta_keywords' => array('type' => 'isString','size' => 256),
+		'meta_description' => array('type' => 'isString','size' => 256),
+		'rewrite' => array('type' => 'isLinkRewrite','size' => 256, 'required' => true),
+		'content' => array('type' => 'isCleanHtml', 'required' => true),
+	);
 	
 	protected $identifier 		= 'id_cms';
 	protected $table			= 'cms';
-	
-	public function getFields()
-	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_cms'] = (int)($this->id);
-		$fields['id_category_default'] = (int)($this->id_category_default);
-		$fields['title'] = pSQL($this->title);
-		$fields['content'] = pSQL($this->content,true);
-		$fields['meta_title'] = pSQL($this->meta_title);
-		$fields['meta_keywords'] = pSQL($this->meta_keywords);
-		$fields['meta_description'] = pSQL($this->meta_description);
-		$fields['rewrite'] = pSQL($this->rewrite);
-		$fields['active'] = (int)($this->active);
-		$fields['is_top'] = (int)($this->is_top);
-		$fields['is_page'] = (int)($this->is_page);
-		$fields['add_date'] = pSQL($this->add_date);
-		$fields['upd_date'] = pSQL($this->upd_date);
-		return $fields;
-	}
 	
 	public function delete()
 	{
@@ -43,10 +22,8 @@ class CMS extends ObjectBase{
 		return true;
 	}
 	
-	public static function getCMS($active = true,$p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
+	public static function getCMS($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
-	 	if (!Validate::isBool($active))
-	 		die(Tools::displayError());
 
 		$where = '';
 		if(!empty($filter['id_cms']) && Validate::isInt($filter['id_cms']))
@@ -70,19 +47,19 @@ class CMS extends ObjectBase{
 		}
 		
 		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'cms` a
-				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
+				WHERE 1
 				'.$where);
 		if($total==0)
 			return false;
 
 		$result = Db::getInstance()->getAll('SELECT * FROM `'.DB_PREFIX.'cms` a
-				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
+				WHERE 1
 				'.$where.'
 				'.$postion.'
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);
 		$rows   = array(
 				'total' => $total['total'],
-				'cmss'  => self::resetCMS($result));
+				'entitys'  => self::resetCMS($result));
 		return $rows;
 	}
 	

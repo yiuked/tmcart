@@ -1,16 +1,6 @@
-<!--head-->
-<link type="text/css" rel="stylesheet" href="../themes/default/default.css" />
-<link type="text/css" href="../js/jquery/ui/themes/base/jquery.ui.theme.css" rel="stylesheet"  media="all" />
-<link type="text/css" href="../js/jquery/ui/themes/base/jquery.ui.theme.css" rel="stylesheet"  media="all" />
-<script type="text/javascript" src="../js/kindeditor/kindeditor-min.js"></script>
-<script type="text/javascript" src="../js/kindeditor/lang/zh_CN.js"></script>
-<script type="text/javascript" src="../js/jquery/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="../js/jquery/ui/jquery.ui.datepicker.min.js"></script>
-<script type="text/javascript" src="../js/jquery/ui/i18n/jquery.ui.datepicker-en.js"></script>
-<!--//head-->
 <?php
 
-if(isset($_POST['sveCMS']) && Tools::getRequest('sveCMS')=='add')
+if(Tools::P('saveCMS') == 'add')
 {
 	$cms = new CMS();
 	$cms->copyFromPost();
@@ -22,16 +12,16 @@ if(isset($_POST['sveCMS']) && Tools::getRequest('sveCMS')=='add')
 		$errors = $cms->_errors;
 	}else{
 		$_GET['id'] = $cms->id;
-		echo '<div class="conf">创建CMS内容成功</div>';
+		UIAdminAlerts::conf('文章已添加');
 	}
 }
 
 if(isset($_GET['id'])){
-	$id  = (int)$_GET['id'];
+	$id  = (int) Tools::G('id');
 	$obj = new CMS($id);
 }
 
-if(isset($_POST['sveCMS']) && Tools::getRequest('sveCMS')=='edit')
+if(Tools::P('saveCMS') == 'edit')
 {
 	if(Validate::isLoadedObject($obj)){
 		$obj->copyFromPost();
@@ -42,230 +32,123 @@ if(isset($_POST['sveCMS']) && Tools::getRequest('sveCMS')=='edit')
 	if(is_array($obj->_errors) AND count($obj->_errors)>0){
 		$errors = $obj->_errors;
 	}else{
-		echo '<div class="conf">更新CMS内容成功</div>';
+		UIAdminAlerts::conf('文章已更新');
 	}
 	
 }
-require_once(_TM_ADMIN_DIR_.'/errors.php');
+
 ?>
-<div class="path_bar">
-  <div class="path_title">
-    <h3> 
-		<span style="font-weight: normal;" id="current_obj">
-		<span class="breadcrumb item-1 ">CMS<img src="<?php echo $_tmconfig['tm_img_dir'];?>admin/separator_breadcrum.png" style="margin-right:5px" alt="&gt;"> </span>
-		<span class="breadcrumb item-1 ">内容<img src="<?php echo $_tmconfig['tm_img_dir'];?>admin/separator_breadcrum.png" style="margin-right:5px" alt="&gt;"> </span> 
-		<span class="breadcrumb item-2 ">编辑 </span> </span> 
-	</h3>
-    <div class="cc_button">
-      <ul>
-        <li> <a title="Save" href="#" class="toolbar_btn" id="desc-product-save"> <span class="process-icon-save "></span>
-          <div>保存</div>
-          </a> </li>
-        <li> <a title="Back to list" href="javascript:history.back();" class="toolbar_btn" id="desc-product-back"> <span class="process-icon-back "></span>
-          <div>返回列表</div>
-          </a> </li>
-      </ul>
-    </div>
-  </div>
-</div>
+<!--head-->
+<link href="<?php echo BOOTSTRAP_CSS;?>bootstrap-tagsinput.css" rel="stylesheet" />
+<script type="text/javascript" src="<?php echo _TM_JS_URL;?>tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="<?php echo _TM_JS_URL;?>tinymce/tinymce.init.js"></script>
+<script type="text/javascript" src="<?php echo BOOTSTRAP_JS;?>bootstrap-tagsinput.min.js"></script>
+<!--//head-->
+<?php
+//导航
+$breadcrumb = new UIAdminBreadcrumb();
+$breadcrumb->home();
+$breadcrumb->add(array('title' => 'CMS', 'href' => 'index.php?rule=cms'));
+$breadcrumb->add(array('title' => '编辑', 'active' => true));
+$bread = $breadcrumb->draw();
+$btn_group = array(
+	array('type' => 'a', 'title' => '返回', 'href' => 'index.php?rule=cms', 'class' => 'btn-primary', 'icon' => 'level-up'),
+	array('type' => 'button', 'title' => '保存', 'id' => 'save-cms-form', 'class' => 'btn-success', 'icon' => 'save'),
+);
+echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'breadcrumb');
+
+if (isset($errors)) {
+	UIAdminAlerts::MError($errors);
+}
+?>
 <script language="javascript">
-	$("#desc-product-save").click(function(){
-		$("#cms_form").submit();
+	$("#save-cms-save").click(function(){
+		$("#cms-form").submit();
 	})
 </script>
-<div class="mianForm">
-	<form enctype="multipart/form-data" method="post" action="index.php?rule=cms_edit<?php echo isset($id)?'&id='.$id:''?>" class="defaultForm admincmscontent" id="cms_form" name="example">
-		  <fieldset>
-  			<legend> <img alt="CMS 分类" src="<?php echo $_tmconfig['ico_dir'];?>category.png">内容</legend>
-			<label>标题: </label>
-			<div class="margin-form">
-				<div style="display:block; float: left;">
-					<input type="text" class="text_input" value="<?php echo isset($obj)?$obj->title:Tools::getRequest('title');?>"  name="title">
-					<span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span>
-				</div>
-				<sup>*</sup>
-				<div class="clear"></div>
-			</div>
-			<label>状态: </label>
-			<div class="margin-form">
-					<input type="radio" value="1" id="active_on" name="active" <?php  echo isset($obj)&&$obj->active==1?'checked="checked"':''; ?>>
-					<label for="active_on" class="t">
-						<img title="Enabled" alt="Enabled" src="<?php echo $_tmconfig['ico_dir'];?>enabled.gif">
-					</label>
-					<input type="radio" value="0" id="active_off" name="active" <?php  echo isset($obj)&&$obj->active==0?'checked="checked"':''; ?>>
-					<label for="active_off" class="t">
-						<img title="Disabled" alt="Disabled" src="<?php echo $_tmconfig['ico_dir'];?>disabled.gif">
-					</label>
-			</div>
-			<label>置顶: </label>
-			<div class="margin-form">
-					<input type="radio" value="1" id="is_top_on" name="is_top" <?php  echo isset($obj)&&$obj->is_top==1?'checked="checked"':''; ?>>
-					<label for="is_top_on" class="t">
-						<img title="Enabled" alt="Enabled" src="<?php echo $_tmconfig['ico_dir'];?>enabled.gif">
-					</label>
-					<input type="radio" value="0" id="is_top_off" name="is_top" checked="checked" <?php  echo isset($obj)&&$obj->active==0?'checked="checked"':''; ?>>
-					<label for="is_top_off" class="t">
-						<img title="Disabled" alt="Disabled" src="<?php echo $_tmconfig['ico_dir'];?>disabled.gif">
-					</label>
-			</div>
-			<label>一个单独的页面: </label>
-			<div class="margin-form">
-					<input type="radio" value="1" id="is_page_on" name="is_page" checked="checked">
-					<label for="is_page_on" class="t">
-						<img title="Enabled" alt="Enabled" src="<?php echo $_tmconfig['ico_dir'];?>enabled.gif">
-					</label>
-					<input type="radio" value="0" id="is_page_off" name="is_page" <?php  echo isset($obj)&&$obj->is_page==0?'checked="checked"':''; ?>>
-					<label for="is_page_off" class="t">
-						<img title="Disabled" alt="Disabled" src="<?php echo $_tmconfig['ico_dir'];?>disabled.gif">
-					</label>
-			</div>
-			<label>关联分类：</label>
-				<div class="margin-form">
-				<?php
-				$trads = array(
-					 'Home' 		=> '根分类', 
-					 'selected' 	=> '选择', 
-					 'Collapse All' => '关闭', 
-					 'Expand All' 	=> '展开',
-					 'Check All'	=> '全选',
-					 'Uncheck All'	=> '全不选'
-				);
-				if (!isset($obj))
-				{
-					$categoryBox = Tools::getRequest('categoryBox')?Tools::getRequest('categoryBox'):array();
-				}
-				else
-				{
-					if (Tools::isSubmit('categoryBox'))
-						$categoryBox = Tools::getRequest('categoryBox');
-					else
-						$categoryBox = CMS::getCMSCategoriesFullId($obj->id);
-				}
-				echo Helper::renderAdminCategorieTree($trads,$categoryBox, 'categoryBox', false,'CMSTree');
-			 ?>
-			 	<br>
-				 <a href="index.php?rule=cmscategory" class="button bt-icon confirm_leave">
-					<img title="Create new category" alt="Create new category" src="<?php echo $_tmconfig['ico_dir'];?>add.gif">
-					<span>添加分类</span>
-				</a>
-			</div>
-			<?php
-				if (!isset($obj))
-				{
-					$selectedCat = CMSCategory::getCategoryInformations(Tools::getRequest('categoryBox'));
-				}
-				else
-				{
-					if (Tools::isSubmit('categoryBox'))
-						$selectedCat = CMSCategory::getCategoryInformations(Tools::getRequest('categoryBox'));
-					else
-						$selectedCat = CMS::getCMSCategoriesFull($obj->id);
-				}
-			?>
-			<label>默认分类: </label>
-			<div class="margin-form">
-				<div style="display:block; float: left;">
-					<select name="id_category_default" id="id_category_default" <?php if(count($selectedCat)==0){echo 'style="display:none"';}?>>
-					<?php
-					  if(count($selectedCat)>0)
-						foreach($selectedCat as $cat){?>
-						<option value="<?php echo $cat['id_cms_category'];?>" <?php  echo isset($obj)&&$obj->id_category_default==$cat['id_cms_category']?'selected="selected"':'';?>><?php echo $cat['name'];?></option>
-					<?php }?>
-					</select>
-					<div style="display:block;" id="no_default_category">默认分类需要先选择关联分类.</div>
-				</div>
-				<sup>*</sup>
-				<div class="clear"></div>
-			</div>
-			<label>Tab 标签: </label>
-			<div class="margin-form">
-				<div style="display:block; float: left;">
-					<input type="text" class="text_input" value="<?php echo isset($obj)?(CMSTag::CMSTagToString($obj->id)):Tools::getRequest('tags');?>"  name="tags">
-					<span name="help_box" class="hint" style="display: none;">以","号分隔<span class="hint-pointer">&nbsp;</span></span>
-				</div>
-				<div class="clear"></div>
-			</div>
-			<label>Meta Title: </label>
-			<div class="margin-form">
-				<div style="display:block; float: left;">
-					<input type="text" class="text_input" value="<?php echo isset($obj)?$obj->meta_title:Tools::getRequest('meta_title');?>"  name="meta_title">
-					<span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span>
-				</div>
-				<div class="clear"></div>
-			</div>
-			<label>Meta Keywords: </label>
-			<div class="margin-form">
-				<div style="display:block; float: left;">
-					<input type="text" class="text_input" value="<?php echo isset($obj)?$obj->meta_keywords:Tools::getRequest('meta_keywords');?>"  name="meta_keywords">
-					<span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span>
-				</div>
-				<div class="clear"></div>
-			</div>
-			<label>Meta Description: </label>
-			<div class="margin-form">
-				<div style="display:block; float: left;">
-					<input type="text" class="text_input" value="<?php echo isset($obj)?$obj->meta_description:Tools::getRequest('meta_description');?>"  name="meta_description">
-					<span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span>
-				</div>
-				<div class="clear"></div>
-			</div>
-			<label>友好URL链接: </label>
-			<div class="margin-form">
-				<div style="display:block; float: left;">
-					<input type="text" class="text_input" value="<?php echo isset($obj)?$obj->rewrite:Tools::getRequest('rewrite');?>"  name="rewrite">
-					<span name="help_box" class="hint" style="display: none;">只能包含数字,字母及"-"<span class="hint-pointer">&nbsp;</span></span>
-				</div>
-				<sup>*</sup>
-				<div class="clear"></div>
-			</div>
-		<script>
-			KindEditor.ready(function(K) {
-				var editor1 = K.create('textarea[name="content"]', {
-					cssPath : '../js/kindeditor/plugins/code/prettify.css',
-					uploadJson : '../js/kindeditor/php/upload_json.php',
-					fileManagerJson : '../js/kindeditor/php/file_manager_json.php',
-					allowFileManager : true,
-					afterCreate: function () {
-						this.sync();
-					},
-					afterBlur: function () {
-						this.sync();
-					}
-				});
-			});
-		</script>
-			<label>内容描述: </label>
-			<div class="margin-form">
-				<div style="display:block; float: left;">
-					<textarea name="content" style="width:800px;height:400px;visibility:hidden;"><?php echo isset($obj)?$obj->content:Tools::getRequest('content');?></textarea>
-				</div>
-				<div class="clear"></div>
-			</div>
-		<script type="text/javascript">
-			$(function() {
-				if ($(".datepicker").length > 0)
-					$(".datepicker").datepicker({
-						prevText: '',
-						nextText: '',
-						dateFormat: 'yy-mm-dd'
-					});
-			});
-		</script>
-			<label>添加时间: </label>
-			<div class="margin-form">
-				<div style="display:block; float: left;">
-					<input type="text" class="text_input_sort datepicker" value="<?php echo isset($obj)?$obj->add_date:Tools::getRequest('add_date');?>"  name="add_date">
-				</div>
-				<div class="clear"></div>
-			</div>
-			<label>修改时间: </label>
-			<div class="margin-form">
-				<div style="display:block; float: left;">
-					<input type="text" class="text_input_sort datepicker" value="<?php echo isset($obj)?$obj->upd_date:Tools::getRequest('upd_date');?>"  name="upd_date">
-				</div>
-				<div class="clear"></div>
-			</div>
-			<input type="hidden" value="<?php echo isset($id)?'edit':'add'?>"  name="sveCMS">
-		  </fieldset>
-	</form>
-</div>
+<?php
+$form = new UIAdminEditForm('post', 'index.php?rule=cms_edit'. (isset($id) ? '&id=' . $id : ''), 'form-horizontal', 'cms-form');
+$result = Country::getEntity(1,500);
+$countrys = array();
+foreach($result['entitys'] as $country) {
+	$countrys[$country['id_country']] = $country['name'];
+}
+
+$trads = array(
+	'selected' => '选择',
+	'Home' 		=> '根分类',
+	'Collapse All' => '关闭',
+	'Expand All' 	=> '展开',
+);
+if (!isset($obj))
+{
+	$categoryBox = Tools::getRequest('categoryBox')?Tools::getRequest('categoryBox'):array();
+}
+else
+{
+	if (Tools::isSubmit('categoryBox'))
+		$categoryBox = Tools::getRequest('categoryBox');
+	else
+		$categoryBox = CMS::getCMSCategoriesFullId($obj->id);
+}
+$category =  Helper::renderAdminCategorieTree($trads,$categoryBox, 'categoryBox', true,'CMSTree');
+$tag = '<div class="tagify-container"><input type="text" value="'.(isset($obj) ? (Tag::tagToString($obj->id)) : Tools::P('tags')).'" class="form-control" data-role="tagsinput" name="tags" ></div>';
+$form->items = array(
+	'title' => array(
+		'title' => '标题',
+		'type' => 'text',
+		'value' => isset($obj) ? $obj->title : Tools::Q('title'),
+	),
+	'active' => array(
+		'title' => '状态',
+		'type' => 'bool',
+		'value' => isset($obj) ? $obj->active : Tools::Q('active'),
+	),
+	'is_top' => array(
+		'title' => '置顶',
+		'type' => 'bool',
+		'value' => isset($obj) ? $obj->is_top : Tools::Q('is_top'),
+	),
+	'categoryBox' => array(
+		'title' => '分类',
+		'type' => 'custom',
+		'value' => $category
+	),
+	'tags' => array(
+		'title' => 'Tag标签',
+		'type' => 'custom',
+		'value' => $tag
+	),
+	'meta_title' => array(
+		'title' => 'Meta标题',
+		'type' => 'text',
+		'value' => isset($obj) ? $obj->meta_title : Tools::Q('meta_title'),
+	),
+	'meta_keywords' => array(
+		'title' => 'Meta关键词',
+		'type' => 'text',
+		'value' => isset($obj) ? $obj->meta_keywords : Tools::Q('meta_keywords'),
+	),
+	'meta_description' => array(
+		'title' => 'Meta描述',
+		'type' => 'text',
+		'value' => isset($obj) ? $obj->meta_description : Tools::Q('meta_description'),
+	),
+	'rewrite' => array(
+		'title' => '静态链接',
+		'type' => 'text',
+		'value' => isset($obj) ? $obj->rewrite : Tools::Q('rewrite'),
+	),
+	'content' => array(
+		'title' => '内容',
+		'type' => 'textarea',
+		'class' => 'tinymce',
+		'value' => isset($obj) ? $obj->content : Tools::Q('content'),
+	),
+	'saveCMS' => array(
+		'type' => 'hidden',
+		'value' => isset($id) ? 'edit' : 'add',
+	),
+);
+echo UIViewBlock::area(array('col' => 'col-md-12', 'title' => '编辑', 'body' => $form->draw()), 'panel');
+?>

@@ -30,32 +30,24 @@ if (intval(Tools::getRequest('delete'))>0 && Tools::getRequest('entity')=='group
 }
 
 $result  	= AttributeGroup::getEntitys();
-require_once(dirname(__FILE__).'/../errors.php');
+
+if (isset($errors)) {
+	UIAdminAlerts::MError($errors);
+}
+
+$breadcrumb = new UIAdminBreadcrumb();
+$breadcrumb->home();
+$breadcrumb->add(array('title' => '属性', 'active' => true));
+$bread = $breadcrumb->draw();
+
+$btn_group = array(
+	array('type' => 'a', 'title' => '添加属性组', 'href' => 'index.php?rule=attribute_group_edit', 'class' => 'btn-success', 'icon' => 'plus') ,
+	array('type' => 'a', 'title' => '添加属值', 'id' => 'save-address', 'href' => 'index.php?rule=attribute_edit', 'class' => 'btn-success', 'icon' => 'plus') ,
+);
+echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'breadcrumb');
 ?>
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/jquery.tablednd_0_5.js"></script>
 <script src="<?php echo $_tmconfig['tm_js_dir']?>admin/dnd.js" type="text/javascript"></script>
-<div class="row">
-	<div class="col-md-12">
-		<div class="panel panel-default">
-			<div class="panel-body">
-				<div class="col-md-6">
-					<?php
-					$breadcrumb = new UIAdminBreadcrumb();
-					$breadcrumb->home();
-					$breadcrumb->add(array('title' => '属性', 'active' => true));
-					echo $breadcrumb->draw();
-					?>
-				</div>
-				<div class="col-md-6">
-					<div class="btn-group save-group pull-right" role="group">
-						<a href="index.php?rule=attribute_group_edit"  class="btn btn-success" id="submit-form"><span aria-hidden="true" class="glyphicon glyphicon-plus"></span> 添加属性组</a>
-						<a href="index.php?rule=attribute_edit"  class="btn btn-success" id="submit-form"><span aria-hidden="true" class="glyphicon glyphicon-plus"></span> 添加属值</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
 <form class="form" method="post" action="index.php?rule=attribute_group">
 	<div class="row">
 		<div class="col-md-12">

@@ -1,5 +1,6 @@
 <?php
 /**
+ * 使用dndtable时，必要设置table的id属性
  * Created by PhpStorm.
  * User: Administrator
  * Date: 2015/11/11

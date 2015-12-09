@@ -19,6 +19,7 @@ if(intval(Tools::getRequest('delete'))>0){
 }
 echo UIAdminDndTable::loadHead();
 $table = new UIAdminDndTable('color',  'Color', 'id_color');
+$table->addAttribte('id', 'color');
 $table->header = array(
 	array('sort' => false ,'isCheckAll' => 'colorBox[]'),
 	array('name' => 'id_color','title' => 'ID'),

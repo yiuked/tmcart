@@ -1,11 +1,37 @@
 <?php
 class Currency extends ObjectBase
 {
-	protected 	$fields 			= array('name','iso_code','iso_code_num','sign','conversion_rate','format','active');
- 	protected 	$fieldsRequired = array('name', 'iso_code','iso_code_num', 'sign', 'conversion_rate', 'format');
- 	protected 	$fieldsSize = array('name' => 32, 'iso_code' => 3, 'iso_code_num' => 3, 'sign' => 8);
- 	protected 	$fieldsValidate = array('name' => 'isGenericName', 'iso_code' => 'isLanguageIsoCode', 'iso_code_num' => 'isNumericIsoCode','sign' => 'isGenericName',
-		'format' => 'isUnsignedId','conversion_rate' => 'isFloat','active' => 'isBool');
+	protected $fields = array(
+		'name' => array(
+			'type' => 'isGenericName',
+			'required' => true,
+			'size' => 32
+		),
+		'iso_code' => array(
+			'type' => 'isLanguageIsoCode',
+			'required' => true,
+			'size' => 3
+		),
+		'iso_code_num' => array(
+			'type' => 'isInt',
+			'required' => true,
+		),
+		'sign' => array(
+			'type' => 'isGenericName',
+			'required' => true,
+		),
+		'conversion_rate' => array(
+			'type' => 'isFloat',
+			'required' => true,
+		),
+		'format' => array(
+			'type' => 'isInt',
+			'required' => true,
+		),
+		'active' => array(
+			'type' => 'isInt',
+		),
+	);
 
 	/** @var Currency Current currency */
 	static protected	$current = NULL;
@@ -13,17 +39,6 @@ class Currency extends ObjectBase
 	
 	protected 	$table = 'currency';
 	protected 	$identifier = 'id_currency';
-
-	/**
-	 * Overriding check if currency with the same iso code already exists.
-	 * If it's true, currency is doesn't added.
-	 *
-	 * @see ObjectModelCore::add()
-	 */
-	public function add($autodate = true, $nullValues = false)
-	{
-		return Currency::exists($this->iso_code) ? false : parent::add();
-	}
 
 	/**
 	 * Check if a curency already exists.
@@ -43,21 +58,6 @@ class Currency extends ObjectBase
 		} else {
 			return false;
 		}
-	}
-	public function getFields()
-	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_currency'] = (int)($this->id);
-		$fields['name'] = pSQL($this->name);
-		$fields['iso_code'] = pSQL($this->iso_code);
-		$fields['iso_code_num'] = pSQL($this->iso_code_num);
-		$fields['sign'] = pSQL($this->sign);
-		$fields['format'] = (int)($this->format);
-		$fields['conversion_rate'] = (float)($this->conversion_rate);
-		$fields['active'] = (int)($this->active);
-
-		return $fields;
 	}
 
 	public function deleteSelection($selection)
@@ -88,10 +88,8 @@ class Currency extends ObjectBase
 		return $this->update();
 	}
 
-	public static function getEntity($active = true,$p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
+	public static function getEntity($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
-	 	if (!Validate::isBool($active))
-	 		die(Tools::displayError());
 
 		$where = '';
 		if(!empty($filter['id_currency']) && Validate::isInt($filter['id_currency']))
@@ -110,13 +108,13 @@ class Currency extends ObjectBase
 		}
 
 		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'currency` a
-				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
+				WHERE 1
 				'.$where);
 		if($total==0)
 			return false;
 
 		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'currency` a
-				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
+				WHERE 1
 				'.$where.'
 				'.$postion.'
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);

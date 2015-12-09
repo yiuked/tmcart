@@ -49,36 +49,60 @@ class UIAdminEditForm extends UIView
         foreach ($this->items as $key => $item) {
 
             $class = 'class="form-control ' . (isset($item['class']) ? ' ' . $item['class'] . '"' : '"');
-            $info  = isset($item['info']) ? '<p class="text-info">' . $item['info'] .'</p>': '';
+            $info  = isset($item['info']) && !empty($item['info']) ? '<p class="text-info">' . $item['info'] .'</p>': '';
             $other = isset($item['other']) ? ' ' . $item['other'] : '';
-            $id    = isset($item['id']) ? ' id=' . $item['id'] : '';
-            $style = isset($item['css']) ? ' style=' . $item['css'] : '';
+            $id    = isset($item['id']) ? ' id="' . $item['id'] .'"' : '';
+            $value = isset($item['value']) ? ' value="' . $item['value'] .'"' : '';
+            $style = isset($item['css']) ? ' style="' . $item['css'] .'"' : '';
+            $label = $item['type'] != 'hidden' ? '<label class="col-md-2 control-label" for="' .$key . '">' . $item['title'] . '</label>' : '';
 
-            if (in_array($item['type'], array('text', 'passwd', 'email'))) {
+            if (in_array($item['type'], array('text', 'passwd', 'email', 'file'))) {
                 $html .= '<div class="form-group">
-                    <label class="col-md-2 control-label" for="' .$key . '">' . $item['title'] . '</label>
+                    ' . $label . '
                     <div class="col-md-8">
-                        <input type="' . $item['type'] . '" value="' . $item['value'] . '" name="' . $key . '" ' . $class . $id . $style . $other . '>
+                        <input type="' . $item['type'] . '" name="' . $key . '" ' .$value . $class . $id . $style . $other . '>
+                        '. $info .'
+                    </div>
+                </div>';
+            }elseif($item['type'] == 'textarea') {
+                $html .= '<div class="form-group">
+                    ' . $label . '
+                    <div class="col-md-8">
+                        <textarea name="' . $key . '" ' . $class . $id . $style . $other . '>' .$item['value'] . '</textarea>
                         '.  $info .'
                     </div>
                 </div>';
             }elseif ($item['type'] == 'bool'){
                 $html .= '<div class="form-group">
-                    <label class="col-md-2 control-label" for="' .$key . '">' . $item['title'] . '</label>
+                    ' . $label . '
                     <div class="col-md-8">
                         <div data-toggle="buttons" class="btn-group">
-							<label class="btn btn-grey enabled">
+							<label class="btn btn-grey enabled ' .($item['value'] == 1 ? 'active' : '').'">
 								<input type="radio" autocomplete="off" value="1" name="' . $key . '">启用
 							</label>
-							<label class="btn btn-grey">
+							<label class="btn btn-grey ' .($item['value'] == 1 ? 'active' : '').'">
 								<input type="radio" autocomplete="off" value="0" name="' . $key . '">关闭
 							</label>
 						</div>
                         '.  $info .'
                     </div>
                 </div>';
+            }elseif ($item['type'] == 'radio'){
+                $html .= '<div class="form-group">
+                    ' . $label . '
+                    <div class="col-md-8">
+                        <div data-toggle="buttons" class="btn-group radio-group">';
+                foreach ($item['items'] as $radiaValue => $radioTitle) {
+                    $html .= '<label class="btn btn-grey '.($radiaValue == $item['value'] ? ' active' : '').'">
+								<input type="radio" '.($radiaValue == $item['value'] ? 'checked' : '').' value="' . $radiaValue . '" name="' . $key . '">' .$radioTitle .'
+							</label>';
+                }
+                $html .= '</div>
+                        '.  $info .'
+                    </div>
+                </div>';
             }elseif ($item['type'] == 'hidden') {
-                $html .= '<input type="hidden" value="' . $item['value'] . '"  name="' . $key . '">';
+                $html .= '<input type="hidden" ' .$value . '  name="' . $key . '">';
             } elseif ($item['type'] == 'submit' || $item['type'] == 'cannel') {
                 $html .= '<div class="form-group">
                     <div class="col-md-8 col-md-offset-2">
@@ -93,12 +117,20 @@ class UIAdminEditForm extends UIView
                     }
                 }
                 $html .= '<div class="form-group">
-                    <label class="col-md-2 control-label" for="' .$key . '">' . $item['title'] . '</label>
+                    ' . $label . '
                     <div class="col-md-8">
                         <select name="' . $key . '" ' . $class . $id . $style . $other . '>
                             <option value="NULL">--选择--</option>
                             '. $options .'
                         </select>
+                        '.  $info .'
+                    </div>
+                </div>';
+            }elseif($item['type'] == 'custom') {
+                $html .= '<div class="form-group">
+                    ' . $label . '
+                    <div class="col-md-8">
+                        ' .$item['value'] . '
                         '.  $info .'
                     </div>
                 </div>';
@@ -109,6 +141,7 @@ class UIAdminEditForm extends UIView
             unset($other);
             unset($id);
             unset($style);
+            unset($label);
         }
 
         return $html;

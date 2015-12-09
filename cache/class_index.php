@@ -61,4 +61,8 @@
   'ImageType' => 'D:\\wamp\\www\\red\\shoes/model/ImageType.php',
   'FileUploader' => 'D:\\wamp\\www\\red\\shoes/core/FileUploader.php',
   'ImageManager' => 'D:\\wamp\\www\\red\\shoes/model/ImageManager.php',
+  'Attribute' => 'D:\\wamp\\www\\red\\shoes/model/Attribute.php',
+  'CMS' => 'D:\\wamp\\www\\red\\shoes/model/CMS.php',
+  'CMSComment' => 'D:\\wamp\\www\\red\\shoes/model/CMSComment.php',
+  'CMSTag' => 'D:\\wamp\\www\\red\\shoes/model/CMSTag.php',
 ); 

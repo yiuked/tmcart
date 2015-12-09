@@ -1,12 +1,12 @@
 <!--head-->
+<!--
 <link type="text/css" rel="stylesheet" href="../themes/default/default.css" />
 <link type="text/css" href="../js/jquery/ui/themes/base/jquery.ui.theme.css" rel="stylesheet"  media="all" />
 <link type="text/css" href="../js/jquery/ui/themes/base/jquery.ui.theme.css" rel="stylesheet"  media="all" />
 <script type="text/javascript" src="../js/kindeditor/kindeditor-min.js"></script>
 <script type="text/javascript" src="../js/kindeditor/lang/zh_CN.js"></script>
-<script type="text/javascript" src="../js/jquery/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="../js/jquery/ui/jquery.ui.datepicker.min.js"></script>
-<script type="text/javascript" src="../js/jquery/ui/i18n/jquery.ui.datepicker-en.js"></script>
+-->
+<script type="text/javascript" src="../js/tinymce/tinymce.min.js"></script>
 <!--//head-->
 <?php
 if(isset($_POST['sveCategory']) && Tools::getRequest('sveCategory')=='add')
@@ -49,43 +49,27 @@ if(isset($_POST['sveCategory']) && Tools::getRequest('sveCategory')=='edit')
 if (isset($errors)) {
 	UIAdminAlerts::MError($errors);
 }
+//导航
+$breadcrumb = new UIAdminBreadcrumb();
+$breadcrumb->home();
+$breadcrumb->add(array('title' => '分类', 'active' => true));
+$bread = $breadcrumb->draw();
+$btn_group = array(
+	array('type' => 'a', 'title' => '返回', 'href' => 'index.php?rule=category', 'class' => 'btn-primary', 'icon' => 'level-up') ,
+	array('type' => 'button', 'title' => '保存', 'id' => 'save-category', 'class' => 'btn-success', 'icon' => 'saved') ,
+);
+echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'breadcrumb');
 ?>
-<div class="row">
-	<div class="col-md-12">
-		<div class="panel panel-default">
-			<div class="panel-body">
-				<div class="col-md-6">
-					<?php
-					$breadcrumb = new UIAdminBreadcrumb();
-					$breadcrumb->home();
-					$breadcrumb->add(array('title' => '分类', 'active' => true));
-					echo $breadcrumb->draw();
-					?>
-				</div>
-				<div class="col-md-6">
-					<div class="btn-group pull-right" role="group">
-						<a href="index.php?rule=category"  class="btn btn-primary"><span aria-hidden="true" class="glyphicon glyphicon-level-up"></span> 返回</a>
-					</div>
-
-					<div class="btn-group save-group pull-right" role="group">
-						<a href="index.php?rule=category_edit"  class="btn btn-success"><span aria-hidden="true" class="glyphicon glyphicon-plus"></span> 新分类</a>
-						<a href="javascript:void(0)"  class="btn btn-success" id="submit-form"><span aria-hidden="true" class="glyphicon glyphicon-floppy-saved"></span> 保存</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
 
 <script language="javascript">
-	$("#submit-form").click(function(){
-		$("#cms_category_form").submit();
+	$("#save-category").click(function(){
+		$("#category-form").submit();
 	})
 </script>
 <div class="panel panel-default">
 	<div class="panel-body">
-		<div class="col-md-10 form-horizontal">
-			<form enctype="multipart/form-data" method="post" action="index.php?rule=category_edit<?php echo isset($id)?'&id='.$id:''?>" class="defaultForm admincmscontent" id="cms_category_form" name="example">
+		<div class="col-md-10">
+			<form enctype="multipart/form-data" method="post" action="index.php?rule=category_edit<?php echo isset($id)?'&id='.$id:''?>" class="form-horizontal" id="category-form" >
 				<div class="form-group">
 					<label for="name" class="col-sm-2 control-label">名称</label>
 					<div class="col-sm-10">
@@ -144,6 +128,7 @@ if (isset($errors)) {
 					</div>
 				</div>
 				<script>
+					/*
 					KindEditor.ready(function(K) {
 						var editor1 = K.create('textarea[name="description"]', {
 							cssPath : '../js/kindeditor/plugins/code/prettify.css',
@@ -158,23 +143,33 @@ if (isset($errors)) {
 							}
 						});
 					});
+					*/
+					tinymce.init({
+						selector: '.tinymce',
+						menu: {
+							edit: {title: 'Edit', items: 'undo redo | cut copy paste | selectall'},
+							insert: {title: 'Insert', items: 'media image link | pagebreak'},
+							view: {title: 'View', items: 'visualaid'},
+							format: {title: 'Format', items: 'bold italic underline strikethrough superscript subscript | formats | removeformat'},
+							table: {title: 'Table', items: 'inserttable tableprops deletetable | cell row column'},
+							tools: {title: 'Tools', items: 'code'}
+						},
+						plugins : "link image paste pagebreak table contextmenu filemanager table code media autoresize textcolor",
+						external_filemanager_path:  "<?php echo ADMIN_URL;?>filemanager/",
+						filemanager_title: "文件管理" ,
+						external_plugins: { "filemanager" : "<?php echo ADMIN_URL;?>filemanager/plugin.min.js"},
+						relative_urls : false,//相对URL
+						convert_urls: false,//必设属性否则URL地址将对不上
+						toolbar: 'code | insertfile undo redo | styleselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',// 需在工具栏显示的
+						language: 'zh_CN',
+					});
 				</script>
 				<div class="form-group">
 					<label for="rewrite" class="col-sm-2 control-label">描述</label>
 					<div class="col-sm-10">
-							<textarea name="description" style="width:800px;height:400px;visibility:hidden;"><?php echo isset($obj)?$obj->description:Tools::getRequest('description');?></textarea>
+							<textarea class="tinymce" name="description"><?php echo isset($obj)?$obj->description:Tools::getRequest('description');?></textarea>
 					</div>
 				</div>
-				<script type="text/javascript">
-					$(function() {
-						if ($(".datepicker").length > 0)
-							$(".datepicker").datepicker({
-								prevText: '',
-								nextText: '',
-								dateFormat: 'yy-mm-dd'
-							});
-					});
-				</script>
 				<input type="hidden" value="<?php echo isset($id)?'edit':'add'?>"  name="sveCategory">
 				<div class="form-group">
 					<div class="col-sm-10 col-sm-offset-2">

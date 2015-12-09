@@ -7,7 +7,7 @@
  */
 ?>
 <div class="row">
-    <div class="<?php echo $data['col']; ?>">
+    <div class="<?php echo isset($data['class']) ? $data['class'] : 'col-md-12'; ?>">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <?php echo $data['title']; ?>

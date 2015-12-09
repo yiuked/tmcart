@@ -2,7 +2,7 @@
 class Address extends ObjectBase{
 	protected $fields = array(
 		'name' => array(
-			'type' => 'isInt',
+			'type' => 'isName',
 		),
 		'id_country' => array(
 			'type' => 'isInt',

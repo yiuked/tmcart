@@ -39,12 +39,16 @@ class Brand extends ObjectBase{
 	protected $table			= 'brand';
 
 	/**
-	 * ����Ʒ��ͼƬ
+	 * 更新LOGO
 	 *
 	 * @return bool
 	 */
 	public function updateLogo()
 	{
+		if (!isset($_FILES['qqfile'])) {
+			return true;
+		}
+
 		$uploader = new FileUploader();
 		$result = $uploader->handleUpload('brand');
 		if (isset($result['success'])) {

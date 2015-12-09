@@ -8,6 +8,7 @@ if(isset($_GET['toggle']))
 		'User'=> array('active'),
 		'Brand'=> array('active'),
 		'OrderStatus'=> array('send_mail'),
+		'CMS'=> array('active', 'is_top'),
 	);
 
 	$key    = Tools::G('key');

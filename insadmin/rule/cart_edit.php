@@ -5,27 +5,19 @@ if(isset($_GET['id'])){
 	$obj = new Cart($id);
 }
 
+$breadcrumb = new UIAdminBreadcrumb();
+$breadcrumb->home();
+$breadcrumb->add(array('title' => '购物车', 'href' => 'index.php?rule=cart'));
+$breadcrumb->add(array('title' => '详情', 'active' => true));
+$bread = $breadcrumb->draw();
+$btn_group = array(
+	array('type' => 'a', 'title' => '返回', 'href' => 'index.php?rule=cart', 'class' => 'btn-primary', 'icon' => 'level-up') ,
+	array('type' => 'button', 'title' => '生成定单', 'id' => 'send-to-order', 'class' => 'btn-success', 'icon' => 'save') ,
+);
+echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'breadcrumb');
+//echo sprintf("%09d",$id);
 ?>
-<div class="path_bar">
-  <div class="path_title">
-    <h3> 
-		<span style="font-weight: normal;" id="current_obj">
-		<span class="breadcrumb item-1 ">购物车<img src="<?php echo $_tmconfig['tm_img_dir'];?>admin/separator_breadcrum.png" style="margin-right:5px" alt="&gt;"> </span>
-		<span class="breadcrumb item-2 ">#<?php echo sprintf("%09d",$id);?> </span> </span> 
-	</h3>
-    <div class="cc_button">
-      <ul>
-	  	 <li class="status"></li>
-	  	<li><a title="提交到定单系统" href="javascript:void(0)" class="toolbar_btn" id="cart_to_order" data-id="<?php echo $obj->id?>"> <span class="process-icon-save-and-stay"></span>
-			  <div>生成为定单</div>
-			  </a> </li>
-        <li><a title="Back to list" href="javascript:history.back();" class="toolbar_btn" id="desc-product-back"> <span class="process-icon-back "></span>
-          <div>返回列表</div>
-          </a> </li>
-      </ul>
-    </div>
-  </div>
-</div>
+
 <?php 
 if(isset($obj->user)){
 ?>
@@ -60,9 +52,6 @@ if(isset($obj->user)){
 }
 ?>
 <div class="order_product" style=" clear:both;">
-<?php
-	$products = $obj->getProducts();
-?>
 	<fieldset style="width: 98%; " class="small">
 		<legend><img alt="Products" src="<?php echo $_tmconfig['ico_dir'];?>cart.gif">Products</legend>
 		<table id="orderProducts" class="table" cellspacing="0" cellpadding="0" style="width: 100%;">
@@ -73,6 +62,10 @@ if(isset($obj->user)){
 				<th>数量</th>
 				<th>总额</th>
 			</tr>
+			<?php
+			$products = $obj->getProducts();
+			if (is_array($products) && count($products) > 0) {
+			?>
 			<?php foreach($products as $product){?>
 			<tr>
 				<td><img src="<?php echo $product['image'];?>" title="<?php echo $product['name'];?>"></td>
@@ -86,6 +79,7 @@ if(isset($obj->user)){
 				<td><?php echo $product['quantity'];?></td>
 				<td><?php echo Tools::displayPrice($product['total']);?></td>
 			</tr>
+				<?php }?>
 			<?php }?>
 		</table>
 		<div style="float:right; margin-top: 20px;">
@@ -119,10 +113,11 @@ if(isset($obj->user)){
 		</div>
 	</fieldset>
 </div>
+
 <script>
 $(document).ready(function(){
-	$("#cart_to_order").click(function(){
-		var id_cart = $(this).attr("data-id"); 
+	$("#send-to-order").click(function(){
+		var id_cart = $(this).attr("data-id");
 		$('.cc_button li.status').html('<img src="<?php echo $_tmconfig['ico_dir'];?>loader.gif" />提交中...')
 		$.ajax({
 			url: 'public/ajax_sendorder.php',
@@ -137,6 +132,6 @@ $(document).ready(function(){
 						$('.cc_button li.status').html('<font color="green">提交成功!</font>')
 				}
 			});
-	})
+		})
 })
 </script>
