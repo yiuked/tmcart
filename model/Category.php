@@ -225,11 +225,8 @@ class Category extends ObjectBase{
 	  * @param boolean $active return only active categories
 	  * @return array Categories
 	  */
-	public function getSubCategories($active = true,$limit=20, $p=20, $orderBy = NULL, $orderWay = NULL, $filter=array())
+	public function getSubCategories($limit = 20, $p = 20, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
-	 	if (!Validate::isBool($active))
-	 		die(Tools::displayError());
-		
 		$where = '';
 		if(!empty($filter['id_category']) && Validate::isInt($filter['id_category']))
 			$where .= ' AND `id_category`='.intval($filter['id_category']);
@@ -244,21 +241,20 @@ class Category extends ObjectBase{
 		}else{
 			$postion = 'ORDER BY `position` ASC';
 		}
-		
+
 		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'category`
-		WHERE `id_parent` = '.(int)($this->id).' '.($active?' `active`=1 AND':'').'
+		WHERE `id_parent` = '.(int)($this->id).'
 		'.$where);
 
 		$result = Db::getInstance()->getAll('
 		SELECT * FROM `'.DB_PREFIX.'category`
 		WHERE `id_parent` = '.(int)($this->id).' '.$where.'
-		'.($active ? 'AND `active` = 1' : '').'
 		'.$postion.'
 		LIMIT '.(($p-1)*$limit).','.(int)$limit);
 
 		$rows   = array(
 				'total' => $total['total'],
-				'entitys'  => $result);
+				'items'  => $result);
 
 		return $rows;
 	}

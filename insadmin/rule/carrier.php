@@ -40,7 +40,7 @@ $orderWay 	= isset($_GET['orderway']) ? Tools::G('orderway') : 'desc';
 $limit		= $cookie->getPost('pagination') ? $cookie->getPost('pagination') : '50';
 $p			= Tools::G('p') ? (Tools::G('p') == 0 ? 1 : Tools::G('p')) : 1;
 
-$result  	= Carrier::getEntity($p, $limit, $orderBy, $orderWay, $filter);
+$result  	= Carrier::loadData($p, $limit, $orderBy, $orderWay, $filter);
 
 if (isset($errors)) {
 	UIAdminAlerts::MError($errors);
@@ -61,7 +61,7 @@ echo UIViewBlock::area(array('title' => '物流', 'table' => $table, 'result' =>
 <?php
 $form = new UIAdminEditForm('post', 'index.php?rule=carrier', 'form-horizontal', 'address-form');
 $carriers = array();
-foreach($result['entitys'] as $car) {
+foreach($result['items'] as $car) {
 	$carriers[$car['id_carrier']] = $car['name'];
 }
 

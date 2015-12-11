@@ -1,34 +1,27 @@
 <?php 
 class State extends ObjectBase{
-	protected $fields 			= array('iso_code','name','active','id_country');
-	protected $fieldsRequired	= array('iso_code','name');
-	protected $fieldsSize 		= array('name' => 64);
-	protected $fieldsValidate	= array(
-		'iso_code' => 'isLanguageIsoCode',
-		'active' => 'isBool',
-		'need_state' => 'isBool',
-		'name'=> 'isGenericName');
-	
+
+	protected $fields = array(
+		'iso_code' => array('type' => 'isInt'),
+		'id_country' => array('type' => 'isInt'),
+		'active' => array('type' => 'isInt'),
+		'need_state' => array('type' => 'isInt'),
+		'name' => array('type' => 'isGenericName', 'required' => true, 'size' => 40),
+	);
 	protected $identifier 		= 'id_state';
 	protected $table			= 'state';
-	
-	public function getFields()
-	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_state'] = (int)($this->id);
-		$fields['id_country'] = (int)($this->id_country);
-		$fields['iso_code'] = pSQL($this->iso_code);
-		$fields['name'] = pSQL($this->name);
-		$fields['active'] = (int)($this->active);
-		return $fields;
-	}
-	
-	public static function getEntity($active = true,$p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
-	{
-	 	if (!Validate::isBool($active))
-	 		die(Tools::displayError());
 
+	/**
+	 * 获取数据
+	 * @param int $p
+	 * @param int $limit
+	 * @param null $orderBy
+	 * @param null $orderWay
+	 * @param array $filter
+	 * @return array|bool
+	 */
+	public static function loadData($p=1 ,$limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
+	{
 		$where = '';
 		if(!empty($filter['id_state']) && Validate::isInt($filter['id_state']))
 			$where .= ' AND a.`id_state`='.intval($filter['id_state']);
@@ -49,19 +42,21 @@ class State extends ObjectBase{
 		}
 
 		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'state` a
-				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
+				LEFT JOIN `'.DB_PREFIX.'country` c ON (a.id_country = c.id_country)
+				WHERE 1
 				'.$where);
 		if($total==0)
 			return false;
 
-		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'state` a
-				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
+		$result = Db::getInstance()->getAll('SELECT a.*, c.name as country FROM `'.DB_PREFIX.'state` a
+				LEFT JOIN `'.DB_PREFIX.'country` c ON (a.id_country = c.id_country)
+				WHERE 1
 				'.$where.'
 				'.$postion.'
-				LIMIT '.(($p-1)*$limit).','.(int)$limit);
+				LIMIT '.(($p - 1) * $limit) . ','.(int) $limit);
 		$rows   = array(
 				'total' => $total['total'],
-				'entitys'  => $result);
+				'items'  => $result);
 		return $rows;
 	}
 }

@@ -29,7 +29,7 @@ if (intval(Tools::getRequest('delete'))>0 && Tools::getRequest('entity')=='group
 			echo '<div class="conf">删除对象成功</div>';
 }
 
-$result  	= AttributeGroup::getEntitys();
+$result  	= AttributeGroup::loadData();
 
 if (isset($errors)) {
 	UIAdminAlerts::MError($errors);
@@ -64,8 +64,8 @@ echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'br
 							</tr>
 					   </thead>
 					<?php
-					if(is_array($result['entitys']) && count($result['entitys'])>0){
-					foreach($result['entitys'] as $key => $row){
+					if(is_array($result['itmes']) && count($result['itmes'])>0){
+					foreach($result['itmes'] as $key => $row){
 						$attributeGroup = new AttributeGroup($row['id_attribute_group']);
 						$attributes = $attributeGroup->getAttributes();
 					?>

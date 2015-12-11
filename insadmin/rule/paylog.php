@@ -33,7 +33,7 @@ $orderWay 	= isset($_GET['orderway']) ? Tools::G('orderway') : 'desc';
 $limit		= $cookie->getPost('pagination') ? $cookie->getPost('pagination') : '50';
 $p			= Tools::G('p') ? (Tools::G('p') == 0 ? 1 : Tools::G('p')) : 1;
 
-$result  	= Paylog::getEntity($p,$limit,$orderBy,$orderWay,$filter);
+$result  	= Paylog::loadData($p, $limit, $orderBy, $orderWay, $filter);
 
 if (isset($errors)) {
 	UIAdminAlerts::MError($errors);

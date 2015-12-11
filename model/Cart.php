@@ -131,14 +131,17 @@ class Cart extends ObjectBase{
 		return false;
 	}
 	
-	public static function reload($result)
+	public static function reload($result, $full = true)
 	{
 		foreach($result as &$row)
 		{
-			$cart 			= new Cart((int)($row['id_cart']));
-			$row['total'] 	= $cart->getOrderTotal();
-			$row['total_display'] 	= Tools::displayPrice($row['total']);
-			$row['shipping_display'] 	= Tools::displayPrice($row['shipping']);
+			if ($full) {
+				$cart 			= new Cart((int)($row['id_cart']));
+				$row['total'] 	= $cart->getOrderTotal();
+				$row['total_display'] 	= Tools::displayPrice($row['total']);
+				$row['shipping_display'] 	= Tools::displayPrice($row['shipping']);
+			}
+
 			switch ($row['status']) {
 				case Cart::IS_OPEN:
 					$row['color'] = '#E3BF16';
@@ -157,7 +160,7 @@ class Cart extends ObjectBase{
 		return $result;
 	}
 	
-	public static function getEntity($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
+	public static function loadData($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
 		$where = '';
 		if(!empty($filter['id_cart']) && Validate::isInt($filter['id_cart']))
@@ -197,7 +200,7 @@ class Cart extends ObjectBase{
 					LIMIT '.(($p-1)*$limit).','.(int)$limit);
 		$rows   = array(
 				'total' => $total['total'],
-				'entitys'  => self::reload($result));
+				'items'  => self::reload($result));
 		return $rows;
 	}
 }

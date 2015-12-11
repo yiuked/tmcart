@@ -110,7 +110,7 @@ $orderWay 	= isset($_GET['orderway']) ? Tools::G('orderway') : 'desc';
 $limit		= $cookie->getPost('pagination') ? $cookie->getPost('pagination') : '50';
 $p			= Tools::G('p') ? (Tools::G('p') == 0 ? 1 : Tools::G('p')) : 1;
 
-$result  	= Product::getProducts($p, $limit, $orderBy, $orderWay, $filter);
+$result  	= Product::loadData($p, $limit, $orderBy, $orderWay, $filter);
 if (isset($errors)) {
 	UIAdminAlerts::MError($errors);
 }
@@ -172,9 +172,9 @@ echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group, 'cla
 						<input type="radio" class="id_brands" name="id_brands" value="0" <?php if(Tools::getRequest('id_brand')==0){echo "checked";}?>/></a> 所有品牌
 				</li>
 				<?php
-				$brands = Brand::getEntity();
+				$brands = Brand::loadData();
 				if($brands){
-					foreach($brands['entitys'] as $brand){
+					foreach($brands['items'] as $brand){
 						?>
 						<li class="list-group-item"><a href="?rule=product&id_category=<?php echo Tools::getRequest('id_category')?Tools::getRequest('id_category'):1;?>&id_brand=<?php echo $brand["id_brand"];?>">
 								<input type="radio" class="id_brands" name="id_brands" value="<?php echo $brand["id_brand"];?>" <?php if(Tools::getRequest('id_brand')==$brand["id_brand"]){echo "checked";}?>/></a> <?php echo $brand["name"];?></li>

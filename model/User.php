@@ -1,30 +1,35 @@
 <?php 
 class User extends ObjectBase{
-	protected $fields 			= array('name','email','passwd','active','add_date','upd_date');
-	protected $fieldsRequired	= array('name','email');
-	protected $fieldsSize 		= array('name' => 32,'email' => 128,'passwd' => 32);
-	protected $fieldsValidate	= array(
-		'name' => 'isName',
-		'passwd' => 'isPasswd',
-		'active'=> 'isBool',
-		'email' => 'isEmail');
+
+	protected $fields = array(
+		'name' => array(
+			'type' => 'isName',
+			'required' => true,
+			'name' => 32
+		),
+		'email' => array(
+			'type' => 'isEmail',
+			'required' => true,
+			'name' => 128
+		),
+		'passwd' => array(
+			'type' => 'isPasswd',
+			'required' => true,
+			'name' => 32
+		),
+		'active' => array(
+			'type' => 'isInt',
+		),
+		'add_date' => array(
+			'type' => 'isDate',
+		),
+		'upd_date' => array(
+			'type' => 'isDate',
+		),
+	);
 	
 	protected $identifier 		= 'id_user';
 	protected $table			= 'user';
-	
-	public function getFields()
-	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_user'] = (int)($this->id);
-		$fields['name'] = pSQL($this->name);
-		$fields['email'] = pSQL($this->email);
-		$fields['passwd'] = pSQL($this->passwd);
-		$fields['active'] = 1;
-		$fields['add_date'] = pSQL($this->add_date);
-		$fields['upd_date'] = pSQL($this->upd_date);
-		return $fields;
-	}
 
 	public static function userExists($email)
 	{
@@ -126,27 +131,33 @@ class User extends ObjectBase{
 		return false;
 	}
 
+	/**
+	 *获取用户购物车
+	 * @return miex
+	 */
 	public function getCarts()
 	{
-		$result 	= Db::getInstance()->getAll('SELECT `id_cart`,`add_date` FROM `'.DB_PREFIX.'cart` WHERE `id_user`='.(int)($this->id));
-		return $result;
+		$result 	= Db::getInstance()->getAll('SELECT * FROM `'.DB_PREFIX.'cart` WHERE `id_user`='.(int)($this->id));
+		if ($result) {
+			return Cart::reload($result, false);
+		}
+		return false;
 	}
 	
 	public function getContacts()
 	{
-		$result 	= Db::getInstance()->getAll('SELECT `id_contact`,`add_date` FROM `'.DB_PREFIX.'contact` WHERE `id_parent`=0 AND `id_user`='.(int)($this->id));
+		$result 	= Db::getInstance()->getAll('SELECT `id_contact`, `active`, `add_date` FROM `'.DB_PREFIX.'contact` WHERE `id_parent` = 0 AND `id_user` = '.(int)($this->id));
 		return $result;
 	}
 	
 	public function getOrders()
 	{
-		$orders	= array();
-		$result 	= Db::getInstance()->getAll('SELECT `id_order` FROM `'.DB_PREFIX.'order` WHERE `id_user`='.(int)($this->id));
-		foreach($result as $row)
-		{
-			$orders[] = new Order(intval($row['id_order']));
-		}
-		return $orders;
+		$result 	= Db::getInstance()->getAll('
+		SELECT o.`id_order`,o.reference,os.name as status,os.color,o.add_date FROM `'.DB_PREFIX.'order` o
+		LEFT JOIN `'.DB_PREFIX.'order_status` os ON (o.id_order_status = os.id_order_status)
+		WHERE o.`id_user`='.(int)($this->id));
+
+		return $result;
 	}
 	
 	public function getPaymentedProduct()
@@ -164,7 +175,7 @@ class User extends ObjectBase{
 		return $result;
 	}
 	
-	public static function getEntitys($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
+	public static function loadData($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
 		$where = '';
 		if(!empty($filter['id_contact']) && Validate::isInt($filter['id_contact']))
@@ -198,7 +209,7 @@ class User extends ObjectBase{
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);
 		$rows   = array(
 				'total' => $total['total'],
-				'entitys'  => $result);
+				'items'  => $result);
 		return $rows;
 	}
 }

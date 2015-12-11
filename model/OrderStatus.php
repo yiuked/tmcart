@@ -1,32 +1,18 @@
 <?php
 class OrderStatus extends ObjectBase
 {
-	protected $fields 			= array('name','color','send_mail','email_tpl');
-	protected $fieldsRequired	= array('name','color');
-	protected $fieldsSize 		= array('name' => 128,'color' => 56);
-	protected $fieldsValidate	= array(
-		'name' => 'isGenericName',
-		'color' => 'isColor', 
-		'send_mail' => 'isBool', 
-		'email_tpl' => 'isGenericName');
+	protected $fields = array(
+		'name' => array('type' => 'isGenericName', 'size' => 128, 'required' => true),
+		'color' => array('type' => 'isColor', 'size' => 12, 'required' => true),
+		'send_mail' => array('type' => 'isInt'),
+		'email_tpl' => array('type' => 'isGenericName', 'size' => 128),
+		'active' => array('type' => 'isInt'),
+	);
 	
 	protected $identifier 		= 'id_order_status';
 	protected $table			= 'order_status';
 	
-	public function getFields()
-	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_order_status'] = (int)($this->id);
-		$fields['name'] 	= pSQL($this->name);
-		$fields['color'] 	= pSQL($this->color);
-		$fields['send_mail']= (int)($this->send_mail);
-		$fields['email_tpl']= pSQL($this->email_tpl);
-		$fields['active'] 	= (int)($this->active);
-		return $fields;
-	}
-	
-	public static function getEntity($p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
+	public static function loadData($p = 1, $limit = 50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
 		$where = '';
 		if(!empty($filter['id_order_status']) && Validate::isInt($filter['id_order_status']))
@@ -55,10 +41,10 @@ class OrderStatus extends ObjectBase
 		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'order_status` a
 				WHERE 1 '.$where.'
 				'.$postion.'
-				LIMIT '.(($p-1)*$limit).','.(int)$limit);
+				LIMIT '.(($p - 1) * $limit).','.(int) $limit);
 		$rows   = array(
 				'total' => $total['total'],
-				'entitys'  => $result);
+				'items'  => $result);
 		return $rows;
 	}
 }

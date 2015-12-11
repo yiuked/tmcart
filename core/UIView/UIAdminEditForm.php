@@ -106,7 +106,7 @@ class UIAdminEditForm extends UIView
             } elseif ($item['type'] == 'submit' || $item['type'] == 'cannel') {
                 $html .= '<div class="form-group">
                     <div class="col-md-8 col-md-offset-2">
-                        <button name="' . $key . '" class="btn ' . $item['class'] . '" type="' . $item['type'] . '"><span class="glyphicon ' . $item['icon'] . '"></span> ' . $item['title'] . '</button>
+                        <button name="' . $key . '" class="btn ' . $item['class'] . '" type="' . $item['type'] . '"><span class="glyphicon glyphicon-' . $item['icon'] . '"></span> ' . $item['title'] . '</button>
                     </div>
                 </div>';
             } elseif ($item['type'] == 'select') {

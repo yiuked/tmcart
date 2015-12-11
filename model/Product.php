@@ -206,7 +206,7 @@ class Product extends ObjectBase{
 		return $rows;
 	}
 	
-	public static function getProducts($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
+	public static function loadData($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
 		$where = '';
 		if(!empty($filter['id_product']) && Validate::isInt($filter['id_product']))
@@ -246,7 +246,7 @@ class Product extends ObjectBase{
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);
 		$rows   = array(
 				'total' => $total['total'],
-				'entitys'  => self::reLoad($result));
+				'items'  => self::reLoad($result));
 		return $rows;
 	}
 	

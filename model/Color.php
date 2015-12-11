@@ -41,7 +41,7 @@ class Color extends ObjectBase{
 	protected $identifier 		= 'id_color';
 	protected $table			= 'color';
 	
-	public static function getEntitys($orderBy = NULL, $orderWay = NULL)
+	public static function loadData($orderBy = NULL, $orderWay = NULL)
 	{
 		if(!is_null($orderBy) AND !is_null($orderWay))
 		{
@@ -52,7 +52,7 @@ class Color extends ObjectBase{
 		$result = Db::getInstance()->getAll('SELECT *,code as color  FROM `'.DB_PREFIX.'color` '.$postion);
 		return array(
 			'total' => count($result),
-			'entitys' => $result
+			'items' => $result
 		);
 	}
 	

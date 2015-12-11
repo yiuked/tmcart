@@ -315,7 +315,7 @@ width: 40px;}
 }
 .demo {
   margin-bottom: 20px;
-  padding-left: 50px;
+  padding-left: 10px;
   position: relative;
   width:600px;
 }
@@ -326,12 +326,12 @@ width: 40px;}
   display: block;
   font-size: 0;
   height: 0;
-  left: 42px;
+  left: 2px;
   line-height: 0;
   margin-top: -8px;
   overflow: hidden;
   position: absolute;
-  top: 50%;
+  bottom: 3px;
   width: 0;
 }
 .demo .article {
@@ -342,7 +342,7 @@ width: 40px;}
   display: inline-block;
   float: left;
   padding: 5px 10px;
-  width:528px;
+  width:568px;
   min-height:26px;
 }
 .fr.demo .article{
@@ -354,7 +354,7 @@ border: 1px solid #006633;
   border-style: solid none solid solid;
   border-width: 8px medium 8px 8px;
   left: auto;
-  right: 42px;
+  right: 14px;
 }
 /*pagination css*/
 .page-number .pagination{

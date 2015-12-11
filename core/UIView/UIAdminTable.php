@@ -14,6 +14,9 @@ class UIAdminTable extends UIView
     /* @var string token 当前表格的校验 */
     public $token;
 
+    /* @var booln displayFilter 是否显示检索行 */
+    public $displayFilter = false;
+
     /* @var string rule 当前页的rule */
     public $rule;
 
@@ -58,6 +61,7 @@ class UIAdminTable extends UIView
     {
         global $cookie;
 
+        $this->displayFilter = true;
         foreach ($this->header as $head) {
             if (isset($head['filter'])) {
                 $key = $this->token . '_' . $head['name'];
@@ -120,31 +124,32 @@ class UIAdminTable extends UIView
                 $headHtml .= '</th>';
             }
 
-
-            if (isset($head['isAction']) && $haveFilter == true) {
-                $filterHtml .=  '<td'. $width . $class .'><div class="btn-group"><button name="' . $this->token . '_submitFilter" type="submit" class="btn btn-default"><span aria-hidden="true" class="glyphicon glyphicon-search"></span> 搜索</button>';
-                $filterHtml .=  '  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span><span class="sr-only">搜索</span></button>';
-                $filterHtml .= '    <ul class="dropdown-menu table-action-dropdown-menu">';
-                $filterHtml .= '       <li><button name="' . $this->token . '_resetFilter"  type="submit" class="clear-btn btn-default"><span aria-hidden="true" class="glyphicon glyphicon-refresh"></span> 重置</button></li>';
-                $filterHtml .= '   </ul></div>';
-                $filterHtml .= ' </td>';
-            } elseif (!isset($head['filter']) || (isset($head['isAction']) && $haveFilter == false)){
-                $filterHtml .= '<td'. $width . $class .'>--</td>';
-            } elseif ($head['filter'] == 'string') {
-                $haveFilter = true;
-                $filterHtml .= '<td'. $width . $class .'><div class="form-group">';
-                $filterHtml .= '<label for="' . $this->token . '_' . $head['name'] . '" class="sr-only">' . $head['title'] . '</label>';
-                $filterHtml .= '<input type="text" placeholder="' . $head['title'] . '" value="" name="' . $this->token . '_' . $head['name'] . '" class="form-control">';
-                $filterHtml .= '</div></td>';
-            } elseif ($head['filter'] == 'bool') {
-                $filterHtml .= '<td'. $width . $class .'><div class="form-group">';
-                $filterHtml .= '<label for="' .$this->token . '_' . $head['name'] . '" class="sr-only">' . $head['title'] . '</label>';
-                $filterHtml .= '<select class="form-control" name="' . $this->token . '_' . $head['name'] . '">';
-				$filterHtml .= '<option value="">--</option>';
-                $filterHtml .= '<option value="1">Yes</option>';
-				$filterHtml .= '<option value="2">No</option>';
-                $filterHtml .= '</select>';
-                $filterHtml .= '</div></td>';
+            if ($this->displayFilter) {
+                if (isset($head['isAction']) && $haveFilter == true) {
+                    $filterHtml .= '<td' . $width . $class . '><div class="btn-group"><button name="' . $this->token . '_submitFilter" type="submit" class="btn btn-default"><span aria-hidden="true" class="glyphicon glyphicon-search"></span> 搜索</button>';
+                    $filterHtml .= '  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span><span class="sr-only">搜索</span></button>';
+                    $filterHtml .= '    <ul class="dropdown-menu table-action-dropdown-menu">';
+                    $filterHtml .= '       <li><button name="' . $this->token . '_resetFilter"  type="submit" class="clear-btn btn-default"><span aria-hidden="true" class="glyphicon glyphicon-refresh"></span> 重置</button></li>';
+                    $filterHtml .= '   </ul></div>';
+                    $filterHtml .= ' </td>';
+                } elseif (!isset($head['filter']) || (isset($head['isAction']) && $haveFilter == false)) {
+                    $filterHtml .= '<td' . $width . $class . '>--</td>';
+                } elseif ($head['filter'] == 'string') {
+                    $haveFilter = true;
+                    $filterHtml .= '<td' . $width . $class . '><div class="form-group">';
+                    $filterHtml .= '<label for="' . $this->token . '_' . $head['name'] . '" class="sr-only">' . $head['title'] . '</label>';
+                    $filterHtml .= '<input type="text" placeholder="' . $head['title'] . '" value="" name="' . $this->token . '_' . $head['name'] . '" class="form-control">';
+                    $filterHtml .= '</div></td>';
+                } elseif ($head['filter'] == 'bool') {
+                    $filterHtml .= '<td' . $width . $class . '><div class="form-group">';
+                    $filterHtml .= '<label for="' . $this->token . '_' . $head['name'] . '" class="sr-only">' . $head['title'] . '</label>';
+                    $filterHtml .= '<select class="form-control" name="' . $this->token . '_' . $head['name'] . '">';
+                    $filterHtml .= '<option value="">--</option>';
+                    $filterHtml .= '<option value="1">Yes</option>';
+                    $filterHtml .= '<option value="2">No</option>';
+                    $filterHtml .= '</select>';
+                    $filterHtml .= '</div></td>';
+                }
             }
         }
 
@@ -177,9 +182,11 @@ class UIAdminTable extends UIView
                         } elseif (isset($head['filter']) && $head['filter'] == 'bool') {
                             $body .= '<td'. $width . $class .'><span class="glyphicon glyphicon-'. ($row[$head['name']] == 0 ? 'remove':'ok') .' active-toggle" onclick="setToggle($(this),\'' .  $this->className . '\',\'' .  $head['name'] . '\',' .  $row[$this->identifier] . ')"></span></td>';
                         }elseif(isset($head['edit']) && $head['edit'] == false){
+                            $row[$head['name']] = Tools::substr($row[$head['name']], 0, 100);
                             $title = isset($head['color']) ? '<span style="background-color:' .  $row['color'] . ';color:white" class="color_field">' .  $row[$head['name']] . '</span>' : $row[$head['name']];
                             $body .= '<td'. $width . $class .' class="pointer">' .  $title . '</td>';
                         }else{
+                            $row[$head['name']] = Tools::substr($row[$head['name']], 0, 100);
                             $title = isset($head['color']) ? '<span style="background-color:' .  $row['color'] . ';color:white" class="color_field">' .  $row[$head['name']] . '</span>' : $row[$head['name']];
                             $body .= '<td'. $width . $class .' onclick="document.location = \'index.php?rule=' .  $this->rule . (!$this->child ? '_edit' : '') . '&id=' .  $row[$this->identifier] . '\'" class="pointer">' .  $title . '</td>';
                         }

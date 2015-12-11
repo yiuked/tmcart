@@ -46,62 +46,24 @@ $orderWay 	= isset($_GET['orderway']) ? Tools::G('orderway') : 'asc';
 $limit		= $cookie->getPost('pagination') ? $cookie->getPost('pagination') : '50';
 $p			= Tools::G('p') ? (Tools::G('p') == 0 ? 1 : Tools::G('p')) : 1;
 
-$result  	= Brand::getEntity($p, $limit, $orderBy, $orderWay, $filter);
+$result  	= Brand::loadData($p, $limit, $orderBy, $orderWay, $filter);
 
-require_once(dirname(__FILE__).'/../errors.php');
-?>
-<div class="row">
-	<div class="col-md-12">
-		<div class="panel panel-default">
-			<div class="panel-body">
-				<div class="col-md-6">
-					<?php
-					$breadcrumb = new UIAdminBreadcrumb();
-					$breadcrumb->home();
-					$breadcrumb->add(array('title' => '品牌', 'active' => true));
-					echo $breadcrumb->draw();
-					?>
-				</div>
-				<div class="col-md-6">
-					<div class="btn-group save-group pull-right" role="group">
-						<a href="index.php?rule=brand_edit"  class="btn btn-success" id="submit-form"><span aria-hidden="true" class="glyphicon glyphicon-plus"></span> 新品牌</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				品牌
-			</div>
-			<div class="panel-body">
-				<form class="form-inline" method="post" action="index.php?rule=brand">
-					<?php
-					//config table options
-					$table->data = $result['entitys'];
-					echo $table->draw();
-					?>
+if (isset($errors)) {
+	UIAdminAlerts::MError($errors);
+}
 
-					<div class="row">
-						<div class="col-md-4">
-							<div class="btn-group" role="group" >
-								<button type="submit" class="btn btn-default" onclick="return confirm('你确定要删除选中项目?');" name="subDelete">批量删除</button>
-								<button type="submit" class="btn btn-default" name="subActiveON">批量启用</button>
-								<button type="submit" class="btn btn-default" name="subActiveOFF">批量关闭</button>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<?php
-							$pagination = new UIAdminPagination($result['total'],$limit);
-							echo $pagination->draw();
-							?>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
+$breadcrumb = new UIAdminBreadcrumb();
+$breadcrumb->home();
+$breadcrumb->add(array('title' => '购物车', 'active' => true));
+$bread = $breadcrumb->draw();
+$btn_groups = array(
+	array('type' => 'a', 'title' => '新分类', 'href' => 'index.php?rule=category_edit', 'class' => 'btn-success', 'icon' => 'plus')
+);
+echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_groups), 'breadcrumb');
+
+$btn_group = array(
+	array('type' => 'button', 'title' => '批量删除', 'confirm' => '你确定要删除选中项?', 'name' => 'deleteItems', 'class' => 'btn-danger', 'icon' => 'remove') ,
+	array('type' => 'button', 'title' => '批量启用', 'name' => 'subActiveON', 'class' => 'btn-default') ,
+	array('type' => 'button', 'title' => '批量关闭', 'name' => 'subActiveOFF', 'class' => 'btn-default') ,
+);
+echo UIViewBlock::area(array('title' => '地址列表', 'table' => $table, 'result' => $result, 'limit' => $limit, 'btn_groups' => $btn_group), 'table');

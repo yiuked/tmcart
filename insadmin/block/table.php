@@ -28,7 +28,7 @@
                 <form class="form" method="post" action="index.php?rule=<?php echo isset($data['action']) ? $data['action'] : Tools::G('rule');?>">
                     <?php
                     //config table options
-                    $data['table']->data = $data['result']['entitys'];
+                    $data['table']->data = $data['result']['items'];
                     echo  $data['table']->draw();
                     ?>
                     <div class="row">

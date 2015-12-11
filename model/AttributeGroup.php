@@ -43,10 +43,8 @@ class AttributeGroup extends ObjectBase{
 		}
 	} 
 	
-	public static function getEntitys($active = true,$p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
+	public static function loadData($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
-	 	if (!Validate::isBool($active))
-	 		die(Tools::displayError());
 
 		$where = '';
 		if(!empty($filter['id_attribute_group']) && Validate::isInt($filter['id_attribute_group']))
@@ -72,7 +70,7 @@ class AttributeGroup extends ObjectBase{
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);
 		$rows   = array(
 				'total' => $total['total'],
-				'entitys'  => $result);
+				'items'  => $result);
 		return $rows;
 	}
 	

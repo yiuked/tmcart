@@ -49,7 +49,7 @@ $orderWay 	= isset($_GET['orderway']) ? Tools::G('orderway') : 'desc';
 $limit		= $cookie->getPost('pagination') ? $cookie->getPost('pagination') : '50';
 $p			= Tools::G('p') ? (Tools::G('p') == 0 ? 1 : Tools::G('p')) : 1;
 
-$result  	= Cart::getEntity($p, $limit, $orderBy, $orderWay, $filter);
+$result  	= Cart::loadData($p, $limit, $orderBy, $orderWay, $filter);
 
 if (isset($errors)) {
 	UIAdminAlerts::MError($errors);
@@ -60,37 +60,8 @@ $breadcrumb->home();
 $breadcrumb->add(array('title' => '购物车', 'active' => true));
 $bread = $breadcrumb->draw();
 echo UIViewBlock::area(array('bread' => $bread), 'breadcrumb');
-?>
-<div class="row">
-	<div class="col-md-12">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				定单
-			</div>
-			<div class="panel-body">
-			<form class="form" method="post" action="index.php?rule=cart">
-				<?php
-				//config table options
-				$table->data = $result['entitys'];
-				echo $table->draw();
-				?>
-				<div class="row">
-					<div class="col-md-4">
-						<div class="btn-group" role="group" >
-							<button type="submit" class="btn btn-default" onclick="return confirm('你确定要删除选中项目?');" name="subDelete">批量删除</button>
-							<button type="submit" class="btn btn-default" name="subActiveON">批量启用</button>
-							<button type="submit" class="btn btn-default" name="subActiveOFF">批量关闭</button>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<?php
-						$pagination = new UIAdminPagination($result['total'],$limit);
-						echo $pagination->draw();
-						?>
-					</div>
-				</div>
-			</form>
-			</div>
-		</div>
-	</div>
-</div>
+
+$btn_group = array(
+	array('type' => 'button', 'title' => '删除选中','confirm' => '确定要删除选中项?', 'name' => 'subDelete', 'btn_type' => 'submit', 'class' => 'btn-danger') ,
+);
+echo UIViewBlock::area(array('title' => '用户留言', 'table' => $table, 'result' => $result, 'limit' => $limit, 'btn_groups' => $btn_group), 'table');

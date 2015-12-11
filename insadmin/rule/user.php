@@ -48,7 +48,7 @@ $orderWay 	= isset($_GET['orderway']) ? Tools::G('orderway') : 'desc';
 $limit		= $cookie->getPost('pagination') ? $cookie->getPost('pagination') : '50';
 $p			= Tools::G('p') ? (Tools::G('p') == 0 ? 1 : Tools::G('p')) : 1;
 
-$result  	= User::getEntitys($p,$limit,$orderBy,$orderWay,$filter);
+$result  	= User::loadData($p, $limit, $orderBy, $orderWay, $filter);
 if (isset($errors)) {
 	UIAdminAlerts::MError($errors);
 }
@@ -57,7 +57,7 @@ $breadcrumb->home();
 $breadcrumb->add(array('title' => '用户', 'active' => true));
 $bread = $breadcrumb->draw();
 $btn_group = array(
-	array('type' => 'a', 'title' => '新用户', 'href' => 'index.php?rule=user_add', 'class' => 'btn-success', 'icon' => 'plus') ,
+	array('type' => 'a', 'title' => '新用户', 'href' => 'index.php?rule=user_edit', 'class' => 'btn-success', 'icon' => 'plus') ,
 );
 echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'breadcrumb');
 $btn_group = array(

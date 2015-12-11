@@ -1,68 +1,30 @@
 <?php 
 class Order extends ObjectBase{
-	protected $fields 			= array('id_cart','id_user','id_currency','id_address','id_carrier','id_module','payment','track_number','product_total','shipping_total','discount','amount','conversion_rate','id_order_status','reference','add_date','upd_date');
-	protected $fieldsRequired	= array('id_cart','id_user','id_currency','id_address','id_carrier','id_module','product_total','shipping_total','discount','amount','conversion_rate','id_order_status');
-	protected $fieldsValidate	= array(
-		'id_cart' => 'isUnsignedId',
-		'id_user'=> 'isUnsignedId',
-		'id_currency' => 'isUnsignedId', 
-		'id_address' => 'isUnsignedId', 
-		'id_carrier'=> 'isUnsignedId',
-		'id_order_status'=>'isUnsignedId',
-		'id_module' => 'isUnsignedId',
-		'payment' => 'isGenericName',
-		'product_total'=>'isPrice',
-		'shipping_total'=>'isPrice',
-		'amount' => 'isPrice',
-		'discount' => 'isPrice',
-		'conversion_rate' => 'isFloat');
-	
+
+	protected $fields = array(
+		'id_cart' => array('type' => 'isInt'),
+		'id_user' => array('type' => 'isInt'),
+		'id_currency' => array('type' => 'isInt'),
+		'reference' => array('type' => 'isGenericName'),
+		'id_address' => array('type' => 'isInt'),
+		'id_carrier' => array('type' => 'isInt'),
+		'id_order_status' => array('type' => 'isInt'),
+		'id_module' => array('type' => 'isInt'),
+		'product_total' => array('type' => 'isPrice'),
+		'shipping_total' => array('type' => 'isPrice'),
+		'amount' => array('type' => 'isPrice'),
+		'discount' => array('type' => 'isPrice'),
+		'track_number' => array('type' => 'isGenericName'),
+		'conversion_rate' => array('type' => 'isFloat'),
+		'upd_date' => array('type' => 'isDate'),
+		'add_date' => array('type' => 'isDate'),
+	);
+
+	protected $joinCache = array();
 	protected $identifier 		= 'id_order';
 	protected $table			= 'order';
-	
-	public function __construct($id=NULL)
-	{
-		parent::__construct($id);
-		if($id){
-			if($this->id_cart)
-				$this->cart 	= new Cart((int)($this->id_cart));
-			if($this->id_user)
-				$this->user 	= new User((int)($this->id_user));
-			if($this->id_address)
-				$this->address 	= new Address((int)($this->id_address));
-			if($this->id_carrier)
-				$this->carrier 	= new Carrier((int)($this->id_carrier));
-			if($this->id_order_status)
-				$this->order_status = new OrderStatus((int)($this->id_order_status));
-		}
-	}
-	
-	public function getFields()
-	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_order'] = (int)($this->id);
-		$fields['id_cart'] = (int)($this->id_cart);
-		$fields['id_user'] = (int)($this->id_user);
-		$fields['id_currency'] = (int)($this->id_currency);
-		$fields['id_address'] = (int)($this->id_address);
-		$fields['id_carrier'] = (int)($this->id_carrier);
-		$fields['id_order_status'] = (int)($this->id_order_status);
-		$fields['id_module'] = (int)($this->id_module);
-		$fields['payment'] = pSQL($this->payment);
-		$fields['track_number'] = pSQL($this->track_number);
-		$fields['product_total'] = floatval($this->product_total);
-		$fields['shipping_total'] = floatval($this->shipping_total);
-		$fields['amount'] = floatval($this->amount);
-		$fields['discount'] = floatval($this->discount);
-		$fields['conversion_rate'] = floatval($this->conversion_rate);
-		$fields['reference'] = pSQL($this->reference);
-		$fields['add_date'] = isset($this->add_date)?pSQL($this->add_date):'';
-		$fields['upd_date'] = isset($this->upd_date)?pSQL($this->upd_date):'';
-		return $fields;
-	}
-	
-	public function add($nullValues = false)
+
+	public function add()
 	{	
 		$this->reference = self::generateReference();
 		if(parent::add()){
@@ -111,10 +73,8 @@ class Order extends ObjectBase{
 		return false;
 	}
 	
-	public static function getEntity($active = true,$p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
+	public static function loadData($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
-	 	if (!Validate::isBool($active))
-	 		die(Tools::displayError());
 
 		$where = '';
 		if(!empty($filter['id_order']) && Validate::isInt($filter['id_order']))
@@ -127,8 +87,6 @@ class Order extends ObjectBase{
 			$where .= ' AND a.`id_cart` = '.intval($filter['id_cart']);
 		if(!empty($filter['name']) && Validate::isCatalogName($filter['name']))
 			$where .= ' AND u.`name` LIKE "%'.pSQL($filter['name']).'%"';
-		if(!empty($filter['active']) && Validate::isInt($filter['active']))
-			$where .= ' AND a.`active`='.((int)($filter['active'])==1?'1':'0');
 		if(!empty($filter['email']) && Validate::isInt($filter['email']))
 			$where .= ' AND a.`email` LIKE "%'.pSQL($filter['email']).'%"';
 		
@@ -163,7 +121,7 @@ class Order extends ObjectBase{
 		);
 		$rows   = array(
 				'total' => $total['total'],
-				'entitys'  => $result);
+				'items'  => $result);
 		return $rows;
 	}
 }

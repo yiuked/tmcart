@@ -1,39 +1,22 @@
 <?php 
 class Contact extends ObjectBase{
-	protected $fields 			= array('id_contact','id_parent','id_user','name','email','subject','content','active','add_date','upd_date');
-	protected $fieldsRequired	= array('name','email');
-	protected $fieldsSize 		= array('name' => 256, 'email' => 256,'subject' => 256,'content' => 512);
-	protected $fieldsValidate	= array(
-		'subject' => 'isCatalogName',
-		'active'=> 'isBool',
-		'name' => 'isName', 
-		'email' => 'isEmail', 
-		'content' => 'isMessage');
+	protected $fields = array(
+		'id_parent' => array('type' => 'isInt'),
+		'id_user' => array('type' => 'isInt'),
+		'name' => array('type' => 'isName', 'size' => '128', 'required' => true),
+		'email' => array('type' => 'isEmail', 'size' => '256', 'required' => true),
+		'subject' => array('type' => 'isMailSubject'),
+		'content' => array('type' => 'isMessage', 'required' => true),
+		'active' => array('type' => 'isInt'),
+		'add_date' => array('type' => 'isDate'),
+		'upd_date' => array('type' => 'isDate'),
+	);
 	
 	protected $identifier 		= 'id_contact';
 	protected $table			= 'contact';
 	
-	public function getFields()
+	public static function loadData($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_contact'] = (int)($this->id);
-		$fields['id_parent'] = (int)($this->id_parent);
-		$fields['id_user'] = (int)($this->id_user);
-		$fields['name'] = pSQL($this->name);
-		$fields['subject'] = pSQL($this->subject);
-		$fields['content'] = pSQL($this->content);
-		$fields['email'] = pSQL($this->email);
-		$fields['active'] = isset($this->active)?(int)($this->active):0;
-		$fields['add_date'] = pSQL($this->add_date);
-		$fields['upd_date'] = pSQL($this->upd_date);
-		return $fields;
-	}
-	
-	public static function getContact($active = true,$p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
-	{
-	 	if (!Validate::isBool($active))
-	 		die(Tools::displayError());
 
 		$where = '';
 		if(!empty($filter['id_contact']) && Validate::isInt($filter['id_contact']))
@@ -55,19 +38,19 @@ class Contact extends ObjectBase{
 		}
 
 		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'contact` a
-				WHERE 1 AND `id_parent`=0 '.($active?' AND a.`active`=1 ':'').'
+				WHERE 1 AND `id_parent`=0
 				'.$where);
 		if($total==0)
 			return false;
 
 		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'contact` a
-				WHERE 1 AND `id_parent`=0 '.($active?' AND AND a.`active`=1 ':'').'
+				WHERE 1 AND `id_parent`=0
 				'.$where.'
 				'.$postion.'
-				LIMIT '.(($p-1)*$limit).','.(int)$limit);
+				LIMIT '.(($p-1) * $limit).','.(int)$limit);
 		$rows   = array(
 				'total' => $total['total'],
-				'contacts'  => $result);
+				'items'  => $result);
 		return $rows;
 	}
 	

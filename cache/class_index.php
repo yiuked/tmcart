@@ -65,4 +65,6 @@
   'CMS' => 'D:\\wamp\\www\\red\\shoes/model/CMS.php',
   'CMSComment' => 'D:\\wamp\\www\\red\\shoes/model/CMSComment.php',
   'CMSTag' => 'D:\\wamp\\www\\red\\shoes/model/CMSTag.php',
+  'Contact' => 'D:\\wamp\\www\\red\\shoes/model/Contact.php',
+  'Mail' => 'D:\\wamp\\www\\red\\shoes/core/Mail.php',
 ); 

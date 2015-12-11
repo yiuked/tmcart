@@ -1,32 +1,33 @@
 <?php
 
-if(intval(Tools::getRequest('delete'))>0){
+if (intval(Tools::G('delete'))>0) {
 	$object = new Coupon(intval(Tools::getRequest('delete')));
 	if(Validate::isLoadedObject($object)){
 		$object->delete();
 	}
 	
-	if(is_array($object->_errors) AND count($object->_errors)>0){
+	if (is_array($object->_errors) AND count($object->_errors)>0) {
 		$errors = $object->_errors;
-	}else{
-		echo '<div class="conf">删除对象成功</div>';
+	} else {
+		UIAdminAlerts::conf('优惠码已删除');
 	}
-}elseif(Tools::isSubmit('subDelete')){
+} elseif(Tools::isSubmit('subDelete')) {
 	$select_cat = Tools::getRequest('categoryBox');
 	$coupon	= new Coupon();
-		if($coupon->deleteSelection($select_cat))
-			echo '<div class="conf">删除对象成功</div>';
+		if ($coupon->deleteSelection($select_cat)) {
+			UIAdminAlerts::conf('优惠码已删除');
+		}
 
-}elseif(intval(Tools::getRequest('toggleStatus'))>0){
+} elseif(intval(Tools::getRequest('toggleStatus')) > 0) {
 	$object = new Coupon(intval(Tools::getRequest('toggleStatus')));
 	if(Validate::isLoadedObject($object)){
 		$object->toggleStatus();
 	}
 	
-	if(is_array($object->_errors) AND count($object->_errors)>0){
+	if (is_array($object->_errors) AND count($object->_errors) > 0) {
 		$errors = $object->_errors;
-	}else{
-		echo '<div class="conf">更新分类状态成功</div>';
+	} else {
+		UIAdminAlerts::conf('优惠码已更新');
 	}
 }
 
@@ -48,7 +49,7 @@ $orderWay 	= isset($_GET['orderway']) ? Tools::G('orderway') : 'desc';
 $limit		= $cookie->getPost('pagination') ? $cookie->getPost('pagination') : '50';
 $p			= Tools::G('p') ? (Tools::G('p') == 0 ? 1 : Tools::G('p')) : 1;
 
-$result  	= Coupon::getEntity($p,$limit,$orderBy,$orderWay,$filter);
+$result  	= Coupon::loadData($p, $limit, $orderBy, $orderWay, $filter);
 
 if (isset($errors)) {
 	UIAdminAlerts::MError($errors);

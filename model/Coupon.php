@@ -1,33 +1,23 @@
 <?php 
 class Coupon extends ObjectBase{
-	protected $fields 			= array('id_user','code','off','use','total_over','quantity_over',
-		'amount','active','add_date');
-	protected $fieldsRequired	= array('code');
-	protected $fieldsSize 		= array('code' => 32);
-	protected $fieldsValidate	= array(
-		'code' => 'isGenericName');
+
+	protected $fields = array(
+		'code' => array('type' => 'isInt'),
+		'id_user' => array('type' => 'isGenericName', 'required' => true, 'size' => 32),
+		'use' => array('type' => 'isInt'),
+		'off' => array('type' => 'isInt'),
+		'amount' => array('type' => 'isPrice'),
+		'active' => array('type' => 'isInt'),
+		'total_over' => array('type' => 'isPrice'),
+		'quantity_over' => array('type' => 'isInt'),
+		'add_date' => array('type' => 'isDate'),
+	);
 	
 	protected $identifier 		= 'id_coupon';
 	protected $table			= 'coupon';
+
 	
-	public function getFields()
-	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_coupon'] = (int)($this->id);
-		$fields['id_user'] = (int)($this->id_user);
-		$fields['code'] = pSQL($this->code);
-		$fields['use'] = (int)($this->use);
-		$fields['off'] = (int)($this->off);
-		$fields['amount'] = floatval($this->amount);
-		$fields['active'] = intval($this->active);
-		$fields['total_over'] = floatval($this->total_over);
-		$fields['quantity_over'] = intval($this->quantity_over);
-		$fields['add_date'] = pSQL($this->add_date);
-		return $fields;
-	}
-	
-	public static function getEntity($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
+	public static function loadData($p = 1, $limit = 50, $orderBy = NULL, $orderWay = NULL, $filter = array())
 	{
 		$where = '';
 		if(!empty($filter['id_coupon']) && Validate::isInt($filter['id_coupon']))
@@ -44,16 +34,16 @@ class Coupon extends ObjectBase{
 
 		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'coupon` a
 				WHERE 1'.$where);
-		if($total==0)
+		if($total == 0)
 			return false;
 
 		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'coupon` a
 				WHERE 1 '.$where.'
 				'.$postion.'
-				LIMIT '.(($p-1)*$limit).','.(int)$limit);
+				LIMIT '.(($p - 1) * $limit).','.(int) $limit);
 		$rows   = array(
 				'total' => $total['total'],
-				'entitys'  => $result);
+				'items' => $result);
 		return $rows;
 	}
 }

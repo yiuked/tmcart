@@ -131,5 +131,5 @@ $btn_group = array(
 	array('type' => 'button', 'title' => '激活选中', 'name' => 'subActiveON',  'btn_type' => 'submit','class' => 'btn-default') ,
 	array('type' => 'button', 'title' => '关闭选中', 'name' => 'subActiveOFF', 'btn_type' => 'submit', 'class' => 'btn-default') ,
 );
-echo UIViewBlock::area(array('title' => '颜色', 'table' => $table, 'class' => 'col-md-10 col-md-offset-2', 'result' => $result, 'btn_groups' => $btn_group), 'table');
+echo UIViewBlock::area(array('title' => '文章', 'table' => $table, 'class' => 'col-md-10 col-md-offset-2', 'result' => $result, 'btn_groups' => $btn_group), 'table');
 ?>

@@ -30,7 +30,7 @@ $table->header = array(
 );
 $orderBy 	= isset($_GET['orderby']) ? Tools::G('orderby') : 'position';
 $orderWay 	= isset($_GET['orderway']) ? Tools::G('orderway') : 'asc';
-$result = Color::getEntitys($orderBy, $orderWay);
+$result = Color::loadData($orderBy, $orderWay);
 
 if (isset($errors)) {
 	UIAdminAlerts::MError($errors);

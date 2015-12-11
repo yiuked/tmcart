@@ -126,7 +126,7 @@ class Brand extends ObjectBase{
 		return $result;
 	}
 	
-	public static function getEntity($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
+	public static function loadData($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
 
 		$where = '';
@@ -155,7 +155,7 @@ class Brand extends ObjectBase{
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);
 		$rows   = array(
 				'total' => $total['total'],
-				'entitys'  => self::reLoad($result));
+				'items'  => self::reLoad($result));
 		return $rows;
 	}
 }

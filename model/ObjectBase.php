@@ -14,6 +14,9 @@ abstract class ObjectBase{
 
 	/** @var string SQL Table identifier */
 	protected $identifier = NULL;
+
+	/** @var array 用来存取关联对象 */
+	protected $joinCache = array();
 	
 	public function __construct($id = NULL)
 	{	
@@ -56,6 +59,26 @@ abstract class ObjectBase{
 					}
 				}
 			}
+		}
+	}
+
+	/**
+	 * 获取关联对象
+	 * @param $className 关联对象的类名
+	 * @param $identifier_name 关联对象的主键
+	 * @return object
+	 */
+	public function join($className, $identifier_name)
+	{
+		if(!array_key_exists($identifier_name,$this->fields)){
+			return false;
+		}
+
+		if(isset($this->joinCache[$className]) && Validate::isLoadedObject($this->joinCache[$className])) {
+			return $this->joinCache[$className];
+		}else{
+			$this->joinCache[$className] = new $className($this->{$identifier_name});
+			return $this->joinCache[$className];
 		}
 	}
 	

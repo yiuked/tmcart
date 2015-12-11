@@ -54,7 +54,7 @@ $orderWay 	= isset($_GET['orderway']) ? Tools::G('orderway') : 'asc';
 $limit		= $cookie->getPost('pagination') ? $cookie->getPost('pagination') : '50';
 $p			= Tools::G('p') ? (Tools::G('p') == 0 ? 1 : Tools::G('p')) : 1;
 
-$result  	= $category->getSubCategories(false,$limit,$p,$orderBy,$orderWay,$filter);
+$result  	= $category->getSubCategories($limit, $p, $orderBy, $orderWay, $filter);
 $catBar = $category->getCatBar($category->id);
 krsort($catBar);
 
