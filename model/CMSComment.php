@@ -1,39 +1,40 @@
 <?php 
 class CMSComment extends ObjectBase{
-	protected $fields 			= array('id_cms_comment','id_cms','id_keep','name','email','website','comment','active','add_date','upd_date');
-	protected $fieldsRequired	= array('name','email','comment');
-	protected $fieldsSize 		= array('name' => 256, 'email' => 256,'comment' => 512);
-	protected $fieldsValidate	= array(
-		'website' => 'isUrl',
-		'active'=> 'isBool',
-		'name' => 'isName', 
-		'email' => 'isEmail', 
-		'comment' => 'isMessage');
-	
+
+	protected $fields = array(
+		'id_cms' => array(
+			'type' => 'isInt',
+		),
+		'name' => array(
+			'type' => 'isName',
+			'size' => '128',
+			'required' => true
+		),
+		'email' => array(
+			'type' => 'isEmail',
+			'size' => '128',
+			'required' => true
+		),
+		'comment' => array(
+			'type' => 'isMessage',
+			'size' => '512',
+			'required' => true
+		),
+		'active' => array(
+			'type' => 'isInt',
+		),
+		'add_date' => array(
+			'type' => 'isDate',
+		),
+		'upd_date' => array(
+			'type' => 'isDate',
+		),
+	);
 	protected $identifier 		= 'id_cms_comment';
 	protected $table			= 'cms_comment';
 	
-	public function getFields()
+	public static function loadData($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_cms_comment'] = (int)($this->id);
-		$fields['website'] = pSQL($this->website);
-		$fields['name'] = pSQL($this->name);
-		$fields['comment'] = pSQL($this->comment);
-		$fields['email'] = pSQL($this->email);
-		$fields['id_cms'] = (int)($this->id_cms);
-		$fields['id_keep'] = (int)($this->id_keep);
-		$fields['active'] = isset($this->active)?(int)($this->active):0;
-		$fields['add_date'] = pSQL($this->add_date);
-		$fields['upd_date'] = pSQL($this->upd_date);
-		return $fields;
-	}
-	
-	public static function getComments($active = true,$p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
-	{
-	 	if (!Validate::isBool($active))
-	 		die(Tools::displayError());
 
 		$where = '';
 		if(!empty($filter['id_cms_comment']) && Validate::isInt($filter['id_cms_comment']))
@@ -56,20 +57,18 @@ class CMSComment extends ObjectBase{
 		
 		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'cms_comment` a
 				LEFT JOIN `'.DB_PREFIX.'cms` b ON (a.`id_cms` = b.`id_cms`)
-				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
-				'.$where);
+				WHERE 1'.$where);
 		if($total==0)
 			return false;
 
 		$result = Db::getInstance()->getAll('SELECT a.*,b.title FROM `'.DB_PREFIX.'cms_comment` a
 				LEFT JOIN `'.DB_PREFIX.'cms` b ON (a.`id_cms` = b.`id_cms`)
-				WHERE 1 '.($active?' AND a.`active`=1 ':'').'
-				'.$where.'
+				WHERE 1 '.$where.'
 				'.$postion.'
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);
 		$rows   = array(
 				'total' => $total['total'],
-				'comments'  => $result);
+				'items'  => $result);
 		return $rows;
 	}
 }

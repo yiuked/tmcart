@@ -56,7 +56,7 @@ class UIAdminEditForm extends UIView
             $style = isset($item['css']) ? ' style="' . $item['css'] .'"' : '';
             $label = $item['type'] != 'hidden' ? '<label class="col-md-2 control-label" for="' .$key . '">' . $item['title'] . '</label>' : '';
 
-            if (in_array($item['type'], array('text', 'passwd', 'email', 'file'))) {
+            if (in_array($item['type'], array('text', 'password', 'email', 'file'))) {
                 $html .= '<div class="form-group">
                     ' . $label . '
                     <div class="col-md-8">

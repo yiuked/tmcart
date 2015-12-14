@@ -170,7 +170,7 @@ class CMSCategory extends ObjectBase{
 
 		$rows   = array(
 			'total' => $total['total'],
-			'entitys'  => $result);
+			'items'  => $result);
 
 		return $rows;
 	}

@@ -22,7 +22,7 @@ class CMS extends ObjectBase{
 		return true;
 	}
 	
-	public static function getCMS($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
+	public static function loadData($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
 
 		$where = '';
@@ -59,7 +59,7 @@ class CMS extends ObjectBase{
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);
 		$rows   = array(
 				'total' => $total['total'],
-				'entitys'  => self::resetCMS($result));
+				'items'  => self::resetCMS($result));
 		return $rows;
 	}
 	

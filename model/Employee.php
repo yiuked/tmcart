@@ -1,44 +1,20 @@
 <?php
 class Employee extends ObjectBase
 {
-	protected $fields 			= array('name','email','passwd','active','add_date','upd_date','last_date');
-	protected $fieldsRequired	= array('name','email','passwd');
-	protected $fieldsSize 		= array('name' => 64, 'email' => 128,'passwd' => 32);
-	protected $fieldsValidate	= array(
-		'name' => 'isName',
-		'active'=> 'isBool',
-		'passwd' => 'isPasswdAdmin',
-		'email' => 'isEmail');
+
+	protected $fields = array(
+		'name' => array('type' => 'isName', 'size' => '64', 'required' => true),
+		'email' => array('type' => 'isEmail', 'size' => '128', 'required' => true),
+		'passwd' => array('type' => 'isPasswdAdmin', 'size' => '32', 'required' => true),
+		'active' => array('type' => 'isInt'),
+		'add_date' => array('type' => 'isDate'),
+		'upd_date' => array('type' => 'isDate'),
+		'last_date' => array('type' => 'isDate'),
+	);
 	
 	protected $identifier 		= 'id_employee';
 	protected $table			= 'employee';
-	
-	public function getFields()
-	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_emploayee'] = (int)($this->id);
-		$fields['name'] 		= pSQL($this->name);
-		$fields['email'] 		= pSQL($this->email);
-		$fields['passwd'] 		= pSQL($this->passwd);
-		$fields['active'] 		= (int)($this->active);
-		$fields['add_date'] 	= pSQL($this->add_date);
-		$fields['upd_date'] 	= pSQL($this->upd_date);
-		$fields['last_date'] 	= pSQL($this->last_date);
-		return $fields;
-	}
-	
-	public function add($nullValues = false)
-	{
-		$this->last_date = date('Y-m-d H:i:s');
-		return parent::add($nullValues);
-	}
-	
-	public function delete()
-	{
-		if ($this->id == 1) return false;
-		return parent::delete();
-	}
+
 	
 	public static function employeeExists($email)
 	{
@@ -96,10 +72,8 @@ class Employee extends ObjectBase
 		AND active = 1');
 	}
 	
-	public static function getEmployee($active = true,$p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
+	public static function loadData($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
-	 	if (!Validate::isBool($active))
-	 		die(Tools::displayError());
 
 		$where = '';
 		if(!empty($filter['id_employee']) && Validate::isInt($filter['id_employee']))
@@ -118,17 +92,17 @@ class Employee extends ObjectBase
 			$postion = 'ORDER BY `position` ASC';
 		}
 		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'employee` a
-				WHERE 1 '.($active?' a.`active`=1 AND':'').'
+				WHERE 1
 				'.$where);
 
 		$result = Db::getInstance()->getAll('SELECT * FROM `'.DB_PREFIX.'employee` a
-				WHERE 1 '.($active?' a.`active`=1 AND':'').'
+				WHERE 1
 				'.$where.'
 				'.$postion.'
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);
 		$rows   = array(
 				'total' => $total['total'],
-				'employees'  => $result);
+				'items'  => $result);
 		return $rows;
 	}
 

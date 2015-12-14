@@ -68,11 +68,6 @@ if (isset($errors)) {
 </script>
 <?php
 $form = new UIAdminEditForm('post', 'index.php?rule=cms_edit'. (isset($id) ? '&id=' . $id : ''), 'form-horizontal', 'cms-form');
-$result = Country::getEntity(1,500);
-$countrys = array();
-foreach($result['entitys'] as $country) {
-	$countrys[$country['id_country']] = $country['name'];
-}
 
 $trads = array(
 	'selected' => '选择',
@@ -82,12 +77,12 @@ $trads = array(
 );
 if (!isset($obj))
 {
-	$categoryBox = Tools::getRequest('categoryBox')?Tools::getRequest('categoryBox'):array();
+	$categoryBox = Tools::P('categoryBox')?Tools::P('categoryBox'):array();
 }
 else
 {
 	if (Tools::isSubmit('categoryBox'))
-		$categoryBox = Tools::getRequest('categoryBox');
+		$categoryBox = Tools::P('categoryBox');
 	else
 		$categoryBox = CMS::getCMSCategoriesFullId($obj->id);
 }

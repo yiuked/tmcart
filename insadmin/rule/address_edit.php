@@ -82,9 +82,9 @@ echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'br
 </script>
 <?php
 $form = new UIAdminEditForm('post', 'index.php?rule=address_edit'. (isset($id) ? '&id=' . $id : ''), 'form-horizontal', 'address-form');
-$result = Country::getEntity(1,500);
+$result = Country::loadData(1,500);
 $countrys = array();
-foreach($result['entitys'] as $country) {
+foreach($result['items'] as $country) {
 	$countrys[$country['id_country']] = $country['name'];
 }
 

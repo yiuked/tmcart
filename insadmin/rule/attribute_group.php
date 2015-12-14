@@ -64,8 +64,8 @@ echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'br
 							</tr>
 					   </thead>
 					<?php
-					if(is_array($result['itmes']) && count($result['itmes'])>0){
-					foreach($result['itmes'] as $key => $row){
+					if(is_array($result['items']) && count($result['items']) > 0){
+					foreach($result['items'] as $key => $row){
 						$attributeGroup = new AttributeGroup($row['id_attribute_group']);
 						$attributes = $attributeGroup->getAttributes();
 					?>

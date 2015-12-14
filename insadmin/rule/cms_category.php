@@ -1,10 +1,10 @@
 <?php
-$id 		= Tools::getRequest('id')?Tools::getRequest('id'):1;
+$id 		= Tools::G('id') ? Tools::G('id') : 1;
 $category 	= new CMSCategory($id);
 $filter		= array();
 
-if(intval(Tools::getRequest('delete'))>0){
-	$object = new CMSCategory(intval(Tools::getRequest('delete')));
+if(Tools::G('delete') > 0){
+	$object = new CMSCategory(intval(Tools::G('delete')));
 	if(Validate::isLoadedObject($object)){
 		$object->delete();
 	}
@@ -12,10 +12,10 @@ if(intval(Tools::getRequest('delete'))>0){
 	if(is_array($object->_errors) AND count($object->_errors)>0){
 		$errors = $object->_errors;
 	}else{
-		echo '<div class="conf">删除分类成功</div>';
+		UIAdminAlerts::conf('分类已删除');
 	}
 }elseif(Tools::isSubmit('subDelete')){
-	$select_cat = Tools::getRequest('categoryBox');
+	$select_cat = Tools::P('categoryBox');
 	if(Validate::isLoadedObject($category) AND is_array($select_cat)){
 		$category->deleteSelection($select_cat);
 	}
@@ -25,32 +25,13 @@ if(intval(Tools::getRequest('delete'))>0){
 	}else{
 		echo '<div class="conf">删除分类成功</div>';
 	}
-}elseif(intval(Tools::getRequest('toggleStatus'))>0){
-	$object = new CMSCategory(intval(Tools::getRequest('toggleStatus')));
-	if(Validate::isLoadedObject($object)){
-		$object->toggleStatus();
-	}
-	
-	if(is_array($object->_errors) AND count($object->_errors)>0){
-		$errors = $object->_errors;
-	}else{
-		echo '<div class="conf">更新分类状态成功</div>';
-	}
 }elseif(Tools::isSubmit('subActiveON') OR Tools::isSubmit('subActiveOFF')){
 	$select_cat = Tools::getRequest('categoryBox');
 	$action		= Tools::isSubmit('subActiveON')?1:0;
 	$object		= new CMSCategory();
 	if(is_array($select_cat)){
 		if($object->statusSelection($select_cat,$action))
-			echo '<div class="conf">更新分类状态成功</div>';
-	}
-}elseif (isset($_GET['position'])){
-	if (!Validate::isLoadedObject($object = new CMSCategory((int)(Tools::getRequest('id_category_to_move')))))
-		$errors[] = '无法输入对象';
-	if (!$object->updatePosition((int)(Tools::getRequest('way')), (int)(Tools::getRequest('position'))))
-		$errors[] = '更新排序失败';
-	else {
-		echo '<div class="conf">更新排序成功</div>';
+			UIAdminAlerts::conf('分类已更新');
 	}
 }
 
