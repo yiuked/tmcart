@@ -40,7 +40,7 @@ class Color extends ObjectBase{
 	
 	protected $identifier 		= 'id_color';
 	protected $table			= 'color';
-	
+
 	public static function loadData($orderBy = NULL, $orderWay = NULL)
 	{
 		if(!is_null($orderBy) AND !is_null($orderWay))

@@ -1,7 +1,7 @@
 <?php
 
-if(intval(Tools::getRequest('delete'))>0){
-	$object = new Cart(intval(Tools::getRequest('delete')));
+if ( Tools::P('delete') > 0) {
+	$object = new Cart(Tools::P('delete'));
 	if(Validate::isLoadedObject($object)){
 		$object->delete();
 	}
@@ -9,30 +9,19 @@ if(intval(Tools::getRequest('delete'))>0){
 	if(is_array($object->_errors) AND count($object->_errors)>0){
 		$errors = $object->_errors;
 	}else{
-		echo '<div class="conf">删除对象成功</div>';
+		UIAdminAlerts::conf('购物车已删除');
 	}
-}elseif(Tools::isSubmit('subDelete')){
-	$select_cat = Tools::getRequest('categoryBox');
+} elseif(Tools::isSubmit('delSelected')) {
+	$select_cat = Tools::P('itemsBox');
 	$cart	= new Cart();
-		if($cart->deleteSelection($select_cat))
-			echo '<div class="conf">删除对象成功</div>';
-
-}elseif(intval(Tools::getRequest('toggleStatus'))>0){
-	$object = new Cart(intval(Tools::getRequest('toggleStatus')));
-	if(Validate::isLoadedObject($object)){
-		$object->toggleStatus();
-	}
-	
-	if(is_array($object->_errors) AND count($object->_errors)>0){
-		$errors = $object->_errors;
-	}else{
-		echo '<div class="conf">更新对象状态成功</div>';
+	if ($cart->deleteMulti($select_cat)){
+		UIAdminAlerts::conf('购物车已删除');
 	}
 }
 
 $table = new UIAdminTable('cart',  'Cart', 'id_cart');
 $table->header = array(
-	array('sort' => false ,'isCheckAll' => 'orderBox[]'),
+	array('sort' => false ,'isCheckAll' => 'itemsBox[]'),
 	array('name' => 'id_cart', 'title' => 'ID', 'width'=> '80px', 'filter' => 'string'),
 	array('name' => 'name', 'title' => '用户', 'filter' => 'string'),
 	array('sort' => false ,'name' => 'total_display', 'title' => '金额', 'width'=> '80px'),
@@ -62,6 +51,6 @@ $bread = $breadcrumb->draw();
 echo UIViewBlock::area(array('bread' => $bread), 'breadcrumb');
 
 $btn_group = array(
-	array('type' => 'button', 'title' => '删除选中','confirm' => '确定要删除选中项?', 'name' => 'subDelete', 'btn_type' => 'submit', 'class' => 'btn-danger') ,
+	array('type' => 'button', 'title' => '删除选中','confirm' => '确定要删除选中项?', 'name' => 'delSelected', 'btn_type' => 'submit', 'class' => 'btn-danger') ,
 );
 echo UIViewBlock::area(array('title' => '用户留言', 'table' => $table, 'result' => $result, 'limit' => $limit, 'btn_groups' => $btn_group), 'table');

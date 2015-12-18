@@ -339,14 +339,16 @@ class Product extends ObjectBase{
 
 	public function getAttributes()
 	{
-		$ret = array();
-		if ($row = Db::getInstance()->getAll('
+		return Db::getInstance()->getAllValue('
 		SELECT `id_attribute` FROM `'.DB_PREFIX.'product_to_attribute`
-		WHERE `id_product` = '.(int)$this->id)
-		)
-			foreach ($row as $val)
-				$ret[] = $val['id_attribute'];
-		return $ret;
+		WHERE `id_product` = '.(int)$this->id);
+	}
+
+	public function getFeatures()
+	{
+		return Db::getInstance()->getAllValue('
+		SELECT `id_feature_value` FROM `'.DB_PREFIX.'product_to_feature`
+		WHERE `id_product` = '.(int)$this->id);
 	}
 	
 	/**
@@ -435,23 +437,85 @@ class Product extends ObjectBase{
 	}
 	
 	public function updateAttribute($attributes)
-	{	
+	{
+		if (!is_array($attributes) && intval($attributes) == 0) {
+			return true;
+		}
+
 		if(!is_array($attributes))
 			$attributes = explode(',',$attributes);
 		$attributes = array_unique($attributes);
 		// get max position in each categories
-		$result = Db::getInstance()->getAll('SELECT `id_attribute`
+		$result = Db::getInstance()->getAllValue('SELECT `id_attribute`
 				FROM `'.DB_PREFIX.'product_to_attribute`
 				WHERE `id_attribute` NOT IN('.implode(',', array_map('intval', $attributes)).')
 				AND `id_product` = '. $this->id );
-		if(is_array($result))
-			foreach ($result as $attributeToDelete)
-				$this->deleteAttribute($attributeToDelete['id_attribute']);
 
-		if (!$this->addToAttribute($attributes))
-			return false;
+		if (is_array($result)) {
+			$need_add = array_diff($attributes, $result);
+			$need_del = array_diff($result, $attributes);
+		} else {
+			$need_add = $attributes;
+			$need_del = array();
+		}
 
-		return true;
+		$ret = true;
+		if (count($need_add) > 0) {
+			$addSQLs = array();
+			foreach ($need_add as $id_attribute) {
+				$addSQLs[] = '(' .(int) $this->id . ',' . (int) $id_attribute . ')';
+			}
+			$ret &= Db::getInstance()->exec('
+			INSERT INTO `'.DB_PREFIX.'product_to_attribute` (`id_product`, `id_attribute`)
+			VALUES '.implode(',', $addSQLs));
+		}
+
+		if (count($need_del) > 0) {
+			$ret &= Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'product_to_attribute` WHERE id_attribute IN('.implode(',', array_map('intval', $need_del)).')');
+		}
+
+		return $ret;
+	}
+
+	public function updateFeature($feature)
+	{
+		if (!is_array($feature) && intval($feature) == 0) {
+			return true;
+		}
+
+		if(!is_array($feature))
+			$feature = explode(',',$feature);
+		$feature = array_unique($feature);
+		// get max position in each categories
+		$result = Db::getInstance()->getAllValue('SELECT `id_feature_value`
+				FROM `'.DB_PREFIX.'product_to_feature`
+				WHERE `id_product` = '. $this->id );
+
+		if (is_array($result)) {
+			$need_add = array_diff($feature, $result);
+			$need_del = array_diff($result, $feature);
+		} else {
+			$need_add = $feature;
+			$need_del = array();
+		}
+
+
+		$ret = true;
+		if (count($need_add) > 0) {
+			$addSQLs = array();
+			foreach ($need_add as $id_featrue_value) {
+				$addSQLs[] = '(' . (int) $id_featrue_value . ',' .(int) $this->id. ')';
+			}
+			$ret &= Db::getInstance()->exec('
+			INSERT INTO `'.DB_PREFIX.'product_to_feature` (`id_feature_value`, `id_product`)
+			VALUES '.implode(',', $addSQLs));
+		}
+
+		if (count($need_del) > 0) {
+			$ret &= Db::getInstance()->exec('DELETE FROM `'.DB_PREFIX.'product_to_feature` WHERE id_feature_value IN('.implode(',', array_map('intval', $need_del)).')');
+		}
+
+		return $ret;
 	}
 	
 	/**
@@ -555,25 +619,6 @@ class Product extends ObjectBase{
 			foreach($result as &$row)
 				$row['children'] = $this->getComments($row['id_cms_comment']);
 		return $result;
-	}
-
-	public function toggle($key = 'active')
-	{
-	 	if (!Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
-	 		die('Fatal error:Object not exist!');
-
-	 	/* Object must have a variable called 'active' */
-	 	elseif (!key_exists($key, $this))
-	 		die('Fatal error:No field \''.$key.'\'');
-
-	 	/* Update active status on object */
-	 	$this->{$key} = $this->{$key} > 0 ? 0 : 1;
-
-		/* Change status to active/inactive */
-		return Db::getInstance()->exec('
-		UPDATE `'.pSQL(DB_PREFIX.$this->table).'`
-		SET `'.pSQL($key).'` = '.$this->{$key}.',`upd_date`="'.date('Y-m-d H:i:s').'"
-		WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
 	}
 	
 	static public function updateOrders($id)

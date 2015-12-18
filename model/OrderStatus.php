@@ -6,7 +6,6 @@ class OrderStatus extends ObjectBase
 		'color' => array('type' => 'isColor', 'size' => 12, 'required' => true),
 		'send_mail' => array('type' => 'isInt'),
 		'email_tpl' => array('type' => 'isGenericName', 'size' => 128),
-		'active' => array('type' => 'isInt'),
 	);
 	
 	protected $identifier 		= 'id_order_status';

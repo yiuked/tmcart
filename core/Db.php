@@ -176,7 +176,7 @@ abstract class Db
 	 * @param $filed
 	 * @return array() 返回一个一维数组的结果集
 	 */
-	abstract public function getAllValue($query, $filed);
+	abstract public function getAllValue($query, $filed = false);
 
 	/**
 	 * 用于执行插入、更新等无返回结果集的$query

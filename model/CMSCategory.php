@@ -21,7 +21,7 @@ class CMSCategory extends ObjectBase{
 	
 	public	function add($nullValues = false)
 	{
-		$this->position = self::getLastPosition((int)$this->id_parent);
+		$this->position = $this->getLastPosition();
 		if (!isset($this->level_depth) OR !$this->level_depth)
 			$this->level_depth = $this->calcLevelDepth();
 		$ret = parent::add($nullValues);
@@ -68,12 +68,6 @@ class CMSCategory extends ObjectBase{
 				$rule->delete();
 		}
 		return true;
-	}
-	
-	
-	public static function getLastPosition($id_category_parent)
-	{
-		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'.DB_PREFIX.'cms_category` WHERE `id_parent` = '.(int)($id_category_parent)));
 	}
 	
 	/**
@@ -226,20 +220,25 @@ class CMSCategory extends ObjectBase{
 			$this->recursiveDelete($toDelete, (int)($row['id_cms_category']));
 		}
 	}
+
+	public function getLastPosition()
+	{
+		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'.DB_PREFIX.'cms_category` WHERE `id_parent` = '.(int)($this->id_parent)));
+	}
 	
-	public static function cleanPositions($id_category_parent)
+	public function cleanPositions()
 	{
 		$result = Db::getInstance()->getAll('
 		SELECT `id_cms_category`
 		FROM `'.DB_PREFIX.'cms_category`
-		WHERE `id_parent` = '.(int)($id_category_parent).'
+		WHERE `id_parent` = '.(int)($this->id_parent).'
 		ORDER BY `position`');
 		$sizeof = sizeof($result);
 		for ($i = 0; $i < $sizeof; ++$i){
 				$sql = '
 				UPDATE `'.DB_PREFIX.'cms_category`
 				SET `position` = '.(int)($i).'
-				WHERE `id_parent` = '.(int)($id_category_parent).'
+				WHERE `id_parent` = '.(int)($this->id_parent).'
 				AND `id_cms_category` = '.(int)($result[$i]['id_cms_category']);
 				Db::getInstance()->exec($sql);
 			}

@@ -46,7 +46,7 @@ abstract class UIView implements UIViewInterface
         $attribute = '';
         if (is_array($this->attribtes) && count($this->attribtes) > 0) {
             foreach ($this->attribtes as $key => $value) {
-                $attribute .= $key . '="' . $value . '"';
+                $attribute .= $key . '="' . $value . '" ';
             }
         }
         return $attribute;

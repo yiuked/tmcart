@@ -57,7 +57,7 @@ class Category extends ObjectBase{
 	
 	public	function add()
 	{
-		$this->position = self::getLastPosition((int)$this->id_parent);
+		$this->position = self::getLastPosition();
 		if (!isset($this->level_depth) OR !$this->level_depth){
 			$this->level_depth = $this->calcLevelDepth();
 		}
@@ -164,17 +164,6 @@ class Category extends ObjectBase{
 			}
 		}*/
 		return $rows;
-	}
-
-	/**
-	 * 获得最大的postion,并且自动加1
-	 *
-	 * @param $id_category_parent
-	 * @return int
-	 */
-	public static function getLastPosition($id_category_parent)
-	{
-		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'.DB_PREFIX.'category` WHERE `id_parent` = '.(int)($id_category_parent)));
 	}
 
 	/**
@@ -308,20 +297,31 @@ class Category extends ObjectBase{
 			$this->recursiveDelete($toDelete, (int)($row['id_category']));
 		}
 	}
+
+	/**
+	 * 获得最大的postion,并且自动加1
+	 *
+	 * @param $id_category_parent
+	 * @return int
+	 */
+	public function getLastPosition()
+	{
+		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'.DB_PREFIX.'category` WHERE `id_parent` = '.(int)($this->id_parent)));
+	}
 	
-	public static function cleanPositions($id_category_parent)
+	public function cleanPositions()
 	{
 		$result = Db::getInstance()->getAll('
 		SELECT `id_category`
 		FROM `'.DB_PREFIX.'category`
-		WHERE `id_parent` = '.(int)($id_category_parent).'
+		WHERE `id_parent` = '.(int)($this->id_parent).'
 		ORDER BY `position`');
 		$sizeof = sizeof($result);
 		for ($i = 0; $i < $sizeof; ++$i){
 				$sql = '
 				UPDATE `'.DB_PREFIX.'category`
 				SET `position` = '.(int)($i).'
-				WHERE `id_parent` = '.(int)($id_category_parent).'
+				WHERE `id_parent` = '.(int)($this->id_parent).'
 				AND `id_category` = '.(int)($result[$i]['id_category']);
 				Db::getInstance()->exec($sql);
 			}
@@ -449,4 +449,3 @@ class Category extends ObjectBase{
 		return $categories;
 	}
 }
-?>

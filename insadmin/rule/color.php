@@ -11,7 +11,7 @@ if(intval(Tools::getRequest('delete'))>0){
 		UIAdminAlerts::conf('颜色已删除');
 	}
 }elseif(Tools::isSubmit('subDelete')){
-	$select_cat = Tools::getRequest('categoryBox');
+	$select_cat = Tools::P('itemsBox');
 	$color	= new Color();
 	if($color->deleteSelection($select_cat)){
 		UIAdminAlerts::conf('颜色已删除');
@@ -19,9 +19,9 @@ if(intval(Tools::getRequest('delete'))>0){
 }
 echo UIAdminDndTable::loadHead();
 $table = new UIAdminDndTable('color',  'Color', 'id_color');
-$table->addAttribte('id', 'color');
+$table->addAttribte('id', 'color-table');
 $table->header = array(
-	array('sort' => false ,'isCheckAll' => 'colorBox[]'),
+	array('sort' => false ,'isCheckAll' => 'itemsBox[]'),
 	array('name' => 'id_color','title' => 'ID'),
 	array('name' => 'name','title' => '名称'),
 	array('name' => 'code','title' => '颜色','color' => true),

@@ -41,11 +41,11 @@ $table->parent = 'id_parent';
 $table->child = true;
 $table->header = array(
 	array('sort' => false ,'isCheckAll' => 'categoryBox[]'),
-	array('name' => 'id_category','title' => 'ID','filter' => 'string'),
-	array('name' => 'name','title' => '名称','filter' => 'string'),
+	array('name' => 'id_category','title' => 'ID','filter' => 'string', 'rule' => 'category'),
+	array('name' => 'name','title' => '名称','filter' => 'string', 'rule' => 'category'),
 	array('name' => 'active','title' => '状态','filter' => 'bool'),
 	array('name' => 'position','title' => '排序'),
-	array('name' => 'add_date','title' => '添加时间'),
+	array('name' => 'add_date','title' => '添加时间', 'rule' => 'category'),
 	array('sort' => false ,'title' => '操作', 'class' => 'text-right', 'isAction'=> array( 'edit','view', 'delete')),
 );
 $filter = $table->initFilter();

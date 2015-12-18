@@ -1,32 +1,34 @@
 <?php 
 class CMSTag extends ObjectBase{
-	protected $fields 			= array('id_cms_tag','name','meta_title','meta_keywords','meta_description','rewrite','add_date','upd_date');
-	protected $fieldsRequired	= array('name','rewrite');
-	protected $fieldsSize 		= array('name' => 256);
-	protected $fieldsValidate	= array(
-		'name' => 'isGenericName',
-		'meta_title' => 'isGenericName',
-		'meta_keywords' => 'isGenericName',
-		'meta_description' => 'isGenericName', 
-		'rewrite' => 'isLinkRewrite');
-	
+	protected $fields = array(
+		'name' => array(
+			'type' => 'isGenericName',
+			'size' => 56,
+			'required' => true,
+		),
+		'rewrite' => array(
+			'type' => 'isGenericName',
+			'size' => 128,
+			'required' => true,
+		),
+		'meta_title' => array(
+			'type' => 'isGenericName',
+		),
+		'meta_keywords' => array(
+			'type' => 'isGenericName',
+		),
+		'meta_description' => array(
+			'type' => 'isGenericName',
+		),
+		'add_date' => array(
+			'type' => 'isDate',
+		),
+		'upd_date' => array(
+			'type' => 'isDate',
+		),
+	);
 	protected $identifier 		= 'id_cms_tag';
 	protected $table			= 'cms_tag';
-	
-	public function getFields()
-	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_cms_tag'] = (int)($this->id);
-		$fields['name'] = pSQL($this->name);
-		$fields['meta_title'] = pSQL($this->meta_title);
-		$fields['meta_keywords'] = pSQL($this->meta_keywords);
-		$fields['meta_description'] = pSQL($this->meta_description);
-		$fields['rewrite'] = pSQL($this->rewrite);
-		$fields['add_date'] = pSQL($this->add_date);
-		$fields['upd_date'] = pSQL($this->upd_date);
-		return $fields;
-	}
 	
 	public static function existsByTagName($name)
 	{
@@ -50,7 +52,7 @@ class CMSTag extends ObjectBase{
 		return $tag->id;
 	}
 	
-	public function getThisTags($p=1,$limit=50)
+	public function getThisTags($p = 1, $limit = 50)
 	{
 		$result = Db::getInstance()->getAll('SELECT c.* FROM `'.DB_PREFIX.'cms` c
 				LEFT JOIN `'.DB_PREFIX.'cms_to_tag` ctt ON (ctt.`id_cms` = c.`id_cms`)
@@ -82,7 +84,7 @@ class CMSTag extends ObjectBase{
 		return $tags_str;
 	}
 	
-	public static function getTags($p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
+	public static function loadData($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
 
 		$where = '';
@@ -100,16 +102,16 @@ class CMSTag extends ObjectBase{
 		
 		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'cms_tag` a
 				WHERE 1 '.$where);
-		if($total==0)
+		if($total == 0)
 			return false;
 
 		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'cms_tag` a
 				WHERE 1 '.$where.'
 				'.$postion.'
-				LIMIT '.(($p-1)*$limit).','.(int)$limit);
+				LIMIT '.(($p - 1) * $limit).','.(int) $limit);
 		$rows   = array(
 				'total' => $total['total'],
-				'tags'  => $result);
+				'items'  => $result);
 		return $rows;
 	}
 }

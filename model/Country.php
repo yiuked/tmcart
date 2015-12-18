@@ -61,53 +61,6 @@ class Country extends ObjectBase{
 				'items'  => $result);
 		return $rows;
 	}
-	
-	public static function cleanPositions()
-	{
-		$result = Db::getInstance()->getAll('
-		SELECT `id_country`
-		FROM `'.DB_PREFIX.'country`
-		ORDER BY `id_country`');
-		$sizeof = sizeof($result);
-		for ($i = 0; $i < $sizeof; ++$i){
-				$sql = '
-				UPDATE `'.DB_PREFIX.'country`
-				SET `position` = '.(int)($i).'
-				WHERE `id_country` = '.(int)($result[$i]['id_country']);
-				Db::getInstance()->exec($sql);
-			}
-		return true;
-	}
-	
-	public function updatePosition($way, $position)
-	{	
-		if (!$res = Db::getInstance()->getAll('
-			SELECT cp.`id_country`, cp.`position` 
-			FROM `'.DB_PREFIX.'country` cp
-			ORDER BY cp.`position` ASC'
-		))
-			return false;
-		foreach ($res AS $country)
-			if ((int)($country['id_country']) == (int)($this->id))
-				$movedCountry = $country;
-		
-		if (!isset($movedCountry) || !isset($position))
-			return false;
 
-		return (Db::getInstance()->exec('
-			UPDATE `'.DB_PREFIX.'country`
-			SET `position`= `position` '.($way ? '- 1' : '+ 1').'
-			WHERE `position` 
-			'.($way 
-				? '> '.(int)($movedCountry['position']).' AND `position` <= '.(int)($position)
-				: '< '.(int)($movedCountry['position']).' AND `position` >= '.(int)($position)
-				))
-		AND Db::getInstance()->exec('
-			UPDATE `'.DB_PREFIX.'country`
-			SET `position` = '.(int)($position).'
-			WHERE `id_country`='.(int)($movedCountry['id_country'])
-			)
-		);
-	}
 }
 ?>

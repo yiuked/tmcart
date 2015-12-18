@@ -49,14 +49,14 @@ echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'br
 	<div style="width: 49%; float:right;">
 		<fieldset class="small">
 			<?php 
-				$order_stauts = OrderStatus::getEntity(true);
+				$order_stauts = OrderStatus::loadData();
 			?>
 			<legend><img src="<?php echo $_tmconfig['ico_dir'];?>details.gif">定单状态</legend>
 			<form action="" method="post" name="order_status">
 				<p><b>当前状态:</b><span style="background-color:<?php echo $obj->join('OrderStatus', 'id_order_status')->color;?>;color:white" class="color_field"><?php echo $obj->join('OrderStatus', 'id_order_status')->name;?></span></p>
 				<p><b>更新状态为:</b>
 				<select id="id_order_status" name="id_order_status">
-					<?php foreach($order_stauts['entitys'] as $status){?>
+					<?php foreach($order_stauts['items'] as $status){?>
 					<option value="<?php echo $status['id_order_status'];?>" <?php if($status['id_order_status']==$obj->join('OrderStatus', 'id_order_status')->id){?>selected="selected"<?php }?>><?php echo $status['name'];?></option>
 					<?php }?>
 				</select></p>

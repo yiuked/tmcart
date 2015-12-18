@@ -55,11 +55,8 @@ echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'br
 </script>
 <?php
 $form = new UIAdminEditForm('post', 'index.php?rule=attribute_group_edit'. (isset($id) ? '&id=' . $id : ''), 'form-horizontal', 'attribute-group-form');
-$attributeGroup = AttributeGroup::getEntitys();
-$groups = array();
-foreach($attributeGroup['entitys'] as $group){
-	$groups[$group['id_attribute_group']] = $group['name'];
-}
+$attributeGroup = AttributeGroup::loadData();
+
 $items = array(
 	AttributeGroup::GROUP_TYPE_SELECT => '下单菜单',
 	AttributeGroup::GROUP_TYPE_RADIO => '单选按钮',

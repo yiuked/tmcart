@@ -433,6 +433,10 @@ class Validate
 	*/
 	public static function isDate($date)
 	{
+		if ($date == '0000-00-00 00:00:00') {
+			return true;
+		}
+
 		if (!preg_match('/^([0-9]{4})-((0?[1-9])|(1[0-2]))-((0?[1-9])|([1-2][0-9])|(3[01]))( [0-9]{2}:[0-9]{2}:[0-9]{2})?$/', $date, $matches))
 			return false;
 		return checkdate((int)$matches[2], (int)$matches[5], (int)$matches[0]);

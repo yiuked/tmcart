@@ -67,4 +67,7 @@
   'CMSTag' => 'D:\\wamp\\www\\red\\shoes/model/CMSTag.php',
   'Contact' => 'D:\\wamp\\www\\red\\shoes/model/Contact.php',
   'Mail' => 'D:\\wamp\\www\\red\\shoes/core/Mail.php',
+  'PaymentModule' => 'D:\\wamp\\www\\red\\shoes/model/PaymentModule.php',
+  'Feature' => 'D:\\wamp\\www\\red\\shoes/model/Feature.php',
+  'FeatureValue' => 'D:\\wamp\\www\\red\\shoes/model/FeatureValue.php',
 ); 

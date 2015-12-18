@@ -28,8 +28,14 @@ class Currency extends ObjectBase
 			'type' => 'isInt',
 			'required' => true,
 		),
+		'position' => array(
+			'type' => 'isInt',
+		),
 		'active' => array(
 			'type' => 'isInt',
+		),
+		'add_date' => array(
+			'type' => 'isDate',
 		),
 	);
 
@@ -88,7 +94,7 @@ class Currency extends ObjectBase
 		return $this->update();
 	}
 
-	public static function getEntity($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
+	public static function loadData($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
 
 		$where = '';
@@ -120,7 +126,7 @@ class Currency extends ObjectBase
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);
 		$rows   = array(
 				'total' => $total['total'],
-				'entitys'  => $result);
+				'items' => $result);
 		return $rows;
 	}
 

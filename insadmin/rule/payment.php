@@ -5,23 +5,21 @@ if($id = Tools::getRequest('install')){
 	echo '<div class="conf">操作成功</div>';
 }
 $payments = Module::getModulesByType('payment');
-require_once(dirname(__FILE__).'/../errors.php');
+
+/** 输出错误信息 */
+if (isset($errors)) {
+	UIAdminAlerts::MError($errors);
+}
+
+/** 导航 */
+$breadcrumb = new UIAdminBreadcrumb();
+$breadcrumb->home();
+$breadcrumb->add(array('title' => '系统设置', 'active' => true));
+$breadcrumb->add(array('title' => '支付模块', 'active' => true));
+$bread = $breadcrumb->draw();
+echo UIViewBlock::area(array('bread' => $bread), 'breadcrumb');
+
 ?>
-<script type="text/javascript" src="../js/jquery/jquery.tablednd_0_5.js"></script>
-<script type="text/javascript">
-	var token = '1f0af725a0585d7827c059999fd2d35e';
-	var come_from = 'currency';
-	var alternate = '0';
-</script>
-<script src="../js/admin/dnd.js" type="text/javascript"></script>
-<div class="path_bar">
-	<div class="path_title">
-		<h3> 
-			<span style="font-weight: normal;" id="current_obj">
-			<span class="breadcrumb item-1 ">支付模块</span> 
-		</h3>
-	</div>
-</div>
 <form class="form" method="post" action="index.php?rule=currency">
 <table class="table_grid" name="list_table" width="100%">
 <tr><td>

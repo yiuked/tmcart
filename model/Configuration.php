@@ -59,7 +59,7 @@ class Configuration extends ObjectBase
 	  */
 	public static function get($key)
 	{
-		if (is_array(self::$_CONF) AND key_exists($key, self::$_CONF))
+		if (is_array(self::$_CONF) AND array_key_exists($key, self::$_CONF))
 			return self::$_CONF[$key];
 		elseif($value = Db::getInstance()->getValue('SELECT `value` FROM `'.DB_PREFIX.'configuration` WHERE `name` = \''.pSQL($key).'\'')){
 			self::$_CONF[$key] = $value;
@@ -84,7 +84,7 @@ class Configuration extends ObjectBase
 		$resTab = array();
 
 		foreach ($keys AS $key)
-			if (key_exists($key, self::$_CONF))
+			if (array_key_exists($key, self::$_CONF))
 				$resTab[$key] = self::$_CONF[$key];
 		return $resTab;
 	}
@@ -138,10 +138,10 @@ class Configuration extends ObjectBase
 		if (Configuration::get($key) !== false)
 		{
 			$values = pSQL($values, $html);
-			$result = $db->AutoExecute(
+			$result = $db->update(
 				DB_PREFIX.'configuration',
 				array('value' => $values, 'upd_date' => date('Y-m-d H:i:s')),
-				'UPDATE', '`name` = \''.pSQL($key).'\'', true, true);
+				 '`name` = \''.pSQL($key).'\'', true);
 			self::$_CONF[$key] = stripslashes($values);
 		}
 		else

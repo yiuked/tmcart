@@ -23,10 +23,10 @@ class AttributeGroup extends ObjectBase{
 	protected $identifier 		= 'id_attribute_group';
 	protected $table			= 'attribute_group';
 	
-	public function add($nullValues = false)
+	public function add()
 	{
-		$this->position = self::getLastPosition();
-		return parent::add($nullValues);
+		$this->position = $this->getLastPosition();
+		return parent::add();
 	}
 	
 	public function delete()
@@ -43,7 +43,7 @@ class AttributeGroup extends ObjectBase{
 		}
 	} 
 	
-	public static function loadData($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
+	public static function loadData($p = 1, $limit = 50, $orderBy = NULL, $orderWay = NULL, $filter = array())
 	{
 
 		$where = '';
@@ -101,11 +101,6 @@ class AttributeGroup extends ObjectBase{
 			$attributes[$row['id_attribute_group']]['attributes'][$row['id_attribute']]['name'] = $row['name'];
 		}
 		return 	$attributes;
-	}
-	
-	public static function getLastPosition()
-	{
-		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'.DB_PREFIX.'attribute_group`'));
 	}
 }
 ?>

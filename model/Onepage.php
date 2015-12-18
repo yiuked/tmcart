@@ -1,35 +1,40 @@
 <?php 
 class Onepage extends ObjectBase{
-	protected $fields 			= array('id_onepage','view_name','meta_title','meta_keywords','meta_description','rewrite','add_date','upd_date');
-	protected $fieldsRequired	= array('view_name','rewrite');
-	protected $fieldsSize 		= array('view_name'=>128,'meta_description' => 256, 'meta_keywords' => 256,
-		'meta_title' => 256, 'rewrite' => 256, 'title' => 256);
-	protected $fieldsValidate	= array(
-		'view_name' => 'isEntityName',
-		'meta_title' => 'isGenericName',
-		'meta_keywords' => 'isGenericName',
-		'meta_description' => 'isGenericName', 
-		'rewrite' => 'isLinkRewrite');
-	
+
+	protected $fields = array(
+		'view_name' => array(
+			'type' => 'isEntityName',
+			'required' => true,
+			'size' => '56',
+		),
+		'meta_title' => array(
+			'type' => 'isGenericName',
+			'size' => '256',
+		),
+		'meta_keywords' => array(
+			'type' => 'isGenericName',
+			'size' => '256',
+		),
+		'meta_description' => array(
+			'type' => 'isGenericName',
+			'size' => '256',
+		),
+		'rewrite' => array(
+			'type' => 'isLinkRewrite',
+			'required' => true,
+			'size' => '256',
+		),
+		'add_date' => array(
+			'type' => 'isDate',
+		),
+		'upd_date' => array(
+			'type' => 'isDate',
+		),
+	);
 	protected $identifier 		= 'id_onepage';
 	protected $table			= 'onepage';
-	
-	public function getFields()
-	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_onepage'] = (int)($this->id);
-		$fields['view_name'] = pSQL($this->view_name);
-		$fields['meta_title'] = pSQL($this->meta_title);
-		$fields['meta_keywords'] = pSQL($this->meta_keywords);
-		$fields['meta_description'] = pSQL($this->meta_description);
-		$fields['rewrite'] = pSQL($this->rewrite);
-		$fields['add_date'] = pSQL($this->add_date);
-		$fields['upd_date'] = pSQL($this->upd_date);
-		return $fields;
-	}
 
-	public static function getPages($action=true,$p=1,$limit=50,$orderBy = NULL,$orderWay = NULL,$filter=array())
+	public static function loadData($p = 1, $limit = 50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
 		$where = '';
 		if(!empty($filter['id_onepage']) && Validate::isInt($filter['id_onepage']))
@@ -59,7 +64,7 @@ class Onepage extends ObjectBase{
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);
 		$rows   = array(
 				'total' => $total['total'],
-				'entitys'  => $result);
+				'items'  => $result);
 		return $rows;
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-if(isset($_POST['sveColor']) && Tools::getRequest('sveColor')=='add')
+if(Tools::P('saveColor') == 'add')
 {
 	$color = new Color();
 	$color->copyFromPost();
@@ -14,11 +14,11 @@ if(isset($_POST['sveColor']) && Tools::getRequest('sveColor')=='add')
 }
 
 if(isset($_GET['id'])){
-	$id  = (int)$_GET['id'];
+	$id  = (int) $_GET['id'];
 	$obj = new Color($id);
 }
 
-if(isset($_POST['sveColor']) && Tools::getRequest('sveColor')=='edit')
+if(Tools::P('saveColor') == 'edit')
 {
 	if(Validate::isLoadedObject($obj)){
 		$obj->copyFromPost();
@@ -99,7 +99,7 @@ $form->items = array(
 		'id' => 'rewrite',
 		'other' => 'onkeyup="if (isArrowKey(event)) return ;copy2friendlyURL();" onchange="copy2friendlyURL();"'
 	),
-	'sveColor' => array(
+	'saveColor' => array(
 		'type' => 'hidden',
 		'value' => isset($id) ? 'edit' : 'add',
 	),

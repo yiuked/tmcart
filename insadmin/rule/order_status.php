@@ -35,7 +35,7 @@ $table->header = array(
 	array('sort' => false ,'isCheckAll' => 'itemsBox[]'),
 	array('name' => 'id_order_status', 'title' => 'ID', 'width'=> '80px', 'filter' => 'string'),
 	array('name' => 'name', 'title' => '状态', 'filter' => 'string', 'color' => true),
-	array('name' => 'active', 'title' => '发送邮件', 'filter' => 'bool'),
+	array('name' => 'send_mail', 'title' => '发送邮件', 'filter' => 'bool'),
 	array('name' => 'email_tpl', 'title' => '模板', 'filter' => 'string'),
 	array('sort' => false , 'title' => '操作',  'class' => 'text-right',  'isAction'=> array( 'edit', 'delete')),
 );

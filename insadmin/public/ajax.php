@@ -1,5 +1,8 @@
 <?php
 include_once(dirname(__FILE__) . "/../config/init.php");
+/**
+ * 处理各种taggle请求
+ */
 if(isset($_GET['toggle']))
 {
 	$fields = array(
@@ -9,6 +12,7 @@ if(isset($_GET['toggle']))
 		'Brand'=> array('active'),
 		'OrderStatus'=> array('send_mail'),
 		'CMS'=> array('active', 'is_top'),
+		'Country' => array('need_state', 'active'),
 	);
 
 	$key    = Tools::G('key');
@@ -24,35 +28,48 @@ if(isset($_GET['toggle']))
 	}
 	die(json_encode(array("status"=>"NO")));
 }
+
+/**
+ * ajax动态状态国家下的省/州
+ */
+if (isset($_GET['ajaxStates']) AND isset($_GET['id_country']))
+{
+	$states = Db::getInstance()->getAll('
+	SELECT s.id_state, s.name
+	FROM '.DB_PREFIX.'state s
+	LEFT JOIN '.DB_PREFIX.'country c ON (s.`id_country` = c.`id_country`)
+	WHERE s.id_country = '.(int)(Tools::getRequest('id_country')).' AND s.active = 1 AND c.`need_state` = 1
+	ORDER BY s.`name` ASC');
+
+	if (is_array($states) AND !empty($states))
+	{
+		$list = '';
+		if (Tools::getRequest('no_empty') != true)
+			$list = '<option value="0">--选择--</option>'."\n";
+
+		foreach ($states AS $state)
+			$list .= '<option value="'.(int)($state['id_state']).'"'.((isset($_GET['id_state']) AND $_GET['id_state'] == $state['id_state']) ? ' selected="selected"' : '').'>'.$state['name'].'</option>'."\n";
+	}
+	else
+		$list = 'false';
+
+	die($list);
+}
+
+/**
+ * Jquery tree动态获取子目信息
+ */
 if (Tools::isSubmit('getChildrenCategories') && Tools::getRequest('id_category_parent'))
 {
 	if(Tools::getRequest('type')=='CMSTree'){
 		$children_categories = CMSCategory::getChildrenWithNbSelectedSubCat(Tools::getRequest('id_category_parent'), Tools::getRequest('selectedCat'));
 		die(json_encode($children_categories));
-	}
-}
-
-if (Tools::isSubmit('getChildrenCategories') && Tools::getRequest('id_category_parent'))
-{
-	if(Tools::getRequest('type') == 'Tree'){
+	}elseif(Tools::getRequest('type') == 'Tree'){
 		$children_categories = Category::getChildrenWithNbSelectedSubCat(Tools::getRequest('id_category_parent'), Tools::getRequest('selectedCat'));
 		die(json_encode($children_categories));
 	}
 }
-/*quik change price or spice price*/
-if(isset($_GET['action'])&&$_GET['action']=='changePrice'){
-	if(isset($_GET['id_product'])&&isset($_GET['value'])&&isset($_GET['type'])){
-		$product = new Product((int)$_GET['id_product']);
-		if($_GET['type']=='YES')
-			$product->price = (float)$_GET['value'];
-		else
-			$product->special_price = (float)$_GET['value'];
-		if($product->update()){
-			die(json_encode(array("status"=>"YES")));
-		}
-	}
-	die(json_encode(array("status"=>"NO")));
-}
+
 /*CMS Category position*/
 if (array_key_exists('ajaxCMSCategoriesPositions', $_POST))
 {
@@ -110,9 +127,15 @@ if (array_key_exists('ajaxCategoriesPositions', $_POST))
 		die('{"hasError" : true, "errors" : "This category can not be loaded"}');
 }
 
-/*Country Position*/
+/**
+ * id_country_to_move 当前操作的行的country id值
+ * way 操作行是向上则为0，向下则为1
+ * country 是一个数组，它的每一项为这样的值,这个值是前端js排序处理后的最终结果，这个结果代表着新的排序信息.
+ * tr_5_1,tr_6_2...  值为table下tr的id值，页tr的id为 tr_ + id_country + _ + position
+ */
 if (array_key_exists('ajaxCountryPositions', $_POST))
 {
+
 	$id_country_to_move = (int)(Tools::getRequest('id_country_to_move'));
 	$way = (int)(Tools::getRequest('way'));
 	$positions = Tools::getRequest('country');
@@ -165,28 +188,3 @@ if (array_key_exists('ajaxAttributePositions', $_POST))
 	else
 		die('{"hasError" : true, "errors" : "This attribute can not be loaded"}');
 }
-
-if (isset($_GET['ajaxStates']) AND isset($_GET['id_country']))
-{
-	$states = Db::getInstance()->getAll('
-	SELECT s.id_state, s.name
-	FROM '.DB_PREFIX.'state s
-	LEFT JOIN '.DB_PREFIX.'country c ON (s.`id_country` = c.`id_country`)
-	WHERE s.id_country = '.(int)(Tools::getRequest('id_country')).' AND s.active = 1 AND c.`need_state` = 1
-	ORDER BY s.`name` ASC');
-
-if (is_array($states) AND !empty($states))
-	{
-		$list = '';
-		if (Tools::getRequest('no_empty') != true)
-			$list = '<option value="0">--选择--</option>'."\n";
-
-		foreach ($states AS $state)
-			$list .= '<option value="'.(int)($state['id_state']).'"'.((isset($_GET['id_state']) AND $_GET['id_state'] == $state['id_state']) ? ' selected="selected"' : '').'>'.$state['name'].'</option>'."\n";
-	}
-	else
-		$list = 'false';
-
-	die($list);
-}
-?>

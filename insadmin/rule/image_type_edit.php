@@ -25,7 +25,7 @@ if(Tools::P('imageTypeSaveType') == 'edit')
 	if(Validate::isLoadedObject($obj)){
 		$obj->copyFromPost();
 		
-		if($obj->update() && Tools::P('reloadImages')){
+		if($obj->update() && Tools::P('reloadImages') == 1){
 			$obj->reloadImages();
 		}
 	}
@@ -85,6 +85,7 @@ $form->items = array(
     'reloadImages' => array(
         'title' => '重载图片',
         'type' => 'bool',
+        'value' => '0',
         'info' => '重载图片将删除以前图片按新的属性重新生成图片,这个过程可能会需要一些时间'
     ),
     'imageTypeSaveType' => array(

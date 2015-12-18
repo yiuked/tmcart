@@ -48,7 +48,7 @@ if(isset($_POST['sveProduct']) && Tools::getRequest('sveProduct')=='edit')
 	if(Validate::isLoadedObject($obj)){
 		$obj->copyFromPost();
 		if($obj->update()){
-			if(!$obj->updateCategories($_POST['categoryBox']) OR !$obj->addToTags($_POST['tags']) OR !$obj->updateAttribute($_POST['attribute_items']))
+			if(!$obj->updateCategories($_POST['categoryBox']) OR !$obj->addToTags($_POST['tags']) OR !$obj->updateAttribute($_POST['attribute_items']) OR !$obj->updateFeature(Tools::P('id_feature_value')))
 				$obj->_errors = '更新产品内容时发生了一个错误';
 		}
 	}
@@ -138,6 +138,7 @@ $(document).ready(function(){
 						<a id="link-seo"  class="list-group-item tab-page <?php if(isset($_POST['tab_key']) && $_POST['tab_key']=='seo'){echo "disabled";}?>" href="#">SEO</a>
 						<a id="link-category"  class="list-group-item tab-page <?php if(isset($_POST['tab_key']) && $_POST['tab_key']=='category'){echo "disabled";}?>" href="#">分类</a>
 						<a id="link-atrribute" class="list-group-item tab-page <?php if(isset($_POST['tab_key']) && $_POST['tab_key']=='atrribute'){echo "disabled";}?>" href="#">属性</a>
+						<a id="link-feature" class="list-group-item tab-page <?php if(isset($_POST['tab_key']) && $_POST['tab_key']=='feature'){echo "disabled";}?>" href="#">特征</a>
 						<a id="link-image" class="list-group-item tab-page <?php if(isset($_POST['tab_key']) && $_POST['tab_key']=='image'){echo "disabled";}?>" href="#">产品图片</a>
 					</ul>
 				</div>
@@ -359,9 +360,9 @@ $(document).ready(function(){
 										</div>
 									</div>
 									<?php
-									$brandData = Brand::getEntity();
+									$brandData = Brand::loadData();
 									if($brandData){
-										$brands = $brandData['entitys'];
+										$brands = $brandData['items'];
 										?>
 										<div class="form-group">
 											<label for="categoryBox" class="col-sm-2 control-label">品牌</label>
@@ -470,6 +471,51 @@ $(document).ready(function(){
 											}
 										});
 									</script>
+								</div>
+							</div>
+						</div>
+
+						<div id="product-tab-content-feature" class="product-tab-content" style=" display:none">
+							<div class="row">
+								<div class="col-md-10 form-horizontal">
+									<?php
+									$features = Feature::loadData();
+									$featureValues = FeatureValue::loadData();
+									if (isset($obj)) {
+										$selectedFeature = $obj->getFeatures();
+									}
+									if ($features) {
+										foreach ($features['items'] as $feature) {
+
+											?>
+											<div class="form-group">
+												<label for="categoryBox" class="col-sm-2 control-label"><?php echo $feature['name'];?></label>
+
+												<div class="col-sm-10">
+													<select name="id_feature_value[]" class="form-control">
+														<option value="">--选择特征--</option>
+														<?php
+														foreach ($featureValues['items'] as $featureValue) {
+															if ($featureValue['id_feature'] != $feature['id_feature']) {
+																continue;
+																//<?php echo isset($obj) && $obj->id_brand == $brand['id_brand'] ? 'selected="selected"' : '';
+															}
+															$featureSelectedHtml = "";
+															if (isset($selectedFeature) && in_array($featureValue['id_feature_value'], $selectedFeature)) {
+																$featureSelectedHtml = 'selected="selected"';
+															}
+															?>
+															<option
+																value="<?php echo $featureValue['id_feature_value']; ?>" <?php echo $featureSelectedHtml;?> ><?php echo $featureValue['name']; ?></option>
+														<?php } ?>
+													</select>
+												</div>
+											</div>
+											<?php
+										}
+									}
+
+									?>
 								</div>
 							</div>
 						</div>

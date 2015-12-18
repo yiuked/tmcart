@@ -22,11 +22,13 @@ class Cart extends ObjectBase{
 	const IS_OPEN 	= 0;
 	const IS_ORDER 	= 1;
 	const IS_CLOSE 	= 3;
+
 	public function delete()
 	{
 		if(parent::delete()){
-			Db::getInstance()->exec('DELETE FROM '.DB_PREFIX.'cart_product WHERE id_cart='.(int)($this->id));
+			return Db::getInstance()->exec('DELETE FROM '.DB_PREFIX.'cart_product WHERE id_cart='.(int)($this->id));
 		}
+		return false;
 	}
 	
 	public function getCartInfo()

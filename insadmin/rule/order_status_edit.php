@@ -1,5 +1,5 @@
 <?php
-if(isset($_POST['sveOrderStatus']) && Tools::getRequest('sveOrderStatus')=='add')
+if(Tools::P('saveOrderStatus') == 'add')
 {
 	$orderstatus = new OrderStatus();
 	$orderstatus->copyFromPost();
@@ -9,16 +9,16 @@ if(isset($_POST['sveOrderStatus']) && Tools::getRequest('sveOrderStatus')=='add'
 		$errors = $orderstatus->_errors;
 	}else{
 		$_GET['id']	= $orderstatus->id;
-		echo '<div class="conf">创建对象成功</div>';
+		UIAdminAlerts::conf('定单状态已添加');
 	}
 }
 
 if(isset($_GET['id'])){
-	$id  = (int)$_GET['id'];
+	$id  = (int) $_GET['id'];
 	$obj = new OrderStatus($id);
 }
 
-if(isset($_POST['sveOrderStatus']) && Tools::getRequest('sveOrderStatus')=='edit')
+if(Tools::P('saveOrderStatus') == 'edit')
 {
 	if(Validate::isLoadedObject($obj)){
 		$obj->copyFromPost();
@@ -28,77 +28,71 @@ if(isset($_POST['sveOrderStatus']) && Tools::getRequest('sveOrderStatus')=='edit
 	if(is_array($obj->_errors) AND count($obj->_errors)>0){
 		$errors = $obj->_errors;
 	}else{
-		echo '<div class="conf">更新对象成功</div>';
+      UIAdminAlerts::conf('定单状态已更新');
 	}
 }
-require_once(dirname(__FILE__).'/../errors.php');
-?>
+/** 错误处理 */
+if (isset($errors)) {
+  UIAdminAlerts::MError($errors);
+}
 
-<div class="path_bar">
-  <div class="path_title">
-    <h3> <span style="font-weight: normal;" id="current_obj"> <span class="breadcrumb item-1 ">货币<img src="<?php echo $_tmconfig['tm_img_dir'];?>admin/separator_breadcrum.png" style="margin-right:5px" alt="&gt;"> </span> <span class="breadcrumb item-2 ">编辑 </span> </span> </h3>
-    <div class="cc_button">
-      <ul>
-        <li> <a title="Save" href="#" class="toolbar_btn" id="emploay-save"> <span class="process-icon-save "></span>
-          <div>保存</div>
-          </a> </li>
-        <li> <a title="Back to list" href="index.php?rule=order_status" class="toolbar_btn" id="desc-product-back"> <span class="process-icon-back "></span>
-          <div>返回列表</div>
-          </a> </li>
-      </ul>
-    </div>
-  </div>
-</div>
+/** 导航 */
+$breadcrumb = new UIAdminBreadcrumb();
+$breadcrumb->home();
+$breadcrumb->add(array('title' => '定单状态', 'href' => 'index.php?rule=order_status'));
+$breadcrumb->add(array('title' => '编辑', 'active' => true));
+$bread = $breadcrumb->draw();
+$btn_group = array(
+    array('type' => 'a', 'title' => '返回', 'href' => 'index.php?rule=order_status', 'class' => 'btn-primary', 'icon' => 'level-up') ,
+    array('type' => 'button', 'title' => '保存', 'id' => 'save-ordder-status-form', 'class' => 'btn-success', 'icon' => 'save') ,
+);
+echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'breadcrumb');
+?>
 <script language="javascript">
-	$("#emploay-save").click(function(){
-		$("#orderstatus_form").submit();
+	$("#save-ordder-status-form").click(function(){
+		$("#ordder-status-form").submit();
 	})
 </script>
-<div class="mianForm">
-  <form enctype="multipart/form-data" method="post" action="index.php?rule=order_status_edit<?php echo isset($id)?'&id='.$id:''?>" class="defaultForm admincmscontent" id="orderstatus_form" name="example">
-    <fieldset>
-    <legend> <img alt="CMS 分类" src="<?php echo $_tmconfig['ico_dir'];?>category.png">定单状态</legend>
-    <label>状态名: </label>
-    <div class="margin-form">
-      <div style="display:block; float: left;">
-        <input type="text" value="<?php echo isset($obj)?$obj->name:Tools::getRequest('name');?>"  name="name">
-        <span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span> </div>
-      <sup>*</sup>
-      <div class="clear"></div>
-    </div>
-    <label>标识颜色: </label>
-    <div class="margin-form">
-      <div style="display:block; float: left;">
-        <input type="text" value="<?php echo isset($obj)?$obj->color:Tools::getRequest('color');?>"  name="color">
-        <span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span> </div>
-      <sup>*</sup>
-      <p class="preference_description">用于区分标识定单状态，格式如:#FF9900</p>
-      <div class="clear"></div>
-    </div>
-    <label>发送邮件： </label>
-    <div class="margin-form">
-      <div style="display:block; float: left;">
-        <input type="checkbox" value="1" <?php echo (isset($obj)&&$obj->send_mail)?'checked="checked"':'';?> name="send_mail">
-		<span class="preference_description">定单更变为此状态时，是否发向客户发送邮件</span>
-      </div>
-      <div class="clear"></div>
-    </div>
-    <label>邮件模板： </label>
-    <div class="margin-form">
-      <div style="display:block; float: left;">
-        <input type="text" value="<?php echo isset($obj)?$obj->email_tpl:Tools::getRequest('email_tpl');?>"  name="email_tpl">
-        <span name="help_box" class="hint" style="display: none;">不能包含以下字符: &lt;&gt;;=#{}<span class="hint-pointer">&nbsp;</span></span> </div>
-      <p class="preference_description">注意,汇率是相对的,默认货币的汇率为1,其它货币是相对默认货币的汇率</p>
-      <div class="clear"></div>
-    </div>
-	<label>模板状态： </label>
-    <div class="margin-form">
-      <input type="radio" checked="checked" value="1" id="active_on" name="active">
-      <label for="active_on" class="t"> <img title="Enabled" alt="Enabled" src="<?php echo $_tmconfig['ico_dir'];?>enabled.gif"> </label>
-      <input type="radio" value="0" id="active_off" name="active">
-      <label for="active_off" class="t"> <img title="Disabled" alt="Disabled" src="<?php echo $_tmconfig['ico_dir'];?>disabled.gif"> </label>
-    </div>
-    <input type="hidden" value="<?php echo isset($id)?'edit':'add'?>"  name="sveOrderStatus">
-    </fieldset>
-  </form>
-</div>
+<link href="<?php echo _TM_JS_URL; ?>boootstrap-colorpicker/css/colorpicker.css" rel="stylesheet" type="text/css" media="all" />
+<script type="text/javascript" src="<?php echo _TM_JS_URL; ?>boootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+<script>
+$(document).ready(function() {
+  $('.colorpicker').colorpicker();
+})
+</script>
+<?php
+$form = new UIAdminEditForm('post', 'index.php?rule=order_status_edit'. (isset($id) ? '&id=' . $id : ''), 'form-horizontal', 'order-status-form');
+$form->items = array(
+    'name' => array(
+        'title' => '状态名',
+        'type' => 'text',
+        'value' => isset($obj) ? $obj->name : Tools::Q('name'),
+    ),
+    'color' => array(
+        'title' => '颜色值',
+        'type' => 'text',
+        'class' => 'colorpicker',
+        'value' => isset($obj) ? $obj->color : Tools::Q('color'),
+        'css' => 'width:40px;',
+    ),
+    'send_mail' => array(
+        'title' => '发送邮件',
+        'type' => 'bool',
+        'value' => isset($obj) ? $obj->send_mail : Tools::Q('send_mail'),
+    ),
+    'email_tpl' => array(
+        'title' => '邮件模板',
+        'type' => 'text',
+        'value' => isset($obj) ? $obj->email_tpl : Tools::Q('email_tpl'),
+    ),
+    'active' => array(
+        'title' => '状态',
+        'type' => 'bool',
+        'value' => isset($obj) ? $obj->active : Tools::Q('active'),
+    ),
+    'saveOrderStatus' => array(
+        'type' => 'hidden',
+        'value' => isset($id) ? 'edit' : 'add',
+    ),
+);
+echo UIViewBlock::area(array( 'title' => '编辑', 'body' => $form->draw()), 'panel');

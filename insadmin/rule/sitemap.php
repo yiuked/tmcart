@@ -19,7 +19,7 @@ $xmlString .= '
 
 $link = new Link();
 //category page
-$result = Db::getInstance()->ExecuteS('SELECT rule_link AS link FROM `'._DB_PREFIX_.'rule` WHERE entity="Category"');
+$result = Db::getInstance()->getAll('SELECT rule_link AS link FROM `'.DB_PREFIX.'rule` WHERE entity="Category"');
 foreach($result as $row)
 $xmlString .= '
 	<url>
@@ -30,7 +30,7 @@ $xmlString .= '
 	</url>';
 
 //brand page
-$result = Db::getInstance()->ExecuteS('SELECT rule_link AS link FROM `'._DB_PREFIX_.'rule` WHERE `entity`="Brand"');
+$result = Db::getInstance()->getAll('SELECT rule_link AS link FROM `'.DB_PREFIX.'rule` WHERE `entity`="Brand"');
 foreach($result as $row)
 $xmlString .= '
 	<url>
@@ -41,7 +41,7 @@ $xmlString .= '
 	</url>';
 
 //color page
-$result = Db::getInstance()->ExecuteS('SELECT rule_link AS link FROM `'._DB_PREFIX_.'rule` WHERE `entity`="Color"');
+$result = Db::getInstance()->getAll('SELECT rule_link AS link FROM `'.DB_PREFIX.'rule` WHERE `entity`="Color"');
 foreach($result as $row)
 $xmlString .= '
 	<url>
@@ -52,7 +52,7 @@ $xmlString .= '
 	</url>';
 	
 //product page
-$result = Db::getInstance()->ExecuteS('SELECT rule_link AS link FROM `'._DB_PREFIX_.'rule` WHERE `entity`="Product"');
+$result = Db::getInstance()->getAll('SELECT rule_link AS link FROM `'.DB_PREFIX.'rule` WHERE `entity`="Product"');
 foreach($result as $row)
 $xmlString .= '
 	<url>
@@ -65,42 +65,65 @@ $xmlString .= '
 $xmlString .= '
 </urlset>';
 
-	if(file_exists($s_file) && is_writable($s_file) && file_put_contents($s_file,$xmlString))
-		echo '<div class="conf">生成SiteMap成功</div>';
-	else
+	if (file_exists($s_file) && is_writable($s_file) && file_put_contents($s_file,$xmlString)) {
+		UIAdminAlerts::conf('Sitemap已更新');
+	} else {
 		$errors[] = 'sitemap.xml文件不存在，sitemap.xml或者文件不可写,请创建或更改权限后重试！';
+	}
 }
-require_once(_TM_ADMIN_DIR_.'/errors.php');
-?>
-<div class="path_bar">
-  <div class="path_title">
-    <h3> 
-		<span style="font-weight: normal;" id="current_obj">
-		<span class="breadcrumb item-1 ">SEO<img src="<?php echo $_tmconfig['tm_img_dir'];?>admin/separator_breadcrum.png" style="margin-right:5px" alt="&gt;"> </span> 
-		<span class="breadcrumb item-2 ">SiteMap </span> </span> 
-	</h3>
-  </div>
-</div>
 
-<div class="mianForm">
-	<form enctype="multipart/form-data" method="post" action="index.php?rule=sitemap" class="defaultForm" id="sitemap_form" name="example">
-		  <fieldset>
-  			<legend> <img alt="SiteMap" src="<?php echo $_tmconfig['tm_img_dir'];?>icon/category.png">SiteMap</legend>
-				<?php if(file_exists($s_file)){?>
-						<p><b>最后更新:</b><?php echo date('Y-m-d H:i:s',filemtime($s_file));?></p>
-						<p><b>文件权限:</b>
-								<?php if(is_writable($s_file)){ ?>
-								<font color="#006600">文件可写</font>
-								<?php }else{ ?>
-								<font color="#FF0000">文件不可写</font>
-								<?php }?>
-						</p>
-						<p><b>链接:</b><a href="<?php echo $_tmconfig['root_dir'];?>sitemap.xml" target="_blank"><?php echo $_tmconfig['root_dir'];?>sitemap.xml</a></p>
-						<input type="submit" value="更新SiteMap" name="createSiteMap" class="button" />
-				<?php }else{ ?>
-					<p>您还未生成过sitemap.xml文件，请在网站根目录下创建 sitemap.xml，将权限设置为可写.</p>
-					<input type="submit" value="生成SiteMap" name="createSiteMap" class="button" />
-				<?php }?>
-		  </fieldset>
-	</form>
-</div>
+/** 错误处理 */
+if (isset($errors)) {
+	UIAdminAlerts::MError($errors);
+}
+
+/** 导航 */
+$breadcrumb = new UIAdminBreadcrumb();
+$breadcrumb->home();
+$breadcrumb->add(array('title' => '系统设置', 'active' => true));
+$breadcrumb->add(array('title' => 'Sitemap', 'active' => true));
+$bread = $breadcrumb->draw();
+$btn_group = array(
+	array('type' => 'button', 'title' => '更新', 'id' => 'save-sitemap-form', 'class' => 'btn-success', 'icon' => 'save') ,
+);
+echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'breadcrumb');
+?>
+<script language="javascript">
+	$("#save-sitemap-form").click(function(){
+		$("#sitemap-form").submit();
+	})
+</script>
+<?php
+
+$form = new UIAdminEditForm('post', 'index.php?rule=sitemap', 'form-horizontal', 'sitemap-form');
+
+if  (file_exists($s_file)) {
+	$form->items['last_time'] = array(
+		'type' => 'custom',
+		'title' => '最后更新',
+		'value'=> date('Y-m-d H:i:s',filemtime($s_file)),
+	);
+	$form->items['is_write'] = array(
+		'type' => 'custom',
+		'title' => '文件权限',
+		'value'=> is_writable($s_file) ? '<span class="label label-success">文件可写</span>' : '<span class="label label-danger">文件不可写</span>',
+	);
+	$form->items['link'] = array(
+		'type' => 'custom',
+		'title' => '链接',
+		'value'=> '<a href ="' ._TM_ROOT_URL_ . 'sitemap.xml" target="_blank" >' . _TM_ROOT_URL_ .'sitemap.xml</a>',
+	);
+} else {
+	$form->items['link'] = array(
+		'type' => 'custom',
+		'title' => '提示',
+		'value'=> '<div class="alert alert-warning" role="alert">您还未生成过sitemap.xml文件，请在网站根目录下创建 sitemap.xml，将权限设置为可写.</div>',
+	);
+}
+$form->items['createSiteMap'] = array(
+	'type' => 'submit',
+	'class' => 'btn-success',
+	'icon' => 'save',
+	'title' => '更新'
+);
+echo UIViewBlock::area(array( 'title' => '编辑', 'body' => $form->draw()), 'panel');

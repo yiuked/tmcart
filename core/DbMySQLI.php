@@ -106,7 +106,7 @@ class DbMySQLI extends Db
         return false;
     }
 
-    public function getAllValue($query,$filed)
+    public function getAllValue($query,$filed = false)
     {
         if ($this->_link)
         {

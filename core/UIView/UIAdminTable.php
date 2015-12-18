@@ -20,6 +20,8 @@ class UIAdminTable extends UIView
     /* @var string rule 当前页的rule */
     public $rule;
 
+    public $redirctRule;
+
     /* @var string table内部要操作的对象名，比如要ajax更改active的时候，需要用到这个 */
     public $className;
 
@@ -113,6 +115,7 @@ class UIAdminTable extends UIView
             }elseif(isset($head['sort']) && $head['sort'] == false){
                 $headHtml .= '<th'. $width . $class .'>' . $head['title'] . '</th>';
             }else{
+                $rule = isset($head['rule']) ? $head['rule'] : $this->rule . '_edit';
                 $headHtml .= '<th'. $width . $class .'>';
                 $headHtml .= '<a href="index.php?rule=' . $this->rule . ($this->child ? '&id=' . Tools::G('id') : '') . '&orderby=' . (isset($head['sort']) ? $head['sort'] : $head['name']) . '&orderway=desc&token=' . $this->token . '">';
                 $headHtml .= '<span class="glyphicon glyphicon-sort-by-order-alt" aria-hidden="true"></span>';
@@ -154,7 +157,12 @@ class UIAdminTable extends UIView
         }
 
         $headHtml .= '</tr>';
-        $filterHtml .= '</tr>';
+        if ($this->displayFilter) {
+            $filterHtml .= '</tr>';
+        } else {
+            $filterHtml = "";
+        }
+
         return '<thead>'. $headHtml .  $filterHtml . '</thead>';
     }
 
@@ -201,7 +209,7 @@ class UIAdminTable extends UIView
                                 $body .= '<a class="btn btn-default" href="index.php?rule=' .  $this->rule . '_edit&id=' .  $row[$this->identifier] . '"><span class="glyphicon glyphicon-edit" title="编辑" aria-hidden="true"></span> 编辑</a>';
                                 break;
                             case 'delete':
-                                $body .= '<a class="btn btn-default" href="index.php?rule=' .  $this->rule . '&delete=' .  $row[$this->identifier] . '" onclick="return confirm(\'你确定要删除？\')"><span class="glyphicon glyphicon-trash" title="删除" aria-hidden="true"></span> 删除</a>';
+                                $body .= '<a class="btn btn-default" href="index.php?rule=' .  $this->rule . ($this->child ? '&id=' . Tools::G('id') : '')  . '&delete=' .  $row[$this->identifier] . '" onclick="return confirm(\'你确定要删除？\')"><span class="glyphicon glyphicon-trash" title="删除" aria-hidden="true"></span> 删除</a>';
                                 break;
                         }
                         if (count($head['isAction']) == 1){
@@ -222,7 +230,7 @@ class UIAdminTable extends UIView
                                 $body .=  '<li><a href="index.php?rule=' .  $this->rule . '_edit&id=' .  $row[$this->identifier] . '"><span class="glyphicon glyphicon-edit" title="编辑" aria-hidden="true"></span> 编辑</a></li>';
                             }
                             if ($action == 'delete') {
-                                $body .=  '<li><a href="index.php?rule=' .  $this->rule . '&delete=' .  $row[$this->identifier] . '" onclick="return confirm(\'你确定要删除？\')"><span class="glyphicon glyphicon-trash" title="删除" aria-hidden="true"></span> 删除</a></li>';
+                                $body .=  '<li><a href="index.php?rule=' .  $this->rule . ($this->child ? '&id=' . Tools::G('id') : '') . '&delete=' .  $row[$this->identifier] . '" onclick="return confirm(\'你确定要删除？\')"><span class="glyphicon glyphicon-trash" title="删除" aria-hidden="true"></span> 删除</a></li>';
                             }
                         }
 

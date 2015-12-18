@@ -21,7 +21,7 @@ class Attribute extends ObjectBase{
 	
 	public function add()
 	{
-		$this->position = self::getLastPosition($this->id_attribute_group);
+		$this->position = $this->getLastPosition();
 		return parent::add();
 	}
 	
@@ -33,24 +33,24 @@ class Attribute extends ObjectBase{
 		}
 	}
 	
-	public static function getLastPosition($id_attribute_group)
+	public function getLastPosition()
 	{
-		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'.DB_PREFIX.'attribute` WHERE `id_attribute_group`='.(int)($id_attribute_group)));
+		return (Db::getInstance()->getValue('SELECT MAX(position) + 1 FROM `'.DB_PREFIX.'attribute` WHERE `id_attribute_group`='.(int)($this->id_attribute_group)));
 	}
 	
-	public static function cleanPositions($id_group)
+	public function cleanPositions()
 	{
 		$result = Db::getInstance()->getAll('
 		SELECT `id_attribute`
 		FROM `'.DB_PREFIX.'attribute`
-		WHERE `id_attribute_group` = '.(int)($id_group).'
+		WHERE `id_attribute_group` = '.(int)($this->id_attribute_group).'
 		ORDER BY `position`');
 		$sizeof = sizeof($result);
 		for ($i = 0; $i < $sizeof; ++$i){
 				$sql = '
 				UPDATE `'.DB_PREFIX.'attribute`
 				SET `position` = '.(int)($i).'
-				WHERE `id_attribute_group` = '.(int)($id_group).'
+				WHERE `id_attribute_group` = '.(int)($this->id_attribute_group).'
 				AND `id_attribute` = '.(int)($result[$i]['id_attribute']);
 				Db::getInstance()->exec($sql);
 			}
@@ -87,6 +87,42 @@ class Attribute extends ObjectBase{
 			SET `position` = '.(int)($position).'
 			WHERE `id_attribute_group` = '.(int)($movedAttribute['id_attribute_group']).'
 			AND `id_attribute`='.(int)($movedAttribute['id_attribute'])));
+	}
+
+	public static function loadData($p = 1, $limit = 50, $orderBy = NULL, $orderWay = NULL, $filter = array())
+	{
+		$where = '';
+		if (!isset($filter['id_attribute_group']) || (isset($filter['id_attribute_group']) && (int) $filter['id_attribute_group'] == 0)) {
+			return false;
+		} else {
+			$where .= ' AND a.`id_attribute_group`='.intval($filter['id_attribute_group']);
+		}
+
+		if(!empty($filter['id_attribute']) && Validate::isInt($filter['id_attribute']))
+			$where .= ' AND a.`id_attribute`='.intval($filter['id_attribute']);
+		if(!empty($filter['name']) && Validate::isCatalogName($filter['name']))
+			$where .= ' AND a.`name` LIKE "%'.pSQL($filter['name']).'%"';
+
+		if(!is_null($orderBy) AND !is_null($orderWay))
+		{
+			$postion = 'ORDER BY '.pSQL($orderBy).' '.pSQL($orderWay);
+		}else{
+			$postion = 'ORDER BY `position` ASC';
+		}
+
+		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'attribute` a
+				WHERE 1 '.$where);
+		if($total==0)
+			return false;
+
+		$result = Db::getInstance()->getAll('SELECT a.* FROM `'.DB_PREFIX.'attribute` a
+				WHERE 1 '.$where.'
+				'.$postion.'
+				LIMIT '.(($p - 1) * $limit).','.(int) $limit);
+		$rows   = array(
+			'total' => $total['total'],
+			'items'  => $result);
+		return $rows;
 	}
 	
 	public static function getByAttributeString($attribute_str)

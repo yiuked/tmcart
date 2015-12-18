@@ -35,6 +35,7 @@
                         <li><a href="index.php?rule=category" title="商品分类">商品分类</a></li>
                         <li><a href="index.php?rule=product_to_category" title="批量产品归类">批量产品归类</a></li>
                         <li><a href="index.php?rule=attribute_group" title="商品属性">商品属性</a></li>
+                        <li><a href="index.php?rule=feature" title="商品特征">商品特征</a></li>
                         <li><a href="index.php?rule=brand" title="品牌管理">品牌管理</a></li>
                         <li><a href="index.php?rule=import" title="批量导入">批量导入</a></li>
                         <li><a href="index.php?rule=feedback" title="产品反馈">产品反馈</a></li>
@@ -116,7 +117,6 @@
                         SEO <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="index.php?rule=seo_base" title="SEO相关配置">SEO相关配置</a></li>
                         <li><a href="index.php?rule=onepage" title="单面管理">单面管理</a></li>
                         <li><a href="index.php?rule=rule" title="路由列表">路由列表</a></li>
                         <li><a href="index.php?rule=sitemap" title="路由列表">SiteMap</a></li>

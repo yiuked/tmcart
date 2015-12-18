@@ -46,8 +46,9 @@ class UIAdminDndTable extends UIAdminTable
                             $title = isset($head['color']) ? '<span style="background-color:' .  $row['color'] . ';color:white" class="color_field">' .  $row[$head['name']] . '</span>' : $row[$head['name']];
                             $body .= '<td'. $width . $class .' class="pointer">' .  $title . '</td>';
                         }else {
+                            $rule = isset($head['rule']) ? $head['rule'] : $this->rule . '_edit';
                             $title = isset($head['color']) ? '<span style="background-color:' .  $row['color'] . ';color:white" class="color_field">' .  $row[$head['name']] . '</span>' : $row[$head['name']];
-                            $body .= '<td'. $width . $class .' onclick="document.location = \'index.php?rule=' .  $this->rule . (!$this->child ? '_edit' : '') . '&id=' .  $row[$this->identifier] . '\'" class="pointer">' .   $title . '</td>';
+                            $body .= '<td'. $width . $class .' onclick="document.location = \'index.php?rule=' .  $rule . '&id=' .  $row[$this->identifier] . '\'" class="pointer">' .   $title . '</td>';
                         }
                     } elseif (isset($head['isAction'])) {
                         //create filter and reset filter buttom group
@@ -60,7 +61,7 @@ class UIAdminDndTable extends UIAdminTable
                                 $body .= '<a class="btn btn-default" href="index.php?rule=' .  $this->rule . '_edit&id=' .  $row[$this->identifier] . '"><span class="glyphicon glyphicon-edit" title="编辑" aria-hidden="true"></span> 编辑</a>';
                                 break;
                             case 'delete':
-                                $body .= '<a class="btn btn-default" href="index.php?rule=' .  $this->rule . '&delete=' .  $row[$this->identifier] . '" onclick="return confirm(\'你确定要删除？\')"><span class="glyphicon glyphicon-trash" title="删除" aria-hidden="true"></span> 删除</a>';
+                                $body .= '<a class="btn btn-default" href="index.php?rule=' .  $this->rule . ($this->child ? '&id=' . Tools::G('id') : '')  . '&delete=' .  $row[$this->identifier] . '" onclick="return confirm(\'你确定要删除？\')"><span class="glyphicon glyphicon-trash" title="删除" aria-hidden="true"></span> 删除</a>';
                                 break;
                         }
                         if (count($head['isAction']) == 1){
@@ -80,7 +81,7 @@ class UIAdminDndTable extends UIAdminTable
                                 $body .=  '<li><a href="index.php?rule=' .  $this->rule . '_edit&id=' .  $row[$this->identifier] . '"><span class="glyphicon glyphicon-edit" title="编辑" aria-hidden="true"></span> 编辑</a></li>';
                             }
                             if ($action == 'delete') {
-                                $body .=  '<li><a href="index.php?rule=' .  $this->rule . '&delete=' .  $row[$this->identifier] . '" onclick="return confirm(\'你确定要删除？\')"><span class="glyphicon glyphicon-trash" title="删除" aria-hidden="true"></span> 删除</a></li>';
+                                $body .=  '<li><a href="index.php?rule=' .  $this->rule . ($this->child ? '&id=' . Tools::G('id') : '')  . '&delete=' .  $row[$this->identifier] . '" onclick="return confirm(\'你确定要删除？\')"><span class="glyphicon glyphicon-trash" title="删除" aria-hidden="true"></span> 删除</a></li>';
                             }
                         }
 

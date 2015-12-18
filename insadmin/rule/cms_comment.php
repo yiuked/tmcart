@@ -35,30 +35,36 @@ $table->header = array(
 	array(
 		'name' => 'id_cms_comment',
 		'title' => 'ID',
+		'edit' => false,
 		'filter' => 'string'
 	),
 	array(
 		'name' => 'name',
 		'title' => '访客',
+		'edit' => false,
 		'filter' => 'string'
 	),
 	array(
 		'name' => 'email',
 		'title' => '邮箱',
+		'edit' => false,
 		'filter' => 'string'
 	),
 	array(
 		'name' => 'active',
 		'title' => '状态',
+		'edit' => false,
 		'filter' => 'bool'
 	),
 	array(
 		'name' => 'comment',
 		'title' => '内容',
+		'edit' => false,
 	),
 	array(
 		'name' => 'add_date',
 		'title' => '时间',
+		'edit' => false,
 	),
 	array(
 		'sort' => false ,

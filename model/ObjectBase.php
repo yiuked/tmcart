@@ -103,16 +103,21 @@ abstract class ObjectBase{
 	 *
 	 * return boolean Deletion result
 	 */
-	public function deleteSelection($ids)
+	public function deleteMulti($ids)
 	{
+		if (!is_array($ids)) {
+			return false;
+		}
+
 		$return = 1;
+
 		foreach ($ids AS $id)
 		{
 			$obj_name = get_class($this);
-			$obj = new $obj_name;
-			$obj->id = $id;
-			$obj->load();
-			$return &= $obj->delete();
+			$obj = new $obj_name((int) $id);
+			if (Validate::isLoadedObject($obj)) {
+				$return &= $obj->delete();
+			}
 		}
 		return $return;
 	}
@@ -212,6 +217,9 @@ abstract class ObjectBase{
 			$this->upd_date = date('Y-m-d H:i:s');
 			$fields['upd_date']	= $this->upd_date;
 		}
+		if (array_key_exists('position', $fields)){
+			$this->position = $this->getLastPosition();
+		}
 
 
 		/* Database insertion */
@@ -305,6 +313,9 @@ abstract class ObjectBase{
 				$rule->delete();
 			}
 		}
+		if (array_key_exists('position', $this->fields)){
+			$this->cleanPositions();
+		}
 
 		return $result;
 	}
@@ -316,21 +327,105 @@ abstract class ObjectBase{
 	 */
 	public function toggle($key = 'active')
 	{
-		if (!Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
+		if (!Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table)) {
 			die('Fatal error:Object not exist!');
 
-		/* Object must have a variable called 'active' */
-		elseif (!isset($this->active))
-			die('Fatal error:No field \'active\'');
-
+			/* Object must have a variable called 'active' */
+		} elseif (!array_key_exists($key, $this->fields)) {
+			die('Fatal error:No field \'' . $key . '\'');
+		}
 		/* Update active status on object */
-		$this->active = $this->active > 0 ? 0 : 1;
+		$this->{$key} = $this->{$key} > 0 ? 0 : 1;
 
 		/* Change status to active/inactive */
-		return Db::getInstance()->exec('
-		UPDATE `'.pSQL(DB_PREFIX.$this->table).'`
-		SET `active` = '.$this->active.'
-		WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
+		return $this->update();
+	}
+
+	/**
+	 * 获得最大排序并在最大排序的基础上加1
+	 * @return int
+	 */
+	public function getLastPosition()
+	{
+		if (!array_key_exists('position', $this->fields)) {
+			die('Fatal error:No field \'position\'');
+		}
+		return Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'.DB_PREFIX . $this->table . '`');
+	}
+
+	/**
+	 * 更新排序
+	 * @param bool $way 代表0代表升，1代表降
+	 * @param $position 当前对象新的position值
+	 * @return bool
+	 */
+	public function updatePosition($way, $position)
+	{
+		if (!array_key_exists('position', $this->fields)) {
+			die('Fatal error:No field \'position\'');
+		}
+
+		if (!$result = Db::getInstance()->getAll('
+			SELECT `' .$this->identifier. '`, `position`
+			FROM `' . DB_PREFIX . $this->table . '`
+			ORDER BY `position` ASC'
+		))
+			return false;
+
+		foreach ($result AS $row)
+			if ((int)($row[$this->identifier]) == (int)($this->id))
+				$movedRow = $row;
+
+		if (!isset($movedRow) || !isset($position))
+			return false;
+
+		/**
+		 * 升的情况，所有在当前对象原排序前面且在新排序后面的，都+1
+		 * 降的情况，所有在当前对象原排序后面且在新排序前面的，都-1
+		 * 最后再更新自己，完成所有更新操作
+		 */
+		return (Db::getInstance()->exec('
+			UPDATE `' . DB_PREFIX . $this->table .'`
+			SET `position`= `position` '.($way ? '- 1' : '+ 1').'
+			WHERE `position`
+			'.($way
+					? '> '.(int)($movedRow['position']).' AND `position` <= '.(int)($position)
+					: '< '.(int)($movedRow['position']).' AND `position` >= '.(int)($position)
+				))
+			AND Db::getInstance()->exec('
+			UPDATE `' . DB_PREFIX . $this->table .'`
+			SET `position` = '.(int)($position).'
+			WHERE `' . $this->identifier . '`='.(int)($movedRow[$this->identifier])
+			)
+		);
+	}
+
+	/**
+	 * 重置排序
+	 * @return bool
+	 */
+	public function cleanPositions()
+	{
+		if (!array_key_exists('position', $this->fields)) {
+			die('Fatal error:No field \'position\'');
+		}
+
+		$result = Db::getInstance()->getAll('
+		SELECT `' .$this->identifier. '`
+		FROM `'.DB_PREFIX . $this->table .'`
+		ORDER BY `position` ASC');
+		if (!$result) {
+			return true;
+		}
+		$sizeof = count($result);
+		for ($i = 0; $i < $sizeof; ++$i){
+			$sql = '
+				UPDATE `'.DB_PREFIX. $this->table .'`
+				SET `position` = '.(int)($i).'
+				WHERE  `' .$this->identifier. '` = '.(int)($result[$i][$this->identifier]);
+			Db::getInstance()->exec($sql);
+		}
+		return true;
 	}
 	
 }

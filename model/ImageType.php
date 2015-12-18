@@ -94,7 +94,7 @@ class ImageType extends ObjectBase
 		return Db::getInstance()->getRow('SELECT `id_image_type`, `name`, `width`, `height`, `products`, `categories`, `manufacturers`, `suppliers`, `scenes` FROM `'.DB_PREFIX.'image_type` WHERE `name` = \''.pSQL($name).'\' AND `'.pSQL($type).'` = 1');
 	}
 	
-	public static function getEntity($p=1 ,$limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
+	public static function loadData($p=1 ,$limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
 		$where = '';
 		if(!empty($filter['id_image_type']) && Validate::isInt($filter['id_image_type']))
@@ -120,7 +120,7 @@ class ImageType extends ObjectBase
 				LIMIT '.(($p-1)*$limit).','.(int)$limit);
 		$rows   = array(
 				'total' => $total['total'],
-				'entitys'  => $result);
+				'items'  => $result);
 		return $rows;
 	}
 

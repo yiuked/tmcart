@@ -1,6 +1,6 @@
 <?php
-if(intval(Tools::getRequest('delete'))>0){
-	$object = new Country(intval(Tools::getRequest('delete')));
+if(Tools::G('delete') > 0){
+	$object = new Country(Tools::G('delete'));
 	if(Validate::isLoadedObject($object)){
 		$object->delete();
 	}
@@ -8,37 +8,27 @@ if(intval(Tools::getRequest('delete'))>0){
 	if(is_array($object->_errors) AND count($object->_errors)>0){
 		$errors = $object->_errors;
 	}else{
-		echo '<div class="conf">删除对象成功</div>';
+		UIAdminAlerts::conf('国家已删除');
 	}
 }elseif(Tools::isSubmit('subDelete')){
-	$select_cat = Tools::getRequest('categoryBox');
+	$select_cat = Tools::P('categoryBox');
 	$country	= new Country();
 		if($country->deleteSelection($select_cat))
-			echo '<div class="conf">删除对象成功</div>';
+			UIAdminAlerts::conf('国家已删除');
 
-}elseif(Tools::getRequest('toggle') && intval(Tools::getRequest('id'))>0){
-	$object = new Country((int)(Tools::getRequest('id')));
-	if(Validate::isLoadedObject($object)){
-		$object->toggle(Tools::getRequest('toggle'));
-	}
-
-	if(is_array($object->_errors) AND count($object->_errors)>0){
-		$errors = $object->_errors;
-	}else{
-		echo '<div class="conf">更新对象成功</div>';
-	}
 }elseif(Tools::isSubmit('subActiveON') OR Tools::isSubmit('subActiveOFF')){
 	$select_cat = Tools::getRequest('categoryBox');
 	$action		= Tools::isSubmit('subActiveON')?1:0;
 	$object		= new Country();
 	if(is_array($select_cat)){
 		if($object->statusSelection($select_cat,$action))
-			echo '<div class="conf">更新对象成功</div>';
+			UIAdminAlerts::conf('国家已更新');
 	}
 }
 
-UIAdminDndTable::loadHead();
+echo UIAdminDndTable::loadHead();
 $table =  new UIAdminDndTable('country', 'Country', 'id_country');
+$table->addAttribte('id', 'country');
 $table->header = array(
 	array('sort' => false, 'isCheckAll' => 'itemsBox[]','name' => 'id_country'),
 	array('name' => 'id_country','title' => 'ID','filter' => 'string'),

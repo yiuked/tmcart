@@ -26,7 +26,7 @@ class UIAdminAlerts
 {
     public static function conf($msg, $return = false)
     {
-        $html = self::msg($msg, 'bg-success');
+        $html = self::msg('<span class="glyphicon glyphicon-ok"></span> ' . $msg, 'bg-success');
         if ($return) {
             return $html;
         } else {
