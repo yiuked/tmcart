@@ -17,7 +17,7 @@ class breadcrumb extends Module
 			$entityid = "";
 			if($view_name === 'ProductView'){
 				$id_category = $view->entity->id_category_default;
-			}else if($view_name==='CategoryView'){
+			}else if($view_name === 'CategoryView'){
 				$entityid    = ",".$view->entity->id;
 				$id_category = $view->entity->id_parent;
 			}
@@ -25,14 +25,14 @@ class breadcrumb extends Module
 			
 			$category = Db::getInstance()->getRow('
 			SELECT id_category, level_depth, nleft, nright
-			FROM '._DB_PREFIX_.'category
+			FROM ' . DB_PREFIX . 'category
 			WHERE id_category = '.(int)$id_category);
 			$id_parent_path = ",1,".$id_category;
 			if (isset($category['id_category']))
 			{
-				$categories = Db::getInstance()->ExecuteS('
+				$categories = Db::getInstance()->getAll('
 				SELECT id_category,name,rewrite
-				FROM '._DB_PREFIX_.'category
+				FROM ' . DB_PREFIX . 'category
 				WHERE nleft <= '.(int)$category['nleft'].' AND nright >= '.(int)$category['nright'].' AND id_category != 1
 				ORDER BY level_depth ASC
 				LIMIT '.(int)$category['level_depth']);
@@ -43,7 +43,7 @@ class breadcrumb extends Module
 				{
 					$id_parent_path .= ",".$category['id_category'];
 					$fullPath .=
-					('<li><a href="'.$link->getLink($category['rewrite']).'" title="'.htmlentities($category['name'], ENT_NOQUOTES, 'UTF-8').'">').
+					('<li><a href="'.$link->getPage('CategoryView', $category['id_category']).'" title="'.htmlentities($category['name'], ENT_NOQUOTES, 'UTF-8').'">').
 					htmlentities($category['name'], ENT_NOQUOTES, 'UTF-8').
 					('</a></li>');
 				}

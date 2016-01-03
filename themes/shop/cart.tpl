@@ -66,7 +66,7 @@
 			<th>Save</th>
 			<th>Conditions</th>
 		</tr>
-		{foreach from=$coupons.entitys item=coupon name=coupon}
+		{foreach from=$coupons.items item=coupon name=coupon}
 		<tr>
 			<td>{$coupon.code}</td>
 			<td>

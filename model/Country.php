@@ -24,18 +24,18 @@ class Country extends ObjectBase{
 	protected $identifier 		= 'id_country';
 	protected $table			= 'country';
 	
-	public static function loadData($p = 1, $limit = 50, $orderBy = NULL, $orderWay = NULL, $filter=array())
+	public static function loadData($p = 1, $limit = 1000, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
 		$where = '';
-		if(!empty($filter['id_country']) && Validate::isInt($filter['id_country']))
+		if (isset($filter['id_country']))
 			$where .= ' AND a.`id_country`='.intval($filter['id_country']);
-		if(!empty($filter['iso_code']) && Validate::isCatalogName($filter['iso_code']))
+		if (isset($filter['iso_code']))
 			$where .= ' AND a.`iso_code`="'.pSQL($filter['subject']).'"';
 		if(!empty($filter['name']) && Validate::isCatalogName($filter['name']))
 			$where .= ' AND a.`name` LIKE "%'.pSQL($filter['name']).'%"';
-		if(!empty($filter['active']) && Validate::isInt($filter['active']))
+		if(isset($filter['active']))
 			$where .= ' AND a.`active`='.((int)($filter['active']) == 1 ? '1' : '0');
-		if(!empty($filter['need_state']) && Validate::isInt($filter['need_state']))
+		if(isset($filter['need_state']))
 			$where .= ' AND a.`need_state`='.((int)($filter['need_state'])==1?'1':'0');
 
 		if(!is_null($orderBy) AND !is_null($orderWay))

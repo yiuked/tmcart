@@ -7,8 +7,9 @@ class PaymentModule extends Module
 	{
 		$hook_payments = array();
 		$payments = Module::getModulesByType('payment');
+
 		foreach($payments as $key=>$payment){
-			if((int)($payment['active'])==1){
+			if((int)($payment['active']) == 1){
 				$pay = Module::Hook($payment['id']);
 				$hook_payments[$key] = $pay->hookPayment();
 			}

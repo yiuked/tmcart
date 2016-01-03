@@ -112,7 +112,7 @@ class Tools{
 			$domain = 'http://'.$domain;
 		return $domain;
 	}
-	
+
 	public static function getLink($alias)
 	{
 		if(URL_REWRITE)
@@ -536,6 +536,8 @@ class Tools{
 	{
 		return substr($filename, strrpos($filename, '.') + 1);
 	}
+
+
 }
 
 ?>

@@ -15,7 +15,7 @@ define('_TM_TEMP_DIR', _TM_ROOT_DIR_.'/temp/');
 define('_TM_IMG_DIR', _TM_ROOT_DIR_.'/images/');
 define('_TM_PRO_IMG_DIR', _TM_IMG_DIR.'pro/');
 define('_TM_TMP_IMG_DIR', _TM_IMG_DIR.'tmp/');
-define('_TM_VIEWS_DIR', _TM_ROOT_DIR_.'/views/');
+define('_TM_CONTROLLER_DIR', _TM_ROOT_DIR_.'/controller/');
 define('_TM_CACHE_DIR', _TM_ROOT_DIR_.'/cache/');
 define('_TM_FSO_DIR', _TM_CACHE_DIR.'fso/');
 

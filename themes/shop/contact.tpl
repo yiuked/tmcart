@@ -7,8 +7,8 @@
 	<br>
 	<span class="formLabel"><strong> Order Questions </strong></span>
 	<div class="show_url">
-		<a href="{$link->getPage('MyfeedbackView')}">How can I review my order?</a><br>
-		<a href="{$link->getPage('MyordersView')}">How can I track my package?</a><br>
+		<a href="{$link->getPage('MyFeedbackView')}">How can I review my order?</a><br>
+		<a href="{$link->getPage('MyOrdersView')}">How can I track my package?</a><br>
 	</div>
 	<br><br>
 	<span class="formLabel">

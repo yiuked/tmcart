@@ -20,29 +20,13 @@
 		{$address->phone}<br>
         <a href="{$link->getPage('AddressView')}?id_address={$address->id}&referer=CheckoutView" class="all"><strong>Change address</strong></a>
     </p>
-	{*
-	<ul id="address-list" class="address-list">
-		<li>
-			<input type="radio" name="id_address" value="{$address->id}" id="id_address_{$address->id}" {if $cart->id_address==$address->id}checked="checked"{/if}/>
-			<label for="id_address_{$address->id}"><a href="{$link->getPage('AddressView')}?id_address={$address->id}&referer=CheckoutView" title="edit this address">
-			{$address->first_name} {$address->last_name},
-			{$address->address} {$address->address2},
-			{$address->city}{if $address->country->need_state} {$address->state->name}{/if} {$address->postcode},
-			{$address->country->name},{$address->phone}</a>
-			</label>
-			
-		</li>
-	</ul>
-	<br/>
-	<a href="{$link->getPage('AddressView')}?referer=CheckoutView" class="all" title="Add Address"><strong>Change your delivery address</strong></a>
-	*}
 </fieldset>
 <br/>
-{if count($carriers.entitys)>1}
+{if count($carriers.items) > 1}
 <fieldset id="p-carrier">
 	<legend>Delivery methods</legend>
 	<ul id="carrier-list" class="carrier-list">
-	{foreach from=$carriers.entitys item=carrier name=carrier}
+	{foreach from=$carriers.items item=carrier name=carrier}
 		<li>
 			<input type="radio" name="id_carrier" value="{$carrier.id_carrier}" class="carrier_list" id="id_address_{$carrier.id_carrier}" {if $cart->id_carrier==$carrier.id_carrier}checked="checked"{/if}/>
 			<label for="id_carrier_{$carrier.id_carrier}"><strong>{$carrier.name}</strong> <span>{$carrier.description}</span></label>
@@ -50,9 +34,6 @@
 		</li>
 	{/foreach}
 	</ul>
-	{*
-	<div style="border-top: 1px dashed rgb(231, 231, 231); padding-top: 15px;"><img width="100%" src="{$img_dir}cart.bg.jpg"></div>
-	*}
 </fieldset>
 <br/>
 {/if}
@@ -108,23 +89,6 @@
 {$payment}
 {/foreach}
 </div>
-{*
-<fieldset id="p-payment">
-	<legend>Choose payment method</legend>
-	<ul id="payment-list" class="payment-list">
-	{foreach from=$payments item=payment name=payment}
-		<li>{$payment}</li>
-	{/foreach}
-	</ul>
-</fieldset>
-<br/>
-
-<p class="panier-send panier-send-bottom">
-	<a class="form-send dbl button big east pink check_out" href="#" title="Order" onclick="return checkoutCheck()">
-		   <span>Order <span class="secure">(<span>100% secured payment</span>)</span></span>
-	 </a>
-</p>
-*}
 </form>
 </div>
 <script type="text/javascript">

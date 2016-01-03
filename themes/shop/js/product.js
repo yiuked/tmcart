@@ -75,7 +75,7 @@ $(document).ready(function(){
 		else
 			PreviewImg($(this).attr('src').replace("-large",""));
 	})
-	$("#bigpic_show .close-modal").live("click",function(){
+	$("#bigpic_show .close-modal").on("click",function(){
 	  $("#bigpic_show").hide();
 	});
 

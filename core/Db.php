@@ -149,6 +149,20 @@ abstract class Db
 	abstract public function getServerVersion();
 
 	/**
+	 * 获取sql执行结果的句柄
+	 * @param $sql
+	 * @return mixed
+	 */
+	abstract public function query($sql);
+
+	/**
+	 * 获取下一条记录
+	 * @param $result sql执行结果的句柄
+	 * @return mixed
+	 */
+	abstract public function nextRow($result);
+
+	/**
 	 * 获取一条记录集,会自行添加LIMIT 1
 	 * @param $query
 	 * @return mixed

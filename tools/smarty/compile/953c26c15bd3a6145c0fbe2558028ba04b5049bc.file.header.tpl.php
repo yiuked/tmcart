@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2015-11-03 22:50:01
+<?php /* Smarty version Smarty-3.1.12, created on 2015-12-29 10:17:36
          compiled from "D:\wamp\www\red\shoes\themes\shop\header.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:2377154992dd1dbaf44-85901661%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '953c26c15bd3a6145c0fbe2558028ba04b5049bc' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\header.tpl',
-      1 => 1446561898,
+      1 => 1451355453,
       2 => 'file',
     ),
   ),
@@ -24,6 +24,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'meta' => 0,
     'shop_name' => 0,
     'root_dir' => 0,
+    'tm_css_dir' => 0,
     'css_dir' => 0,
     'css_file' => 0,
     'css' => 0,
@@ -34,15 +35,10 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'link' => 0,
     'view_name' => 0,
     'query' => 0,
-    'logged' => 0,
-    'user_email' => 0,
-    'alert_total' => 0,
-    'wish_total' => 0,
     'cart_quantity' => 0,
     'cart_products' => 0,
     'cat_product' => 0,
     'attribute' => 0,
-    'img_dir' => 0,
     'cart_total' => 0,
     'SECATION_HEAD' => 0,
   ),
@@ -76,6 +72,8 @@ if (!is_callable('smarty_modifier_escape')) include 'D:\\wamp\\www\\red\\shoes\\
 favicon.ico" />
 <link rel="shortcut icon" type="image/gif" href="<?php echo $_smarty_tpl->tpl_vars['root_dir']->value;?>
 favicon.gif" />
+<link href="<?php echo $_smarty_tpl->tpl_vars['tm_css_dir']->value;?>
+bootstrap.min.css" rel="stylesheet" type="text/css" media="all" />
 <link href="<?php echo $_smarty_tpl->tpl_vars['css_dir']->value;?>
 global.css" rel="stylesheet" type="text/css" media="all" />
 <?php if ($_smarty_tpl->tpl_vars['css_file']->value){?>
@@ -87,7 +85,9 @@ $_smarty_tpl->tpl_vars['css']->_loop = true;
 " rel="stylesheet" type="text/css" media="all" /><?php } ?>
 <?php }?>
 <script type="text/javascript" src="<?php echo $_smarty_tpl->tpl_vars['tm_js_dir']->value;?>
-jquery/jquery-1.7.2.min.js"></script>
+jquery/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo $_smarty_tpl->tpl_vars['tm_js_dir']->value;?>
+bootstrap.min.js"></script>
 <script type="text/javascript" src="<?php echo $_smarty_tpl->tpl_vars['js_dir']->value;?>
 front.js"></script>
 <?php if ($_smarty_tpl->tpl_vars['allow_cn']->value==false){?>
@@ -113,121 +113,103 @@ $_smarty_tpl->tpl_vars['js']->_loop = true;
 </head>
 <body class="browse <?php echo $_smarty_tpl->tpl_vars['view_name']->value;?>
 ">
+	<?php echo $_smarty_tpl->getSubTemplate (((string)$_smarty_tpl->tpl_vars['tpl_dir']->value)."./block/top_men.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null, array(), 0);?>
+
  	<div id="header">
-	  <div class="header-base">
-			<?php if ($_smarty_tpl->tpl_vars['view_name']->value=='index'){?>
-			<h1 class="logo"><a href="<?php echo $_smarty_tpl->tpl_vars['root_dir']->value;?>
+		<div class="container">
+		  <div class="row">
+				<?php if ($_smarty_tpl->tpl_vars['view_name']->value=='index'){?>
+				<h1 class="col-md-3 logo"><a href="<?php echo $_smarty_tpl->tpl_vars['root_dir']->value;?>
 " title="<?php echo $_smarty_tpl->tpl_vars['shop_name']->value;?>
 "><?php echo $_smarty_tpl->tpl_vars['shop_name']->value;?>
 </a></h1>
-			<?php }else{ ?>
-			<div class="logo"><a href="<?php echo $_smarty_tpl->tpl_vars['root_dir']->value;?>
+				<?php }else{ ?>
+				<div class="col-md-3 logo"><a href="<?php echo $_smarty_tpl->tpl_vars['root_dir']->value;?>
 " title="<?php echo $_smarty_tpl->tpl_vars['shop_name']->value;?>
 " ><?php echo $_smarty_tpl->tpl_vars['shop_name']->value;?>
 </a></div>
-			<?php }?>
-			<div id="search">
-				  <form role="search" method="get" action="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('SearchView');?>
+				<?php }?>
+				<div id="search" class="col-md-6">
+					  <form role="search" method="get" action="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('SearchView');?>
 ">
-					<input type="text" placeholder="Sneaker shoes?Pumps,Boots..." name="s" value="<?php if (isset($_smarty_tpl->tpl_vars['query']->value)){?><?php echo $_smarty_tpl->tpl_vars['query']->value;?>
+						<input type="text" placeholder="雪地靴 羽绒服" name="s" value="<?php if (isset($_smarty_tpl->tpl_vars['query']->value)){?><?php echo $_smarty_tpl->tpl_vars['query']->value;?>
 <?php }?>">
-					<button type="submit" class="icon-search"></button>
-				  </form>
-			 </div>
-			<div class="var_link">
-				<ul>
-				  	<li class="account<?php if ($_smarty_tpl->tpl_vars['logged']->value){?> logged<?php }?>">
-						<a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('MyaccountView');?>
-"><span class="icon icon-user"></span><span class="label">Account</span></a>
-						<div class="layer account-layer">
-						  <?php if (!$_smarty_tpl->tpl_vars['logged']->value){?>
-						  <dl class="login"><a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('MyaddressesView');?>
-" class="all">Sign in</a></dl>
-						  <?php }else{ ?>
-						  <dl class="login"><a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('LoginView');?>
-?mylogout" class="all">Sign Out</a></dl>
-						  <dl><a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('MyordersView');?>
-">Welcome <strong><?php echo $_smarty_tpl->tpl_vars['user_email']->value;?>
-</strong></a></dl>
-						  <?php }?>
-						  <dl><a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('MyordersView');?>
-">See my orders</a></dl>
-						  <dl><a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('MyaddressesView');?>
-">My addresses</a></dl>
-						  <dl><a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('UserView');?>
-">Connection settings</a></dl>
-						  <dl><a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('MyfeedbackView');?>
-">Make a feedback</a></dl>
-						  <dl><a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('MyaddressesView');?>
-">Your Sarenza vouchers</a></dl>
-						</div>
-					</li>
-				  	<li class="alerts"><a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('MyAlertView');?>
-"><span class="icon icon-bell"><?php if ($_smarty_tpl->tpl_vars['alert_total']->value>0){?><i><?php echo $_smarty_tpl->tpl_vars['alert_total']->value;?>
-</i><?php }?></span><span class="label">Alerts</span></a></li>
-				  	<li class="likes"><a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('WishView');?>
-"><span class="icon icon-heart-2"><?php if ($_smarty_tpl->tpl_vars['wish_total']->value>0){?><i><?php echo $_smarty_tpl->tpl_vars['wish_total']->value;?>
-</i><?php }?></span><span class="label">Wish list</span></a></li>
-				  	<li class="basket">
+						<button type="submit" class="icon-search">搜 索</button>
+					  </form>
+						<ul class="inline hot-search">
+							<li><a href="">保暖内衣</a></li>
+							<li class="spacer"></li>
+							<li><a href="">圣诞节礼物</a></li>
+							<li class="spacer"></li>
+							<li><a href="">电脑</a></li>
+							<li class="spacer"></li>
+							<li><a href="">手机</a></li>
+							<li class="spacer"></li>
+							<li><a href="">巧克力</a></li>
+						</ul>
+				 </div>
+				<div class="col-md-3">
+					<div class="dropdown cart">
 						<a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('CartView');?>
-">
-							<span class="icon icon-basket filled"><?php if ($_smarty_tpl->tpl_vars['cart_quantity']->value>0){?><i><?php echo $_smarty_tpl->tpl_vars['cart_quantity']->value;?>
-</i><?php }?></span>
-							<span class="label">Basket</span>
+" class="cart-btn">
+							<span aria-hidden="true" class="glyphicon glyphicon-shopping-cart"></span> 我的购物车
+							<?php if ($_smarty_tpl->tpl_vars['cart_quantity']->value>0){?>
+							<span class="badge"> <?php echo $_smarty_tpl->tpl_vars['cart_quantity']->value;?>
+ </span>
+							<?php }?>
 						</a>
 						<?php if ($_smarty_tpl->tpl_vars['view_name']->value!='cart'){?>
-						<div class="layer basket-layer">
-						<?php if ($_smarty_tpl->tpl_vars['cart_quantity']->value>0){?>
-						<table>
-							<?php  $_smarty_tpl->tpl_vars['cat_product'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['cat_product']->_loop = false;
+							<div class="menu">
+								<?php if ($_smarty_tpl->tpl_vars['cart_quantity']->value>0){?>
+									<table>
+										<?php  $_smarty_tpl->tpl_vars['cat_product'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['cat_product']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['cart_products']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
 foreach ($_from as $_smarty_tpl->tpl_vars['cat_product']->key => $_smarty_tpl->tpl_vars['cat_product']->value){
 $_smarty_tpl->tpl_vars['cat_product']->_loop = true;
 ?>
-							<tr class="item">
-								<td class="td-image"><a href="<?php echo $_smarty_tpl->tpl_vars['cat_product']->value['link'];?>
+											<tr class="item">
+												<td class="td-image"><a href="<?php echo $_smarty_tpl->tpl_vars['cat_product']->value['link'];?>
 " target="_blank"><img src="<?php echo $_smarty_tpl->tpl_vars['cat_product']->value['image'];?>
 " alt="<?php echo $_smarty_tpl->tpl_vars['cat_product']->value['name'];?>
 " /></a></td>
-								<td class="td-name"><a href="<?php echo $_smarty_tpl->tpl_vars['cat_product']->value['link'];?>
+												<td class="td-name"><a href="<?php echo $_smarty_tpl->tpl_vars['cat_product']->value['link'];?>
 " target="_blank"><?php echo smarty_modifier_escape(smarty_modifier_truncate($_smarty_tpl->tpl_vars['cat_product']->value['name'],50,'...'), 'html', 'UTF-8');?>
 </a><br/>
-									<?php  $_smarty_tpl->tpl_vars['attribute'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['attribute']->_loop = false;
+													<?php  $_smarty_tpl->tpl_vars['attribute'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['attribute']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['cat_product']->value['attributes']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
 foreach ($_from as $_smarty_tpl->tpl_vars['attribute']->key => $_smarty_tpl->tpl_vars['attribute']->value){
 $_smarty_tpl->tpl_vars['attribute']->_loop = true;
 ?>
-									<em><?php echo $_smarty_tpl->tpl_vars['attribute']->value['group_name'];?>
+														<em><?php echo $_smarty_tpl->tpl_vars['attribute']->value['group_name'];?>
 :<?php echo $_smarty_tpl->tpl_vars['attribute']->value['name'];?>
 </em>
-									<?php } ?>
-								</td>
-								<td class="td-price">
-									<?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['cat_product']->value['price']),$_smarty_tpl);?>
-x<?php echo $_smarty_tpl->tpl_vars['cat_product']->value['quantity'];?>
-<br>
-									<a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('CartView');?>
+													<?php } ?>
+												</td>
+												<td class="td-price">
+													<b><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['cat_product']->value['price']),$_smarty_tpl);?>
+</b><br>
+													<b>x <?php echo $_smarty_tpl->tpl_vars['cat_product']->value['quantity'];?>
+</b><br>
+													<a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('CartView');?>
 ?delete=<?php echo $_smarty_tpl->tpl_vars['cat_product']->value['id_cart_product'];?>
-" class="cart_quantity_delete" rel="nofollow"><img src="<?php echo $_smarty_tpl->tpl_vars['img_dir']->value;?>
-btn_trash.gif" alt="delete" /></a>
-								</td>
-							</tr>
-							<?php } ?>
-						 </table>
-						<p class="align_right"><span class="productPrice"><?php echo $_smarty_tpl->tpl_vars['cart_quantity']->value;?>
-</span> items <span class="productPrice"><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['cart_total']->value),$_smarty_tpl);?>
-</span> total</p>
-						<a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('CartView');?>
-" class="button">CheckOut</a>
-						<?php }else{ ?>
-						Shopping bag is empty!
+" class="cart_quantity_delete" rel="nofollow">删除</a>
+												</td>
+											</tr>
+										<?php } ?>
+									</table>
+									<p>共 <span class="productPrice"><?php echo $_smarty_tpl->tpl_vars['cart_quantity']->value;?>
+</span> 件商品 总金额 <span class="productPrice"><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['cart_total']->value),$_smarty_tpl);?>
+</span> <a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('CartView');?>
+" class="btn btn-pink btn-xs">去购物车</a></p>
+
+								<?php }else{ ?>
+									购物车为空
+								<?php }?>
+							</div>
 						<?php }?>
-						</div>
-						<?php }?>
-					</li>
-				</ul>
-			</div>
-			<div class="clear"></div>
+					</div>
+				</div>
+		  </div>
 		</div>
 		<?php echo $_smarty_tpl->getSubTemplate (((string)$_smarty_tpl->tpl_vars['tpl_dir']->value)."./block/top_navigation.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null, array(), 0);?>
 

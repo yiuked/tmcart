@@ -1,27 +1,40 @@
-<section class="align_center">
-  <h2 class="pt-standard"><span>Most popular</span></h2>
-  <a href="{$link->getPage('SaleView')}" class="all">All bestsellers</a>
-	<div id="product_list">
-		<ul>
-			{foreach from=$products item=product name=product}
-			<li>
-				<a data-id="{$product.id_product}" href="javascript:void(0)" class="fav icon-link tool {if in_array($product.id_product,$wish_array)}on{/if}"><i class="icon-heart-2 txt-24">
-						</i><span class="tip"><span>Add to my wish list</span></span></a>
-				{if $product.is_new}
-				<div class="productBugNew"><img border="0" alt="" src="{$img_dir}bug_new.gif"></div>
-				{/if}
-				<a href="{$product.link}" title="{$product.name}"><img src="{$product.image_home}" alt="{$product.name}" title="{$product.name}" /></a>
-				<div class="productName">
-					<h2><a href="{$product.link}" title="{$product.name}">{$product.name}</a></h2>
-				</div>
-				<div class="price align_center"><span class="list_retail_price">{displayPrice price=$product.special_price}</span><strong>{displayPrice price=$product.price}</strong></div>
-				{if $product.price_save_off>0}
-				<div class="discount">
-					<span class="rate">{$product.price_save_off}</span>
-				</div>
-				{/if}
-			</li>
-			{/foreach}
-		</ul>
+<div class="container">
+	<div class="full-block home-product-block">
+		<div class="block-title">
+			<div class="title">推荐产品 <small>买新奇，买低价</small></div>
+			<a class="more" href="{$link->getPage('SaleView')}" class="all">更多<span aria-hidden="true" class="glyphicon glyphicon-menu-right"></span></a>
+			<ul class="inline pull-right">
+				<li><a href="#">单鞋</a></li>
+				<li class="spacer"></li>
+				<li><a href="#">松糕鞋</a></li>
+				<li class="spacer"></li>
+				<li><a href="#">运动鞋</a></li>
+				<li class="spacer"></li>
+				<li><a href="#">靴子</a></li>
+				<li class="spacer"></li>
+				<li><a href="#">雪地靴</a></li>
+			</ul>
+		</div>
+
+		<div id="product_list">
+			<ul>
+				{foreach from=$products item=product name=product}
+					<li class="col-md-3">
+						<a data-id="{$product.id_product}" href="javascript:void(0)" data-toggle="tooltip" data-placement="bottom" title="点击收藏该商品" class="wish {if in_array($product.id_product,$wish_array)}on{/if}">
+							<span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
+						</a>
+						{if $product.is_new}
+							<span class="label label-success new">新品上架</span>
+						{/if}
+						<a href="{$product.link}" title="{$product.name}"><img src="{$product.image_home}" alt="{$product.name}" title="{$product.name}" /></a>
+						<div class="price align_center">
+							<span class="old_price">{displayPrice price=$product.old_price}</span>
+							<span class="now_price">{displayPrice price=$product.price}</span>
+						</div>
+						<h2 class="product-name"><a href="{$product.link}" title="{$product.name}">{$product.name}</a></h2>
+					</li>
+				{/foreach}
+			</ul>
+		</div>
 	</div>
-</section>
+</div>

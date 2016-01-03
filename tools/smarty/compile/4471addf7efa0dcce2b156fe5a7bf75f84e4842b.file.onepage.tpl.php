@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2015-01-16 17:53:20
+<?php /* Smarty version Smarty-3.1.12, created on 2015-12-22 14:50:46
          compiled from "D:\wamp\www\red\shoes\themes\shop\block\onepage.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:469454b8df9014a788-63244910%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '4471addf7efa0dcce2b156fe5a7bf75f84e4842b' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\block\\onepage.tpl',
-      1 => 1419833668,
+      1 => 1450767041,
       2 => 'file',
     ),
   ),
@@ -15,6 +15,8 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'function' => 
   array (
   ),
+  'version' => 'Smarty-3.1.12',
+  'unifunc' => 'content_54b8df90477216_05289135',
   'variables' => 
   array (
     'link' => 0,
@@ -32,8 +34,6 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'payment' => 0,
   ),
   'has_nocache_code' => false,
-  'version' => 'Smarty-3.1.12',
-  'unifunc' => 'content_54b8df90477216_05289135',
 ),false); /*/%%SmartyHeaderCode%%*/?>
 <?php if ($_valid && !is_callable('content_54b8df90477216_05289135')) {function content_54b8df90477216_05289135($_smarty_tpl) {?><?php if (!is_callable('smarty_modifier_truncate')) include 'D:\\wamp\\www\\red\\shoes\\tools\\smarty\\plugins\\modifier.truncate.php';
 if (!is_callable('smarty_modifier_escape')) include 'D:\\wamp\\www\\red\\shoes\\tools\\smarty\\plugins\\modifier.escape.php';
@@ -71,15 +71,14 @@ if (!is_callable('smarty_modifier_escape')) include 'D:\\wamp\\www\\red\\shoes\\
 ?id_address=<?php echo $_smarty_tpl->tpl_vars['address']->value->id;?>
 &referer=CheckoutView" class="all"><strong>Change address</strong></a>
     </p>
-	
 </fieldset>
 <br/>
-<?php if (count($_smarty_tpl->tpl_vars['carriers']->value['entitys'])>1){?>
+<?php if (count($_smarty_tpl->tpl_vars['carriers']->value['items'])>1){?>
 <fieldset id="p-carrier">
 	<legend>Delivery methods</legend>
 	<ul id="carrier-list" class="carrier-list">
 	<?php  $_smarty_tpl->tpl_vars['carrier'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['carrier']->_loop = false;
- $_from = $_smarty_tpl->tpl_vars['carriers']->value['entitys']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
+ $_from = $_smarty_tpl->tpl_vars['carriers']->value['items']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
 foreach ($_from as $_smarty_tpl->tpl_vars['carrier']->key => $_smarty_tpl->tpl_vars['carrier']->value){
 $_smarty_tpl->tpl_vars['carrier']->_loop = true;
 ?>
@@ -96,7 +95,6 @@ $_smarty_tpl->tpl_vars['carrier']->_loop = true;
 		</li>
 	<?php } ?>
 	</ul>
-	
 </fieldset>
 <br/>
 <?php }?>
@@ -179,7 +177,6 @@ $_smarty_tpl->tpl_vars['payment']->_loop = true;
 
 <?php } ?>
 </div>
-
 </form>
 </div>
 <script type="text/javascript">

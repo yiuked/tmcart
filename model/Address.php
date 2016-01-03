@@ -7,6 +7,9 @@ class Address extends ObjectBase{
 		'id_country' => array(
 			'type' => 'isInt',
 		),
+		'id_user' => array(
+			'type' => 'isInt',
+		),
 		'id_state' => array(
 			'type' => 'isInt',
 		),
@@ -25,6 +28,9 @@ class Address extends ObjectBase{
 		'phone' => array(
 			'type' => 'isPhoneNumber',
 		),
+		'is_default' => array(
+			'type' => 'isInt',
+		),
 		'add_date' => array(
 			'type' => 'isDate',
 		),
@@ -35,20 +41,20 @@ class Address extends ObjectBase{
 	protected $identifier 		= 'id_address';
 	protected $table			= 'address';
 	
-	public static function loadData($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
+	public static function loadData($p = 1, $limit = 50, $orderBy = NULL, $orderWay = NULL, $filter = array())
 	{
 		$where = '';
-		if(!empty($filter['id_address']) && Validate::isInt($filter['id_address']))
+		if(isset($filter['id_address']))
 			$where .= ' AND a.`id_address`='.intval($filter['id_address']);
-		if(!empty($filter['id_country']) && Validate::isInt($filter['id_country']))
+		if(isset($filter['id_country']))
 			$where .= ' AND a.`id_country`='.intval($filter['id_country']);
-		if(!empty($filter['id_state']) && Validate::isInt($filter['id_state']))
+		if(isset($filter['id_state']))
 			$where .= ' AND a.`id_state`='.intval($filter['id_state']);
-		if(!empty($filter['address']) && Validate::isCatalogName($filter['address']))
+		if(isset($filter['address']) && Validate::isCatalogName($filter['address']))
 			$where .= ' AND a.`address` LIKE "%'.pSQL($filter['address']).'%"';
-		if(!empty($filter['city']) && Validate::isCatalogName($filter['city']))
+		if(isset($filter['city']) && Validate::isCatalogName($filter['city']))
 			$where .= ' AND a.`city` LIKE "%'.pSQL($filter['city']).'%"';
-		if(!empty($filter['name']) && Validate::isCatalogName($filter['name']))
+		if(isset($filter['name']) && Validate::isCatalogName($filter['name']))
 			$where .= ' AND a.`name` LIKE "%'.pSQL($filter['name']).'%"';
 		
 		if(!is_null($orderBy) AND !is_null($orderWay))

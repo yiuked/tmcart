@@ -8,10 +8,10 @@ class homeproduct extends Module
 		global $smarty, $cookie;
 
 
-		$result = Db::getInstance()->ExecuteS('SELECT a.* 
-				FROM `'._DB_PREFIX_.'product` a
+		$result = Db::getInstance()->getAll('SELECT a.*
+				FROM `'.DB_PREFIX.'product` a
 				WHERE a.active=1 AND a.is_top=1
-				LIMIT 0,12');
+				LIMIT 0,4');
 		$products = Product::reLoad($result);
 		$smarty->assign('products', $products);
 

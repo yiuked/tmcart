@@ -7,7 +7,7 @@ class Product extends ObjectBase{
 		'id_category_default' => array('type' => 'isInt'),
 		'id_image' => array('type' => 'isInt'),
 		'price' => array('type' => 'isPrice', 'required' => true),
-		'special_price' => array('type' => 'isPrice', 'required' => true),
+		'old_price' => array('type' => 'isPrice', 'required' => true),
 		'ean13' => array('type' => 'isEan13'),
 		'weight' => array('type' => 'isFloat'),
 		'quantity' => array('type' => 'isInt'),
@@ -126,23 +126,26 @@ class Product extends ObjectBase{
 		return false;
 	}
 	
-	public function getAlsoProduct($number=12)
+	public function getAlsoProduct($number = 12)
 	{
-		$leftResult = Db::getInstance()->getAll('SELECT p.id_product,p.id_image_default,p.price,p.special_price,p.`name`,p.rewrite,b.name AS brand
+		$leftResult = Db::getInstance()->getAll('SELECT p.id_product,p.id_image,p.price,p.old_price,p.`name`,p.rewrite,b.name AS brand
 		FROM '.DB_PREFIX.'product p
 		LEFT JOIN `'.DB_PREFIX.'brand` b ON b.id_brand=p.id_brand
 		WHERE p.id_product > '.$this->id.'
 		AND p.active=1 AND p.id_category_default='.(int)($this->id_category_default).'
 		ORDER BY p.id_product LIMIT '.intval($number/2));
+
 		$leftNumber = count($leftResult);
 		$rightNumber = $number - $leftNumber;
-		$rightResult = Db::getInstance()->getAll('SELECT p.id_product,p.id_image_default,p.price,p.special_price,p.`name`,p.rewrite,b.name AS brand
+
+		$rightResult = Db::getInstance()->getAll('SELECT p.id_product,p.id_image,p.price,p.old_price,p.`name`,p.rewrite,b.name AS brand
 		FROM '.DB_PREFIX.'product p
 		LEFT JOIN `'.DB_PREFIX.'brand` b ON b.id_brand=p.id_brand
 		WHERE p.id_product < '.$this->id.'
 		AND p.active=1 AND p.id_category_default='.(int)($this->id_category_default).'
 		ORDER BY p.id_product LIMIT '.intval($rightNumber));
-		$result = array_merge($leftResult,$rightResult);
+		$result = array_merge($leftResult, $rightResult);
+
 		if(!$result)
 			return false;
 		return self::reLoad($result);
@@ -206,22 +209,27 @@ class Product extends ObjectBase{
 		return $rows;
 	}
 	
-	public static function loadData($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
+	public static function loadData($p = 1, $limit = 50, $orderBy = NULL, $orderWay = NULL, $filter = array())
 	{
+
 		$where = '';
-		if(!empty($filter['id_product']) && Validate::isInt($filter['id_product']))
+		if (isset($filter['id_product']))
 			$where .= ' AND a.`id_product`='.intval($filter['id_product']);
-		if(!empty($filter['id_brand']) && Validate::isInt($filter['id_brand']))
+		if(isset($filter['id_brand']))
 			$where .= ' AND a.`id_brand`='.intval($filter['id_brand']);
-		if(!empty($filter['name']) && Validate::isCatalogName($filter['name']))
+		if(isset($filter['brand.active']))
+			$where .= ' AND IF(b.id_brand > 0,b.active=' . intval($filter['brand.active']) . ',1)';
+		if(isset($filter['name']) && Validate::isCatalogName($filter['name']))
 			$where .= ' AND a.`name` LIKE "%'.pSQL($filter['name']).'%"';
-		if(!empty($filter['rewrite']) && Validate::isCatalogName($filter['rewrite']))
+		if(isset($filter['rewrite']) && Validate::isCatalogName($filter['rewrite']))
 			$where .= ' AND a.`rewrite` LIKE "%'.pSQL($filter['rewrite']).'%"';
-		if(!empty($filter['active']) && Validate::isInt($filter['active']))
+		if(isset($filter['active']))
 			$where .= ' AND a.`active`='.((int)($filter['active']) == 1 ? '1' : '0');
-		if(!empty($filter['is_stock']) && Validate::isInt($filter['is_stock']))
-			$where .= ' AND a.`is_stock`='.((int)($filter['is_stock'])==1?'1':'0');
-		if(!empty($filter['id_category']) && Validate::isInt($filter['id_category']) && $filter['id_category']>1)
+		if(isset($filter['is_stock']))
+			$where .= ' AND a.`is_stock`='.((int)($filter['is_stock']) ==1 ? '1' : '0');
+		if(isset($filter['is_sale']))
+			$where .= ' AND a.`is_sale`='.((int)($filter['is_sale']) ==1 ? '1' : '0');
+		if(isset($filter['id_category']) && $filter['id_category'] > 1)
 			$where .= ' AND (a.`id_product` IN (SELECT `id_product` FROM `'.DB_PREFIX.'product_to_category` WHERE `id_category`='.intval($filter['id_category']).') OR a.id_category_default ='.intval($filter['id_category']).')';
 		
 		if(!is_null($orderBy) AND !is_null($orderWay))
@@ -231,31 +239,36 @@ class Product extends ObjectBase{
 			$postion = 'ORDER BY `id_product` DESC';
 		}
 
-		$total  = Db::getInstance()->getRow('SELECT count(*) AS total FROM `'.DB_PREFIX.'product` a
+		$total  = Db::getInstance()->getValue('SELECT count(*) AS total FROM `'.DB_PREFIX.'product` a
 				LEFT JOIN `'.DB_PREFIX.'category` AS c ON a.id_category_default = c.id_category
+				LEFT JOIN `'.DB_PREFIX.'brand`  AS b ON a.id_brand = b.id_brand
 				WHERE 1
 				'.$where);
-		if($total==0)
+
+		if($total == 0)
 			return false;
 
 		$result = Db::getInstance()->getAll('SELECT a.*,c.name AS c_name FROM `'.DB_PREFIX.'product` a
 				LEFT JOIN `'.DB_PREFIX.'category` AS c ON a.id_category_default = c.id_category
+				LEFT JOIN `'.DB_PREFIX.'brand`  AS b ON a.id_brand = b.id_brand
 				WHERE 1
 				'.$where.'
 				'.$postion.'
-				LIMIT '.(($p-1)*$limit).','.(int)$limit);
+				LIMIT '.(($p - 1) * $limit).','.(int) $limit);
 		$rows   = array(
-				'total' => $total['total'],
+				'total' => $total,
 				'items'  => self::reLoad($result));
 		return $rows;
 	}
 	
 	public static function reLoad($result)
 	{
+		global $link;
+
 		if(!is_array($result))
 			return;
 		foreach($result as &$row){
-			$row['link'] = Tools::getLink($row['rewrite']);
+			$row['link'] = $link->getPage('ProductView' ,$row['id_product']);
 			$row['name'] = stripslashes($row['name']);
 			$row['tags'] = self::getProductTags($row['id_product']);
 			$row['image_home'] = Image::getImageLink($row['id_image'],'home');
@@ -264,9 +277,9 @@ class Product extends ObjectBase{
 			$row['rating']= self::feedbacStateWithProduct($row['id_product']);
 			$row['price_save'] = 0;
 			$row['price_save_off'] = 0;
-			if($row['special_price']>0){
-				$row['price_save'] = $row['special_price'] - $row['price'];
-				$row['price_save_off'] = (int)(($row['special_price'] - $row['price'])/$row['special_price']*100);
+			if ($row['old_price'] > 0) {
+				$row['price_save'] = $row['old_price'] - $row['price'];
+				$row['price_save_off'] = (int)(($row['old_price'] - $row['price'])/$row['old_price']*100);
 			}
 		}
 		return $result;
@@ -572,7 +585,7 @@ class Product extends ObjectBase{
 	public function addToTags($tags)
 	{
 		if (empty($tags))
-			return false;
+			return true;
 
 		$tags = explode(',', $tags);
 
@@ -609,7 +622,7 @@ class Product extends ObjectBase{
 		return $ret;
 	}
 	
-	public function getComments($id_keep=0)
+	public function getComments($id_keep = 0)
 	{
 		$result = Db::getInstance()->getAll('SELECT *
 		FROM `'.DB_PREFIX.'cms_comment`

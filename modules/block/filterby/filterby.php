@@ -33,15 +33,15 @@ class filterby extends Module
 		
 		$cache_key = 'style-list-data';
 		if(!$result = Cache::getInstance()->get($cache_key)){
-			$result = Db::getInstance()->ExecuteS('
+			$result = Db::getInstance()->getAll('
 			SELECT id_category,name,rewrite
-			FROM `'._DB_PREFIX_.'category`
+			FROM `' . DB_PREFIX . 'category`
 			WHERE `active` = 1 AND `id_parent` = 1
 			ORDER BY `position` ASC');
 			if($result){
 				foreach ($result as &$row)
 				{
-					$row['link'] = $link->getLink($row['rewrite']);
+					$row['link'] = $link->getPage('CategoryView', $row['id_category']);
 				}
 			}
 			Cache::getInstance()->set($cache_key,$result);
@@ -55,8 +55,8 @@ class filterby extends Module
 		global $link;
 		$cache_key = 'color-list-data';
 		if(!$result = Cache::getInstance()->get($cache_key)){
-			$result = Db::getInstance()->ExecuteS('SELECT * 
-					FROM `'._DB_PREFIX_.'color` ORDER BY `top` ASC');
+			$result = Db::getInstance()->getAll('SELECT *
+					FROM `' . DB_PREFIX . 'color` ORDER BY `top` ASC');
 			if($result){
 				foreach ($result as &$row)
 				{

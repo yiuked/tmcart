@@ -35,11 +35,11 @@ class Wish extends ObjectBase
 	{
 		global $cookie;
 		$array = array(
-				'count'=>0,
-				'array'=>array()
+				'count'=> 0,
+				'array'=> array()
 				);
-		if(isset($cookie->id_user)&&$cookie->id_user>0){
-			$result = Db::getInstance()->ExecuteField('SELECT id_product FROM '.DB_PREFIX.'wish WHERE id_user='.intval($cookie->id_user),'id_product');
+		if (isset($cookie->id_user) && $cookie->id_user > 0) {
+			$result = Db::getInstance()->getValue('SELECT id_product FROM '.DB_PREFIX.'wish WHERE id_user=' . intval($cookie->id_user));
 			if($result)
 			{
 				$array['count'] = count($result);

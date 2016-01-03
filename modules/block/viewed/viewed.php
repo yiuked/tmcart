@@ -7,21 +7,21 @@ class viewed extends Module
 	{
 		global $smarty;
 		$noloadid = 0;
-		if(isset($_GET['entity']) && $_GET['entity']=='Product' && $_GET['id_entity']>0)
+		if(isset($_GET['product-view']) && Tools::G('product-view') == 'Product' && Tools::G('product-view') > 0)
 		{
-			$this->add($_GET['id_entity']);
-			$noloadid = intval($_GET['id_entity']);
+			$this->addViewed(Tools::G('product-view'));
+			$noloadid = intval(Tools::G('product-view'));
 		}
-		$smarty->assign('vieweds',$this->get(5,$noloadid));
+		$smarty->assign('vieweds',$this->getViewed(10, $noloadid));
 		$display = $this->display(__FILE__, 'viewed.tpl');
 		return $display;	
 	}
 	
-	public function add($id_product)
+	public function addViewed($id_product)
 	{
 		global $cookie;
 		$_content = array();
-		if(isset($cookie->viewed)&&strlen($cookie->viewed)>0){
+		if (isset($cookie->viewed) && strlen($cookie->viewed) > 0) {
 			$_content = explode(",",$cookie->viewed);
 		}
 		if(!in_array($id_product,$_content))
@@ -30,34 +30,34 @@ class viewed extends Module
 		$cookie->viewed  = implode(",",$_content);
 	}
 	
-	public function get($limit=10,$noloadid=0)
+	public function getViewed($limit = 10, $noloadid = 0)
 	{
 		global $cookie;
 
 		$_content = array();
-		if(isset($cookie->viewed)&&strlen($cookie->viewed)>0){
-			$_content = explode(",",$cookie->viewed);
+		if(isset($cookie->viewed) && strlen($cookie->viewed) > 0){
+			$_content = explode(",", $cookie->viewed);
 		}
 		
 		$product_ids = array();
 		$content_num = count($_content);
-		if($content_num>0){
+		if ($content_num > 0) {
 			$j = 0;
-			for($i=$content_num-1;$i>=0;$i--){
-				if($_content[$i]!=$noloadid){
+			for ($i = $content_num - 1; $i >= 0; $i--) {
+				if ($_content[$i]!=$noloadid) {
 					$product_ids[] = $_content[$i];
 					$j++;
 				}
-				if($j>=$limit)
+				if ($j >= $limit)
 					break;
 			}
 		}else
 			return false;
 		
-		if(count($product_ids)==0)
+		if (count($product_ids) == 0)
 			return false;
-		$result = Db::getInstance()->ExecuteS('SELECT p.*,b.name AS brand FROM `'._DB_PREFIX_.'product` p
-		LEFT JOIN `'._DB_PREFIX_.'brand` b ON b.id_brand=p.id_brand
+		$result = Db::getInstance()->getAll('SELECT p.*,b.name AS brand FROM `'.DB_PREFIX.'product` p
+		LEFT JOIN `'.DB_PREFIX.'brand` b ON b.id_brand=p.id_brand
 		WHERE id_product IN('.implode(',', array_map('intval', $product_ids)).')');
 		if(!$result)
 			return false;

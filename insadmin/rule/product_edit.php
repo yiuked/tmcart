@@ -5,8 +5,8 @@
 <link href="<?php echo BOOTSTRAP_CSS;?>bootstrap-tagsinput.css" rel="stylesheet" />
 <link href="<?php echo $_tmconfig['tm_js_dir']?>jquery/plugins/treeview-categories/jquery.treeview-categories.css" rel="stylesheet" type="text/css" media="all" />
 <link href="<?php echo $_tmconfig['tm_js_dir']?>jquery/plugins/ajaxfileupload/jquery.ajaxfileupload.css" rel="stylesheet" type="text/css" media="all" />
-<script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>kindeditor/kindeditor-min.js"></script>
-<script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>kindeditor/lang/zh_CN.js"></script>
+<script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>tinymce/tinymce.init.js"></script>
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/jquery.ui.core.min.js"></script>
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/jquery.ui.widget.min.js"></script>
 <script type="text/javascript" src="<?php echo $_tmconfig['tm_js_dir']?>jquery/ui/jquery.ui.mouse.min.js"></script>
@@ -82,25 +82,10 @@ $btn_group = array(
 echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group,), 'breadcrumb');
 ?>
 <script language="javascript">
+$(document).ready(function(){
 	$("#desc-product-save").click(function(){
 		$("#product_form").submit();
 	})
-
-	KindEditor.ready(function(K) {
-	var editor1 = K.create('textarea[name="description"]', {
-		cssPath : '../js/kindeditor/plugins/code/prettify.css',
-		uploadJson : '../js/kindeditor/php/upload_json.php',
-		fileManagerJson : '../js/kindeditor/php/file_manager_json.php',
-		allowFileManager : true,
-		afterCreate: function () {
-			this.sync();
-		},
-		afterBlur: function () {
-			this.sync();
-		}
-	});
-});
-$(document).ready(function(){
 	currentId = $(".productTabs a.disabled").attr('id').substr(5);
 	$('.product-tab-content').hide();
 	$("#product-tab-content-"+currentId).show();
@@ -182,7 +167,7 @@ $(document).ready(function(){
 									<div class="form-group">
 										<label for="special_price" class="col-sm-2 control-label">官方标价</label>
 										<div class="col-sm-2">
-											<input type="text" value="<?php echo isset($obj)?$obj->special_price:(Tools::getRequest('special_price')?Tools::getRequest('special_price'):0);?>"  name="special_price" class="form-control">
+											<input type="text" value="<?php echo isset($obj)?$obj->old_price:(Tools::getRequest('old_price')?Tools::getRequest('old_price'):0);?>"  name="old_price" class="form-control">
 										</div>
 									</div>
 									<div class="form-group">
@@ -254,7 +239,7 @@ $(document).ready(function(){
 									<div class="form-group">
 										<label for="time" class="col-md-1 control-label">内容描述</label>
 										<div class="col-md-10">
-											<textarea name="description" class="description" style="width:700px;height:300px;visibility:hidden;"><?php echo isset($obj->description)?$obj->description:Tools::getRequest('description');?></textarea>
+											<textarea name="description" class="tinymce"><?php echo isset($obj->description)?$obj->description:Tools::getRequest('description');?></textarea>
 										</div>
 									</div>
 								</div>
@@ -368,6 +353,7 @@ $(document).ready(function(){
 											<label for="categoryBox" class="col-sm-2 control-label">品牌</label>
 											<div class="col-sm-10">
 												<select name="id_brand" class="form-control" id="id_brand">
+													<option value="0">----</option>
 													<?php
 													foreach($brands as $brand){ ?>
 														<option value="<?php echo $brand['id_brand'];?>" <?php  echo isset($obj)&&$obj->id_brand==$brand['id_brand']?'selected="selected"':'';?>><?php echo $brand['name'];?></option>

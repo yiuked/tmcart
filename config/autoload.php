@@ -33,9 +33,9 @@ function __autoload ($className)
         if (file_exists(_TM_MODEL_DIR . $className . '.php')) {
             require_once(_TM_MODEL_DIR . $className . '.php');
             $class_index[$className] = _TM_MODEL_DIR . $className . '.php';
-        } elseif (file_exists(_TM_VIEWS_DIR . $className . '.php')) {
-            require_once(_TM_VIEWS_DIR . $className . '.php');
-            $class_index[$className] = _TM_VIEWS_DIR . $className . '.php';
+        } elseif (file_exists(_TM_CONTROLLER_DIR . $className . '.php')) {
+            require_once(_TM_CONTROLLER_DIR . $className . '.php');
+            $class_index[$className] = _TM_CONTROLLER_DIR . $className . '.php';
         } elseif (file_exists(_TM_CORE_DIR . $className . '.php')) {
             require_once(_TM_CORE_DIR . $className . '.php');
             $class_index[$className] = _TM_CORE_DIR . $className . '.php';

@@ -44,7 +44,7 @@ class Module extends ObjectBase{
 		$_modules = array();
 		$result = opendir(_TM_MODULES_DIR.$type);
 		while($dir = readdir($result)){
-			if(Validate::isModuleName($dir) && is_dir(_TM_MODULES_DIR.$type.'/'.$dir)){
+			if (Validate::isModuleName($dir) && is_dir(_TM_MODULES_DIR.$type.'/'.$dir)) {
 				include(_TM_MODULES_DIR.$type.'/'.$dir.'/config.php');
 				if(!$mod = Module::existsModule($dir)){
 					$module = new Module();
@@ -52,12 +52,11 @@ class Module extends ObjectBase{
 					$module->name = pSQL($_modules[$type][$dir]['name']);
 					$module->type = pSQL($type);
 					$module->description = pSQL($_modules[$type][$dir]['description']);
-					$module->active = (int)($_modules[$type][$dir]['active']);
+					$module->active = 0;
 					$module->add();
 					$_modules[$type][$dir]['id'] = $module->id;
-				}else{
+				} else {
 					$_modules[$type][$dir]['id'] = $mod['id_module'];
-					$_modules[$type][$dir]['active'] = $mod['active'];
 					$_modules[$type][$dir]['type'] = $mod['type'];
 				}
 			}

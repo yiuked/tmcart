@@ -40,6 +40,7 @@
                         <li><a href="index.php?rule=import" title="批量导入">批量导入</a></li>
                         <li><a href="index.php?rule=feedback" title="产品反馈">产品反馈</a></li>
                         <li><a href="index.php?rule=color" title="颜色">颜色</a></li>
+                        <li><a href="index.php?rule=filter" title="产品索引">产品索引</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">

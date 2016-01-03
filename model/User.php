@@ -111,10 +111,10 @@ class User extends ObjectBase{
 		AND active = 1');
 	}
 	
-	public function getAddress()
+	public function getAddresses()
 	{
 		$addresses	= array();
-		$result 	= Db::getInstance()->getAll('SELECT `id_address` FROM `'.DB_PREFIX.'address` WHERE `deleted`=0 AND `id_user`='.(int)($this->id));
+		$result 	= Db::getInstance()->getAll('SELECT `id_address` FROM `'.DB_PREFIX.'address` WHERE `id_user`='.(int)($this->id));
 		foreach($result as $row)
 		{
 			$addresses[] = new Address(intval($row['id_address']));
@@ -175,7 +175,7 @@ class User extends ObjectBase{
 		return $result;
 	}
 	
-	public static function loadData($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
+	public static function loadData($p = 1, $limit = 50, $orderBy = NULL, $orderWay = NULL, $filter = array())
 	{
 		$where = '';
 		if(!empty($filter['id_contact']) && Validate::isInt($filter['id_contact']))

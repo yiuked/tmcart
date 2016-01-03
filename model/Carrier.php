@@ -66,7 +66,7 @@ class Carrier extends ObjectBase{
 		return $result;
 	}
 	
-	public static function loadData($p=1, $limit=50, $orderBy = NULL, $orderWay = NULL, $filter=array())
+	public static function loadData($p = 1, $limit = 1000, $orderBy = NULL, $orderWay = NULL, $filter=array())
 	{
 
 		$where = '';

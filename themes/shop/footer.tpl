@@ -4,7 +4,9 @@
 			{$FOOT_BLOCK}
 			{/if}
 			<div id="footer">
-			{include file="$tpl_dir./block/foot.tpl"}
+				<div class="container">
+					{include file="$tpl_dir./block/foot.tpl"}
+				</div>
 			</div>
 	</body>
 </html>

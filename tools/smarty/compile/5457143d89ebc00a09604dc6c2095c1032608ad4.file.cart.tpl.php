@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2015-09-23 18:12:37
+<?php /* Smarty version Smarty-3.1.12, created on 2015-12-22 13:52:35
          compiled from "D:\wamp\www\red\shoes\themes\shop\cart.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:13715549a679f58f126-20984040%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '5457143d89ebc00a09604dc6c2095c1032608ad4' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\cart.tpl',
-      1 => 1443003154,
+      1 => 1450763552,
       2 => 'file',
     ),
   ),
@@ -189,7 +189,7 @@ $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['last']      
 			<th>Conditions</th>
 		</tr>
 		<?php  $_smarty_tpl->tpl_vars['coupon'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['coupon']->_loop = false;
- $_from = $_smarty_tpl->tpl_vars['coupons']->value['entitys']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
+ $_from = $_smarty_tpl->tpl_vars['coupons']->value['items']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
 foreach ($_from as $_smarty_tpl->tpl_vars['coupon']->key => $_smarty_tpl->tpl_vars['coupon']->value){
 $_smarty_tpl->tpl_vars['coupon']->_loop = true;
 ?>

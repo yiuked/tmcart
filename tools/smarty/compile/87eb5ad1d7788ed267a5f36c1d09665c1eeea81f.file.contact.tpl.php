@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2015-05-26 11:01:15
+<?php /* Smarty version Smarty-3.1.12, created on 2015-12-24 13:49:27
          compiled from "D:\wamp\www\red\shoes\themes\shop\contact.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:926354ba0945d7b2f2-59199524%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '87eb5ad1d7788ed267a5f36c1d09665c1eeea81f' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\contact.tpl',
-      1 => 1432609268,
+      1 => 1450682151,
       2 => 'file',
     ),
   ),
@@ -36,9 +36,9 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 	<br>
 	<span class="formLabel"><strong> Order Questions </strong></span>
 	<div class="show_url">
-		<a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('MyfeedbackView');?>
+		<a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('MyFeedbackView');?>
 ">How can I review my order?</a><br>
-		<a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('MyordersView');?>
+		<a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('MyOrdersView');?>
 ">How can I track my package?</a><br>
 	</div>
 	<br><br>

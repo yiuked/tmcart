@@ -1,12 +1,6 @@
 <!--head-->
-<!--
-<link type="text/css" rel="stylesheet" href="../themes/default/default.css" />
-<link type="text/css" href="../js/jquery/ui/themes/base/jquery.ui.theme.css" rel="stylesheet"  media="all" />
-<link type="text/css" href="../js/jquery/ui/themes/base/jquery.ui.theme.css" rel="stylesheet"  media="all" />
-<script type="text/javascript" src="../js/kindeditor/kindeditor-min.js"></script>
-<script type="text/javascript" src="../js/kindeditor/lang/zh_CN.js"></script>
--->
 <script type="text/javascript" src="../js/tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="../js/tinymce/tinymce.init.js"></script>
 <!--//head-->
 <?php
 if(isset($_POST['sveCategory']) && Tools::getRequest('sveCategory')=='add')
@@ -127,43 +121,6 @@ echo UIViewBlock::area(array('bread' => $bread, 'btn_groups' => $btn_group), 'br
 						<input type="text" value="<?php echo isset($obj)?$obj->rewrite:Tools::getRequest('rewrite');?>" class="form-control" name="rewrite" id="rewrite" onkeyup="if (isArrowKey(event)) return ;generateFriendlyURL();" onchange="generateFriendlyURL();">
 					</div>
 				</div>
-				<script>
-					/*
-					KindEditor.ready(function(K) {
-						var editor1 = K.create('textarea[name="description"]', {
-							cssPath : '../js/kindeditor/plugins/code/prettify.css',
-							uploadJson : '../js/kindeditor/php/upload_json.php',
-							fileManagerJson : '../js/kindeditor/php/file_manager_json.php',
-							allowFileManager : true,
-							afterCreate: function () {
-								this.sync();
-							},
-							afterBlur: function () {
-								this.sync();
-							}
-						});
-					});
-					*/
-					tinymce.init({
-						selector: '.tinymce',
-						menu: {
-							edit: {title: 'Edit', items: 'undo redo | cut copy paste | selectall'},
-							insert: {title: 'Insert', items: 'media image link | pagebreak'},
-							view: {title: 'View', items: 'visualaid'},
-							format: {title: 'Format', items: 'bold italic underline strikethrough superscript subscript | formats | removeformat'},
-							table: {title: 'Table', items: 'inserttable tableprops deletetable | cell row column'},
-							tools: {title: 'Tools', items: 'code'}
-						},
-						plugins : "link image paste pagebreak table contextmenu filemanager table code media autoresize textcolor",
-						external_filemanager_path:  "<?php echo ADMIN_URL;?>filemanager/",
-						filemanager_title: "文件管理" ,
-						external_plugins: { "filemanager" : "<?php echo ADMIN_URL;?>filemanager/plugin.min.js"},
-						relative_urls : false,//相对URL
-						convert_urls: false,//必设属性否则URL地址将对不上
-						toolbar: 'code | insertfile undo redo | styleselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',// 需在工具栏显示的
-						language: 'zh_CN',
-					});
-				</script>
 				<div class="form-group">
 					<label for="rewrite" class="col-sm-2 control-label">描述</label>
 					<div class="col-sm-10">

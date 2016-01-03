@@ -20,38 +20,37 @@ $bread = $breadcrumb->draw();
 echo UIViewBlock::area(array('bread' => $bread), 'breadcrumb');
 
 ?>
-<form class="form" method="post" action="index.php?rule=currency">
-<table class="table_grid" name="list_table" width="100%">
-<tr><td>
-<div class="mianColForm">
-	<table class="tableList table tableDnD" width="100%" cellpadding="0" cellspacing="0" id="currency">
-	<thead>
-		<tr>
-			<th>LOGO</th>
-			<th>名称</th>
-			<th>描述</th>
-			<th>操作</th>
-		</tr>
-	   </thead>
-		<?php 
-		foreach($payments as $key => $row){?>
-		<tr class="row">
-			<td class="pointer" ><img src="<?php echo $_tmconfig['pay_dir'].$key.'/logo.png';?>" /></td>
-			<td class="pointer" ><?php echo $row['name'];?> <?php if($row['active']){?><span class="setup">已启用</span><?php }else{?><span class="setup non-install">未启用</span><?php }?></td>
-			<td class="pointer" ><?php echo $row['description'];?></td>
-			<td align="right">
-				<?php if($row['active']){?>
-				<a class="button" href="index.php?rule=payment&install=<?php echo $row['id'];?>">卸载</a>
-				<a class="button" href="index.php?rule=payment_edit&id=<?php echo $row['id'];?>">配置</a>
-				<?php }else{?>
-				<a class="button" href="index.php?rule=payment&install=<?php echo $row['id'];?>">安装</a>
-				<?php }?>
-			</td>
-		</tr>
-		<?php }
-		?>
-	</table>
+<div class="panel panel-default">
+	<div class="panel-heading">支付模块</div>
+	<div class="panel-body">
+		<form class="form" method="post" action="index.php?rule=currency">
+			<table class="table">
+				<thead>
+				<tr>
+					<th>LOGO</th>
+					<th>名称</th>
+					<th>描述</th>
+					<th class="text-right">操作</th>
+				</tr>
+				<?php
+				foreach($payments as $key => $row){?>
+					<tr>
+						<td class="pointer" ><img src="<?php echo $_tmconfig['pay_dir'].$key.'/logo.png';?>" /></td>
+						<td class="pointer" ><?php echo $row['name'];?> <?php if($row['active']){?><span class="setup">已启用</span><?php }else{?><span class="setup non-install">未启用</span><?php }?></td>
+						<td class="pointer" ><?php echo $row['description'];?></td>
+						<td align="right">
+							<?php if($row['active']){?>
+								<a class="btn btn-danger" href="index.php?rule=payment&install=<?php echo $row['id'];?>"><span aria-hidden="true" class="glyphicon glyphicon-floppy-remove"></span> 卸载</a>
+								<a class="btn btn-success" href="index.php?rule=payment_edit&id=<?php echo $row['id'];?>"><span aria-hidden="true" class="glyphicon glyphicon-cog"></span> 配置</a>
+							<?php }else{?>
+								<a class="btn btn-success" href="index.php?rule=payment&install=<?php echo $row['id'];?>"><span aria-hidden="true" class="glyphicon glyphicon-floppy-saved"></span> 安装</a>
+							<?php }?>
+						</td>
+					</tr>
+				<?php }
+				?>
+				</thead>
+			</table>
+		</form>
+	</div>
 </div>
-</td></tr>
-</table>
-</form>

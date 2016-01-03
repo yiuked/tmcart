@@ -63,7 +63,7 @@ $table->header = array(
 		'filter' => 'string'
 	),
 	array(
-		'name' => 'special_price',
+		'name' => 'old_price',
 		'title' => '原价',
 		'width'=> '80px',
 		'filter' => 'string'

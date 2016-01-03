@@ -64,14 +64,26 @@ class UIAdminTable extends UIView
         global $cookie;
 
         $this->displayFilter = true;
-        foreach ($this->header as $head) {
-            if (isset($head['filter'])) {
-                $key = $this->token . '_' . $head['name'];
-                if(isset($_POST[ $key])){
-                    $cookie->__set( $key, Tools::P($key));
-                    $this->filters[$head['name']] = Tools::P($key);
-                }elseif($cookie->__isset($key)){
-                    $this->filters[$head['name']] = $cookie->__get($key);
+        $this->checkUnsetFilter();
+        if (isset($_POST[$this->token . '_submitFilter'])) {
+            foreach ($this->header as $head) {
+                if (isset($head['filter'])) {
+                    $key = $this->token . '_' . $head['name'];
+                    if (isset($_POST[$key])) {
+                        $cookie->__set($key, Tools::P($key));
+                        $this->filters[$head['name']] = Tools::P($key);
+                    } elseif ($cookie->__isset($key)) {
+                        $this->filters[$head['name']] = $cookie->__get($key);
+                    }
+                }
+            }
+        } else {
+            foreach ($this->header as $head) {
+                if (isset($head['filter'])) {
+                    $key = $this->token . '_' . $head['name'];
+                    if ($cookie->__isset($key)) {
+                        $this->filters[$head['name']] = $cookie->__get($key);
+                    }
                 }
             }
         }
@@ -80,9 +92,9 @@ class UIAdminTable extends UIView
     }
 
     /**
-     * 删除初始filter的cookie记录
+     * 检测是否删除初始filter的cookie记录
      */
-    public function unsetFilter()
+    protected function checkUnsetFilter()
     {
         global $cookie;
 
@@ -91,6 +103,7 @@ class UIAdminTable extends UIView
                 if (isset($head['filter'])) {
                     $key = $this->token . '_' . $head['name'];
                     if($cookie->__isset($key)){
+                        $cookie->__unset($key);
                         unset($this->{$key});
                     }
                 }

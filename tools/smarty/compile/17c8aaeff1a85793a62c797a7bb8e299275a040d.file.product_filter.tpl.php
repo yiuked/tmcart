@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2015-11-13 23:27:21
+<?php /* Smarty version Smarty-3.1.12, created on 2015-12-28 17:26:09
          compiled from "D:\wamp\www\red\shoes\themes\shop\block\product_filter.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:586754992dda812068-65179926%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '17c8aaeff1a85793a62c797a7bb8e299275a040d' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\block\\product_filter.tpl',
-      1 => 1446561897,
+      1 => 1451294764,
       2 => 'file',
     ),
   ),
@@ -27,7 +27,6 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'query' => 0,
     'n_list' => 0,
     'per' => 0,
-    'sort' => 0,
     'link' => 0,
     'pages_nb' => 0,
     'showPage' => 0,
@@ -35,14 +34,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_54992ddac22dd3_55127000')) {function content_54992ddac22dd3_55127000($_smarty_tpl) {?><script language="javascript">
-
-$(function(){
-    $('.dept_select').chosen({disable_search_threshold: 10});
-});
-
-</script>
-<div class="itemsShown">Items: <strong><?php echo ($_smarty_tpl->tpl_vars['p']->value-1)*$_smarty_tpl->tpl_vars['n']->value;?>
+<?php if ($_valid && !is_callable('content_54992ddac22dd3_55127000')) {function content_54992ddac22dd3_55127000($_smarty_tpl) {?><div class="itemsShown">Items: <strong><?php echo ($_smarty_tpl->tpl_vars['p']->value-1)*$_smarty_tpl->tpl_vars['n']->value;?>
  - <?php if ($_smarty_tpl->tpl_vars['currenN']->value>$_smarty_tpl->tpl_vars['total']->value){?><?php echo $_smarty_tpl->tpl_vars['total']->value;?>
 <?php }else{ ?><?php echo $_smarty_tpl->tpl_vars['currenN']->value;?>
 <?php }?></strong> of <strong><?php echo $_smarty_tpl->tpl_vars['total']->value;?>
@@ -68,34 +60,22 @@ $_smarty_tpl->tpl_vars['per']->_loop = true;
 		</select>
 	</div>
 </form>
-<form action="<?php echo $_smarty_tpl->tpl_vars['this_url']->value;?>
-" method="GET">
-	<div class="sortByControls">
-		<span class="label">SORT BY:</span>
-		<?php if (isset($_smarty_tpl->tpl_vars['query']->value)){?>
-		<input type="hidden" name="s" value="<?php echo $_smarty_tpl->tpl_vars['query']->value;?>
-" />
-		<?php }?>
-		<select onchange="this.form.submit()" name="sort" class="dept_select" style="width:150px;text-align:left;">
-		  <option value="newest" <?php if ($_smarty_tpl->tpl_vars['sort']->value=='newest'){?>selected="selected"<?php }?>>Newest</option>
-		  <option value="orders" <?php if ($_smarty_tpl->tpl_vars['sort']->value=='orders'){?>selected="selected"<?php }?>>Orders</option>
-		  <option value="rental_price_desc" <?php if ($_smarty_tpl->tpl_vars['sort']->value=='rental_price_desc'){?>selected="selected"<?php }?>>Price: high to low</option>
-		  <option value="rental_price_asc" <?php if ($_smarty_tpl->tpl_vars['sort']->value=='rental_price_asc'){?>selected="selected"<?php }?>>Price: low to high</option>
-		</select>
-	</div>
-</form>
+
+
 
 <?php $_smarty_tpl->tpl_vars["showPage"] = new Smarty_variable("5", null, 0);?>
 
 <?php $_smarty_tpl->tpl_vars["pageBefor"] = new Smarty_variable("3", null, 0);?>
 <div class="browsePageControls">
-	<span class="label">PAGE:</span>
+
+	<ul class="pagination">
 	<?php if ($_smarty_tpl->tpl_vars['p']->value!=1){?>
-	<a class="control prev" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->goPage($_smarty_tpl->tpl_vars['this_url']->value,$_smarty_tpl->tpl_vars['p']->value-1);?>
-">&nbsp; &nbsp;</a>
+	<li><a class="control prev" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->goPage($_smarty_tpl->tpl_vars['this_url']->value,$_smarty_tpl->tpl_vars['p']->value-1);?>
+">上一页</a></li>
 	<?php }else{ ?>
-	<span class="control ui-pagination-prev ui-pagination-disabled">&nbsp; &nbsp;</span>
+	<li><span class="control ui-pagination-prev ui-pagination-disabled">上一页</span></li>
 	<?php }?>
+
 	<?php if ($_smarty_tpl->tpl_vars['pages_nb']->value<$_smarty_tpl->tpl_vars['showPage']->value){?>
 		<?php if (isset($_smarty_tpl->tpl_vars['smarty']->value['section']['pagination'])) unset($_smarty_tpl->tpl_vars['smarty']->value['section']['pagination']);
 $_smarty_tpl->tpl_vars['smarty']->value['section']['pagination']['name'] = 'pagination';
@@ -126,13 +106,13 @@ $_smarty_tpl->tpl_vars['smarty']->value['section']['pagination']['first']      =
 $_smarty_tpl->tpl_vars['smarty']->value['section']['pagination']['last']       = ($_smarty_tpl->tpl_vars['smarty']->value['section']['pagination']['iteration'] == $_smarty_tpl->tpl_vars['smarty']->value['section']['pagination']['total']);
 ?>
 			<?php if ($_smarty_tpl->tpl_vars['p']->value==$_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index']){?>
-			<a class="control pageNum selected" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->goPage($_smarty_tpl->tpl_vars['this_url']->value,$_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index']);?>
+			<li><a class="control pageNum selected" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->goPage($_smarty_tpl->tpl_vars['this_url']->value,$_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index']);?>
 "><?php echo $_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index'];?>
-</a>
+</a></li>
 			<?php }else{ ?>
-			<a class="control pageNum" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->goPage($_smarty_tpl->tpl_vars['this_url']->value,$_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index']);?>
+			<li><a class="control pageNum" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->goPage($_smarty_tpl->tpl_vars['this_url']->value,$_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index']);?>
 "><?php echo $_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index'];?>
-</a>
+</a></li>
 			<?php }?>
 		<?php endfor; endif; ?>
 	<?php }elseif($_smarty_tpl->tpl_vars['p']->value<=($_smarty_tpl->tpl_vars['pageBefor']->value+1)){?>
@@ -165,13 +145,13 @@ $_smarty_tpl->tpl_vars['smarty']->value['section']['pagination']['first']      =
 $_smarty_tpl->tpl_vars['smarty']->value['section']['pagination']['last']       = ($_smarty_tpl->tpl_vars['smarty']->value['section']['pagination']['iteration'] == $_smarty_tpl->tpl_vars['smarty']->value['section']['pagination']['total']);
 ?>
 			<?php if ($_smarty_tpl->tpl_vars['p']->value==$_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index']){?>
-			<a class="control pageNum selected" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->goPage($_smarty_tpl->tpl_vars['this_url']->value,$_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index']);?>
+			<li><a class="control pageNum selected" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->goPage($_smarty_tpl->tpl_vars['this_url']->value,$_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index']);?>
 "><?php echo $_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index'];?>
-</a>
+</a></li>
 			<?php }else{ ?>
-			<a class="control pageNum" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->goPage($_smarty_tpl->tpl_vars['this_url']->value,$_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index']);?>
+			<li><a class="control pageNum" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->goPage($_smarty_tpl->tpl_vars['this_url']->value,$_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index']);?>
 "><?php echo $_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index'];?>
-</a>
+</a></li>
 			<?php }?>
 		<?php endfor; endif; ?>
 	<?php }elseif($_smarty_tpl->tpl_vars['pages_nb']->value-$_smarty_tpl->tpl_vars['p']->value<=$_smarty_tpl->tpl_vars['pageBefor']->value){?>
@@ -204,13 +184,13 @@ $_smarty_tpl->tpl_vars['smarty']->value['section']['pagination']['first']      =
 $_smarty_tpl->tpl_vars['smarty']->value['section']['pagination']['last']       = ($_smarty_tpl->tpl_vars['smarty']->value['section']['pagination']['iteration'] == $_smarty_tpl->tpl_vars['smarty']->value['section']['pagination']['total']);
 ?>
 			<?php if ($_smarty_tpl->tpl_vars['p']->value==$_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index']){?>
-			<a class="control pageNum selected" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->goPage($_smarty_tpl->tpl_vars['this_url']->value,$_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index']);?>
+			<li><a class="control pageNum selected" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->goPage($_smarty_tpl->tpl_vars['this_url']->value,$_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index']);?>
 "><?php echo $_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index'];?>
-</a>
+</a></li>
 			<?php }else{ ?>
-			<a class="control pageNum" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->goPage($_smarty_tpl->tpl_vars['this_url']->value,$_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index']);?>
+			<li><a class="control pageNum" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->goPage($_smarty_tpl->tpl_vars['this_url']->value,$_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index']);?>
 "><?php echo $_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index'];?>
-</a>
+</a></li>
 			<?php }?>
 		<?php endfor; endif; ?>
 	<?php }else{ ?>
@@ -243,31 +223,31 @@ $_smarty_tpl->tpl_vars['smarty']->value['section']['pagination']['first']      =
 $_smarty_tpl->tpl_vars['smarty']->value['section']['pagination']['last']       = ($_smarty_tpl->tpl_vars['smarty']->value['section']['pagination']['iteration'] == $_smarty_tpl->tpl_vars['smarty']->value['section']['pagination']['total']);
 ?>
 			<?php if ($_smarty_tpl->tpl_vars['p']->value==$_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index']){?>
-			<a class="control pageNum selected" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->goPage($_smarty_tpl->tpl_vars['this_url']->value,$_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index']);?>
+			<li><a class="control pageNum selected" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->goPage($_smarty_tpl->tpl_vars['this_url']->value,$_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index']);?>
 "><?php echo $_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index'];?>
-</a>
+</a></li>
 			<?php }else{ ?>
-			<a class="control pageNum" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->goPage($_smarty_tpl->tpl_vars['this_url']->value,$_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index']);?>
+			<li><a class="control pageNum" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->goPage($_smarty_tpl->tpl_vars['this_url']->value,$_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index']);?>
 "><?php echo $_smarty_tpl->getVariable('smarty')->value['section']['pagination']['index'];?>
-</a>
+</a></li>
 			<?php }?>
 		<?php endfor; endif; ?>	
 	<?php }?>
 
 	<?php if ($_smarty_tpl->tpl_vars['pages_nb']->value>1&&$_smarty_tpl->tpl_vars['p']->value!=$_smarty_tpl->tpl_vars['pages_nb']->value){?>
-	<a class="control next" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->goPage($_smarty_tpl->tpl_vars['this_url']->value,$_smarty_tpl->tpl_vars['p']->value+1);?>
-">&nbsp; &nbsp;</a>
+		<li><a class="control next" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->goPage($_smarty_tpl->tpl_vars['this_url']->value,$_smarty_tpl->tpl_vars['p']->value+1);?>
+">下一页</a></li>
 	<?php }else{ ?>
-	<span class="control ui-pagination-next ui-pagination-disabled">&nbsp; &nbsp;</span>
+		<li><span class="control ui-pagination-next ui-pagination-disabled">下一页</span></li>
 	<?php }?>
-	
+	</ul>
 	<div class="ui-pagination-goto">
 		<input type="hidden" id="max-page-nb" class="max-page-nb" value="<?php echo $_smarty_tpl->tpl_vars['pages_nb']->value;?>
 " />
 		<label for="" class="ui-label">
-			Go to Page
-			<input type="text" class="ui-textfield ui-textfield-system" maxlength="3" id="pagination-bottom-input">
+			到第
+			<input type="text" class="ui-textfield ui-textfield-system" maxlength="3" id="pagination-bottom-input">页
 		</label>
-		<input type="button" value="Go" id="pagination-bottom-goto">
+		<input type="button" value="确定" id="pagination-bottom-goto">
 	</div>
 </div><?php }} ?>

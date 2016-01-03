@@ -62,15 +62,25 @@ class DbPdo extends Db
         return false;
     }
 
+    public function query($sql)
+    {
+        return $this->_link->query($sql);
+    }
+
+    public function nextRow($result = false)
+    {
+        if (!is_object($result)) {
+            return false;
+        }
+        return $result->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function getAll($query)
     {
         if ($this->_link)
         {
-            $resultArray = array();
             if ($st = $this->_link->query($query)) {
-                while ($row =  $st->fetch(PDO::FETCH_ASSOC))
-                    $resultArray[] = $row;
-                return $resultArray;
+                return $st->fetchAll(PDO::FETCH_ASSOC);
             }
         }
         return false;

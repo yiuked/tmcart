@@ -1,14 +1,10 @@
-<div id="myacount_block_left" class="product-list-filter facets-container">
-	<div class="section actif">
-		<h3 class="filter-title"><a href="#"><span>My Account</span></a></h3>
-		<ul class="bluemenu">
-			<li><a href="{$link->getPage('MyordersView')}" title="My Orders">My Orders</a></li>
-			<li><a href="{$link->getPage('MyaddressesView')}" title="My Addresses">My Addresses</a></li>
-			<li><a href="{$link->getPage('WishView')}" title="Wish Products">Wish Products</a></li>
-			<li><a href="{$link->getPage('MyfeedbackView')}" title="My Addresses">My Feedbacks</a></li>
-			<li><a href="{$link->getPage('MyAlertView')}" title="My Alert">My Alerts</a></li>
-			<li><a href="{$link->getPage('UserView')}" title="Account Information">Account Information</a></li>
-			<li><a href="{$link->getPage('MyaccountView')}?mylogout" title="Logout">Logout</a></li>
-		</ul>
- 	</div>
+<div class="list-group">
+	<a href="#" class="list-group-item disabled">个人中心</a>
+	<a class="list-group-item" href="{$link->getPage('MyordersView')}" title="定单管理">定单管理</a>
+	<a class="list-group-item" href="{$link->getPage('MyaddressesView')}" title="收货地址">收货地址</a>
+	<a class="list-group-item" href="{$link->getPage('MyWishView')}" title="关注商品">关注商品</a>
+	<a class="list-group-item" href="{$link->getPage('MyfeedbackView')}" title="商品评价">商品评价</a>
+	<a class="list-group-item" href="{$link->getPage('MyAlertView')}" title="站内信息">站内信息</a>
+	<a class="list-group-item" href="{$link->getPage('UserView')}" title="账户信息">账户信息</a>
+	<a class="list-group-item" href="{$link->getPage('MyaccountView')}?mylogout" title="注销">注销</a>
 </div>

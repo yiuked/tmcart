@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2015-11-13 23:27:20
+<?php /* Smarty version Smarty-3.1.12, created on 2015-12-28 14:50:21
          compiled from "D:\wamp\www\red\shoes\modules\block\breadcrumb\breadcrumb.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:2692654992dd9ef4846-81144509%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '268f50d0fc42d115412b8a48d9cb182cb2aa68dc' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\modules\\block\\breadcrumb\\breadcrumb.tpl',
-      1 => 1446561897,
+      1 => 1451285415,
       2 => 'file',
     ),
   ),
@@ -23,8 +23,10 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_54992dd9f25128_78634134')) {function content_54992dd9f25128_78634134($_smarty_tpl) {?><div id="breadcrumbs"> 
-	<?php echo $_smarty_tpl->tpl_vars['breadcrumbs']->value;?>
+<?php if ($_valid && !is_callable('content_54992dd9f25128_78634134')) {function content_54992dd9f25128_78634134($_smarty_tpl) {?><div class="container">
+	<div id="breadcrumbs">
+		<?php echo $_smarty_tpl->tpl_vars['breadcrumbs']->value;?>
 
+	</div>
 </div>
 <?php }} ?>
