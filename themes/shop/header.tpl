@@ -1,18 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-{if $allow_cn == false}
-<noscript><META http-equiv="refresh" content="0;URL='about:blank'"></noscript>
-{/if}
-{if $is_google_ip}
 <title>{$meta.title}</title>
 <meta name="description" content="{$meta.description}" />
 <meta name="keywords" content="{$meta.keywords}" />
-<meta name="robots" content="index,follow,noarchive" />
-{else}
-<title>{$shop_name}</title>
-<meta name="robots" content="noindex,nofollow,noarchive" />
-{/if}
+<meta name="robots" content="index,follow" />
 <meta content="IE=Edge" http-equiv="X-UA-Compatible">
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
 <link rel="alternate" hreflang="en" href="alternateURL">
@@ -67,40 +59,38 @@
 						</ul>
 				 </div>
 				<div class="col-md-3">
-					<div class="dropdown cart">
+					<div class="dropdown cart-block">
 						<a href="{$link->getPage('CartView')}" class="cart-btn">
 							<span aria-hidden="true" class="glyphicon glyphicon-shopping-cart"></span> 我的购物车
 							{if $cart_quantity > 0}
 							<span class="badge"> {$cart_quantity} </span>
 							{/if}
 						</a>
-						{if $view_name!='cart'}
-							<div class="menu">
-								{if $cart_quantity>0}
-									<table>
-										{foreach from=$cart_products item=cat_product name=cat_product}
-											<tr class="item">
-												<td class="td-image"><a href="{$cat_product.link}" target="_blank"><img src="{$cat_product.image}" alt="{$cat_product.name}" /></a></td>
-												<td class="td-name"><a href="{$cat_product.link}" target="_blank">{$cat_product.name|truncate:50:'...'|escape:'html':'UTF-8'}</a><br/>
-													{foreach from=$cat_product.attributes item=attribute name=attribute}
-														<em>{$attribute.group_name}:{$attribute.name}</em>
-													{/foreach}
-												</td>
-												<td class="td-price">
-													<b>{displayPrice price=$cat_product.price}</b><br>
-													<b>x {$cat_product.quantity}</b><br>
-													<a href="{$link->getPage('CartView')}?delete={$cat_product.id_cart_product}" class="cart_quantity_delete" rel="nofollow">删除</a>
-												</td>
-											</tr>
-										{/foreach}
-									</table>
-									<p>共 <span class="productPrice">{$cart_quantity}</span> 件商品 总金额 <span class="productPrice">{displayPrice price=$cart_total}</span> <a href="{$link->getPage('CartView')}" class="btn btn-pink btn-xs">去购物车</a></p>
+						<div class="menu">
+							{if $cart_quantity>0}
+								<table>
+									{foreach from=$cart_products item=cat_product name=cat_product}
+										<tr class="item">
+											<td class="td-image"><a href="{$cat_product.link}" target="_blank"><img src="{$cat_product.image}" alt="{$cat_product.name}" /></a></td>
+											<td class="td-name"><a href="{$cat_product.link}" target="_blank">{$cat_product.name|truncate:50:'...'|escape:'html':'UTF-8'}</a><br/>
+												{foreach from=$cat_product.attributes item=attribute name=attribute}
+													<em>{$attribute.group_name}:{$attribute.name}</em>
+												{/foreach}
+											</td>
+											<td class="td-price">
+												<b>{displayPrice price=$cat_product.price}</b><br>
+												<b>x {$cat_product.quantity}</b><br>
+												<a href="javascript:;" class="cart_quantity_delete" data-id="{$cat_product.id_cart_product}" data-id="nofollow">删除</a>
+											</td>
+										</tr>
+									{/foreach}
+								</table>
+								<p>共 <span class="cart-total-quantity">{$cart_quantity}</span> 件商品 总金额 <span class="cart-total">{displayPrice price=$cart_total}</span> <a href="{$link->getPage('CartView')}" class="btn btn-pink btn-xs">去购物车</a></p>
 
-								{else}
-									购物车为空
-								{/if}
-							</div>
-						{/if}
+							{else}
+								<p>购物车为空</p>
+							{/if}
+						</div>
 					</div>
 				</div>
 		  </div>

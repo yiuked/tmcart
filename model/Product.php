@@ -128,7 +128,7 @@ class Product extends ObjectBase{
 	
 	public function getAlsoProduct($number = 12)
 	{
-		$leftResult = Db::getInstance()->getAll('SELECT p.id_product,p.id_image,p.price,p.old_price,p.`name`,p.rewrite,b.name AS brand
+		$leftResult = Db::getInstance()->getAll('SELECT p.id_product,p.id_image,p.price,p.old_price,p.is_new,p.`name`,p.rewrite,b.name AS brand
 		FROM '.DB_PREFIX.'product p
 		LEFT JOIN `'.DB_PREFIX.'brand` b ON b.id_brand=p.id_brand
 		WHERE p.id_product > '.$this->id.'
@@ -138,7 +138,7 @@ class Product extends ObjectBase{
 		$leftNumber = count($leftResult);
 		$rightNumber = $number - $leftNumber;
 
-		$rightResult = Db::getInstance()->getAll('SELECT p.id_product,p.id_image,p.price,p.old_price,p.`name`,p.rewrite,b.name AS brand
+		$rightResult = Db::getInstance()->getAll('SELECT p.id_product,p.id_image,p.price,p.old_price,p.is_new,p.`name`,p.rewrite,b.name AS brand
 		FROM '.DB_PREFIX.'product p
 		LEFT JOIN `'.DB_PREFIX.'brand` b ON b.id_brand=p.id_brand
 		WHERE p.id_product < '.$this->id.'

@@ -51,13 +51,17 @@ class Image extends ObjectBase
 	 * @param $type
 	 * @return bool|string
 	 */
-	public static function getImageLink($id_image,$type)
+	public static function getImageLink($id_image,$type = "")
 	{
 		if(!$id_image)
 			return false;
 		$image = new Image((int)($id_image));
-		if($image->getExistingImgPath())
+		if($image->getExistingImgPath()){
+			if (empty($type)) {
+				return _TM_PRO_URL.$image->getExistingImgPath().'.jpg';
+			}
 			return _TM_PRO_URL.$image->getExistingImgPath().'-'.$type.'.jpg';
+		}
 	}
 	
 	/**

@@ -7,14 +7,11 @@ class View{
 	protected $_meta = array();
 	protected $_js_file = array();
 	protected $_css_file = array();
-	
-	public function __construct()
-	{
 
-	}
 	
 	public static function run()
 	{
+
 		if (isset($_GET['route']) && !empty(Tools::G('route'))) {
 			$routes = explode('-', Tools::G('route'));
 			$viewName = '';
@@ -41,7 +38,7 @@ class View{
 		if($this->use_tpl){
 			$this->setHead();
 			$this->sendSectionHead();
-			$smarty->display('header.tpl');
+			return $smarty->fetch('header.tpl');
 		}
 	}
 	
@@ -83,18 +80,19 @@ class View{
 	
 	public function displayFooter()
 	{
-		global $smarty,$cookie;
+		global $smarty;
 
 		if($this->use_tpl){
-			$smarty->display('footer.tpl');
+			return $smarty->fetch('footer.tpl');
 		}
 	}
 	
 	public function display()
-	{	
-		$this->displayHeader();
-		$this->displayMain();
-		$this->displayFooter();
+	{
+		$content = $this->displayHeader();
+		$content .= $this->displayMain();
+		$content .= $this->displayFooter();
+		echo $content;
 	}
 	
 	public function setHead()
@@ -104,14 +102,9 @@ class View{
 		$this->_meta['title'] 			= isset($this->entity->meta_title)?$this->entity->meta_title.' '.Configuration::get('TM_SHOP_NAME'):Configuration::get('TM_SHOP_NAME');
 		$this->_meta['keywords'] 		= isset($this->entity->meta_keywords)?$this->entity->meta_keywords.' '.Configuration::get('TM_SHOP_NAME'):Configuration::get('TM_SHOP_NAME');
 		$this->_meta['description']		= isset($this->entity->meta_description)?$this->entity->meta_description.' '.Configuration::get('TM_SHOP_NAME'):Configuration::get('TM_SHOP_NAME');
-		$is_google_ip = true;
-		if(Configuration::get('GOOGLEBOT_SHOW')=='YES'){
-			$is_google_ip = Tools::isGoogleBot();
-		}
 
 		$smarty->assign(array(
 			'view_name'=>str_replace("view","",strtolower(get_class($view))),
-			'is_google_ip'=>$is_google_ip,
 			'allow_cn'=>AllowCN::getInstance()->AA(),
 			'meta' => $this->_meta,
 			'js_file' => $this->_js_file,

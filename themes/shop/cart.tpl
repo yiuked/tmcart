@@ -1,27 +1,25 @@
-<div id="main_columns">
+<div class="container">
 {if $cart_quantity>0}
 <ul id="order_step" class="step">
-	<li class="current"><span><i>01</i><strong>Summary</strong></span></li>
-	<li class="todo"><span><i>02</i><strong>Sign in/Login</strong></span></li>
-	<li class="todo"><span><i>03</i><strong>Delivery</strong></span></li>
-	<li class="todo"><span><i>04</i><strong>Payment</strong></span></li>
+	<li class="current"><span><i>01</i><strong>购物车</strong></span></li>
+	<li class="todo"><span><i>02</i><strong>登录/注册</strong></span></li>
+	<li class="todo"><span><i>03</i><strong>填写收货地址</strong></span></li>
+	<li class="todo"><span><i>04</i><strong>支付</strong></span></li>
 </ul>
-<h2 class="tc-standard">Your Shopping Cart</h2>
-<br/>
-{if isset($success)}<div class="success">{$success}</div>{/if}
-<form method="post" action="{$link->getPage('CartView')}" name="shopping_cart_form" class="shopping_cart_form">
-<table width="100%" class="cart" cellspacing="0" cellpadding="0" border="0">
-	<tr class="basket-header">
-		<th class="th-delete"></th>
+<h2 class="tc-standard">购物车 <small>{$cart_quantity} 件商品</small></h2>
+<table class="table cart-table">
+	<tr class="cart-header">
+		<th class="th-select"><input type="checkbox" name="check-all"> 全选</th>
 		<th class="th-image"></th>
-		<th class="th-name">Product</th>
-		<th class="th-price">Unit price</th>
-		<th class="th-quantity">Quantity</th>
-		<th class="th-total">Total</th>
+		<th class="th-name">商品</th>
+		<th class="th-price">单价</th>
+		<th class="th-quantity">数量</th>
+		<th class="th-total">小计</th>
+		<th class="th-action">操作</th>
 	</tr>
 	{foreach from=$cart_products item=product name=product}
 	<tr class="item">
-		<td class="td-delete"><a href="{$link->getPage('CartView')}?delete={$product.id_cart_product}" class="cart_quantity_delete" rel="nofollow"><img src="{$img_dir}btn_trash.gif" alt="delete" /></a></td>
+		<td class="td-select"><input type="checkbox" name="id_cart_product[]" value="{$product.id_cart_product}"></td>
 		<td class="td-image"><a href="{$product.link}" title="{$product.name}" target="_blank"><img src="{$product.image}" alt="{$product.name}" /></a></td>
 		<td class="td-name"><a href="{$product.link}" title="{$product.name}" target="_blank">{$product.name}</a><br/>
 			{foreach from=$product.attributes item=attribute name=attribute}
@@ -37,66 +35,28 @@
 			  <option value="{$smarty.section.quantityLoop.index}" {if $smarty.section.quantityLoop.index==$product.quantity}selected="selected"{/if}>{$smarty.section.quantityLoop.index}</option>
 			  {/section}
 			</select>
-			<span class="sub-dd">
-				<ul class="list-item">
-				{section start=1 loop=6 name=quantityLoop}
-				  <li{if $smarty.section.quantityLoop.index==$product.quantity} class="active"{/if}>
-				  	<a class="shoesize " rel="{$smarty.section.quantityLoop.index}" href="#"><span>{$smarty.section.quantityLoop.index}</span></a>
-				  </li>
-				 {/section}
-				</ul>
-			</span>
 		</span>
 		</td>
 		<td class="td-total"><strong>{displayPrice price=$product.total}</strong></td>
+		<td class="td-action"><a href="javascript:;" class="cart_quantity_delete" data-id="{$product.id_cart_product}">删除</a></td>
 	</tr>
 	{/foreach}
 	<tr class="basket-footer">
-		<td colspan="7"><p align="right"><input type="hidden" value="Update Shopping Cart" class="btn" name="cart_update" /></p></td>
+		<td><input type="checkbox" name="check-all"> 全选</td>
+		<td>删除选中</td>
+		<td colspan="4" class="price-sum">
+			<div>
+				<span class="txt">总价（不含运费）：</span>
+				<span class="price total-price">{displayPrice price=$cart_total + $cart_shipping - $cart_discount}</span>
+				<br>
+				<span class="txt">已节省：</span>
+				<span class="price total-discount-price">- {displayPrice price=$cart_discount}</span>
+			</div>
+		</td>
+		<td class="td-action checkout"><a href="{$link->getPage('CheckoutView')}">去结算</a></td>
 	</tr>
 </table>
-</form>
-<br/>
-<div class="clear"></div>
-{if isset($coupons)}
-<div class="panier-resume coupons">
-	<table>
-		<tr>
-			<th>Code</th>
-			<th>Save</th>
-			<th>Conditions</th>
-		</tr>
-		{foreach from=$coupons.items item=coupon name=coupon}
-		<tr>
-			<td>{$coupon.code}</td>
-			<td>
-				{if $coupon.off>0}
-				{$coupon.off}%
-				{else}
-				-{displayPrice price=$coupon.amount}
-				{/if}
-			</td>
-			<td>{$coupon.code}</td>
-			<td>
-			{if $coupon.total_over>0}
-				{if $cart_total>$coupon.total_over}
-				YES
-				{else}
-				NO({displayPrice price=$coupon.total_over-$cart_total})
-				{/if}
-			{else}
-				{if $cart_quantity>$coupon.quantity_over}
-				YES
-				{else}
-				NO({$coupon.quantity_over-$cart_quantity}items)
-				{/if}
-			{/if}
-			</td>
-		</tr>
-		{/foreach}
-	</table>
-</div>
-{/if}
+
 <div class="panier-resume cart-total">
 	<form method="post" action="{$link->getPage('CheckoutView')}" name="checkout_form" id="checkout_form">
 	<div class="memo" id="information">
@@ -141,16 +101,6 @@
 		<p style="color: rgb(102, 102, 102); font-size: 11px; padding-left: 15px;">Remaining amount to be added to your cart in order to obtain free shipping:{displayPrice price=$enjoy_free_shipping-$cart_total}</p>
 		{/if}
 	</div>
-	<div class="panier-total panier-resume-titre">
-		<span>Total</span>
-		<strong>{displayPrice price=$cart_total+$cart_shipping-$cart_discount}</strong>
-	</div>
-	<div class="clear"></div>
-	<p class="panier-send panier-send-bottom">
-		<a title="Order" href="#" class="form-send dbl button big east pink check_out">
-               <span>Order <span class="secure">(<span>100% secured payment</span>)</span></span>
-         </a>
-    </p>
 </div>
 <script language="javascript">
 $(".check_out").click(function(){
@@ -180,12 +130,12 @@ $("#validateCode").click(function(){
 })
 </script>
 {else}
-<h2 class="tc-standard">Your basket is empty...</h2>
+<h2 class="tc-standard">购物车为空...</h2>
 <div class="box-style">
   <div class="bd">
     <ul class="spacer-list no txt-14">
-      <li>Looking for the hottest styles? <a href="{$link->getPage('SaleView')}" class="all no"><strong>This way for inspiration...</strong></a> </li>
-      <li>Already added items to your favourites? <a href="{$link->getPage('WishView')}" class="all no"><strong>See them here!</strong></a> </li>
+      <li>你可能会喜欢? <a href="{$link->getPage('SaleView')}" class="all no"><strong>这些商品...</strong></a> </li>
+      <li>去我收藏过的商品里看看? <a href="{$link->getPage('WishView')}" class="all no"><strong>点击这里!</strong></a> </li>
     </ul>
   </div>
 </div>

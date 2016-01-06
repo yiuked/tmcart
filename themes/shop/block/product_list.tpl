@@ -1,4 +1,4 @@
-<div id="product_list">
+<div class="product_list">
 	<ul>
 		{foreach from=$products item=product name=product}
 			<li>

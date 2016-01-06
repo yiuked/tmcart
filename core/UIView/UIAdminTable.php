@@ -181,6 +181,7 @@ class UIAdminTable extends UIView
 
     protected function drawBody()
     {
+        global $link;
         $body = '';
         if (count($this->data) == 0) {
             $body = '<tr><td align="center" colspan="' .count($this->header). '">没有找到有效记录</td></tr>';
@@ -237,7 +238,7 @@ class UIAdminTable extends UIView
                                 continue;
                             }
                             if ($action == 'view') {
-                                $body .=  '<li><a href="' .Tools::getLink($row['rewrite']). '" target="_blank"><span class="glyphicon glyphicon-file" title="查看" aria-hidden="true"></span> 查看</a></li>';
+                                $body .=  '<li><a href="' .$link->getPage($this->className."View", $row[$this->identifier]). '" target="_blank"><span class="glyphicon glyphicon-file" title="查看" aria-hidden="true"></span> 查看</a></li>';
                             }
                             if ($action == 'edit') {
                                 $body .=  '<li><a href="index.php?rule=' .  $this->rule . '_edit&id=' .  $row[$this->identifier] . '"><span class="glyphicon glyphicon-edit" title="编辑" aria-hidden="true"></span> 编辑</a></li>';

@@ -116,6 +116,30 @@ class AjaxView extends View
 			);
 			echo json_encode($arr);exit();
 		}//end use promo code
+
+		/**
+		 * 购物车
+		 */
+		if (Tools::G('c') == 'Cart') {
+			global $cart;
+			switch (Tools::G('m')) {
+				case 'removeItem':
+
+					if ($cart->deleteProduct(Tools::G('id'))) {
+						$cart_info = $cart->getCartInfo();
+						$result = array(
+							'status' => 'yes',
+							'cart_total' => Tools::displayPrice($cart_info['cart_total']),
+							'cart_quantity' => $cart_info['cart_quantity'],
+						);
+						die(json_encode($result));
+					}
+					die(json_encode(array("status" => "no")));
+					break;
+				default:
+					break;
+			}
+		}
 	}
 }
 ?>

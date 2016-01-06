@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2016-01-03 15:29:23
+<?php /* Smarty version Smarty-3.1.12, created on 2016-01-05 14:50:59
          compiled from "D:\wamp\www\red\shoes\modules\block\homeproduct\homeproduct.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:2721754992dd223b893-95276049%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '415f3981ff6a51f5fcb96557abba633629f45d0d' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\modules\\block\\homeproduct\\homeproduct.tpl',
-      1 => 1451806003,
+      1 => 1451976655,
       2 => 'file',
     ),
   ),
@@ -45,14 +45,14 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 			</ul>
 		</div>
 
-		<div id="product_list">
-			<ul>
+		<div class="content">
+			<ul class="product-list">
 				<?php  $_smarty_tpl->tpl_vars['product'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['product']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['products']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
 foreach ($_from as $_smarty_tpl->tpl_vars['product']->key => $_smarty_tpl->tpl_vars['product']->value){
 $_smarty_tpl->tpl_vars['product']->_loop = true;
 ?>
-					<li class="col-md-3">
+					<li>
 						<a data-id="<?php echo $_smarty_tpl->tpl_vars['product']->value['id_product'];?>
 " href="javascript:void(0)" data-toggle="tooltip" data-placement="bottom" title="点击收藏该商品" class="wish <?php if (in_array($_smarty_tpl->tpl_vars['product']->value['id_product'],$_smarty_tpl->tpl_vars['wish_array']->value)){?>on<?php }?>">
 							<span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
@@ -67,9 +67,9 @@ $_smarty_tpl->tpl_vars['product']->_loop = true;
 " title="<?php echo $_smarty_tpl->tpl_vars['product']->value['name'];?>
 " /></a>
 						<div class="price align_center">
-							<span class="old_price"><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['product']->value['old_price']),$_smarty_tpl);?>
+							<span class="old-price"><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['product']->value['old_price']),$_smarty_tpl);?>
 </span>
-							<span class="now_price"><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['product']->value['price']),$_smarty_tpl);?>
+							<span class="now-price"><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['product']->value['price']),$_smarty_tpl);?>
 </span>
 						</div>
 						<h2 class="product-name"><a href="<?php echo $_smarty_tpl->tpl_vars['product']->value['link'];?>

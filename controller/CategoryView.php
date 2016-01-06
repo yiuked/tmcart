@@ -71,7 +71,7 @@ GROUP BY fp.id_filter');
 					'this_url' => $link->getPage('CategoryView', $this->entity->id),
 					'products' => $products['items']
 			));
-			$smarty->display('category.tpl');
+			return $smarty->fetch('category.tpl');
 		}
 
 		public function sendSectionHead()
@@ -98,25 +98,13 @@ GROUP BY fp.id_filter');
 			parent::setHead();
 		}
 		
-		public function displayLeft()
-		{
-			global $smarty;
-			
-			$smarty->assign(array(
-					'name'=>$this->entity->name,
-					'id_parent'=>$this->entity->id_parent,
-					'LEFT_BLOCK' => Module::hookBlock(array('filterby')),
-			));
-			$smarty->display('block/left_columns.tpl');
-		}
-		
 		public function displayFooter()
 		{
 			global $smarty;
 			$smarty->assign(array(
 					'FOOT_BLOCK' => Module::hookBlock(array('viewed')),
-			));	
-			parent::displayFooter();
+			));
+			return parent::displayFooter();
 		}
 }
 ?>

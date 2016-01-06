@@ -34,7 +34,7 @@ if(Configuration::get('TM_SHOP_DOMAIN')!=$_SERVER['HTTP_HOST']){
 $cookie = new Cookie();
 $cookie->isLogged();
 
-if(isset($cookie->id_cart)&&!Cart::cartIsOrder($cookie->id_cart)){
+if(isset($cookie->id_cart) && !Cart::cartIsOrder($cookie->id_cart)) {
 	$cart = new Cart((int)($cookie->id_cart));
 	
 	if(!Validate::isLoadedObject($cart)){
@@ -53,6 +53,7 @@ if($id_currency = Tools::getRequest('id_currency'))
 		$cart->update();
 	}
 }
+
 if(!(int)($cookie->id_currency)){
 	$currency = new Currency((int)(Configuration::get('ID_CURRENCY_DEFAULT')));
 	$cookie->id_currency = $currency->id;
@@ -67,5 +68,3 @@ if(isset($_GET['mylogout']))
 	$cookie->mylogout();
 
 require_once(dirname(__FILE__).'/smarty.inc.php');
-
-?>

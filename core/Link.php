@@ -21,9 +21,9 @@ class Link
 		return $url.($p == 1 ? '' : (!strstr($url, '?') ? '?' : '&amp;').'p='.(int)($p));
 	}
 	
-	public function getImageLink($id_image,$name)
+	public function getImageLink($id_image, $name = "")
 	{
-		return Image::getImageLink($id_image,$name);
+		return Image::getImageLink($id_image, $name);
 	}
 }
 ?>

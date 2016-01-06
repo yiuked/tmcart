@@ -75,7 +75,8 @@ class Cart extends ObjectBase{
 	
 	public function getProducts($image = "small")
 	{
-		$products = array();
+		global $link;
+
 		$result = Db::getInstance()->getAll('
 				  SELECT c.*,p.`name`,p.`price`,p.`rewrite`,p.id_product,i.`id_image`,(c.`quantity`*p.`price`) AS total FROM '.DB_PREFIX.'cart_product c
 				  LEFT JOIN '.DB_PREFIX.'product p ON (c.`id_product` = p.`id_product`)
@@ -87,7 +88,7 @@ class Cart extends ObjectBase{
 		foreach($result as &$row)
 		{
 			$row['image'] = Image::getImageLink($row['id_image'],$image);
-			$row['link']  = Tools::getLink($row['rewrite']);
+			$row['link']  = $link->getPage('ProductView', $row['id_product']);
 			$row['attributes'] = Attribute::getByAttributeString($row['id_attributes']);
 		}
 		return $result;
@@ -106,7 +107,7 @@ class Cart extends ObjectBase{
 	
 	public function deleteProduct($id_cart_product)
 	{
-		if(Db::getInstance()->exec('DELETE FROM '.DB_PREFIX.'cart_product WHERE `id_cart_product`='.intval($id_cart_product))){
+		if(Db::getInstance()->exec('DELETE FROM '.DB_PREFIX.'cart_product WHERE `id_cart` = ' . (int) $this->id . ' AND `id_cart_product`=' . (int) $id_cart_product)){
 			$this->discount = 0;
 			return $this->update();
 		}
@@ -115,7 +116,7 @@ class Cart extends ObjectBase{
 	
 	public function updateProduct($id_cart_product,$quantity)
 	{
-		if(Db::getInstance()->exec('UPDATE '.DB_PREFIX.'cart_product SET `quantity`='.$quantity.' WHERE `id_cart_product`='.intval($id_cart_product))){
+		if(Db::getInstance()->exec('UPDATE '.DB_PREFIX.'cart_product SET `quantity`='.$quantity.' WHERE  `id_cart` = ' . (int) $this->id . ' AND `id_cart_product`='.intval($id_cart_product))){
 			$this->discount = 0;
 			return $this->update();
 		}

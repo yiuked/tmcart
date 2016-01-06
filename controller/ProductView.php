@@ -14,7 +14,7 @@ class ProductView extends View
 			
 			$attributes = Product::getAttributeAndGrop($this->entity->id);
 			$feedbacks = Feedback::feedbackWithProdict($this->entity->id);
-			$brand		= $this->entity->id_brand>0?new Brand($this->entity->id_brand):false;
+			$brand		= $this->entity->id_brand> 0 ? new Brand($this->entity->id_brand):false;
 
 			$smarty->assign(array(
 				'feedback'=>$feedbacks,
@@ -24,7 +24,7 @@ class ProductView extends View
 				'brand'=>$brand,
 				'products'=>$this->entity->getAlsoProduct(),
 			));
-			$smarty->display('product.tpl');
+			return $smarty->fetch('product.tpl');
 		}
 
 		public function sendSectionHead()
@@ -42,9 +42,7 @@ class ProductView extends View
 				$this->entity->meta_keywords = $this->entity->name;
 			if(!isset($this->entity->meta_description)||$this->entity->meta_description=='0')
 				$this->entity->meta_description = $this->entity->name;
-			
-			$this->_js_file[] =  _TM_JQP_URL.'jquery.easing.js';
-			$this->_js_file[] =  _TM_JQP_URL.'jquery.iosslider.min.js';		
+
 			$this->_js_file[] =  _TM_THEMES_URL.'js/product.js';
 			$category = new Category($this->entity->id_category_default);
 			$smarty->assign(array(
@@ -58,8 +56,8 @@ class ProductView extends View
 			global $smarty;
 			$smarty->assign(array(
 					'FOOT_BLOCK' => Module::hookBlock(array('viewed')),
-			));	
-			parent::displayFooter();
+			));
+			return parent::displayFooter();
 		}
 }
 ?>

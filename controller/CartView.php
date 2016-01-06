@@ -80,7 +80,6 @@ class CartView extends View
 	
 	public function setHead()
 	{
-		global $smarty;
 		$this->_js_file[] 	=  _TM_JQP_URL.'jquery.easing.js';
 		$this->_js_file[] 	=  _TM_JQP_URL.'jquery.iosslider.min.js';
 		parent::setHead();
@@ -95,7 +94,7 @@ class CartView extends View
 					'coupons' => $result,
 			));	
 		}
-		$smarty->display('cart.tpl');
+		return $smarty->fetch('cart.tpl');
 	}
 	
 	public function displayFooter()
@@ -104,7 +103,7 @@ class CartView extends View
 		$smarty->assign(array(
 				'FOOT_BLOCK' => Module::hookBlock(array('viewed')),
 		));	
-		parent::displayFooter();
+		return parent::displayFooter();
 	}
 }
 ?>

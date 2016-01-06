@@ -7,10 +7,10 @@ class viewed extends Module
 	{
 		global $smarty;
 		$noloadid = 0;
-		if(isset($_GET['product-view']) && Tools::G('product-view') == 'Product' && Tools::G('product-view') > 0)
+		if(Tools::G('route') == 'product-view' && Tools::G('id') > 0)
 		{
-			$this->addViewed(Tools::G('product-view'));
-			$noloadid = intval(Tools::G('product-view'));
+			$this->addViewed(Tools::G('id'));
+			$noloadid = intval(Tools::G('id'));
 		}
 		$smarty->assign('vieweds',$this->getViewed(10, $noloadid));
 		$display = $this->display(__FILE__, 'viewed.tpl');

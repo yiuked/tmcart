@@ -78,7 +78,8 @@ class Module extends ObjectBase{
 		}
 	}
 
-	public static function hookBlock($blocks=array(),$view=false)
+
+	public static function hookBlock($blocks=array(), $view = false)
 	{
 		if(!is_array($blocks))
 			$blocks = array($blocks);

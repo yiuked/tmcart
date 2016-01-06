@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2015-12-29 12:13:13
+<?php /* Smarty version Smarty-3.1.12, created on 2016-01-04 11:28:54
          compiled from "D:\wamp\www\red\shoes\themes\shop\block\product_list.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:2719454992dda739188-05269970%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'fdfcb1a6e43d7369b3e890ac4e04136880a1616b' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\block\\product_list.tpl',
-      1 => 1451362390,
+      1 => 1451878126,
       2 => 'file',
     ),
   ),
@@ -25,7 +25,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_54992dda806ca6_23844662')) {function content_54992dda806ca6_23844662($_smarty_tpl) {?><div id="product_list">
+<?php if ($_valid && !is_callable('content_54992dda806ca6_23844662')) {function content_54992dda806ca6_23844662($_smarty_tpl) {?><div class="product_list">
 	<ul>
 		<?php  $_smarty_tpl->tpl_vars['product'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['product']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['products']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}

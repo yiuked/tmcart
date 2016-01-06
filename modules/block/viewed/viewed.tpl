@@ -4,11 +4,19 @@
 		<h3 class="block-title">浏览过的产商品</h3>
 		<div class="content">
 			<div id="viewed-product" class="carousel slide" data-ride="carousel">
-
+				<!-- Indicators -->
+				<ol class="carousel-indicators">
+					<li data-target="#viewed-product" data-slide-to="0"></li>
+				{foreach from=$vieweds item=viewed name=viewed}
+					{if $smarty.foreach.viewed.iteration % 5 == 0 && $smarty.foreach.viewed.last == false}
+						<li data-target="#viewed-product" data-slide-to="{$smarty.foreach.viewed.iteration / 5}" class="active"></li>
+					{/if}
+				{/foreach}
+				</ol>
 				<!-- Wrapper for slides -->
 				<div class="carousel-inner" role="listbox">
 					<div class="item active">
-					<ul>
+					<ul class="product-list">
 					{foreach from=$vieweds item=viewed name=viewed}
 						<li>
 							<a data-id="{$viewed.id_product}" href="javascript:void(0)" data-toggle="tooltip" data-placement="bottom" title="点击收藏该商品" class="wish {if in_array($viewed.id_product,$wish_array)}on{/if}">
@@ -19,15 +27,15 @@
 							{/if}
 							<a href="{$viewed.link}" title="{$viewed.name}"><img src="{$viewed.image_home}" alt="{$viewed.name}" title="{$viewed.name}" /></a>
 							<div class="price align_center">
-								<span class="now_price">{displayPrice price=$viewed.price}</span>
-								<span class="old_price">{displayPrice price=$viewed.old_price}</span>
+								<span class="now-price">{displayPrice price=$viewed.price}</span>
+								<span class="old-price">{displayPrice price=$viewed.old_price}</span>
 							</div>
 							<h2 class="product-name"><a href="{$viewed.link}" title="{$viewed.name}">{$viewed.name}</a></h2>
 						</li>
-						{if $smarty.foreach.viewed.iteration % 4 == 0}
+						{if $smarty.foreach.viewed.iteration % 5 == 0 && $smarty.foreach.viewed.last == false}
 						</ul></div>
-						<div class="item active">
-							<ul>
+						<div class="item">
+							<ul class="product-list">
 						{/if}
 					{/foreach}
 					</ul>

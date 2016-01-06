@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2016-01-03 16:25:20
+<?php /* Smarty version Smarty-3.1.12, created on 2016-01-05 14:50:59
          compiled from "D:\wamp\www\red\shoes\modules\block\viewed\viewed.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:2757554992dd2377f67-64002052%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '9c6c3044253598d916743f11299960a6fc8b4c03' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\modules\\block\\viewed\\viewed.tpl',
-      1 => 1451809430,
+      1 => 1451976642,
       2 => 'file',
     ),
   ),
@@ -31,17 +31,42 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 		<h3 class="block-title">浏览过的产商品</h3>
 		<div class="content">
 			<div id="viewed-product" class="carousel slide" data-ride="carousel">
-
-				<!-- Wrapper for slides -->
-				<div class="carousel-inner" role="listbox">
-					<div class="item active">
-					<ul>
-					<?php  $_smarty_tpl->tpl_vars['viewed'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['viewed']->_loop = false;
+				<!-- Indicators -->
+				<ol class="carousel-indicators">
+					<li data-target="#viewed-product" data-slide-to="0"></li>
+				<?php  $_smarty_tpl->tpl_vars['viewed'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['viewed']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['vieweds']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
+ $_smarty_tpl->tpl_vars['viewed']->total= $_smarty_tpl->_count($_from);
+ $_smarty_tpl->tpl_vars['viewed']->iteration=0;
  $_smarty_tpl->tpl_vars['smarty']->value['foreach']['viewed']['iteration']=0;
 foreach ($_from as $_smarty_tpl->tpl_vars['viewed']->key => $_smarty_tpl->tpl_vars['viewed']->value){
 $_smarty_tpl->tpl_vars['viewed']->_loop = true;
+ $_smarty_tpl->tpl_vars['viewed']->iteration++;
+ $_smarty_tpl->tpl_vars['viewed']->last = $_smarty_tpl->tpl_vars['viewed']->iteration === $_smarty_tpl->tpl_vars['viewed']->total;
  $_smarty_tpl->tpl_vars['smarty']->value['foreach']['viewed']['iteration']++;
+ $_smarty_tpl->tpl_vars['smarty']->value['foreach']['viewed']['last'] = $_smarty_tpl->tpl_vars['viewed']->last;
+?>
+					<?php if ($_smarty_tpl->getVariable('smarty')->value['foreach']['viewed']['iteration']%5==0&&$_smarty_tpl->getVariable('smarty')->value['foreach']['viewed']['last']==false){?>
+						<li data-target="#viewed-product" data-slide-to="<?php echo $_smarty_tpl->getVariable('smarty')->value['foreach']['viewed']['iteration']/5;?>
+" class="active"></li>
+					<?php }?>
+				<?php } ?>
+				</ol>
+				<!-- Wrapper for slides -->
+				<div class="carousel-inner" role="listbox">
+					<div class="item active">
+					<ul class="product-list">
+					<?php  $_smarty_tpl->tpl_vars['viewed'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['viewed']->_loop = false;
+ $_from = $_smarty_tpl->tpl_vars['vieweds']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
+ $_smarty_tpl->tpl_vars['viewed']->total= $_smarty_tpl->_count($_from);
+ $_smarty_tpl->tpl_vars['viewed']->iteration=0;
+ $_smarty_tpl->tpl_vars['smarty']->value['foreach']['viewed']['iteration']=0;
+foreach ($_from as $_smarty_tpl->tpl_vars['viewed']->key => $_smarty_tpl->tpl_vars['viewed']->value){
+$_smarty_tpl->tpl_vars['viewed']->_loop = true;
+ $_smarty_tpl->tpl_vars['viewed']->iteration++;
+ $_smarty_tpl->tpl_vars['viewed']->last = $_smarty_tpl->tpl_vars['viewed']->iteration === $_smarty_tpl->tpl_vars['viewed']->total;
+ $_smarty_tpl->tpl_vars['smarty']->value['foreach']['viewed']['iteration']++;
+ $_smarty_tpl->tpl_vars['smarty']->value['foreach']['viewed']['last'] = $_smarty_tpl->tpl_vars['viewed']->last;
 ?>
 						<li>
 							<a data-id="<?php echo $_smarty_tpl->tpl_vars['viewed']->value['id_product'];?>
@@ -58,9 +83,9 @@ $_smarty_tpl->tpl_vars['viewed']->_loop = true;
 " title="<?php echo $_smarty_tpl->tpl_vars['viewed']->value['name'];?>
 " /></a>
 							<div class="price align_center">
-								<span class="now_price"><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['viewed']->value['price']),$_smarty_tpl);?>
+								<span class="now-price"><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['viewed']->value['price']),$_smarty_tpl);?>
 </span>
-								<span class="old_price"><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['viewed']->value['old_price']),$_smarty_tpl);?>
+								<span class="old-price"><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['viewed']->value['old_price']),$_smarty_tpl);?>
 </span>
 							</div>
 							<h2 class="product-name"><a href="<?php echo $_smarty_tpl->tpl_vars['viewed']->value['link'];?>
@@ -68,10 +93,10 @@ $_smarty_tpl->tpl_vars['viewed']->_loop = true;
 "><?php echo $_smarty_tpl->tpl_vars['viewed']->value['name'];?>
 </a></h2>
 						</li>
-						<?php if ($_smarty_tpl->getVariable('smarty')->value['foreach']['viewed']['iteration']%4==0){?>
+						<?php if ($_smarty_tpl->getVariable('smarty')->value['foreach']['viewed']['iteration']%5==0&&$_smarty_tpl->getVariable('smarty')->value['foreach']['viewed']['last']==false){?>
 						</ul></div>
-						<div class="item active">
-							<ul>
+						<div class="item">
+							<ul class="product-list">
 						<?php }?>
 					<?php } ?>
 					</ul>

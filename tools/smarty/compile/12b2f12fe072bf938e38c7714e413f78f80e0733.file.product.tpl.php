@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2016-01-03 15:15:43
+<?php /* Smarty version Smarty-3.1.12, created on 2016-01-06 10:04:54
          compiled from "D:\wamp\www\red\shoes\themes\shop\product.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:314454993646aabd45-87107133%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '12b2f12fe072bf938e38c7714e413f78f80e0733' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\product.tpl',
-      1 => 1451805342,
+      1 => 1452045862,
       2 => 'file',
     ),
   ),
@@ -27,9 +27,9 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'groups' => 0,
     'group' => 0,
     'attribute' => 0,
-    'wish_array' => 0,
     'products' => 0,
     'product' => 0,
+    'wish_array' => 0,
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
@@ -41,56 +41,118 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 					<img height="300" width="300" id="bigpic" alt="<?php echo $_smarty_tpl->tpl_vars['entity']->value->name;?>
 " title="<?php echo $_smarty_tpl->tpl_vars['entity']->value->name;?>
 " src="<?php echo $_smarty_tpl->tpl_vars['link']->value->getImageLink($_smarty_tpl->tpl_vars['entity']->value->id_image,'large');?>
-" style="display: inline;">
+" data-toggle="modal" data-target=".big-img-modal-lg">
 				</span>
 			</div>
-			<?php if ($_smarty_tpl->tpl_vars['images']->value){?>
-			<div class="iosSlider small-slider">
-				<div class="slider-style slider-style-thumbs">
-					<div class="slider">
-						<?php  $_smarty_tpl->tpl_vars['image'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['image']->_loop = false;
+			<div class="modal fade big-img-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title"><?php echo $_smarty_tpl->tpl_vars['entity']->value->name;?>
+</h4>
+						</div>
+						<div id="big-img-slider" class="carousel slide" data-ride="carousel" data-interval="false">
+							<div class="carousel-inner" role="listbox">
+									<?php  $_smarty_tpl->tpl_vars['image'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['image']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['images']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
+ $_smarty_tpl->tpl_vars['image']->total= $_smarty_tpl->_count($_from);
+ $_smarty_tpl->tpl_vars['image']->iteration=0;
  $_smarty_tpl->tpl_vars['image']->index=-1;
+ $_smarty_tpl->tpl_vars['smarty']->value['foreach']['image']['iteration']=0;
 foreach ($_from as $_smarty_tpl->tpl_vars['image']->key => $_smarty_tpl->tpl_vars['image']->value){
 $_smarty_tpl->tpl_vars['image']->_loop = true;
+ $_smarty_tpl->tpl_vars['image']->iteration++;
  $_smarty_tpl->tpl_vars['image']->index++;
  $_smarty_tpl->tpl_vars['image']->first = $_smarty_tpl->tpl_vars['image']->index === 0;
+ $_smarty_tpl->tpl_vars['image']->last = $_smarty_tpl->tpl_vars['image']->iteration === $_smarty_tpl->tpl_vars['image']->total;
  $_smarty_tpl->tpl_vars['smarty']->value['foreach']['image']['first'] = $_smarty_tpl->tpl_vars['image']->first;
+ $_smarty_tpl->tpl_vars['smarty']->value['foreach']['image']['iteration']++;
+ $_smarty_tpl->tpl_vars['smarty']->value['foreach']['image']['last'] = $_smarty_tpl->tpl_vars['image']->last;
 ?>
-						<div class="item item1">
-						<a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getImageLink($_smarty_tpl->tpl_vars['image']->value['id_image'],'large');?>
-" <?php if ($_smarty_tpl->getVariable('smarty')->value['foreach']['image']['first']){?>class="shown"<?php }?> title="<?php echo $_smarty_tpl->tpl_vars['entity']->value->name;?>
--<?php echo $_smarty_tpl->tpl_vars['image']->value['id_image'];?>
-" onclick="return false">
-							<img src="<?php echo $_smarty_tpl->tpl_vars['link']->value->getImageLink($_smarty_tpl->tpl_vars['image']->value['id_image'],'small');?>
+									<div class="item <?php if ($_smarty_tpl->getVariable('smarty')->value['foreach']['image']['iteration']==1){?>active<?php }?>">
+										<img src="<?php echo $_smarty_tpl->tpl_vars['link']->value->getImageLink($_smarty_tpl->tpl_vars['image']->value['id_image']);?>
 " alt="<?php echo $_smarty_tpl->tpl_vars['entity']->value->name;?>
 -<?php echo $_smarty_tpl->tpl_vars['image']->value['id_image'];?>
 " title="<?php echo $_smarty_tpl->tpl_vars['entity']->value->name;?>
 -<?php echo $_smarty_tpl->tpl_vars['image']->value['id_image'];?>
 " />
-						</a>
+									</div>
+									<?php } ?>
+							</div>
+							<a class="left carousel-control" href="#big-img-slider" role="button" data-slide="prev">
+								<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+								<span class="sr-only">上一页</span>
+							</a>
+							<a class="right carousel-control" href="#big-img-slider" role="button" data-slide="next">
+								<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+								<span class="sr-only">下一页</span>
+							</a>
 						</div>
+					</div>
+				</div>
+			</div>
+			<?php if ($_smarty_tpl->tpl_vars['images']->value){?>
+			<div id="thumbs-list" class="carousel slide" data-ride="carousel" data-interval="false">
+				<div class="carousel-inner" role="listbox">
+					<div class="item active">
+						<?php  $_smarty_tpl->tpl_vars['image'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['image']->_loop = false;
+ $_from = $_smarty_tpl->tpl_vars['images']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
+ $_smarty_tpl->tpl_vars['image']->total= $_smarty_tpl->_count($_from);
+ $_smarty_tpl->tpl_vars['image']->iteration=0;
+ $_smarty_tpl->tpl_vars['image']->index=-1;
+ $_smarty_tpl->tpl_vars['smarty']->value['foreach']['image']['iteration']=0;
+foreach ($_from as $_smarty_tpl->tpl_vars['image']->key => $_smarty_tpl->tpl_vars['image']->value){
+$_smarty_tpl->tpl_vars['image']->_loop = true;
+ $_smarty_tpl->tpl_vars['image']->iteration++;
+ $_smarty_tpl->tpl_vars['image']->index++;
+ $_smarty_tpl->tpl_vars['image']->first = $_smarty_tpl->tpl_vars['image']->index === 0;
+ $_smarty_tpl->tpl_vars['image']->last = $_smarty_tpl->tpl_vars['image']->iteration === $_smarty_tpl->tpl_vars['image']->total;
+ $_smarty_tpl->tpl_vars['smarty']->value['foreach']['image']['first'] = $_smarty_tpl->tpl_vars['image']->first;
+ $_smarty_tpl->tpl_vars['smarty']->value['foreach']['image']['iteration']++;
+ $_smarty_tpl->tpl_vars['smarty']->value['foreach']['image']['last'] = $_smarty_tpl->tpl_vars['image']->last;
+?>
+							<a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getImageLink($_smarty_tpl->tpl_vars['image']->value['id_image'],'large');?>
+" <?php if ($_smarty_tpl->getVariable('smarty')->value['foreach']['image']['first']){?>class="shown"<?php }?> title="<?php echo $_smarty_tpl->tpl_vars['entity']->value->name;?>
+-<?php echo $_smarty_tpl->tpl_vars['image']->value['id_image'];?>
+" onclick="return false">
+								<img src="<?php echo $_smarty_tpl->tpl_vars['link']->value->getImageLink($_smarty_tpl->tpl_vars['image']->value['id_image'],'small');?>
+" alt="<?php echo $_smarty_tpl->tpl_vars['entity']->value->name;?>
+-<?php echo $_smarty_tpl->tpl_vars['image']->value['id_image'];?>
+" title="<?php echo $_smarty_tpl->tpl_vars['entity']->value->name;?>
+-<?php echo $_smarty_tpl->tpl_vars['image']->value['id_image'];?>
+" />
+							</a>
+						<?php if ($_smarty_tpl->getVariable('smarty')->value['foreach']['image']['iteration']%6==0&&$_smarty_tpl->getVariable('smarty')->value['foreach']['image']['last']==false){?>
+						</div>
+						<div class="item">
+						<?php }?>
 						<?php } ?>
 					</div>
 				</div>
-				<?php if (count($_smarty_tpl->tpl_vars['images']->value)>7){?>
-				<div class="controls-direction thumbs-control">
-					<span class="prev">Prev</span>
-					<span class="next">Next</span>
-				</div>
+				<?php if (count($_smarty_tpl->tpl_vars['images']->value)>6){?>
+				<a class="left carousel-control" href="#thumbs-list" role="button" data-slide="prev">
+					<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+					<span class="sr-only">上一页</span>
+				</a>
+				<a class="right carousel-control" href="#thumbs-list" role="button" data-slide="next">
+					<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+					<span class="sr-only">下一页</span>
+				</a>
 				<?php }?>
 			</div>
 			<?php }?>
 		</div>
 
-		<div id="pb-right-column" class="pt-standard" itemtype="http://schema.org/Product" itemscope="">
-			<div class="inner-aside-product">
+		<div id="pb-right-column" >
 				<form action="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('CartView');?>
-" method="post" class="add_to_cart_form">
-				<h1 class="prodTitle" itemprop="name"><?php echo stripslashes($_smarty_tpl->tpl_vars['entity']->value->name);?>
+" method="post" class="form-horizontal add_to_cart_form">
+					<input type="hidden" name="id_product" value="<?php echo $_smarty_tpl->tpl_vars['entity']->value->id;?>
+" />
+					<h1><?php echo stripslashes($_smarty_tpl->tpl_vars['entity']->value->name);?>
 </h1>
-				<?php if ($_smarty_tpl->tpl_vars['entity']->value->orders>0){?>
-					<div itemtype="http://schema.org/AggregateRating" itemscope="" itemprop="aggregateRating" class="product-star-order">
+					<?php if ($_smarty_tpl->tpl_vars['entity']->value->orders>0){?>
+					<div class="product-star-order">
 						 <span class="product-star" id="product-star">
 							 <span class="ui-rating star-block" title="Average Star Rating: <?php echo $_smarty_tpl->tpl_vars['feedback']->value['state']['average'];?>
  out of 5">
@@ -125,182 +187,184 @@ $_smarty_tpl->tpl_vars['image']->_loop = true;
 					</div>
 					<?php }?>
 					<?php if ($_smarty_tpl->tpl_vars['entity']->value->old_price>0){?>
-					<div class="row-panel">
-						<h3 class="title-panel">Retail Price:</h3>
-						<div class="panel">
-							<del class="original-price notranslate">
-								US <span id="sku-price"><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['entity']->value->old_price),$_smarty_tpl);?>
+					<div class="form-group">
+						<label for="old-price" class="col-sm-2 control-label">价格</label>
+						<div class="col-sm-10">
+							<span class="old-price"><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['entity']->value->old_price),$_smarty_tpl);?>
 </span>
-								/  Pair </del>
-							<span class="unit-disc sub-info"></span>
 						</div>
 					</div>
 					<?php }?>
-					<div class="row-panel">
-						<h3 class="title-panel">Discount Price:</h3>
-						<div class="panel">
-							<div class="current-price">
-							  <div itemtype="http://schema.org/Offer" itemscope="" itemprop="offers">
-								<b> <span content="USD" itemprop="priceCurrency">US </span><span itemprop="price" id="sku-price"><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['entity']->value->price),$_smarty_tpl);?>
-</span> </b> /  Pair
-							  </div>
-							</div>
+					<div class="form-group">
+						<label for="now-price" class="col-sm-2 control-label">销售价</label>
+						<div class="col-sm-10">
+							<span class="now-price"><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['entity']->value->price),$_smarty_tpl);?>
+</span>
 						</div>
 					</div>
-
-				  <input type="hidden" name="id_product" value="<?php echo $_smarty_tpl->tpl_vars['entity']->value->id;?>
-" />
-				  <?php  $_smarty_tpl->tpl_vars['group'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['group']->_loop = false;
+					<?php  $_smarty_tpl->tpl_vars['group'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['group']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['groups']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
 foreach ($_from as $_smarty_tpl->tpl_vars['group']->key => $_smarty_tpl->tpl_vars['group']->value){
 $_smarty_tpl->tpl_vars['group']->_loop = true;
 ?>
-				  <div class="hide">
-					<input type="hidden" name="id_attributes[]" class="id_attribute_group" id="id_attribute_group_<?php echo $_smarty_tpl->tpl_vars['group']->value['id_attribute_group'];?>
-" value="" />
-				  </div>
-				  <div class="row-panel no">
-					<h3 class="title-panel"><?php echo $_smarty_tpl->tpl_vars['group']->value['name'];?>
-:</h3>
-					<div class="panel">
-						<span class="skin-select skin">
-							<span class="select-content" id="group-id-<?php echo $_smarty_tpl->tpl_vars['group']->value['id_attribute_group'];?>
-"><span>Select your size</span></span>
-							<select name="group" id="group_<?php echo $_smarty_tpl->tpl_vars['group']->value['id_attribute_group'];?>
-" class="attribute_group skin">
-							  <option value="NULL">Select your size</option>
-							  <?php  $_smarty_tpl->tpl_vars['attribute'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['attribute']->_loop = false;
+					<div class="form-group">
+						<label for="id_attribute_group_<?php echo $_smarty_tpl->tpl_vars['group']->value['id_attribute_group'];?>
+" class="col-sm-2 control-label"><?php echo $_smarty_tpl->tpl_vars['group']->value['name'];?>
+</label>
+						<div class="col-sm-10 attrbiute-radio">
+							<input type="hidden" name="id_attributes[]" class="id_attribute_group" value="<?php if (Tools::P('id_attributes')&&in_array($_smarty_tpl->tpl_vars['attribute']->value['id_attribute'],Tools::P('id_attributes'))){?><?php echo Tools::P('id_attributes');?>
+<?php }?>" />
+							<?php  $_smarty_tpl->tpl_vars['attribute'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['attribute']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['group']->value['attributes']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
 foreach ($_from as $_smarty_tpl->tpl_vars['attribute']->key => $_smarty_tpl->tpl_vars['attribute']->value){
 $_smarty_tpl->tpl_vars['attribute']->_loop = true;
 ?>
-							  <option value="<?php echo $_smarty_tpl->tpl_vars['attribute']->value['id_attribute'];?>
-" <?php if (Tools::getRequest('id_attributes')&&in_array($_smarty_tpl->tpl_vars['attribute']->value['id_attribute'],Tools::getRequest('id_attributes'))){?>selected="selected"<?php }?>>
-							  <?php echo $_smarty_tpl->tpl_vars['attribute']->value['name'];?>
-
-							  </option>
-							 <?php } ?>
-							</select>
-							<span class="sub-dd">
-								<ul class="list-item">
-								  <?php  $_smarty_tpl->tpl_vars['attribute'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['attribute']->_loop = false;
- $_from = $_smarty_tpl->tpl_vars['group']->value['attributes']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
-foreach ($_from as $_smarty_tpl->tpl_vars['attribute']->key => $_smarty_tpl->tpl_vars['attribute']->value){
-$_smarty_tpl->tpl_vars['attribute']->_loop = true;
-?>
-								   <li<?php if (Tools::getRequest('id_attributes')&&in_array($_smarty_tpl->tpl_vars['attribute']->value['id_attribute'],Tools::getRequest('id_attributes'))){?>class="active"<?php }?>>
-									<a class="shoesize" rel="<?php echo $_smarty_tpl->tpl_vars['attribute']->value['id_attribute'];?>
-" href="#"><span> <?php echo $_smarty_tpl->tpl_vars['attribute']->value['name'];?>
- </span></a>
-								   </li>
-								  <?php } ?>
-								</ul>
-							</span>
-						</span>
-						<p><a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('CMSView',144);?>
-" target="_blank" class="all no">See size guide</a></p>
-					</div>
-				  </div>
-				  <?php } ?>
-				  <div class="row-panel">
-					<h3 class="title-panel">Quantity:</h3>
-					<div class="panel"><input type="text" size="4" name="quantity" value="1" id="quantity" /></div>
-				  </div>
-					<a href="#" name="addToCart" id="add_to_cart" class="button full big pink">
-						<input type="hidden" name="addToCart" value="addToCart" />
-						<span class="icon-basket uno">Add to basket</span>
-					</a>
-					<div class="mise-en-avant">
-					  <p style="text-align:center"><strong style="color:red;">New Year Discount <br>
-						5% off orders over 150$ <br>
-						10% off orders over 200$</strong><br>
-					</div>
-					<div class="secondary-actions">
-					  <div class="fav-placeholder tool full">
-						<a id="add-to-favoris" href="javascript:void(0)" onclick="addWish($(this),<?php echo $_smarty_tpl->tpl_vars['entity']->value->id;?>
-)" class="button small full white<?php if (in_array($_smarty_tpl->tpl_vars['entity']->value->id,$_smarty_tpl->tpl_vars['wish_array']->value)){?> on<?php }?>">
-							<span class="icon-heart-2"> Add to My Wish list </span></a>
-					  </div>
-					</div>
-				</form>
-				<div class="clear"></div>
-			</div>
-		</div>
-		<div class="clear"></div>
-		<div class="productTabs">
-			<ul id="product_tab">
-				<li class="tab-row selected"><a href="javascript:void(0)" class="tab-page" id="link-details">Product Details</a></li>
-				<li class="tab-row"><a href="javascript:void(0)" class="tab-page" id="link-feedback">Feedback(<?php echo count($_smarty_tpl->tpl_vars['feedback']->value['rows']);?>
-)</a></li>
-				<li class="tab-row"><a href="javascript:void(0)" class="tab-page" id="link-shipping">Shipping & Payment</a></li>
-			</ul>
-		</div>
-		<div id="tabPane" class="tab-pane">
-			<div id="product-tab-content-details" class="product-tab-content" style="display:block">
-				<div id="product_description">
-					<?php echo stripslashes($_smarty_tpl->tpl_vars['entity']->value->description);?>
-
-					<br/>
-				</div>
-			</div>
-			<div id="product-tab-content-feedback" class="product-tab-content">
-					<?php echo $_smarty_tpl->getSubTemplate (((string)$_smarty_tpl->tpl_vars['tpl_dir']->value)."./block/feedback.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null, array(), 0);?>
-
-			</div>
-			<div id="product-tab-content-shipping" class="product-tab-content">
-				<div class="ui-box-body">
-				  <dl class="ui-attr-list">
-					<dt>Unit Type:</dt>
-					<dd>piece</dd>
-				  </dl>
-				  <dl class="ui-attr-list">
-					<dt>Package Weight:</dt>
-					<dd rel="1.000" class="pnl-packaging-weight">1.000kg (2.20lb.)</dd>
-				  </dl>
-				  <dl class="ui-attr-list">
-					<dt>Package Size:</dt>
-					<dd rel="36|10|26" class="pnl-packaging-size">36cm x 10cm x 26cm (14.17in x 3.94in x 10.24in)</dd>
-				  </dl>
-				</div>
-			</div>
-		</div>
-		<div class="exp-pdp-section-divider"></div>
-		<?php if ($_smarty_tpl->tpl_vars['products']->value){?>
-		<section class="iosSlider main-slider">
-			<h2 class="pt-standard"><span>What about…</span></h2>
-			<div class="slider-style slider-style-aslo">
-				<div class="slider">
-					<?php  $_smarty_tpl->tpl_vars['product'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['product']->_loop = false;
- $_from = $_smarty_tpl->tpl_vars['products']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
-foreach ($_from as $_smarty_tpl->tpl_vars['product']->key => $_smarty_tpl->tpl_vars['product']->value){
-$_smarty_tpl->tpl_vars['product']->_loop = true;
-?>
-					<div class="item item1">
-						<a href="<?php echo $_smarty_tpl->tpl_vars['product']->value['link'];?>
-" title="<?php echo $_smarty_tpl->tpl_vars['product']->value['name'];?>
-">
-							<div class="img-content"><img src="<?php echo $_smarty_tpl->tpl_vars['product']->value['image_home'];?>
-" alt="<?php echo $_smarty_tpl->tpl_vars['product']->value['name'];?>
-" /></div>
-							<strong class="brand"><?php echo $_smarty_tpl->tpl_vars['product']->value['brand'];?>
-</strong>
-							<span class="model"><?php echo $_smarty_tpl->tpl_vars['product']->value['name'];?>
-</span>
-							<strong class="price"><i><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['product']->value['price']),$_smarty_tpl);?>
-</i></strong>
-						</a>
+								<div class="item<?php if (Tools::getRequest('id_attributes')&&in_array($_smarty_tpl->tpl_vars['attribute']->value['id_attribute'],Tools::getRequest('id_attributes'))){?> selected<?php }?>" data-id_attribute="<?php echo $_smarty_tpl->tpl_vars['attribute']->value['id_attribute'];?>
+" ><b></b><a href="javascript:void(0);"><?php echo $_smarty_tpl->tpl_vars['attribute']->value['name'];?>
+</a></div>
+							<?php } ?>
+						</div>
 					</div>
 					<?php } ?>
+
+					<div class="form-group">
+						<label for="quantity" class="col-sm-2 control-label">数量</label>
+						<div class="col-sm-2">
+							<input type="text" size="4" name="quantity" value="1" id="quantity" class="form-control" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="col-sm-offset-2">
+							<button type="submit" class="btn btn-pink" name="addToCart" id="add_to_cart"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> 加入购物车</button>
+							<button type="button" class="btn btn-warning" id="add-to-wish"><span aria-hidden="true" class="glyphicon glyphicon-heart"></span> 收藏</button>
+						</div>
+					</div>
+				</form>
+		</div>
+		<div class="clearfix"></div>
+		<!-- product tabbar -->
+		<div class="panel panel-default product-tag">
+			<div class="panel-body">
+				<ul class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="active"><a href="#tab-description" aria-controls="home" role="tab" data-toggle="tab">描述</a></li>
+					<li role="presentation"><a href="#tab-feedback" aria-controls="profile" role="tab" data-toggle="tab">评论</a></li>
+					<li role="presentation"><a href="#tab-other" aria-controls="messages" role="tab" data-toggle="tab">其它</a></li>
+				</ul>
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane active" id="tab-description"><?php echo stripslashes($_smarty_tpl->tpl_vars['entity']->value->description);?>
+</div>
+					<div role="tabpanel" class="tab-pane" id="tab-feedback"><?php echo $_smarty_tpl->getSubTemplate (((string)$_smarty_tpl->tpl_vars['tpl_dir']->value)."./block/feedback.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null, array(), 0);?>
+</div>
+					<div role="tabpanel" class="tab-pane" id="tab-other">
+						<div class="ui-box-body">
+							<dl class="ui-attr-list">
+								<dt>Unit Type:</dt>
+								<dd>piece</dd>
+							</dl>
+							<dl class="ui-attr-list">
+								<dt>Package Weight:</dt>
+								<dd rel="1.000" class="pnl-packaging-weight">1.000kg (2.20lb.)</dd>
+							</dl>
+							<dl class="ui-attr-list">
+								<dt>Package Size:</dt>
+								<dd rel="36|10|26" class="pnl-packaging-size">36cm x 10cm x 26cm (14.17in x 3.94in x 10.24in)</dd>
+							</dl>
+						</div>
+					</div>
 				</div>
 			</div>
-			<?php if (count($_smarty_tpl->tpl_vars['products']->value)>4){?>
-			<div class="controls-direction aslo-control">
-				<span class="prev">Prev</span>
-				<span class="next">Next</span>
+		</div>
+		<!-- end product tabbar -->
+		<!-- also product -->
+		<?php if ($_smarty_tpl->tpl_vars['products']->value){?>
+		<div class="full-block full-slider">
+			<h3 class="block-title">您可能喜欢...</h3>
+			<div class="content">
+				<div id="also-product" class="carousel slide" data-ride="carousel">
+					<ol class="carousel-indicators">
+						<li data-target="#also-product" data-slide-to="0"></li>
+						<?php  $_smarty_tpl->tpl_vars['product'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['product']->_loop = false;
+ $_from = $_smarty_tpl->tpl_vars['products']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
+ $_smarty_tpl->tpl_vars['product']->total= $_smarty_tpl->_count($_from);
+ $_smarty_tpl->tpl_vars['product']->iteration=0;
+ $_smarty_tpl->tpl_vars['smarty']->value['foreach']['product']['iteration']=0;
+foreach ($_from as $_smarty_tpl->tpl_vars['product']->key => $_smarty_tpl->tpl_vars['product']->value){
+$_smarty_tpl->tpl_vars['product']->_loop = true;
+ $_smarty_tpl->tpl_vars['product']->iteration++;
+ $_smarty_tpl->tpl_vars['product']->last = $_smarty_tpl->tpl_vars['product']->iteration === $_smarty_tpl->tpl_vars['product']->total;
+ $_smarty_tpl->tpl_vars['smarty']->value['foreach']['product']['iteration']++;
+ $_smarty_tpl->tpl_vars['smarty']->value['foreach']['product']['last'] = $_smarty_tpl->tpl_vars['product']->last;
+?>
+							<?php if ($_smarty_tpl->getVariable('smarty')->value['foreach']['product']['iteration']%5==0&&$_smarty_tpl->getVariable('smarty')->value['foreach']['product']['last']==false){?>
+								<li data-target="#also-product" data-slide-to="<?php echo $_smarty_tpl->getVariable('smarty')->value['foreach']['product']['iteration']/5;?>
+" class="active"></li>
+							<?php }?>
+						<?php } ?>
+					</ol>
+					<div class="carousel-inner" role="listbox">
+						<div class="item active">
+							<ul class="product-list">
+								<?php  $_smarty_tpl->tpl_vars['product'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['product']->_loop = false;
+ $_from = $_smarty_tpl->tpl_vars['products']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
+ $_smarty_tpl->tpl_vars['product']->total= $_smarty_tpl->_count($_from);
+ $_smarty_tpl->tpl_vars['product']->iteration=0;
+ $_smarty_tpl->tpl_vars['smarty']->value['foreach']['product']['iteration']=0;
+foreach ($_from as $_smarty_tpl->tpl_vars['product']->key => $_smarty_tpl->tpl_vars['product']->value){
+$_smarty_tpl->tpl_vars['product']->_loop = true;
+ $_smarty_tpl->tpl_vars['product']->iteration++;
+ $_smarty_tpl->tpl_vars['product']->last = $_smarty_tpl->tpl_vars['product']->iteration === $_smarty_tpl->tpl_vars['product']->total;
+ $_smarty_tpl->tpl_vars['smarty']->value['foreach']['product']['iteration']++;
+ $_smarty_tpl->tpl_vars['smarty']->value['foreach']['product']['last'] = $_smarty_tpl->tpl_vars['product']->last;
+?>
+								<li>
+									<a data-id="<?php echo $_smarty_tpl->tpl_vars['product']->value['id_product'];?>
+" href="javascript:void(0)" data-toggle="tooltip" data-placement="bottom" title="点击收藏该商品" class="wish <?php if (in_array($_smarty_tpl->tpl_vars['product']->value['id_product'],$_smarty_tpl->tpl_vars['wish_array']->value)){?>on<?php }?>">
+										<span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
+									</a>
+									<?php if ($_smarty_tpl->tpl_vars['product']->value['is_new']){?>
+										<span class="label label-success new">新品上架</span>
+									<?php }?>
+									<a href="<?php echo $_smarty_tpl->tpl_vars['product']->value['link'];?>
+" title="<?php echo $_smarty_tpl->tpl_vars['product']->value['name'];?>
+"><img src="<?php echo $_smarty_tpl->tpl_vars['product']->value['image_home'];?>
+" alt="<?php echo $_smarty_tpl->tpl_vars['product']->value['name'];?>
+" title="<?php echo $_smarty_tpl->tpl_vars['product']->value['name'];?>
+" /></a>
+									<div class="price align_center">
+										<span class="now-price"><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['product']->value['price']),$_smarty_tpl);?>
+</span>
+										<span class="old-price"><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['product']->value['old_price']),$_smarty_tpl);?>
+</span>
+									</div>
+									<h2 class="product-name"><a href="<?php echo $_smarty_tpl->tpl_vars['product']->value['link'];?>
+" title="<?php echo $_smarty_tpl->tpl_vars['product']->value['name'];?>
+"><?php echo $_smarty_tpl->tpl_vars['product']->value['name'];?>
+</a></h2>
+								</li>
+								<?php if ($_smarty_tpl->getVariable('smarty')->value['foreach']['product']['iteration']%5==0&&$_smarty_tpl->getVariable('smarty')->value['foreach']['product']['last']==false){?>
+							</ul></div>
+						<div class="item">
+							<ul class="product-list">
+								<?php }?>
+								<?php } ?>
+							</ul>
+						</div>
+					</div>
+					<?php if (count($_smarty_tpl->tpl_vars['products']->value)>4){?>
+					<a class="left carousel-control" href="#also-product" role="button" data-slide="prev">
+						<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+						<span class="sr-only">上一页</span>
+					</a>
+					<a class="right carousel-control" href="#also-product" role="button" data-slide="next">
+						<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+						<span class="sr-only">下一页</span>
+					</a>
+					<?php }?>
+				</div>
 			</div>
-			<?php }?>
-		</section>
-		<br>
+		</div>
 		<?php }?>
+		<!-- end also product -->
 	</div>
 </div><?php }} ?>

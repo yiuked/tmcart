@@ -67,34 +67,6 @@ class Tools{
 		return $ip;
 	}
 	
-	function isGoogleBot($ip=false)
-	{
-		if($ip)
-			$ip = isset($_SERVER['REMOTE_ADDR'])?$_SERVER['REMOTE_ADDR']:'0.0.0.0';
-		$ipint = ip2long($ip);
-		if($ipint>=ip2long("64.68.80.0")&&$ipint<=ip2long("64.68.92.255"))
-			return true;
-		elseif($ipint>=ip2long("64.233.160.0")&&$ipint<=ip2long("64.233.191.255"))
-			return true;
-		elseif($ipint>=ip2long("66.102.0.0")&&$ipint<=ip2long("66.102.15.255"))
-			return true;
-		elseif($ipint>=ip2long("66.249.64.0")&&$ipint<=ip2long("66.249.95.255"))
-			return true;
-		elseif($ipint>=ip2long("72.14.192.0")&&$ipint<=ip2long("72.14.255.255"))
-			return true;
-		elseif($ipint>=ip2long("74.125.0.0")&&$ipint<=ip2long("74.125.255.255"))
-			return true;
-		elseif($ipint>=ip2long("209.85.128.0")&&$ipint<=ip2long("209.85.255.255"))
-			return true;
-		elseif($ipint>=ip2long("209.185.108.0")&&$ipint<=ip2long("209.85.255.255"))
-			return true;
-		elseif($ipint>=ip2long("216.33.229.0")&&$ipint<=ip2long("216.33.229.255"))
-			return true;
-		elseif($ipint>=ip2long("216.239.32.0")&&$ipint<=ip2long("216.239.63.255"))
-			return true;
-		return false;
-	}
-	
 	/**
 	 * getShopDomain returns domain name according to configuration and ignoring ssl
 	 *
@@ -111,14 +83,6 @@ class Tools{
 		if ($http)
 			$domain = 'http://'.$domain;
 		return $domain;
-	}
-
-	public static function getLink($alias)
-	{
-		if(URL_REWRITE)
-			return _TM_ROOT_URL_.$alias;
-		else
-			return _TM_ROOT_URL_.'index.php?rule='.$alias;
 	}
 	
 	/**
@@ -364,7 +328,8 @@ class Tools{
 		}
 		else
 			return false;
-		
+
+		$c_char = '<span class="sign">'  . $c_char .  '</span>';
 		$blank = ($c_blank ? ' ' : '');
 		$ret = 0;
 		if (($isNegative = ($price < 0)))
@@ -374,7 +339,7 @@ class Tools{
 	 	{
 	 	 	/* X 0,000.00 */
 	 	 	case 1:
-				$ret = $c_char.$blank.number_format($price, $c_decimals, '.', ',');
+				$ret = $c_char . $blank .number_format($price, $c_decimals, '.', ',');
 				break;
 			/* 0 000,00 X*/
 			case 2:

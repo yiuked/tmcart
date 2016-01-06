@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2015-12-29 10:17:36
+<?php /* Smarty version Smarty-3.1.12, created on 2016-01-06 13:12:34
          compiled from "D:\wamp\www\red\shoes\themes\shop\header.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:2377154992dd1dbaf44-85901661%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '953c26c15bd3a6145c0fbe2558028ba04b5049bc' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\header.tpl',
-      1 => 1451355453,
+      1 => 1452057152,
       2 => 'file',
     ),
   ),
@@ -19,10 +19,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'unifunc' => 'content_54992dd2161aa5_89058516',
   'variables' => 
   array (
-    'allow_cn' => 0,
-    'is_google_ip' => 0,
     'meta' => 0,
-    'shop_name' => 0,
     'root_dir' => 0,
     'tm_css_dir' => 0,
     'css_dir' => 0,
@@ -30,10 +27,12 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'css' => 0,
     'tm_js_dir' => 0,
     'js_dir' => 0,
+    'allow_cn' => 0,
     'js_file' => 0,
     'js' => 0,
     'link' => 0,
     'view_name' => 0,
+    'shop_name' => 0,
     'query' => 0,
     'cart_quantity' => 0,
     'cart_products' => 0,
@@ -49,22 +48,13 @@ if (!is_callable('smarty_modifier_escape')) include 'D:\\wamp\\www\\red\\shoes\\
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<?php if ($_smarty_tpl->tpl_vars['allow_cn']->value==false){?>
-<noscript><META http-equiv="refresh" content="0;URL='about:blank'"></noscript>
-<?php }?>
-<?php if ($_smarty_tpl->tpl_vars['is_google_ip']->value){?>
 <title><?php echo $_smarty_tpl->tpl_vars['meta']->value['title'];?>
 </title>
 <meta name="description" content="<?php echo $_smarty_tpl->tpl_vars['meta']->value['description'];?>
 " />
 <meta name="keywords" content="<?php echo $_smarty_tpl->tpl_vars['meta']->value['keywords'];?>
 " />
-<meta name="robots" content="index,follow,noarchive" />
-<?php }else{ ?>
-<title><?php echo $_smarty_tpl->tpl_vars['shop_name']->value;?>
-</title>
-<meta name="robots" content="noindex,nofollow,noarchive" />
-<?php }?>
+<meta name="robots" content="index,follow" />
 <meta content="IE=Edge" http-equiv="X-UA-Compatible">
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
 <link rel="alternate" hreflang="en" href="alternateURL">
@@ -149,7 +139,7 @@ $_smarty_tpl->tpl_vars['js']->_loop = true;
 						</ul>
 				 </div>
 				<div class="col-md-3">
-					<div class="dropdown cart">
+					<div class="dropdown cart-block">
 						<a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('CartView');?>
 " class="cart-btn">
 							<span aria-hidden="true" class="glyphicon glyphicon-shopping-cart"></span> 我的购物车
@@ -158,55 +148,52 @@ $_smarty_tpl->tpl_vars['js']->_loop = true;
  </span>
 							<?php }?>
 						</a>
-						<?php if ($_smarty_tpl->tpl_vars['view_name']->value!='cart'){?>
-							<div class="menu">
-								<?php if ($_smarty_tpl->tpl_vars['cart_quantity']->value>0){?>
-									<table>
-										<?php  $_smarty_tpl->tpl_vars['cat_product'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['cat_product']->_loop = false;
+						<div class="menu">
+							<?php if ($_smarty_tpl->tpl_vars['cart_quantity']->value>0){?>
+								<table>
+									<?php  $_smarty_tpl->tpl_vars['cat_product'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['cat_product']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['cart_products']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
 foreach ($_from as $_smarty_tpl->tpl_vars['cat_product']->key => $_smarty_tpl->tpl_vars['cat_product']->value){
 $_smarty_tpl->tpl_vars['cat_product']->_loop = true;
 ?>
-											<tr class="item">
-												<td class="td-image"><a href="<?php echo $_smarty_tpl->tpl_vars['cat_product']->value['link'];?>
+										<tr class="item">
+											<td class="td-image"><a href="<?php echo $_smarty_tpl->tpl_vars['cat_product']->value['link'];?>
 " target="_blank"><img src="<?php echo $_smarty_tpl->tpl_vars['cat_product']->value['image'];?>
 " alt="<?php echo $_smarty_tpl->tpl_vars['cat_product']->value['name'];?>
 " /></a></td>
-												<td class="td-name"><a href="<?php echo $_smarty_tpl->tpl_vars['cat_product']->value['link'];?>
+											<td class="td-name"><a href="<?php echo $_smarty_tpl->tpl_vars['cat_product']->value['link'];?>
 " target="_blank"><?php echo smarty_modifier_escape(smarty_modifier_truncate($_smarty_tpl->tpl_vars['cat_product']->value['name'],50,'...'), 'html', 'UTF-8');?>
 </a><br/>
-													<?php  $_smarty_tpl->tpl_vars['attribute'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['attribute']->_loop = false;
+												<?php  $_smarty_tpl->tpl_vars['attribute'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['attribute']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['cat_product']->value['attributes']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
 foreach ($_from as $_smarty_tpl->tpl_vars['attribute']->key => $_smarty_tpl->tpl_vars['attribute']->value){
 $_smarty_tpl->tpl_vars['attribute']->_loop = true;
 ?>
-														<em><?php echo $_smarty_tpl->tpl_vars['attribute']->value['group_name'];?>
+													<em><?php echo $_smarty_tpl->tpl_vars['attribute']->value['group_name'];?>
 :<?php echo $_smarty_tpl->tpl_vars['attribute']->value['name'];?>
 </em>
-													<?php } ?>
-												</td>
-												<td class="td-price">
-													<b><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['cat_product']->value['price']),$_smarty_tpl);?>
+												<?php } ?>
+											</td>
+											<td class="td-price">
+												<b><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['cat_product']->value['price']),$_smarty_tpl);?>
 </b><br>
-													<b>x <?php echo $_smarty_tpl->tpl_vars['cat_product']->value['quantity'];?>
+												<b>x <?php echo $_smarty_tpl->tpl_vars['cat_product']->value['quantity'];?>
 </b><br>
-													<a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('CartView');?>
-?delete=<?php echo $_smarty_tpl->tpl_vars['cat_product']->value['id_cart_product'];?>
-" class="cart_quantity_delete" rel="nofollow">删除</a>
-												</td>
-											</tr>
-										<?php } ?>
-									</table>
-									<p>共 <span class="productPrice"><?php echo $_smarty_tpl->tpl_vars['cart_quantity']->value;?>
-</span> 件商品 总金额 <span class="productPrice"><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['cart_total']->value),$_smarty_tpl);?>
+												<a href="javascript:;" class="cart_quantity_delete" data-id="<?php echo $_smarty_tpl->tpl_vars['cat_product']->value['id_cart_product'];?>
+" data-id="nofollow">删除</a>
+											</td>
+										</tr>
+									<?php } ?>
+								</table>
+								<p>共 <span class="cart-total-quantity"><?php echo $_smarty_tpl->tpl_vars['cart_quantity']->value;?>
+</span> 件商品 总金额 <span class="cart-total"><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['cart_total']->value),$_smarty_tpl);?>
 </span> <a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('CartView');?>
 " class="btn btn-pink btn-xs">去购物车</a></p>
 
-								<?php }else{ ?>
-									购物车为空
-								<?php }?>
-							</div>
-						<?php }?>
+							<?php }else{ ?>
+								<p>购物车为空</p>
+							<?php }?>
+						</div>
 					</div>
 				</div>
 		  </div>

@@ -5,9 +5,7 @@
     height: 360px;
     overflow: hidden;
 }
-#home-page-slider .carousel-control.right,#home-page-slider .carousel-control.left{
-    background: none;
-}
+
 .home-page-banner{
     float: right;
     height: 360px;

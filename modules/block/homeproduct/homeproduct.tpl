@@ -16,10 +16,10 @@
 			</ul>
 		</div>
 
-		<div id="product_list">
-			<ul>
+		<div class="content">
+			<ul class="product-list">
 				{foreach from=$products item=product name=product}
-					<li class="col-md-3">
+					<li>
 						<a data-id="{$product.id_product}" href="javascript:void(0)" data-toggle="tooltip" data-placement="bottom" title="点击收藏该商品" class="wish {if in_array($product.id_product,$wish_array)}on{/if}">
 							<span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
 						</a>
@@ -28,8 +28,8 @@
 						{/if}
 						<a href="{$product.link}" title="{$product.name}"><img src="{$product.image_home}" alt="{$product.name}" title="{$product.name}" /></a>
 						<div class="price align_center">
-							<span class="old_price">{displayPrice price=$product.old_price}</span>
-							<span class="now_price">{displayPrice price=$product.price}</span>
+							<span class="old-price">{displayPrice price=$product.old_price}</span>
+							<span class="now-price">{displayPrice price=$product.price}</span>
 						</div>
 						<h2 class="product-name"><a href="{$product.link}" title="{$product.name}">{$product.name}</a></h2>
 					</li>
