@@ -36,7 +36,7 @@ class MyAlertView extends View
 			$smarty->assign(array(
 					'alerts' => Alert::alerts($cookie->id_user)
 			));
-			$smarty->display('my-alerts.tpl');
+			return $smarty->fetch('my-alerts.tpl');
 		}
 		
 		public function displayLeft()
@@ -45,7 +45,7 @@ class MyAlertView extends View
 			$smarty->assign(array(
 					'LEFT_BLOCK' => Module::hookBlock(array('myaccount')),
 			));
-			$smarty->display('block/left_columns.tpl');
+			return $smarty->fetch('block/left_columns.tpl');
 		}
 }
 ?>

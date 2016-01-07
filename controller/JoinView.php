@@ -1,6 +1,13 @@
 <?php
 class JoinView extends View
 {
+	public function setHead()
+	{
+		$this->_js_file[]  	=  _TM_JS_URL.'bootstrap-validator/js/bootstrapValidator.min.js';
+		$this->_css_file[] 	=  _TM_JS_URL.'bootstrap-validator/css/bootstrapValidator.min.css';
+		parent::setHead();
+	}
+
 	public function displayMain()
 	{
 		global $smarty,$link;
@@ -15,6 +22,7 @@ class JoinView extends View
 			}else{
 				$user = new User();
 				$user->copyFromPost();
+				$user->active = 1;
 				if($user->add()){
 					$address = new Address();
 					$address->copyFromPost();
@@ -33,15 +41,15 @@ class JoinView extends View
 					$errors = $user->_errors;
 			}
 		}
-		$countrys = Country::loadData();
+		$countrys = Country::loadData(1, 500, null, null, array('active' => 1));
 		$smarty->assign(array(
 			'id_default_country'=>Configuration::get('TM_DEFAULT_COUNTRY_ID'),
 			'countrys'=>$countrys,
 			'step'=>Tools::getRequest("step"),
 			'errors' => $errors,
 		));
-		
-		$smarty->display('join.tpl');
+
+		return $smarty->fetch('join.tpl');
 	}
 }
 ?>

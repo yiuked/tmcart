@@ -11,7 +11,7 @@ class MyWishView extends View
 		$smarty->assign(array(
 			'products' => Wish::getWishProductWithUser($cookie->id_user),
 		));
-		$smarty->display('wish.tpl');
+		return $smarty->display('wish.tpl');
 	}
 		
 	public function setHead()
@@ -29,7 +29,7 @@ class MyWishView extends View
 		$smarty->assign(array(
 			'LEFT_BLOCK' => Module::hookBlock(array('myaccount')),
 		));
-		$smarty->display('block/left_columns.tpl');
+		return $smarty->fetch('block/left_columns.tpl');
 	}
 	
 	public function displayFooter()
@@ -38,7 +38,7 @@ class MyWishView extends View
 		$smarty->assign(array(
 				'FOOT_BLOCK' => Module::hookBlock(array('viewed')),
 		));	
-		parent::displayFooter();
+		return parent::displayFooter();
 	}
 }
 ?>

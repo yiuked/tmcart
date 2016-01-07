@@ -1,4 +1,3 @@
-				<div class="clear"></div>
 			</div>
 			{if isset($FOOT_BLOCK)}
 			{$FOOT_BLOCK}

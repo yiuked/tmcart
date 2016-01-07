@@ -22,7 +22,7 @@
 			if(!$payment->active)
 				Tools::redirect($link->getPage('CheckoutView'));
 			
-			echo $payment->execPayment($cart);
+			return $payment->execPayment($cart);
 		}
 	}
 

@@ -10,7 +10,7 @@ class CMSTagView extends View
 					'posts' => CMS::resetCMS($posts['posts']),
 					'total' => $posts['total']
 			));
-			$smarty->display('cms_list.tpl');
+			return $smarty->fetch('cms_list.tpl');
 		}
 }
 ?>

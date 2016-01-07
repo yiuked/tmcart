@@ -8,7 +8,7 @@ class BrandsView extends View
 			$smarty->assign(array(
 					'brands' => $results['entitys'],
 			));
-			$smarty->display('brands.tpl');
+			return $smarty->fetch('brands.tpl');
 		}
 
 		public function sendSectionHead()
@@ -38,7 +38,7 @@ class BrandsView extends View
 			$smarty->assign(array(
 					'FOOT_BLOCK' => Module::hookBlock(array('viewed')),
 			));	
-			parent::displayFooter();
+			return parent::displayFooter();
 		}
 }
 ?>

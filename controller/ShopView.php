@@ -8,7 +8,7 @@ class ShopView extends View
 			$smarty->assign(array(
 					'products' => $products['entitys'],
 			));
-			$smarty->display('shop.tpl');
+			return $smarty->fetch('shop.tpl');
 		}
 }
 ?>

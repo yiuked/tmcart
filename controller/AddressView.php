@@ -40,7 +40,7 @@
 				'countrys'=>$countrys,
 				'errors'   => $errors,
 			));
-			$smarty->display('address.tpl');
+			return $smarty->fetch('address.tpl');
 		}
 	}
 

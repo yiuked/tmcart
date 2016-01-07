@@ -72,6 +72,7 @@ class User extends ObjectBase{
 	public function logined($vals = array())
 	{
 		global $cookie;
+
 		$cookie->logged =1;
 		$cookie->id_user = $this->id;
 		$cookie->email = $this->email;
@@ -125,7 +126,7 @@ class User extends ObjectBase{
 	public function getDefaultAddress()
 	{
 		$addresses	= array();
-		$id_address 	= Db::getInstance()->getValue('SELECT `id_address` FROM `'.DB_PREFIX.'address` WHERE `deleted`=0 AND is_default=1 AND `id_user`='.(int)($this->id));
+		$id_address 	= Db::getInstance()->getValue('SELECT `id_address` FROM `'.DB_PREFIX.'address` WHERE is_default=1 AND `id_user`='.(int)($this->id));
 		if($id_address)
 			return new Address(intval($id_address));
 		return false;

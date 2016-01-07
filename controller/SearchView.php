@@ -7,7 +7,7 @@ class SearchView extends View
 			
 			if($query = Tools::getRequest('s'))
 				$smarty->assign('query',$query);
-			parent::displayHeader();
+			return parent::displayHeader();
 		}
 		public function displayMain()
 		{
@@ -26,16 +26,8 @@ class SearchView extends View
 							'products' => $products['entitys'],
 					));
 			}
-			
-			$smarty->display('search.tpl');
-		}
-		
-		public function setHead()
-		{
-			global $smarty;
-			$this->_js_file[]  	=  _TM_JQP_URL.'chosen/jquery.chosen.js';
-			$this->_css_file[] 	=  _TM_JQP_URL.'chosen/jquery.chosen.css';
-			parent::setHead();
+
+			return $smarty->fetch('search.tpl');
 		}
 		
 }

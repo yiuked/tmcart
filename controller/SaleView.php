@@ -11,7 +11,7 @@ class SaleView extends View
 			$smarty->assign(array(
 					'products' => $products['items']
 			));
-			$smarty->display('sale.tpl');
+			return $smarty->fetch('sale.tpl');
 		}
 
 		public function sendSectionHead()
@@ -25,16 +25,6 @@ class SaleView extends View
 				));
 		}
 		
-		public function setHead()
-		{
-			global $smarty;
-			$this->_js_file[]  	=  _TM_JQP_URL.'chosen/jquery.chosen.js';
-			$this->_js_file[] 	=  _TM_JQP_URL.'jquery.easing.js';
-			$this->_js_file[] 	=  _TM_JQP_URL.'jquery.iosslider.min.js';
-			$this->_css_file[] 	=  _TM_JQP_URL.'chosen/jquery.chosen.css';
-			parent::setHead();
-		}
-		
 		public function displayLeft()
 		{
 			global $smarty;
@@ -43,7 +33,7 @@ class SaleView extends View
 					//'name'=>$this->entity->name,
 					'LEFT_BLOCK' => Module::hookBlock(array('filterby')),
 			));
-			$smarty->display('block/left_columns.tpl');
+			return $smarty->fetch('block/left_columns.tpl');
 		}
 		
 		public function displayFooter()
@@ -52,7 +42,7 @@ class SaleView extends View
 			$smarty->assign(array(
 					'FOOT_BLOCK' => Module::hookBlock(array('viewed')),
 			));	
-			parent::displayFooter();
+			return parent::displayFooter();
 		}
 }
 ?>

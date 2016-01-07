@@ -12,7 +12,7 @@ class ContactView extends View
 					'errors' => $this->_errors,
 					'success' => $this->_success,
 			));
-			$smarty->display('contact.tpl');
+			return $smarty->fetch('contact.tpl');
 		}
 
 		public function displayLeft()
@@ -21,7 +21,7 @@ class ContactView extends View
 			$smarty->assign(array(
 					'LEFT_BLOCK' => Module::hookBlock(array('cmsblock')),
 			));
-			$smarty->display('block/left_columns.tpl');
+			return $smarty->fetch('block/left_columns.tpl');
 		}
 
 		public function postContact()

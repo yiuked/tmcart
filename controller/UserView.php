@@ -33,7 +33,7 @@ class UserView extends View
 					'errors'=>$user->_errors,
 					'user' =>$user,
 			));
-			$smarty->display('user.tpl');
+			return $smarty->fetch('user.tpl');
 		}
 		
 		public function displayLeft()
@@ -42,7 +42,7 @@ class UserView extends View
 			$smarty->assign(array(
 					'LEFT_BLOCK' => Module::hookBlock(array('myaccount')),
 			));
-			$smarty->display('block/left_columns.tpl');
+			return $smarty->fetch('block/left_columns.tpl');
 		}
 }
 ?>

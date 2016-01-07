@@ -11,7 +11,7 @@ class NewProductView extends View
 			$smarty->assign(array(
 					'products' => $products['entitys'],
 			));
-			$smarty->display('new-products.tpl');
+			return $smarty->fetch('new-products.tpl');
 		}
 		
 		public function displayLeft()
@@ -20,7 +20,7 @@ class NewProductView extends View
 			$smarty->assign(array(
 					'LEFT_BLOCK' => Module::hookBlock(array('categories')),
 			));
-			$smarty->display('block/left_columns.tpl');
+			return $smarty->fetch('block/left_columns.tpl');
 		}
 }
 ?>

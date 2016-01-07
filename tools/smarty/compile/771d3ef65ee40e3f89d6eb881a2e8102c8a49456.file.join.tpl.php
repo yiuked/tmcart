@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2015-06-27 10:33:47
+<?php /* Smarty version Smarty-3.1.12, created on 2016-01-07 15:52:06
          compiled from "D:\wamp\www\red\shoes\themes\shop\join.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:18896549a67a9f40155-48991427%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '771d3ef65ee40e3f89d6eb881a2e8102c8a49456' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\join.tpl',
-      1 => 1432093754,
+      1 => 1452153124,
       2 => 'file',
     ),
   ),
@@ -20,6 +20,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'variables' => 
   array (
     'step' => 0,
+    'address' => 0,
     'countrys' => 0,
     'country' => 0,
     'id_default_country' => 0,
@@ -27,7 +28,8 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_549a67aa1c17c9_84632260')) {function content_549a67aa1c17c9_84632260($_smarty_tpl) {?><div id="main_columns">
+<?php if ($_valid && !is_callable('content_549a67aa1c17c9_84632260')) {function content_549a67aa1c17c9_84632260($_smarty_tpl) {?><div class="container">
+	<h3>新用户</h3>
 <?php echo $_smarty_tpl->getSubTemplate (((string)$_smarty_tpl->tpl_vars['tpl_dir']->value)."./block/errors.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null, array(), 0);?>
 
 <?php if ($_smarty_tpl->tpl_vars['step']->value==2){?>
@@ -38,108 +40,109 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 	<li class="todo"><span><i>04</i><strong>Payment</strong></span></li>
 </ul>
 <?php }?>
-<div class="box-style">
-	<form action="" method="post" class="bd">
-	  <div class="row">
-		<h2>Create a new account</h2>
-		<h3>Account settings</h3>
+<form id="join-form" action="" method="post" class="form-horizontal">
+
+	<div class="form-group">
+	  <label for="email" class="col-sm-2 control-label">邮箱</label>
+	  <div class="col-sm-5">
+		  <input type="text" class="form-control" name="email" value="<?php if (isset($_POST['email'])){?><?php echo $_POST['email'];?>
+<?php }elseif(isset($_smarty_tpl->tpl_vars['address']->value->email)){?><?php echo $_smarty_tpl->tpl_vars['address']->value->email;?>
+<?php }?>" placeholder="邮箱地址" >
 	  </div>
-	  <div class="ck_customer">
-		<div class="formField">
-		  <div class="labelDiv"><span class="requiredRed">* </span>Email:</div>
-		  <div class="inputDiv"><input type="text" value="<?php if (isset($_POST['email'])){?><?php echo $_POST['email'];?>
-<?php }?>" name="email" id="email" class="text" size="50"></div>
-		  <div style="text-align:left;font-size:10px;color:#949494; padding-left:100px;" class="input">Your email address will be your username for login.&nbsp;&nbsp;</div>
-		</div>
-		<div class="formField">
-		  <div class="labelDiv"><span class="requiredRed">* </span>Password:</div>
-		  <div class="inputDiv"><input type="password" value="<?php if (isset($_POST['country'])){?><?php echo $_POST['country'];?>
-<?php }?>" name="passwd" id="passwd" class="text" ></div>
-		  <div style="font-size:9px;color:#949494;padding-left:100px;" class="input">Passwords must be between 5-10 characters.</div>
-		</div>
+	</div>
+	<div class="form-group">
+	  <label for="password" class="col-sm-2 control-label">密码</label>
+	  <div class="col-sm-5">
+			  <input type="password" class="form-control" name="passwd" value="" >
 	  </div>
-	
-	  <div class="ck_address">
-		<h3>Your Shipping Address</h3> 
-		<div class="formField">
-		  <div class="labelDiv"><span class="requiredRed">* </span>First Name: </div>
-		  <div class="inputDiv">
-			<input type="text" class="" id="first_name" value="<?php if (isset($_POST['first_name'])){?><?php echo $_POST['first_name'];?>
-<?php }?>" maxlength="40" size="30" name="first_name">
+	</div>
+	<div class="form-group">
+	  <label for="confirmPasswd" class="col-sm-2 control-label">确认密码</label>
+	  <div class="col-sm-5">
+		  <input type="password" class="form-control" name="confirmPasswd" value="" >
+	  </div>
+	</div>
+
+
+	<h3>默认收货地址</h3>
+	<div class="form-group">
+		  <label for="name" class="col-sm-2 control-label">收货人</label>
+		  <div class="col-sm-5">
+			  <input type="text" class="form-control" name="name" value="<?php if (isset($_POST['name'])){?><?php echo $_POST['name'];?>
+<?php }elseif(isset($_smarty_tpl->tpl_vars['address']->value->name)){?><?php echo $_smarty_tpl->tpl_vars['address']->value->name;?>
+<?php }?>" placeholder="如.张三">
 		  </div>
-		</div>
-		<div class="formField">
-		  <div class="labelDiv"><span class="requiredRed">* </span>Last Name:</div>
-		  <div class="inputDiv">
-			<input type="text" id="last_name" value="<?php if (isset($_POST['last_name'])){?><?php echo $_POST['last_name'];?>
-<?php }?>" maxlength="40" size="30" name="last_name">
-		  </div>
-		</div>
-		<div class="formField">
-		  <div class="labelDiv"><span class="requiredRed">* </span>Address:</div>
-		  <div class="inputDiv">
-			<input type="text" id="address" value="<?php if (isset($_POST['address'])){?><?php echo $_POST['address'];?>
-<?php }?>" maxlength="100" size="60" name="address">
-		  </div>
-		</div>
-		<div class="formField">
-		  <div class="labelDiv">Address 2:</div>
-		  <div class="inputDiv">
-			<input type="text" id="address2" value="<?php if (isset($_POST['address'])){?><?php echo $_POST['address'];?>
-<?php }?>" maxlength="100" size="60" name="address2">
-		  </div>
-		</div>
-		<div class="formField">
-		  <div class="labelDiv"><span class="requiredRed">* </span>City:</div>
-		  <div class="inputDiv">
-			<input type="text" id="city" value="<?php if (isset($_POST['city'])){?><?php echo $_POST['city'];?>
-<?php }?>" maxlength="40" size="40" name="city">
-		  </div>
-		</div>
-		<div class="formField">
-		  <div class="labelDiv"><span class="requiredRed">* </span>Post Code:</div>
-		  <div class="inputDiv">
-			<input type="text" value="<?php if (isset($_POST['postcode'])){?><?php echo $_POST['postcode'];?>
-<?php }?>" name="postcode" id="postcode" class="text" >
-		  </div>
-		</div>
-		<div class="formField" id="contains_states" style="display: none;">
-		  <div class="labelDiv"><span class="requiredRed">* </span>State:</div>
-		  <div class="inputDiv">
-			<select id="id_state" name="id_state">
-			</select>
-		  </div>
-		</div>
-		<div class="formField left">
-		  <div class="labelDiv"><span class="requiredRed">* </span>Country:</div>
-		  <div class="inputDiv">
-			  <select id="id_country" name="id_country" style="margin-right:15px">
-				<option value="NULL">--choose--</option>
-				<?php  $_smarty_tpl->tpl_vars['country'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['country']->_loop = false;
- $_from = $_smarty_tpl->tpl_vars['countrys']->value['entitys']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
+	 </div>
+	<div class="form-group">
+	  <label for="address" class="col-sm-2 control-label">地址</label>
+	  <div class="col-sm-5">
+		  <input type="text" class="form-control" name="address" value="<?php if (isset($_POST['address'])){?><?php echo $_POST['address'];?>
+<?php }elseif(isset($_smarty_tpl->tpl_vars['address']->value->address)){?><?php echo $_smarty_tpl->tpl_vars['address']->value->address;?>
+<?php }?>" placeholder="如.白云区建设路">
+	  </div>
+	</div>
+	<div class="form-group">
+	  <label for="address2" class="col-sm-2 control-label">详细地址</label>
+	  <div class="col-sm-5">
+		  <input type="text" class="form-control" name="address2" value="<?php if (isset($_POST['address2'])){?><?php echo $_POST['address2'];?>
+<?php }elseif(isset($_smarty_tpl->tpl_vars['address']->value->address2)){?><?php echo $_smarty_tpl->tpl_vars['address']->value->address2;?>
+<?php }?>" placeholder="如.2栋3单元">
+	  </div>
+	</div>
+	<div class="form-group">
+	  <label for="city" class="col-sm-2 control-label">城市</label>
+	  <div class="col-sm-5">
+		  <input type="text" class="form-control" name="city" value="<?php if (isset($_POST['city'])){?><?php echo $_POST['city'];?>
+<?php }elseif(isset($_smarty_tpl->tpl_vars['address']->value->city)){?><?php echo $_smarty_tpl->tpl_vars['address']->value->city;?>
+<?php }?>" placeholder="如.北京">
+	  </div>
+	</div>
+	<div class="form-group">
+	  <label for="postcode" class="col-sm-2 control-label">邮编</label>
+	  <div class="col-sm-5">
+		  <input type="text" class="form-control" name="postcode" value="<?php if (isset($_POST['postcode'])){?><?php echo $_POST['postcode'];?>
+<?php }elseif(isset($_smarty_tpl->tpl_vars['address']->value->postcode)){?><?php echo $_smarty_tpl->tpl_vars['address']->value->postcode;?>
+<?php }?>" placeholder="000000">
+	  </div>
+	</div>
+	<div class="form-group" style="display: none;">
+	  <label for="postcode" class="col-sm-2 control-label">省份</label>
+	  <div class="col-sm-5">
+		  <select id="id_state" name="id_state" class="form-control">
+		  </select>
+	  </div>
+	</div>
+	<div class="form-group">
+	  <label for="postcode" class="col-sm-2 control-label">国家</label>
+	  <div class="col-sm-5">
+		  <select id="id_country" name="id_country" class="form-control">
+			  <option value="">--选择国家--</option>
+			  <?php  $_smarty_tpl->tpl_vars['country'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['country']->_loop = false;
+ $_from = $_smarty_tpl->tpl_vars['countrys']->value['items']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
 foreach ($_from as $_smarty_tpl->tpl_vars['country']->key => $_smarty_tpl->tpl_vars['country']->value){
 $_smarty_tpl->tpl_vars['country']->_loop = true;
 ?>
-				<option value="<?php echo $_smarty_tpl->tpl_vars['country']->value['id_country'];?>
+				  <option value="<?php echo $_smarty_tpl->tpl_vars['country']->value['id_country'];?>
 " <?php if (isset($_POST['id_country'])){?><?php if ($_POST['id_country']==$_smarty_tpl->tpl_vars['country']->value['id_country']){?>selected="selected"<?php }?><?php }else{ ?><?php if ($_smarty_tpl->tpl_vars['id_default_country']->value==$_smarty_tpl->tpl_vars['country']->value['id_country']){?>selected="selected"<?php }?><?php }?>><?php echo $_smarty_tpl->tpl_vars['country']->value['name'];?>
 </option>
-				<?php } ?>
-			  </select>
-		  </div>
-		</div>
-		<div class="formField">
-		  <div class="labelDiv"><span class="requiredRed">* </span>Phone:</div>
-		  <div class="inputDiv">
-			<input type="text" value="<?php if (isset($_POST['phone'])){?><?php echo $_POST['phone'];?>
-<?php }?>" name="phone" id="phone" class="text" >
-		  </div>
-		</div>
+			  <?php } ?>
+		  </select>
 	  </div>
-	  <p class="submit">
-		<input type="submit" name="CreateUser" value="Submit" class="form-send button big east pink collapse" />
-	  </p>
-	</form>
- </div>
+	</div>
+	<div class="form-group">
+	  <label for="phone" class="col-sm-2 control-label">手机</label>
+	  <div class="col-sm-5">
+		  <input type="text" class="form-control" name="phone" value="<?php if (isset($_POST['phone'])){?><?php echo $_POST['phone'];?>
+<?php }elseif(isset($_smarty_tpl->tpl_vars['address']->value->phone)){?><?php echo $_smarty_tpl->tpl_vars['address']->value->phone;?>
+<?php }?>" placeholder="+86.">
+	  </div>
+	</div>
+	<div class="form-group">
+		<div class="col-sm-5 col-sm-offset-2">
+			<input type="submit" name="CreateUser" value="注册" class="btn btn-success" />
+		</div>
+	</div>
+</form>
 </div>
 <script type="text/javascript">
 var ajaxLink = "<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('AjaxView');?>
@@ -152,6 +155,101 @@ var secat_id = 0;
 <?php }?>
 
 	$(document).ready(function(){
+		$('#join-form').bootstrapValidator({
+			feedbackIcons: {
+				valid: 'glyphicon glyphicon-ok',
+				invalid: 'glyphicon glyphicon-remove',
+				validating: 'glyphicon glyphicon-refresh'
+			},
+			fields: {
+				email: {
+					validators: {
+						notEmpty: {
+							message: '邮箱地址不能为空'
+						},
+						remote: {
+						 url: ajax_dir,
+						 name: 'existsEmail',
+						 message: '这个邮箱地址已被注册'
+						 },
+						emailAddress: {
+							message: '这不是一个正确的邮箱地址'
+						}
+					}
+				},
+				passwd: {
+					validators: {
+						notEmpty: {
+							message: '密码不能为空'
+						},
+						stringLength: {
+							min: 6,
+							max: 30,
+							message: '密码必须是6-30位由字母和数字组成'
+						}
+					}
+				},
+				confirmPasswd: {
+					validators: {
+						notEmpty: {
+							message: '确认密码不能为空'
+						},
+						identical: {
+							field: 'passwd',
+							message: '确认密码与原密码不一致'
+						}
+					}
+				},
+				name: {
+					validators: {
+						notEmpty: {
+							message: '收件人不能为空'
+						},
+					}
+				},
+				address: {
+					validators: {
+						notEmpty: {
+							message: '地址不能为空'
+						},
+					}
+				},
+				city: {
+					validators: {
+						notEmpty: {
+							message: '城市不能为空'
+						},
+					}
+				},
+				postcode: {
+					validators: {
+						notEmpty: {
+							message: '邮编不能为空'
+						},
+					}
+				},
+				'id_country': {
+					validators: {
+						notEmpty: {
+							message: '请选择收货人所在国家'
+						},
+					}
+				},
+				phone: {
+					validators: {
+						notEmpty: {
+							message: '手机号码不能为空'
+						},
+						regexp: {
+							regexp: /(^(\d{3,4}-)?\d{7,8})$|(13[0-9]{9})/,
+							message: '这不是一个有效的手机号码'
+						},
+					}
+				},
+			}
+		})
+
+
 			ajaxStates ();
 			$('#id_country').change(function() {
 				ajaxStates ();

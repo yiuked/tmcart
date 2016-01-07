@@ -12,7 +12,7 @@ class TagView extends View
 					'tag_name' =>  $this->entity->name,
 					'products' => $products['entity'],
 			));
-			$smarty->display('tag.tpl');
+			return $smarty->fetch('tag.tpl');
 		}
 
 		public function displayLeft()
@@ -21,7 +21,7 @@ class TagView extends View
 			$smarty->assign(array(
 					'LEFT_BLOCK' => Module::hookBlock(array('categories')),
 			));
-			$smarty->display('block/left_columns.tpl');
+			return $smarty->fetch('block/left_columns.tpl');
 		}
 }
 

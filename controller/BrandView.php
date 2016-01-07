@@ -11,7 +11,7 @@ class BrandView extends View
 					'entity'   => $this->entity,
 					'products' => $products['entitys']
 			));
-			$smarty->display('brand.tpl');
+			return $smarty->fetch('brand.tpl');
 		}
 
 		public function sendSectionHead()
@@ -25,16 +25,6 @@ class BrandView extends View
 				));
 		}
 		
-		public function setHead()
-		{
-			global $smarty;
-			$this->_js_file[]  	=  _TM_JQP_URL.'chosen/jquery.chosen.js';
-			$this->_js_file[] 	=  _TM_JQP_URL.'jquery.easing.js';
-			$this->_js_file[] 	=  _TM_JQP_URL.'jquery.iosslider.min.js';
-			$this->_css_file[] 	=  _TM_JQP_URL.'chosen/jquery.chosen.css';
-			parent::setHead();
-		}
-		
 		public function displayLeft()
 		{
 			global $smarty;
@@ -42,7 +32,7 @@ class BrandView extends View
 			$smarty->assign(array(
 					'LEFT_BLOCK' => Module::hookBlock(array('filterby')),
 			));
-			$smarty->display('block/left_columns.tpl');
+			return $smarty->fetch('block/left_columns.tpl');
 		}
 		
 		public function displayFooter()
@@ -51,7 +41,7 @@ class BrandView extends View
 			$smarty->assign(array(
 					'FOOT_BLOCK' => Module::hookBlock(array('viewed')),
 			));	
-			parent::displayFooter();
+			return parent::displayFooter();
 		}
 }
 ?>

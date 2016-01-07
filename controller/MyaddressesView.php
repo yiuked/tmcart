@@ -5,13 +5,15 @@ class MyaddressesView extends View
 		{
 			global $smarty,$link,$cookie;
 
-			if(!$cookie->logged)
+			if (!$cookie->logged) {
 				Tools::redirect($link->getPage('LoginView'));
+			}
+
 			$user = new User((int)($cookie->id_user));
 			$smarty->assign(array(
 				'addresses' => Address::loadData(1, 10, 'is_default', 'desc', array('id_user' => $user->id)),
 			));
-			$smarty->display('my-addresses.tpl');
+			return $smarty->fetch('my-addresses.tpl');
 		}
 		
 		public function displayLeft()
@@ -20,7 +22,7 @@ class MyaddressesView extends View
 			$smarty->assign(array(
 					'LEFT_BLOCK' => Module::hookBlock(array('myaccount')),
 			));
-			$smarty->display('block/left_columns.tpl');
+			return $smarty->fetchy('block/left_columns.tpl');
 		}
 }
 ?>

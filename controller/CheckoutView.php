@@ -15,12 +15,12 @@ class CheckoutView extends View
 		}else{
 			$this->LoginedAction();
 		}
-		$smarty->display('checkout.tpl');
+		return $smarty->fetch('checkout.tpl');
 	}
 	
-	public function LoginedAction()
+	private function LoginedAction()
 	{
-		global $cookie,$smarty;
+		global $cookie, $smarty;
 		if(!isset($cookie->id_cart))
 			die('Shpping cart is empty!');
 

@@ -63,8 +63,8 @@ class PasswordView extends View
 			'isExp'=>$isExp,
 			'errors' => $errors,
 		));
-		
-		$smarty->display('password.tpl');
+
+		return $smarty->fetch('password.tpl');
 	}
 }
 ?>

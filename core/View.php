@@ -92,7 +92,7 @@ class View{
 		$content = $this->displayHeader();
 		$content .= $this->displayMain();
 		$content .= $this->displayFooter();
-		echo $content;
+		echo $content;exit();
 	}
 	
 	public function setHead()

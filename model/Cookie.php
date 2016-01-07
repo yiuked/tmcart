@@ -146,6 +146,7 @@ class	Cookie
 	 	if ($this->logged == 1 AND $this->id_user AND Validate::isUnsignedId($this->id_user) AND User::checkPassword((int)($this->id_user), $this->passwd)){
         	return true;
 		}else{
+			$this->mylogout();
 			return false;
 		}
 	}
@@ -191,8 +192,6 @@ class	Cookie
 		unset($this->_content['passwd']);
 		unset($this->_content['logged']);
 		unset($this->_content['email']);
-		unset($this->_content['id_cart']);
-		unset($this->_content['id_address']);
 		$this->_modified = true;
 		$this->write();
 	}
@@ -200,7 +199,7 @@ class	Cookie
 	/**
 	  * Get cookie content
 	  */
-	function update($nullValues = false)
+	function update()
 	{
 		if (isset($_COOKIE[$this->_name]))
 		{

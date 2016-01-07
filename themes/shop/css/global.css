@@ -69,6 +69,9 @@ a:hover,a:focus{
 input[type="checkbox"], input[type="radio"] {
     vertical-align: text-bottom;
 }
+.panel-heading h1,.panel-heading h2,.panel-heading h3,.panel-heading h4{
+    margin: 0;
+}
 /* header.tpl */
 .top-menu {
     background: #f1f1f1 none repeat scroll 0 0;
@@ -565,3 +568,9 @@ ul.step strong {
     font-weight: 700;
 }
 /* end cart.tpl */
+/* login.tpl */
+#login-page {
+    background: #f13fa0 none repeat scroll 0 0;
+    padding: 30px 0;
+}
+/* end login.tpl */

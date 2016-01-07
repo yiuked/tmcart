@@ -10,8 +10,8 @@ class DateView extends View
 			$smarty->assign(array(
 					'posts' => $posts,
 			));
-			
-			$smarty->display('cms_list.tpl');
+
+			return $smarty->fetch('cms_list.tpl');
 		}
 }
 ?>

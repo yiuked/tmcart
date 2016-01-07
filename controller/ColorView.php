@@ -12,8 +12,8 @@ class ColorView extends View
 					'BREADCRUMB' => Module::hookBlock(array('breadcrumb'),$this),
 					'products' => $products['entitys']
 			));
-			
-			$smarty->display('color.tpl');
+
+			return $smarty->fetch('color.tpl');
 		}
 		
 		public function displayLeft()
@@ -22,7 +22,7 @@ class ColorView extends View
 			$smarty->assign(array(
 					'LEFT_BLOCK' => Module::hookBlock(array('shopbycolor')),
 			));
-			$smarty->display('block/left_columns.tpl');
+			return $smarty->fetch('block/left_columns.tpl');
 		}
 }
 ?>

@@ -140,6 +140,19 @@ class AjaxView extends View
 					break;
 			}
 		}
+
+		/**
+		 * 邮箱是否已被注册
+		 */
+		if (Tools::P('existsEmail')) {
+			$valid = true;
+			if (User::userExists(Tools::P('existsEmail'))) {
+				$valid = false;
+			}
+			echo json_encode(array(
+				'valid' => $valid,
+			));
+		}
 	}
 }
 ?>

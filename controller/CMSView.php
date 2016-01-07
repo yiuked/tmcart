@@ -18,7 +18,7 @@ class CMSView extends View
 					'comments_nb' => count($comments),
 					'entity' => $this->entity,
 			));
-			$smarty->display('cms.tpl');
+			return $smarty->fetch('cms.tpl');
 		}
 
 		public function displayLeft()
@@ -27,7 +27,7 @@ class CMSView extends View
 			$smarty->assign(array(
 					'LEFT_BLOCK' => Module::hookBlock(array('cmsblock')),
 			));
-			$smarty->display('block/left_columns.tpl');
+			return $smarty->fetch('block/left_columns.tpl');
 		}
 
 		public function postComment()

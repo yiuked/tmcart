@@ -49,7 +49,7 @@ class MyfeedbackView extends View
 				'products'=>$products,
 				'addresses' => $user->getAddress(),
 			));
-			$smarty->display('my-feedback.tpl');
+			return $smarty->fetch('my-feedback.tpl');
 		}
 		
 		public function displayLeft()
@@ -58,7 +58,7 @@ class MyfeedbackView extends View
 			$smarty->assign(array(
 					'LEFT_BLOCK' => Module::hookBlock(array('myaccount')),
 			));
-			$smarty->display('block/left_columns.tpl');
+			return $smarty->fetch('block/left_columns.tpl');
 		}
 }
 ?>

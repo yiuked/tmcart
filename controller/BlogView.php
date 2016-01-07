@@ -10,7 +10,7 @@
 					'posts' => $posts['cmss'],
 					'total' => $posts['total']
 			));
-			$smarty->display('blog.tpl');
+			return $smarty->fetch('blog.tpl');
 		}
 	}
 
