@@ -23,6 +23,14 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "controller/CartView.php",
+			"settings":
+			{
+				"buffer_size": 2731,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -56,6 +64,8 @@
 	},
 	"file_history":
 	[
+		"/Users/apple/Documents/httpd/red/shoes/themes/shop/block/product_list.tpl",
+		"/Users/apple/Documents/httpd/red/shoes/controller/CategoryView.php",
 		"/Users/apple/Documents/httpd/ci/system/core/CodeIgniter.php",
 		"/Users/apple/Documents/httpd/ci/system/core/Controller.php",
 		"/Users/apple/Documents/httpd/ci/application/config/config.php",
@@ -84,6 +94,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"product_list",
 			"function insert",
 			"function _insert",
 			"function insert"
@@ -104,8 +115,36 @@
 	"groups":
 	[
 		{
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "controller/CartView.php",
+					"settings":
+					{
+						"buffer_size": 2731,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								354,
+								354
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
 			]
 		}
 	],
