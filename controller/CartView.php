@@ -12,7 +12,7 @@ class CartView extends View
 
 	public function requestAction()
 	{
-		global $smarty,$cookie,$cart,$link;
+		global $smarty,$cookie,$cart;
 
 		parent::requestAction();
 
@@ -27,7 +27,7 @@ class CartView extends View
 				$cart = new Cart();
 				$cart->copyFromPost();
 				if ($cart->add()) {
-					$cookie->__set('id_cart', $cart->id);
+					$cookie->id_cart = $cart->id;
 				}
 			}
 		
@@ -68,13 +68,13 @@ class CartView extends View
 		}
 		
 		$smarty->assign(array(
-			'cart_products'=>$this->cart_info['cart_products'],
-			'cart_quantity'=>$this->cart_info['cart_quantity'],
-			'cart_msg'=>$this->cart_info['cart_msg'],
-			'cart_discount'=>$this->cart_info['cart_discount'],
-			'cart_shipping'=>$this->cart_info['cart_shipping'],
-			'cart_total'=>$this->cart_info['cart_total'],
-			'enjoy_free_shipping'=>(float)Configuration::get('ENJOY_FREE_SHIPPING'),
+			'cart_products' => $this->cart_info['cart_products'],
+			'cart_quantity' => $this->cart_info['cart_quantity'],
+			'cart_msg' => $this->cart_info['cart_msg'],
+			'cart_discount' => $this->cart_info['cart_discount'],
+			'cart_shipping' => $this->cart_info['cart_shipping'],
+			'cart_total' => $this->cart_info['cart_total'],
+			'enjoy_free_shipping' => (float) Configuration::get('ENJOY_FREE_SHIPPING'),
 		));
 	}
 	
