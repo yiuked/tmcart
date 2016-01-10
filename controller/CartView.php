@@ -16,7 +16,7 @@ class CartView extends View
 
 		parent::requestAction();
 
-		if(!Validate::isLoadedObject($cart)&&isset($cookie->id_cart))
+		if(!Validate::isLoadedObject($cart) && isset($cookie->id_cart))
 		{
 			$cart = new Cart((int)($cookie->id_cart));
 		}

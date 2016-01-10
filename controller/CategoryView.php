@@ -5,6 +5,7 @@ class CategoryView extends View
 		{
 			if (Tools::G('id') > 0) {
 				$this->entity = new Category(Tools::G('id'));
+
 			}
 		}
 
@@ -93,8 +94,6 @@ GROUP BY fp.id_filter');
 				$this->entity->meta_keywords = $this->entity->name;
 			if(!isset($this->entity->meta_description)||$this->entity->meta_description=='0')
 				$this->entity->meta_description = $this->entity->name;
-			$this->_js_file[] 	=  _TM_JQP_URL.'jquery.easing.js';
-			$this->_js_file[] 	=  _TM_JQP_URL.'jquery.iosslider.min.js';
 			parent::setHead();
 		}
 		
