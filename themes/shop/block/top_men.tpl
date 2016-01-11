@@ -3,8 +3,13 @@
         <div class="row">
             <div class="col-md-4 user-summary">
                 <span>欢迎来到{$shop_name}</span>
+                {if $logged}
+                <a class="tm-email" href="{$link->getPage('MyAccountView')}" title="账号">{$user_email}</a>
+                <a class="tm-exit" href="{$exit}" title="退出">退出</a>
+                {else}
                 <a class="tm-login" href="{$link->getPage('LoginView')}" title="登录">登录</a>
                 <a class="tm-reg" href="{$link->getPage('JoinView')}" title="注册">注册</a>
+                {/if}
             </div>
             <div class="col-md-8 user-account">
                 <ul class="inline fr">

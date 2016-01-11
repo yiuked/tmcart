@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2015-12-22 16:56:00
+<?php /* Smarty version Smarty-3.1.12, created on 2016-01-11 15:54:39
          compiled from "D:\wamp\www\red\shoes\themes\shop\my-addresses.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:7196549d1916465eb2-06024798%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '24c8ab453b1dc5977f180e53d210e6480990191d' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\my-addresses.tpl',
-      1 => 1450774557,
+      1 => 1452498724,
       2 => 'file',
     ),
   ),
@@ -19,91 +19,102 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'unifunc' => 'content_549d1916522bf7_40366534',
   'variables' => 
   array (
+    'DISPLAY_LEFT' => 0,
     'link' => 0,
     'addresses' => 0,
     'address' => 0,
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_549d1916522bf7_40366534')) {function content_549d1916522bf7_40366534($_smarty_tpl) {?><div id="main_columns_two" class="custom">
+<?php if ($_valid && !is_callable('content_549d1916522bf7_40366534')) {function content_549d1916522bf7_40366534($_smarty_tpl) {?><div class="container">
 	<div class="row">
-		<div class="col-md-12">
-			<a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('AddressView');?>
-" class="btn btn-success btn-xs" ><span class="glyphicon glyphicon-plus"></span> 新增收货地址</a>
-			<span>您已创建 <?php echo $_smarty_tpl->tpl_vars['addresses']->value['total'];?>
- 个收货地址，最多可创建10个</span>
+		<div class="col-md-2">
+		<?php echo $_smarty_tpl->tpl_vars['DISPLAY_LEFT']->value;?>
+
 		</div>
-		<div class="col-md-12 address-list">
-			<?php  $_smarty_tpl->tpl_vars['address'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['address']->_loop = false;
- $_from = $_smarty_tpl->tpl_vars['addresses']->value['items']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
+		<div class="col-md-10">
+			<h2>收货地址</h2>
+			<div class="row">
+				<div class="col-md-12">
+					<a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('AddressView');?>
+" class="btn btn-success btn-xs" ><span class="glyphicon glyphicon-plus"></span> 新增收货地址</a>
+					<span>您已创建 <?php echo count($_smarty_tpl->tpl_vars['addresses']->value);?>
+ 个收货地址，最多可创建10个</span>
+				</div>
+				<div class="col-md-12 address-list">
+					<?php  $_smarty_tpl->tpl_vars['address'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['address']->_loop = false;
+ $_from = $_smarty_tpl->tpl_vars['addresses']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
 foreach ($_from as $_smarty_tpl->tpl_vars['address']->key => $_smarty_tpl->tpl_vars['address']->value){
 $_smarty_tpl->tpl_vars['address']->_loop = true;
 ?>
-			<div class="address-item">
-				<div class="head">
-					<h3>
-						<b><?php echo $_smarty_tpl->tpl_vars['address']->value['name'];?>
+						<div class="address-item">
+							<div class="head">
+								<h3>
+									<b><?php echo $_smarty_tpl->tpl_vars['address']->value->name;?>
 </b>
-						<?php if ($_smarty_tpl->tpl_vars['address']->value['is_default']){?>
-						 <span class="label label-success">默认地址</span>
-						<?php }?>
-					</h3>
-					<div class="extra">
-						<a href="#none" data-toggle="modal" data-target=".delete-address-modal"><span aria-hidden="true" class="glyphicon glyphicon-remove"></span></a>
-					</div>
-					<div class="clearfix"></div>
-				</div>
-				<div class="content">
-					<div class="row">
-						<div class="col-sm-2 key">收货人</div>
-						<div class="col-sm-8 value"><?php echo $_smarty_tpl->tpl_vars['address']->value['name'];?>
+									<?php if ($_smarty_tpl->tpl_vars['address']->value->is_default){?>
+										<small class="label label-success">默认地址</small>
+									<?php }?>
+								</h3>
+								<div class="extra">
+									<a href="#none" data-toggle="modal" data-target=".delete-address-modal"><span aria-hidden="true" class="glyphicon glyphicon-remove"></span></a>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<div class="content">
+								<div class="row">
+									<div class="col-sm-2 key">收货人</div>
+									<div class="col-sm-8 value"><?php echo $_smarty_tpl->tpl_vars['address']->value->name;?>
 </div>
-					</div>
-					<div class="row">
-						<div class="col-sm-2 key">国家</div>
-						<div class="col-sm-8 value"><?php echo $_smarty_tpl->tpl_vars['address']->value['country'];?>
+								</div>
+								<div class="row">
+									<div class="col-sm-2 key">国家</div>
+									<div class="col-sm-8 value"><?php echo $_smarty_tpl->tpl_vars['address']->value->join('Country','id_country')->name;?>
 </div>
-					</div>
-					<div class="row">
-						<div class="col-sm-2 key">省份</div>
-						<div class="col-sm-8 value"><?php echo $_smarty_tpl->tpl_vars['address']->value['state'];?>
+								</div>
+								<div class="row">
+									<div class="col-sm-2 key">省份</div>
+									<div class="col-sm-8 value"><?php echo $_smarty_tpl->tpl_vars['address']->value->join('State','id_state')->name;?>
 </div>
-					</div>
-					<div class="row">
-						<div class="col-sm-2 key">城市</div>
-						<div class="col-sm-8 value"><?php echo $_smarty_tpl->tpl_vars['address']->value['city'];?>
+								</div>
+								<div class="row">
+									<div class="col-sm-2 key">城市</div>
+									<div class="col-sm-8 value"><?php echo $_smarty_tpl->tpl_vars['address']->value->city;?>
 </div>
-					</div>
-					<div class="row">
-						<div class="col-sm-2 key">地址</div>
-						<div class="col-sm-8 value"><?php echo $_smarty_tpl->tpl_vars['address']->value['address'];?>
+								</div>
+								<div class="row">
+									<div class="col-sm-2 key">地址</div>
+									<div class="col-sm-8 value"><?php echo $_smarty_tpl->tpl_vars['address']->value->address;?>
 </div>
-					</div>
-					<div class="row">
-						<div class="col-sm-2 key">详细地址</div>
-						<div class="col-sm-8 value"><?php echo $_smarty_tpl->tpl_vars['address']->value['address2'];?>
+								</div>
+								<div class="row">
+									<div class="col-sm-2 key">详细地址</div>
+									<div class="col-sm-8 value"><?php echo $_smarty_tpl->tpl_vars['address']->value->address2;?>
 </div>
-					</div>
-					<div class="row">
-						<div class="col-sm-2 key">电话</div>
-						<div class="col-sm-8 value"><?php echo $_smarty_tpl->tpl_vars['address']->value['phone'];?>
+								</div>
+								<div class="row">
+									<div class="col-sm-2 key">电话</div>
+									<div class="col-sm-8 value"><?php echo $_smarty_tpl->tpl_vars['address']->value->phone;?>
 </div>
-						<div class="col-sm-2 other">
-							<a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('AddressView',$_smarty_tpl->tpl_vars['address']->value['id_address']);?>
+									<div class="col-sm-2 other">
+										<a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('AddressView',$_smarty_tpl->tpl_vars['address']->value->id_address);?>
 ">编辑</a>
+									</div>
+								</div>
+							</div>
 						</div>
-					</div>
+					<?php } ?>
+				</div>
+				<div class="col-md-12">
+					<a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('AddressView');?>
+" class="btn btn-success btn-xs" ><span class="glyphicon glyphicon-plus"></span> 新增收货地址</a>
+					<span>您已创建<?php echo count($_smarty_tpl->tpl_vars['addresses']->value);?>
+个收货地址，最多可创建10个</span>
 				</div>
 			</div>
-			<?php } ?>
-		</div>
-		<div class="col-md-12">
-			<a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('AddressView');?>
-" class="btn btn-success btn-xs" ><span class="glyphicon glyphicon-plus"></span> 新增收货地址</a>
-			<span>您已创建<?php echo $_smarty_tpl->tpl_vars['addresses']->value['total'];?>
-个收货地址，最多可创建10个</span>
 		</div>
 	</div>
+
 </div>
 <div class="modal fade delete-address-modal">
 	<div class="modal-dialog modal-sm">

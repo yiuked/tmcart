@@ -13,24 +13,15 @@ class MyordersView extends View
 			{
 				$order = Order::getByReference($reference);
 				$smarty->assign(array(
-					'products'=>$order->cart->getProducts(),
-					'h_order'=>$order
-					));
+					'products' => $order->cart->getProducts(),
+					'h_order' => $order
+				));
 			}
 			
 			$smarty->assign(array(
 				'orders' => $user->getOrders(),
+				'DISPLAY_LEFT' => Module::hookBlock(array('myaccount')),
 			));
-			$smarty->display('my-orders.tpl');
-		}
-		
-		public function displayLeft()
-		{
-			global $smarty;
-			$smarty->assign(array(
-					'LEFT_BLOCK' => Module::hookBlock(array('myaccount')),
-			));
-			return $smarty->fetch('block/left_columns.tpl');
+			return $smarty->fetch('my-orders.tpl');
 		}
 }
-?>

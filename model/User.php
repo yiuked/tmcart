@@ -112,10 +112,10 @@ class User extends ObjectBase{
 		AND active = 1');
 	}
 	
-	public function getAddresses()
+	public function getAddresses($limit = 10)
 	{
 		$addresses	= array();
-		$result 	= Db::getInstance()->getAll('SELECT `id_address` FROM `'.DB_PREFIX.'address` WHERE `id_user`='.(int)($this->id));
+		$result 	= Db::getInstance()->getAll('SELECT `id_address` FROM `'.DB_PREFIX.'address` WHERE `id_user`='.(int)($this->id) . ' LIMIT 0,' . $limit);
 		foreach($result as $row)
 		{
 			$addresses[] = new Address(intval($row['id_address']));
@@ -125,7 +125,6 @@ class User extends ObjectBase{
 	
 	public function getDefaultAddress()
 	{
-		$addresses	= array();
 		$id_address 	= Db::getInstance()->getValue('SELECT `id_address` FROM `'.DB_PREFIX.'address` WHERE is_default=1 AND `id_user`='.(int)($this->id));
 		if($id_address)
 			return new Address(intval($id_address));
@@ -163,12 +162,15 @@ class User extends ObjectBase{
 	
 	public function getPaymentedProduct()
 	{
-		$result= Db::getInstance()->getAll('SELECT o.id_cart,c.id_product,c.id_attributes,c.unit_price,c.quantity,tm_product.name,i.id_image
+		$result = Db::getInstance()->getAll('SELECT o.id_cart,c.id_product,c.id_attributes,c.unit_price,c.quantity,tm_product.name,i.id_image
 					FROM tm_order AS o
 					Left Join tm_cart_product AS c ON o.id_cart = c.id_cart
 					Left Join tm_product ON c.id_product = tm_product.id_product
 					Left Join tm_image AS i ON tm_product.id_product = i.id_product
 					WHERE  i.cover =  1 AND o.id_user ='.(int)$this->id);
+		if (!$result) {
+			return false;
+		}
 		foreach($result as &$row){
 			$row["data"] 	= base64_encode($row['id_product']."-".$row['id_cart']."-".$row['unit_price']."-".$row['quantity']."-".$row['id_attributes']);
 			$row["md5_key"] = md5($row["data"]); 

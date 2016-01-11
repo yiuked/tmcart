@@ -6,15 +6,11 @@ class PaymentModule extends Module
 	public static function getHookPayment()
 	{
 		$hook_payments = array();
-		$payments = Module::getModulesByType('payment');
-
-		foreach($payments as $key=>$payment){
-			if((int)($payment['active']) == 1){
-				$pay = Module::Hook($payment['id']);
-				$hook_payments[$key] = $pay->hookPayment();
-			}
+		$result = Db::getInstance()->query('SELECT id_module FROM `'.DB_PREFIX.'module` WHERE `type`="'.pSQL('payment').'" AND `active`=1');
+		while($row = Db::getInstance()->nextRow($result)) {
+			$pay = Module::Hook($row['id_module']);
+			$hook_payments[$row['id_module']] = $pay->hookPayment();
 		}
-		
 		return $hook_payments;
 	}
 	

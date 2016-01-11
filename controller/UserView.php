@@ -30,19 +30,11 @@ class UserView extends View
 				}
 			}
 			$smarty->assign(array(
-					'errors'=>$user->_errors,
-					'user' =>$user,
+				'errors'=>$user->_errors,
+				'DISPLAY_LEFT' => Module::hookBlock(array('myaccount')),
+				'user' =>$user,
 			));
-			return $smarty->fetch('user.tpl');
-		}
-		
-		public function displayLeft()
-		{
-			global $smarty;
-			$smarty->assign(array(
-					'LEFT_BLOCK' => Module::hookBlock(array('myaccount')),
-			));
-			return $smarty->fetch('block/left_columns.tpl');
+			return $smarty->fetch('my-user.tpl');
 		}
 }
 ?>

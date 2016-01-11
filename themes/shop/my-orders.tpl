@@ -1,6 +1,10 @@
-<div id="main_columns_two" class="custom">
-<h2>My Orders</h2>
-{if $orders}
+<div class="container">
+  <div class="row">
+    <div class="col-md-2">
+      {$DISPLAY_LEFT}
+    </div>
+    <div class="col-md-10">
+      {if $orders}
 <table border="0" cellpadding="0" cellspacing="0" width="100%" class="table">
 	<tr>
 		<th>Reference</th>
@@ -80,4 +84,6 @@
 {else}
 <p class="warning">You have not placed any orders.</p>
 {/if}
+    </div>
+  </div>
 </div>

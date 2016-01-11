@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2015-08-10 14:44:05
+<?php /* Smarty version Smarty-3.1.12, created on 2016-01-11 15:59:30
          compiled from "D:\wamp\www\red\shoes\themes\shop\my-orders.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:2691654c3123315e939-90220538%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '3477a758ecf800871dfbb193267430941a87287c' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\my-orders.tpl',
-      1 => 1439188990,
+      1 => 1452499111,
       2 => 'file',
     ),
   ),
@@ -19,6 +19,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'unifunc' => 'content_54c312333c1078_72216633',
   'variables' => 
   array (
+    'DISPLAY_LEFT' => 0,
     'orders' => 0,
     'order' => 0,
     'h_order' => 0,
@@ -29,9 +30,14 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_54c312333c1078_72216633')) {function content_54c312333c1078_72216633($_smarty_tpl) {?><div id="main_columns_two" class="custom">
-<h2>My Orders</h2>
-<?php if ($_smarty_tpl->tpl_vars['orders']->value){?>
+<?php if ($_valid && !is_callable('content_54c312333c1078_72216633')) {function content_54c312333c1078_72216633($_smarty_tpl) {?><div class="container">
+  <div class="row">
+    <div class="col-md-2">
+      <?php echo $_smarty_tpl->tpl_vars['DISPLAY_LEFT']->value;?>
+
+    </div>
+    <div class="col-md-10">
+      <?php if ($_smarty_tpl->tpl_vars['orders']->value){?>
 <table border="0" cellpadding="0" cellspacing="0" width="100%" class="table">
 	<tr>
 		<th>Reference</th>
@@ -147,4 +153,6 @@ $_smarty_tpl->tpl_vars['attribute']->_loop = true;
 <?php }else{ ?>
 <p class="warning">You have not placed any orders.</p>
 <?php }?>
+    </div>
+  </div>
 </div><?php }} ?>

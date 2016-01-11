@@ -34,18 +34,11 @@ class MyAlertView extends View
 				Tools::redirect($link->getPage('LoginView'));
 
 			$smarty->assign(array(
+					'DISPLAY_LEFT' => Module::hookBlock(array('myaccount')),
 					'alerts' => Alert::alerts($cookie->id_user)
 			));
 			return $smarty->fetch('my-alerts.tpl');
 		}
-		
-		public function displayLeft()
-		{
-			global $smarty;
-			$smarty->assign(array(
-					'LEFT_BLOCK' => Module::hookBlock(array('myaccount')),
-			));
-			return $smarty->fetch('block/left_columns.tpl');
-		}
+
 }
 ?>

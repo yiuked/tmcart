@@ -23,21 +23,21 @@
  */
 
 $extendsDir = false;
-require_once(_TM_CACHE_DIR . 'class_index.php');
+require(_TM_CACHE_DIR . 'class_index.php');
 function __autoload ($className)
 {
     global $extendsDir, $class_index;
     if (isset($class_index[$className]) && file_exists($class_index[$className])){
-        require_once($class_index[$className]);
+        require($class_index[$className]);
     }else{
         if (file_exists(_TM_MODEL_DIR . $className . '.php')) {
-            require_once(_TM_MODEL_DIR . $className . '.php');
+            require(_TM_MODEL_DIR . $className . '.php');
             $class_index[$className] = _TM_MODEL_DIR . $className . '.php';
         } elseif (file_exists(_TM_CONTROLLER_DIR . $className . '.php')) {
-            require_once(_TM_CONTROLLER_DIR . $className . '.php');
+            require(_TM_CONTROLLER_DIR . $className . '.php');
             $class_index[$className] = _TM_CONTROLLER_DIR . $className . '.php';
         } elseif (file_exists(_TM_CORE_DIR . $className . '.php')) {
-            require_once(_TM_CORE_DIR . $className . '.php');
+            require(_TM_CORE_DIR . $className . '.php');
             $class_index[$className] = _TM_CORE_DIR . $className . '.php';
         } else {
             if (!$extendsDir) {
@@ -47,7 +47,7 @@ function __autoload ($className)
             $haveClass = false;
             foreach ($extendsDir as $dir ){
                 if (file_exists($dir . $className . '.php')) {
-                    require_once($dir . $className . '.php');
+                    require($dir . $className . '.php');
                     $class_index[$className] = $dir . $className . '.php';
                     $haveClass = true;
                     break;

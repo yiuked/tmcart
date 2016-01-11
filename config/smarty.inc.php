@@ -23,6 +23,7 @@ $smarty->assign(array(
 if($cookie->logged){
 	$smarty->assign(array(
 			'user_email'      => $cookie->email,
+			'exit' => $link->getPage('LoginView', false, array('mylogout' => 'true')),
 			'logged'	=> $cookie->logged
 	));
 }

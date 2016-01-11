@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2016-01-05 14:50:59
+<?php /* Smarty version Smarty-3.1.12, created on 2016-01-11 09:58:34
          compiled from "D:\wamp\www\red\shoes\modules\block\homeproduct\homeproduct.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:2721754992dd223b893-95276049%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '415f3981ff6a51f5fcb96557abba633629f45d0d' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\modules\\block\\homeproduct\\homeproduct.tpl',
-      1 => 1451976655,
+      1 => 1452476964,
       2 => 'file',
     ),
   ),

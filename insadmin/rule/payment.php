@@ -1,10 +1,10 @@
 <?php
 if($id = Tools::getRequest('install')){
 	$module = new Module((int)($id));
-	$module->toggleStatus();
-	echo '<div class="conf">操作成功</div>';
+	$module->toggle();
+	UIAdminAlerts::conf('状态已更新');
 }
-$payments = Module::getModulesByType('payment');
+$payments = Module::getModulesByDirct('payment');
 
 /** 输出错误信息 */
 if (isset($errors)) {

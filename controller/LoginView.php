@@ -11,7 +11,11 @@ class LoginView extends View
 				$user = new User();
 				if($user->getByEmail(Tools::getRequest('email'),Tools::getRequest('passwd'))){
 					$user->logined();
-					Tools::redirect($link->getPage('MyaccountView'));
+					if(Tools::G("step") == 2) {
+						Tools::redirect($link->getPage('CheckoutView'));
+					}else{
+						Tools::redirect($link->getPage('MyaccountView'));
+					}
 				}else
 					$smarty->assign('errors',$user->_errors);			
 			}else

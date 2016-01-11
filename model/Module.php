@@ -1,30 +1,28 @@
 <?php 
 class Module extends ObjectBase{
-	protected $fields 			= array('alias','name','type','description','active');
-	protected $fieldsRequired	= array('alias','name','type');
-	protected $fieldsSize 		= array('alias'=>32,'name' => 32, 'description' => 256);
-	protected $fieldsValidate	= array(
-		'active'=> 'isBool',
-		'alias' => 'isModuleName',
-		'name' => 'isModuleName', 
-		'type' => 'isModuleName', 
-		'description' => 'isMessage');
-	
+	protected $fields = array(
+		'alias' => array(
+			'type' => 'isModuleName',
+			'size' => 32
+		),
+		'name' => array(
+			'type' => 'isModuleName',
+			'size' => 32
+		),
+		'type' => array(
+			'type' => 'isModuleName',
+			'size' => 32
+		),
+		'description' => array(
+			'type' => 'isMessage',
+		),
+		'active' => array(
+			'type' => 'isInt',
+		),
+	);
+
 	protected $identifier 		= 'id_module';
 	protected $table			= 'module';
-	
-	public function getFields()
-	{
-		parent::validation();
-		if (isset($this->id))
-			$fields['id_module'] = (int)($this->id);
-		$fields['alias'] = pSQL($this->alias);
-		$fields['name'] = pSQL($this->name);
-		$fields['type'] = pSQL($this->type);
-		$fields['description'] = pSQL($this->description);
-		$fields['active'] = (int)($this->active);
-		return $fields;
-	}
 	
 	public static function existsModule($alias)
 	{
@@ -38,8 +36,8 @@ class Module extends ObjectBase{
 		$alias = $row['alias'];
 		return new $alias;
 	}
-	
-	public static function getModulesByType($type)
+
+	public static function getModulesByDirct($type)
 	{
 		$_modules = array();
 		$result = opendir(_TM_MODULES_DIR.$type);
@@ -57,6 +55,7 @@ class Module extends ObjectBase{
 					$_modules[$type][$dir]['id'] = $module->id;
 				} else {
 					$_modules[$type][$dir]['id'] = $mod['id_module'];
+					$_modules[$type][$dir]['active'] = $mod['active'];
 					$_modules[$type][$dir]['type'] = $mod['type'];
 				}
 			}
@@ -65,8 +64,8 @@ class Module extends ObjectBase{
 	}
 	
 	public static function hook($id){
-		$module = new Module((int)($id));
-		//print_r($module);
+		$module = new Module((int) $id);
+
 		if(is_dir(_TM_MODULES_DIR.$module->type.'/'.$module->alias) && file_exists(_TM_MODULES_DIR.$module->type.'/'.$module->alias.'/'.$module->alias.'.php'))
 		{
 			include_once(_TM_MODULES_DIR.$module->type.'/'.$module->alias.'/'.$module->alias.'.php');
@@ -79,7 +78,7 @@ class Module extends ObjectBase{
 	}
 
 
-	public static function hookBlock($blocks=array(), $view = false)
+	public static function hookBlock($blocks = array(), $view = false)
 	{
 		if(!is_array($blocks))
 			$blocks = array($blocks);
@@ -95,7 +94,7 @@ class Module extends ObjectBase{
 		}
 		return $html;
 	}
-	
+
 	public function display($file, $template)
 	{
 		global $smarty;

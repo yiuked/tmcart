@@ -8,7 +8,6 @@ class MyfeedbackView extends View
 			if(!$cookie->logged)
 				Tools::redirect($link->getPage('LoginView'));
 			$user = new User((int)($cookie->id_user));
-			$address = $user->getAddress();
 			$errors  = array();
 			$success = false; 
 			//添加feedback
@@ -24,7 +23,6 @@ class MyfeedbackView extends View
 				$feedback->unit_price 	= (float)$data[2];
 				$feedback->quantity 	= (int)$data[3];
 				$feedback->md5_key 		= md5(Tools::getRequest("data"));
-				$feedback->flag_code 	= strtolower($address[0]->country->iso_code);
 				$feedback->name	   		= substr($user->first_name,0,1)."***".substr($user->last_name,-1,1);
 				$feedback->id_user 		= $user->id;
 				if($feedback->add())
@@ -35,30 +33,20 @@ class MyfeedbackView extends View
 			//2.获取用户评论过的MD5KEY
 			$proids 	= Feedback::haveFeedbackWithUser($user->id);
 			//3.获取用户购买过的产品
-			$result 	= $user->getPaymentedProduct();
-
 			$products   = array();
-			foreach($result as &$row)
-				if(!in_array($row['md5_key'],$proids)){
-					$products [] = $row;
-				}
+			if ($result 	= $user->getPaymentedProduct()){
+				foreach($result as &$row)
+					if(!in_array($row['md5_key'],$proids)){
+						$products [] = $row;
+					}
+			}
 			
 			$smarty->assign(array(
 				'success'=>$success,
 				'errors'=>$errors,
 				'products'=>$products,
-				'addresses' => $user->getAddress(),
+				'DISPLAY_LEFT' => Module::hookBlock(array('myaccount')),
 			));
 			return $smarty->fetch('my-feedback.tpl');
 		}
-		
-		public function displayLeft()
-		{
-			global $smarty;
-			$smarty->assign(array(
-					'LEFT_BLOCK' => Module::hookBlock(array('myaccount')),
-			));
-			return $smarty->fetch('block/left_columns.tpl');
-		}
 }
-?>

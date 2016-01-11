@@ -12,7 +12,7 @@ class CartView extends View
 
 	public function requestAction()
 	{
-		global $smarty,$cookie,$cart;
+		global $smarty, $cookie, $cart, $link;
 
 		parent::requestAction();
 

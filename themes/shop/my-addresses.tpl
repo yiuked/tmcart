@@ -1,65 +1,74 @@
-<div id="main_columns_two" class="custom">
+<div class="container">
 	<div class="row">
-		<div class="col-md-12">
-			<a href="{$link->getPage('AddressView')}" class="btn btn-success btn-xs" ><span class="glyphicon glyphicon-plus"></span> 新增收货地址</a>
-			<span>您已创建 {$addresses.total} 个收货地址，最多可创建10个</span>
+		<div class="col-md-2">
+		{$DISPLAY_LEFT}
 		</div>
-		<div class="col-md-12 address-list">
-			{foreach from=$addresses.items item=address name=address}
-			<div class="address-item">
-				<div class="head">
-					<h3>
-						<b>{$address.name}</b>
-						{if $address.is_default}
-						 <span class="label label-success">默认地址</span>
-						{/if}
-					</h3>
-					<div class="extra">
-						<a href="#none" data-toggle="modal" data-target=".delete-address-modal"><span aria-hidden="true" class="glyphicon glyphicon-remove"></span></a>
-					</div>
-					<div class="clearfix"></div>
+		<div class="col-md-10">
+			<h2>收货地址</h2>
+			<div class="row">
+				<div class="col-md-12">
+					<a href="{$link->getPage('AddressView')}" class="btn btn-success btn-xs" ><span class="glyphicon glyphicon-plus"></span> 新增收货地址</a>
+					<span>您已创建 {count($addresses)} 个收货地址，最多可创建10个</span>
 				</div>
-				<div class="content">
-					<div class="row">
-						<div class="col-sm-2 key">收货人</div>
-						<div class="col-sm-8 value">{$address.name}</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-2 key">国家</div>
-						<div class="col-sm-8 value">{$address.country}</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-2 key">省份</div>
-						<div class="col-sm-8 value">{$address.state}</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-2 key">城市</div>
-						<div class="col-sm-8 value">{$address.city}</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-2 key">地址</div>
-						<div class="col-sm-8 value">{$address.address}</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-2 key">详细地址</div>
-						<div class="col-sm-8 value">{$address.address2}</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-2 key">电话</div>
-						<div class="col-sm-8 value">{$address.phone}</div>
-						<div class="col-sm-2 other">
-							<a href="{$link->getPage('AddressView', $address.id_address)}">编辑</a>
+				<div class="col-md-12 address-list">
+					{foreach from=$addresses item=address name=address}
+						<div class="address-item">
+							<div class="head">
+								<h3>
+									<b>{$address->name}</b>
+									{if $address->is_default}
+										<small class="label label-success">默认地址</small>
+									{/if}
+								</h3>
+								<div class="extra">
+									<a href="#none" data-toggle="modal" data-target=".delete-address-modal"><span aria-hidden="true" class="glyphicon glyphicon-remove"></span></a>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<div class="content">
+								<div class="row">
+									<div class="col-sm-2 key">收货人</div>
+									<div class="col-sm-8 value">{$address->name}</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-2 key">国家</div>
+									<div class="col-sm-8 value">{$address->join('Country', 'id_country')->name}</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-2 key">省份</div>
+									<div class="col-sm-8 value">{$address->join('State', 'id_state')->name}</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-2 key">城市</div>
+									<div class="col-sm-8 value">{$address->city}</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-2 key">地址</div>
+									<div class="col-sm-8 value">{$address->address}</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-2 key">详细地址</div>
+									<div class="col-sm-8 value">{$address->address2}</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-2 key">电话</div>
+									<div class="col-sm-8 value">{$address->phone}</div>
+									<div class="col-sm-2 other">
+										<a href="{$link->getPage('AddressView', $address->id_address)}">编辑</a>
+									</div>
+								</div>
+							</div>
 						</div>
-					</div>
+					{/foreach}
+				</div>
+				<div class="col-md-12">
+					<a href="{$link->getPage('AddressView')}" class="btn btn-success btn-xs" ><span class="glyphicon glyphicon-plus"></span> 新增收货地址</a>
+					<span>您已创建{count($addresses)}个收货地址，最多可创建10个</span>
 				</div>
 			</div>
-			{/foreach}
-		</div>
-		<div class="col-md-12">
-			<a href="{$link->getPage('AddressView')}" class="btn btn-success btn-xs" ><span class="glyphicon glyphicon-plus"></span> 新增收货地址</a>
-			<span>您已创建{$addresses.total}个收货地址，最多可创建10个</span>
 		</div>
 	</div>
+
 </div>
 <div class="modal fade delete-address-modal">
 	<div class="modal-dialog modal-sm">

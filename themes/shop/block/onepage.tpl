@@ -1,24 +1,24 @@
 <ul id="order_step" class="step">
-	<li class="done"><span><i>01</i><strong>Summary</strong></span></li>
-	<li class="done"><span><i>02</i><strong>Sign in/Login</strong></span></li>
-	<li class="current"><span><i>03</i><strong>Delivery</strong></span></li>
-	<li class="todo"><span><i>04</i><strong>Payment</strong></span></li>
+	<li class="done"><span><i>01</i><strong>购物车</strong></span></li>
+	<li class="done"><span><i>02</i><strong>注册/登录</strong></span></li>
+	<li class="current"><span><i>03</i><strong>配送</strong></span></li>
+	<li class="todo"><span><i>04</i><strong>支付</strong></span></li>
 </ul>
 <div class="box-style">
 <form action="{$link->getPage('ConfirmOrderView')}" method="post" class="bd" id="order-confrim">
 <div class="row">
-	<h2>Payment</h2>
-	<div class="txt-22"><p>Please verify your information and select a payment method.</p></div>
+	<h2>支付</h2>
+	<div class="txt-22"><p>请确认您的定单信息后继续支付.</p></div>
 </div>
 <fieldset id="p-address">
-	<legend>Shipping address</legend>
+	<legend>收货地址</legend>
 	<p class="selectedAddress">
-        <strong>{$address->first_name} {$address->last_name}</strong><br>
+        <strong>{$address->name}</strong><br>
 		{$address->address}{if $address->address2} {$address->address2}{/if}<br>
-		{$address->postcode} {$address->city} {if $address->country->need_state} {$address->state->name}{/if} <br>
-		{$address->country->name}<br>
+		{$address->postcode} {$address->city} {if $address->join('Country',  'id_country')->need_state} {$address->join('State',  'id_state')->name}{/if} <br>
+		{$address->join('Country',  'id_country')->name}<br>
 		{$address->phone}<br>
-        <a href="{$link->getPage('AddressView')}?id_address={$address->id}&referer=CheckoutView" class="all"><strong>Change address</strong></a>
+        <a href="{$link->getPage('AddressView', $address->id, "referer=CheckoutView")}" class="all"><strong>编辑</strong></a>
     </p>
 </fieldset>
 <br/>

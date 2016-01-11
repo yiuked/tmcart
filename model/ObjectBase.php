@@ -23,8 +23,7 @@ abstract class ObjectBase{
 		
 		if ($id)
 		{
-			$result = Db::getInstance()->getRow('
-				SELECT * FROM `'.DB_PREFIX.$this->table.'`  WHERE `'.$this->identifier.'` = '.(int)($id));
+			$result = Db::getInstance()->getRow('SELECT * FROM `'.DB_PREFIX.$this->table.'`  WHERE `'.$this->identifier.'` = '.(int)($id));
 
 			if ($result)
 			{

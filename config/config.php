@@ -21,7 +21,7 @@ define('_COOKIE_IV_', '5DvPoNt2');
 date_default_timezone_set('PRC');
 define('_TM_MODE_DEV_', false);
 
-require_once(dirname(__FILE__).'/init.php');
+require(dirname(__FILE__).'/init.php');
 
 Db::getInstance();
 Configuration::loadConfiguration();
@@ -67,4 +67,4 @@ if(isset($cart) && !(int)($cart->id_currency)){
 if(isset($_GET['mylogout']))
 	$cookie->mylogout();
 
-require_once(dirname(__FILE__).'/smarty.inc.php');
+require(dirname(__FILE__).'/smarty.inc.php');

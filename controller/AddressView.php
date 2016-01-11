@@ -9,13 +9,12 @@
 			if(!$cookie->logged || !User::checkPassword($cookie->id_user, $cookie->passwd))
 				Tools::redirect($link->getPage('userView'));
 			
-			$referer = Tools::Q('referer') ? $link->getPage(Tools::Q('referer')):$link->getPage('MyAddressesView');
-			if($id_address = Tools::getRequest('id_address')){
+			$referer = Tools::Q('referer') ? $link->getPage(Tools::Q('referer')) : $link->getPage('MyAddressesView');
+			if($id_address = Tools::Q('id')){
 				$address   = new Address((int)($id_address));
 				if(Tools::isSubmit('saveAddress')){
 					$address->copyFromPost();
 					if($address->update()){
-						echo $referer;
 						Tools::redirect($referer);
 					}else{
 						$errors  = $address->_errors;
@@ -36,8 +35,8 @@
 			$countrys = Country::loadData(1, 1000, 'position', 'asc', array('active' => true));
 
 			$smarty->assign(array(
-				'referer'=>$referer,
-				'countrys'=>$countrys,
+				'referer' => Tools::Q('referer'),
+				'countrys' => $countrys,
 				'errors'   => $errors,
 			));
 			return $smarty->fetch('address.tpl');

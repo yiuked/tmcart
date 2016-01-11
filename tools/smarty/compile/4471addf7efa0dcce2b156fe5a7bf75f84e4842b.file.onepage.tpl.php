@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2015-12-22 14:50:46
+<?php /* Smarty version Smarty-3.1.12, created on 2016-01-11 14:01:33
          compiled from "D:\wamp\www\red\shoes\themes\shop\block\onepage.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:469454b8df9014a788-63244910%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '4471addf7efa0dcce2b156fe5a7bf75f84e4842b' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\block\\onepage.tpl',
-      1 => 1450767041,
+      1 => 1452492090,
       2 => 'file',
     ),
   ),
@@ -38,38 +38,36 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 <?php if ($_valid && !is_callable('content_54b8df90477216_05289135')) {function content_54b8df90477216_05289135($_smarty_tpl) {?><?php if (!is_callable('smarty_modifier_truncate')) include 'D:\\wamp\\www\\red\\shoes\\tools\\smarty\\plugins\\modifier.truncate.php';
 if (!is_callable('smarty_modifier_escape')) include 'D:\\wamp\\www\\red\\shoes\\tools\\smarty\\plugins\\modifier.escape.php';
 ?><ul id="order_step" class="step">
-	<li class="done"><span><i>01</i><strong>Summary</strong></span></li>
-	<li class="done"><span><i>02</i><strong>Sign in/Login</strong></span></li>
-	<li class="current"><span><i>03</i><strong>Delivery</strong></span></li>
-	<li class="todo"><span><i>04</i><strong>Payment</strong></span></li>
+	<li class="done"><span><i>01</i><strong>购物车</strong></span></li>
+	<li class="done"><span><i>02</i><strong>注册/登录</strong></span></li>
+	<li class="current"><span><i>03</i><strong>配送</strong></span></li>
+	<li class="todo"><span><i>04</i><strong>支付</strong></span></li>
 </ul>
 <div class="box-style">
 <form action="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('ConfirmOrderView');?>
 " method="post" class="bd" id="order-confrim">
 <div class="row">
-	<h2>Payment</h2>
-	<div class="txt-22"><p>Please verify your information and select a payment method.</p></div>
+	<h2>支付</h2>
+	<div class="txt-22"><p>请确认您的定单信息后继续支付.</p></div>
 </div>
 <fieldset id="p-address">
-	<legend>Shipping address</legend>
+	<legend>收货地址</legend>
 	<p class="selectedAddress">
-        <strong><?php echo $_smarty_tpl->tpl_vars['address']->value->first_name;?>
- <?php echo $_smarty_tpl->tpl_vars['address']->value->last_name;?>
+        <strong><?php echo $_smarty_tpl->tpl_vars['address']->value->name;?>
 </strong><br>
 		<?php echo $_smarty_tpl->tpl_vars['address']->value->address;?>
 <?php if ($_smarty_tpl->tpl_vars['address']->value->address2){?> <?php echo $_smarty_tpl->tpl_vars['address']->value->address2;?>
 <?php }?><br>
 		<?php echo $_smarty_tpl->tpl_vars['address']->value->postcode;?>
  <?php echo $_smarty_tpl->tpl_vars['address']->value->city;?>
- <?php if ($_smarty_tpl->tpl_vars['address']->value->country->need_state){?> <?php echo $_smarty_tpl->tpl_vars['address']->value->state->name;?>
+ <?php if ($_smarty_tpl->tpl_vars['address']->value->join('Country','id_country')->need_state){?> <?php echo $_smarty_tpl->tpl_vars['address']->value->join('State','id_state')->name;?>
 <?php }?> <br>
-		<?php echo $_smarty_tpl->tpl_vars['address']->value->country->name;?>
+		<?php echo $_smarty_tpl->tpl_vars['address']->value->join('Country','id_country')->name;?>
 <br>
 		<?php echo $_smarty_tpl->tpl_vars['address']->value->phone;?>
 <br>
-        <a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('AddressView');?>
-?id_address=<?php echo $_smarty_tpl->tpl_vars['address']->value->id;?>
-&referer=CheckoutView" class="all"><strong>Change address</strong></a>
+        <a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('AddressView',$_smarty_tpl->tpl_vars['address']->value->id,"referer=CheckoutView");?>
+" class="all"><strong>编辑</strong></a>
     </p>
 </fieldset>
 <br/>

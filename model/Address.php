@@ -40,7 +40,7 @@ class Address extends ObjectBase{
 	);
 	protected $identifier 		= 'id_address';
 	protected $table			= 'address';
-	
+
 	public static function loadData($p = 1, $limit = 50, $orderBy = NULL, $orderWay = NULL, $filter = array())
 	{
 		$where = '';

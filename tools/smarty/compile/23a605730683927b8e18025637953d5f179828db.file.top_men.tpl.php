@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2015-12-24 17:10:18
+<?php /* Smarty version Smarty-3.1.12, created on 2016-01-11 10:37:02
          compiled from "D:\wamp\www\red\shoes\themes\shop\block\top_men.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:4057567b5fb395d501-11190934%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '23a605730683927b8e18025637953d5f179828db' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\block\\top_men.tpl',
-      1 => 1450948133,
+      1 => 1452479819,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,10 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'variables' => 
   array (
     'shop_name' => 0,
+    'logged' => 0,
     'link' => 0,
+    'user_email' => 0,
+    'exit' => 0,
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
@@ -30,10 +33,18 @@ $_valid = $_smarty_tpl->decodeProperties(array (
             <div class="col-md-4 user-summary">
                 <span>欢迎来到<?php echo $_smarty_tpl->tpl_vars['shop_name']->value;?>
 </span>
+                <?php if ($_smarty_tpl->tpl_vars['logged']->value){?>
+                <a class="tm-email" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('MyAccountView');?>
+" title="账号"><?php echo $_smarty_tpl->tpl_vars['user_email']->value;?>
+</a>
+                <a class="tm-exit" href="<?php echo $_smarty_tpl->tpl_vars['exit']->value;?>
+" title="退出">退出</a>
+                <?php }else{ ?>
                 <a class="tm-login" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('LoginView');?>
 " title="登录">登录</a>
                 <a class="tm-reg" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('JoinView');?>
 " title="注册">注册</a>
+                <?php }?>
             </div>
             <div class="col-md-8 user-account">
                 <ul class="inline fr">

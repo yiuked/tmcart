@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2015-12-22 17:12:40
+<?php /* Smarty version Smarty-3.1.12, created on 2016-01-11 14:09:22
          compiled from "D:\wamp\www\red\shoes\themes\shop\address.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:24072549d22fbdac715-83683463%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '3f1f235b31b903d93976c7f427f12f6d34a2033b' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\address.tpl',
-      1 => 1450775558,
+      1 => 1452492556,
       2 => 'file',
     ),
   ),
@@ -19,6 +19,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'unifunc' => 'content_549d22fc0bb305_00772505',
   'variables' => 
   array (
+    'referer' => 0,
     'link' => 0,
     'address' => 0,
     'countrys' => 0,
@@ -26,13 +27,16 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_549d22fc0bb305_00772505')) {function content_549d22fc0bb305_00772505($_smarty_tpl) {?><div id="main_columns" class="custom">
-<div class="back-arrow"><i class="icon-arrow-left"></i><strong><a href="javascript:history.back();">Back</a></strong></div>
+<?php if ($_valid && !is_callable('content_549d22fc0bb305_00772505')) {function content_549d22fc0bb305_00772505($_smarty_tpl) {?><div class="container" >
+<?php if ($_smarty_tpl->tpl_vars['referer']->value){?>
+<div class="back-arrow"><i class="icon-arrow-left"></i><strong><a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage($_smarty_tpl->tpl_vars['referer']->value);?>
+" title="返回">返回</a></strong></div>
+<?php }?>
 <?php echo $_smarty_tpl->getSubTemplate (((string)$_smarty_tpl->tpl_vars['tpl_dir']->value)."./block/errors.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null, array(), 0);?>
 
 <div class="box-style">
 	<h2>收货地址</h2>
-	<form method="post" action="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('AddresssView');?>
+	<form method="post" action="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('AddressView');?>
 " class="form-horizontal">
 		<div class="form-group">
 			<label for="name" class="col-sm-2 control-label">收货人</label>
@@ -85,13 +89,13 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 		<div class="form-group" id="contains_states" style="display: none;">
 			<label for="name" class="col-sm-2 control-label">省份</label>
 			<div class="col-sm-4">
-				<select id="id_state" name="id_state"></select>
+				<select id="id_state" name="id_state" class="form-control"></select>
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="name" class="col-sm-2 control-label">国家</label>
 			<div class="col-sm-4">
-				<select id="id_country" name="id_country" style="margin-right:15px">
+				<select id="id_country" name="id_country" class="form-control">
 					<option value="NULL">--choose--</option>
 					<?php  $_smarty_tpl->tpl_vars['country'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['country']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['countrys']->value['items']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
@@ -99,7 +103,7 @@ foreach ($_from as $_smarty_tpl->tpl_vars['country']->key => $_smarty_tpl->tpl_v
 $_smarty_tpl->tpl_vars['country']->_loop = true;
 ?>
 						<option value="<?php echo $_smarty_tpl->tpl_vars['country']->value['id_country'];?>
-" <?php if (isset($_POST['id_country'])){?><?php if ($_POST['id_country']==$_smarty_tpl->tpl_vars['country']->value['id_country']){?>selected="selected"<?php }?><?php }else{ ?><?php if (isset($_smarty_tpl->tpl_vars['address']->value)&&$_smarty_tpl->tpl_vars['address']->value->country->id==$_smarty_tpl->tpl_vars['country']->value['id_country']){?>selected="selected"<?php }?><?php }?>><?php echo $_smarty_tpl->tpl_vars['country']->value['name'];?>
+" <?php if (isset($_POST['id_country'])){?><?php if ($_POST['id_country']==$_smarty_tpl->tpl_vars['country']->value['id_country']){?>selected="selected"<?php }?><?php }else{ ?><?php if (isset($_smarty_tpl->tpl_vars['address']->value)&&$_smarty_tpl->tpl_vars['address']->value->join('Country','id_country')->id==$_smarty_tpl->tpl_vars['country']->value['id_country']){?>selected="selected"<?php }?><?php }?>><?php echo $_smarty_tpl->tpl_vars['country']->value['name'];?>
 </option>
 					<?php } ?>
 				</select>
@@ -108,8 +112,12 @@ $_smarty_tpl->tpl_vars['country']->_loop = true;
 		<div class="form-group">
 			<div class="col-sm-4 col-sm-offset-2">
 				<input type="hidden" value="<?php if (isset($_smarty_tpl->tpl_vars['address']->value->id)){?><?php echo $_smarty_tpl->tpl_vars['address']->value->id;?>
-<?php }?>" />
-				<button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-save"></span> 保存</button>
+<?php }?>" name="id" />
+				<?php if ($_smarty_tpl->tpl_vars['referer']->value){?>
+				<input type="hidden" value="<?php echo $_smarty_tpl->tpl_vars['referer']->value;?>
+" name="referer" />
+				<?php }?>
+				<button type="submit" class="btn btn-success" name="saveAddress"><span class="glyphicon glyphicon-save"></span> 保存</button>
 			</div>
 		</div>
 	</form>
@@ -118,8 +126,8 @@ $_smarty_tpl->tpl_vars['country']->_loop = true;
 <script type="text/javascript">
 var ajaxLink = "<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('AjaxView');?>
 ";
-<?php if (isset($_smarty_tpl->tpl_vars['address']->value)&&$_smarty_tpl->tpl_vars['address']->value->country->need_state){?>
-var secat_id = <?php echo $_smarty_tpl->tpl_vars['address']->value->state->id;?>
+<?php if (isset($_smarty_tpl->tpl_vars['address']->value)&&$_smarty_tpl->tpl_vars['address']->value->join('Country','id_country')->need_state){?>
+var secat_id = <?php echo $_smarty_tpl->tpl_vars['address']->value->join('State','id_state')->id;?>
 ;
 <?php }else{ ?>
 var secat_id = 0;

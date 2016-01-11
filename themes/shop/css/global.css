@@ -574,3 +574,33 @@ ul.step strong {
     padding: 30px 0;
 }
 /* end login.tpl */
+/* my-address.tpl */
+.address-list{
+    margin: 10px 0;
+}
+.address-item{
+    border: 2px solid #e6e6e6;
+    margin: 10px 0;
+    padding: 10px;
+}
+.address-item .head{
+    margin-bottom: 10px;
+}
+.address-item .head h3{
+    float: left;
+    margin: 0;
+}
+.address-item .head .extra{
+    float: right;
+}
+.address-item .content .row .key{
+    color: gray;
+    text-align: right;
+}
+.address-item .content .row .value{
+    padding-left: 0;
+}
+.address-item .content .row .other{
+    text-align: right;
+}
+/* end my-address.tpl */

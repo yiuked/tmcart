@@ -8,17 +8,10 @@ class MyaccountView extends View
 			if (!$cookie->logged) {
 				Tools::redirect($link->getPage('LoginView'));
 			}
-
-			return $smarty->fetch('my-account.tpl');
-		}
-		
-		public function displayLeft()
-		{
-			global $smarty;
 			$smarty->assign(array(
-					'LEFT_BLOCK' => Module::hookBlock(array('myaccount')),
+				'DISPLAY_LEFT' => Module::hookBlock(array('myaccount')),
 			));
-			return $smarty->fetch('block/left_columns.tpl');
+			return $smarty->fetch('my-account.tpl');
 		}
 }
 ?>

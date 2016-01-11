@@ -11,7 +11,7 @@ class CheckoutView extends View
 		}
 
 		if(!$cookie->logged ||!User::checkPassword($cookie->id_user,$cookie->passwd)){
-			Tools::redirect($link->getPage('JoinView')."?step=2");
+			Tools::redirect($link->getPage('LoginView', false, array('step' => 2) ));
 		}else{
 			$this->LoginedAction();
 		}
