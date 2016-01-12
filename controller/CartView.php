@@ -15,7 +15,7 @@ class CartView extends View
 		global $smarty, $cookie, $cart, $link;
 
 		parent::requestAction();
-
+		
 		if(!Validate::isLoadedObject($cart) && isset($cookie->id_cart))
 		{
 			$cart = new Cart((int)($cookie->id_cart));
@@ -78,12 +78,6 @@ class CartView extends View
 		));
 	}
 	
-	public function setHead()
-	{
-		$this->_js_file[] 	=  _TM_JQP_URL.'jquery.easing.js';
-		$this->_js_file[] 	=  _TM_JQP_URL.'jquery.iosslider.min.js';
-		parent::setHead();
-	}
 	
 	public function displayMain()
 	{
@@ -106,4 +100,3 @@ class CartView extends View
 		return parent::displayFooter();
 	}
 }
-?>

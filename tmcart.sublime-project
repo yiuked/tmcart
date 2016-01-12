@@ -4,5 +4,15 @@
 		{
 			"path": "/Users/apple/Documents/httpd/red/shoes"
 		}
-	]
+	],
+	"settings":
+  	{
+	    "xdebug": {
+	  		"path_mapping": {},   
+	  		"url": "http://127.0.0.1/red/shoes/index.php",
+	  		"super_globals": true,
+	  		"close_on_stop": true,
+	  		"port": 9000   
+	    }
+  	}
 }

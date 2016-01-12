@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2016-01-08 13:48:00
+<?php /* Smarty version Smarty-3.1.12, created on 2016-01-12 16:55:17
          compiled from "/Users/apple/Documents/httpd/red/shoes/themes/shop/product.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:2041234348568f4d907e6746-30464151%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '205d4152758edd810b53649fd0efba9b9704ca9e' => 
     array (
       0 => '/Users/apple/Documents/httpd/red/shoes/themes/shop/product.tpl',
-      1 => 1452229589,
+      1 => 1452588892,
       2 => 'file',
     ),
   ),
@@ -15,6 +15,8 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'function' => 
   array (
   ),
+  'version' => 'Smarty-3.1.12',
+  'unifunc' => 'content_568f4d909234a6_55520707',
   'variables' => 
   array (
     'entity' => 0,
@@ -30,8 +32,6 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'wish_array' => 0,
   ),
   'has_nocache_code' => false,
-  'version' => 'Smarty-3.1.12',
-  'unifunc' => 'content_568f4d909234a6_55520707',
 ),false); /*/%%SmartyHeaderCode%%*/?>
 <?php if ($_valid && !is_callable('content_568f4d909234a6_55520707')) {function content_568f4d909234a6_55520707($_smarty_tpl) {?><div class="container">
 	<div id="main_columns">
@@ -236,7 +236,8 @@ $_smarty_tpl->tpl_vars['attribute']->_loop = true;
 
 					<div class="form-group">
 						<div class="col-sm-offset-2">
-							<button type="submit" class="btn btn-pink" name="addToCart" id="add_to_cart"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> 加入购物车</button>
+							<input type="hidden" name="addToCart" value="true">
+							<button type="submit" class="btn btn-pink" id="add_to_cart"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> 加入购物车</button>
 							<button type="button" class="btn btn-warning" id="add-to-wish"><span aria-hidden="true" class="glyphicon glyphicon-heart"></span> 收藏</button>
 						</div>
 					</div>

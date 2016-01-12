@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2016-01-08 13:47:44
+<?php /* Smarty version Smarty-3.1.12, created on 2016-01-11 21:06:25
          compiled from "/Users/apple/Documents/httpd/red/shoes/themes/shop/block/top_men.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:1335809282568f4d80718938-91634335%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '96d2d29e80768f8a4f21dd97728591829cf27e9d' => 
     array (
       0 => '/Users/apple/Documents/httpd/red/shoes/themes/shop/block/top_men.tpl',
-      1 => 1452229588,
+      1 => 1452517393,
       2 => 'file',
     ),
   ),
@@ -15,14 +15,17 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'function' => 
   array (
   ),
+  'version' => 'Smarty-3.1.12',
+  'unifunc' => 'content_568f4d80738d42_58373672',
   'variables' => 
   array (
     'shop_name' => 0,
+    'logged' => 0,
     'link' => 0,
+    'user_email' => 0,
+    'exit' => 0,
   ),
   'has_nocache_code' => false,
-  'version' => 'Smarty-3.1.12',
-  'unifunc' => 'content_568f4d80738d42_58373672',
 ),false); /*/%%SmartyHeaderCode%%*/?>
 <?php if ($_valid && !is_callable('content_568f4d80738d42_58373672')) {function content_568f4d80738d42_58373672($_smarty_tpl) {?><div class="top-menu">
     <div class="container">
@@ -30,10 +33,18 @@ $_valid = $_smarty_tpl->decodeProperties(array (
             <div class="col-md-4 user-summary">
                 <span>欢迎来到<?php echo $_smarty_tpl->tpl_vars['shop_name']->value;?>
 </span>
+                <?php if ($_smarty_tpl->tpl_vars['logged']->value){?>
+                <a class="tm-email" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('MyAccountView');?>
+" title="账号"><?php echo $_smarty_tpl->tpl_vars['user_email']->value;?>
+</a>
+                <a class="tm-exit" href="<?php echo $_smarty_tpl->tpl_vars['exit']->value;?>
+" title="退出">退出</a>
+                <?php }else{ ?>
                 <a class="tm-login" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('LoginView');?>
 " title="登录">登录</a>
                 <a class="tm-reg" href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('JoinView');?>
 " title="注册">注册</a>
+                <?php }?>
             </div>
             <div class="col-md-8 user-account">
                 <ul class="inline fr">

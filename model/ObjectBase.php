@@ -177,10 +177,11 @@ abstract class ObjectBase{
 							case 'isInt':
 								$fields[$key] = intval($this->{$key});
 								break;
-							case 'isFloat';
+							case 'isFloat':
+							case 'isPrice':
 								$fields[$key] = floatval($this->{$key});
 								break;
-							case 'isCleanHtml';
+							case 'isCleanHtml':
 								$fields[$key] = pSQL($this->{$key}, true);
 								break;
 							default:

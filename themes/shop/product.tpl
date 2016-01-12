@@ -128,7 +128,8 @@
 
 					<div class="form-group">
 						<div class="col-sm-offset-2">
-							<button type="submit" class="btn btn-pink" name="addToCart" id="add_to_cart"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> 加入购物车</button>
+							<input type="hidden" name="addToCart" value="true">
+							<button type="submit" class="btn btn-pink" id="add_to_cart"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> 加入购物车</button>
 							<button type="button" class="btn btn-warning" id="add-to-wish"><span aria-hidden="true" class="glyphicon glyphicon-heart"></span> 收藏</button>
 						</div>
 					</div>
