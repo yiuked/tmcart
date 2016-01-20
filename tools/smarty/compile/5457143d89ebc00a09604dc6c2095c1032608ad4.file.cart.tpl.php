@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2016-01-11 10:01:11
+<?php /* Smarty version Smarty-3.1.12, created on 2016-01-20 21:48:45
          compiled from "D:\wamp\www\red\shoes\themes\shop\cart.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:13715549a679f58f126-20984040%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '5457143d89ebc00a09604dc6c2095c1032608ad4' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\cart.tpl',
-      1 => 1452476965,
+      1 => 1453297722,
       2 => 'file',
     ),
   ),
@@ -27,9 +27,6 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'cart_shipping' => 0,
     'cart_discount' => 0,
     'link' => 0,
-    'cart_msg' => 0,
-    'img_dir' => 0,
-    'enjoy_free_shipping' => 0,
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
@@ -45,7 +42,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
  件商品</small></h2>
 <table class="table cart-table">
 	<tr class="cart-header">
-		<th class="th-select"><input type="checkbox" name="check-all"> 全选</th>
+		<th class="th-select"><input type="checkbox" name="check-all" class="check-all" data-name="id_cart_product[]"> 全选</th>
 		<th class="th-image"></th>
 		<th class="th-name">商品</th>
 		<th class="th-price">单价</th>
@@ -130,7 +127,7 @@ $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['last']      
 	</tr>
 	<?php } ?>
 	<tr class="basket-footer">
-		<td><input type="checkbox" name="check-all"> 全选</td>
+		<td><input type="checkbox" name="check-all" class="check-all" data-name="id_cart_product[]"> 全选</td>
 		<td>删除选中</td>
 		<td colspan="4" class="price-sum">
 			<div>
@@ -147,85 +144,6 @@ $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['last']      
 ">去结算</a></td>
 	</tr>
 </table>
-
-<div class="panier-resume cart-total">
-	<form method="post" action="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('CheckoutView');?>
-" name="checkout_form" id="checkout_form">
-	<div class="memo" id="information">
-		<label>Leave a message:</label>
-		<textarea placeholder="Information.(optional)" autocomplete="off" class="memo-input <?php if (strlen($_smarty_tpl->tpl_vars['cart_msg']->value)<5){?>memo-close<?php }?>" name="msg"><?php if ($_smarty_tpl->tpl_vars['cart_msg']->value){?><?php echo $_smarty_tpl->tpl_vars['cart_msg']->value;?>
-<?php }?></textarea>
-		<div class="msg hidden">
-			<p class="error">Enter a maximum of 500 characters.</p>
-		</div>
-	</div>
-	</form>
-	<div class="panier-promo">
-	  <p class="panier-resume-titre">
-		<label for="panier-promo-checkbox">
-		<input type="checkbox" id="panier-promo-checkbox" autocomplete="off">
-		<span> <i class="checkbox"></i> Enter a promo code </span> </label>
-		<i class="icon-info tool"> <span class="tip pos-b-l"><span>Tick the box if you have a promo code</span></span></i></p>
-	    <div class="panier-resume-bloc hidden">
-		  <input type="text" data-required-message="Please enter your promo code" value="" class="parsley-validated">
-		  <button data-clickndelay="10" data-clicknwait="promocode" class="button" id="validateCode">OK</button>
-		  <div class="clear"></div>
-		  <p class="warring icon-cancel-2 hidden">This code does not exist</p>
-		  <p class="loader hidden"><img src="<?php echo $_smarty_tpl->tpl_vars['img_dir']->value;?>
-loader.gif" /></p>
-	    </div>
-		<div class="promocode-total <?php if ($_smarty_tpl->tpl_vars['cart_discount']->value==0){?>hidden<?php }?>">
-			<div class="panier-resume-titre">
-				<span>Promo code</span>
-				<strong>-<?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['cart_discount']->value),$_smarty_tpl);?>
-</strong>
-			</div>
-		</div>
-	</div>
-	<div class="panier-livraison">
-	<?php if ($_smarty_tpl->tpl_vars['cart_shipping']->value==0){?>
-		<p class="panier-resume-titre">
-			<label class="icon-checkmark">Shipping</label>
-			<strong class="free">FREE</strong>
-		</p>
-		<?php }else{ ?>
-		<p class="panier-resume-titre">
-			<label>Shipping</label>
-			<strong><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['cart_shipping']->value),$_smarty_tpl);?>
-</strong>
-		</p>
-		<p style="color: rgb(102, 102, 102); font-size: 11px; padding-left: 15px;">Remaining amount to be added to your cart in order to obtain free shipping:<?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['enjoy_free_shipping']->value-$_smarty_tpl->tpl_vars['cart_total']->value),$_smarty_tpl);?>
-</p>
-		<?php }?>
-	</div>
-</div>
-<script language="javascript">
-$(".check_out").click(function(){
-	$("#checkout_form").submit();
-})
-$("#validateCode").click(function(){
-	$(".panier-resume-bloc p.loader").removeClass("hidden");
-	$(".promocode-total").addClass("hidden");
-	$(".panier-resume-bloc p.warring").addClass("hidden");
-	$.ajax({
-		url: ajax_dir,
-		cache: false,
-		data: "validatedPromocode=true&code="+$(".parsley-validated").val(),
-		dataType: "json",
-		success: function(data)
-			{
-				$(".panier-resume-bloc p.loader").addClass("hidden");
-				if(data.status=="NO"){
-					$(".panier-resume-bloc p.warring").removeClass("hidden");
-				}else{
-					$(".promocode-total strong").html(data.discount);
-					$(".promocode-total").removeClass("hidden");
-					$(".panier-total strong").html(data.total);
-				}
-			}
-		});
-})
-</script>
 <?php }else{ ?>
 <h2 class="tc-standard">购物车为空...</h2>
 <div class="box-style">

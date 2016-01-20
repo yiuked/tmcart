@@ -9,7 +9,7 @@
 <h2 class="tc-standard">购物车 <small>{$cart_quantity} 件商品</small></h2>
 <table class="table cart-table">
 	<tr class="cart-header">
-		<th class="th-select"><input type="checkbox" name="check-all"> 全选</th>
+		<th class="th-select"><input type="checkbox" name="check-all" class="check-all" data-name="id_cart_product[]"> 全选</th>
 		<th class="th-image"></th>
 		<th class="th-name">商品</th>
 		<th class="th-price">单价</th>
@@ -42,7 +42,7 @@
 	</tr>
 	{/foreach}
 	<tr class="basket-footer">
-		<td><input type="checkbox" name="check-all"> 全选</td>
+		<td><input type="checkbox" name="check-all" class="check-all" data-name="id_cart_product[]"> 全选</td>
 		<td>删除选中</td>
 		<td colspan="4" class="price-sum">
 			<div>
@@ -56,79 +56,6 @@
 		<td class="td-action checkout"><a href="{$link->getPage('CheckoutView')}">去结算</a></td>
 	</tr>
 </table>
-
-<div class="panier-resume cart-total">
-	<form method="post" action="{$link->getPage('CheckoutView')}" name="checkout_form" id="checkout_form">
-	<div class="memo" id="information">
-		<label>Leave a message:</label>
-		<textarea placeholder="Information.(optional)" autocomplete="off" class="memo-input {if strlen($cart_msg)<5}memo-close{/if}" name="msg">{if $cart_msg}{$cart_msg}{/if}</textarea>
-		<div class="msg hidden">
-			<p class="error">Enter a maximum of 500 characters.</p>
-		</div>
-	</div>
-	</form>
-	<div class="panier-promo">
-	  <p class="panier-resume-titre">
-		<label for="panier-promo-checkbox">
-		<input type="checkbox" id="panier-promo-checkbox" autocomplete="off">
-		<span> <i class="checkbox"></i> Enter a promo code </span> </label>
-		<i class="icon-info tool"> <span class="tip pos-b-l"><span>Tick the box if you have a promo code</span></span></i></p>
-	    <div class="panier-resume-bloc hidden">
-		  <input type="text" data-required-message="Please enter your promo code" value="" class="parsley-validated">
-		  <button data-clickndelay="10" data-clicknwait="promocode" class="button" id="validateCode">OK</button>
-		  <div class="clear"></div>
-		  <p class="warring icon-cancel-2 hidden">This code does not exist</p>
-		  <p class="loader hidden"><img src="{$img_dir}loader.gif" /></p>
-	    </div>
-		<div class="promocode-total {if $cart_discount==0}hidden{/if}">
-			<div class="panier-resume-titre">
-				<span>Promo code</span>
-				<strong>-{displayPrice price=$cart_discount}</strong>
-			</div>
-		</div>
-	</div>
-	<div class="panier-livraison">
-	{if $cart_shipping==0}
-		<p class="panier-resume-titre">
-			<label class="icon-checkmark">Shipping</label>
-			<strong class="free">FREE</strong>
-		</p>
-		{else}
-		<p class="panier-resume-titre">
-			<label>Shipping</label>
-			<strong>{displayPrice price=$cart_shipping}</strong>
-		</p>
-		<p style="color: rgb(102, 102, 102); font-size: 11px; padding-left: 15px;">Remaining amount to be added to your cart in order to obtain free shipping:{displayPrice price=$enjoy_free_shipping-$cart_total}</p>
-		{/if}
-	</div>
-</div>
-<script language="javascript">
-$(".check_out").click(function(){
-	$("#checkout_form").submit();
-})
-$("#validateCode").click(function(){
-	$(".panier-resume-bloc p.loader").removeClass("hidden");
-	$(".promocode-total").addClass("hidden");
-	$(".panier-resume-bloc p.warring").addClass("hidden");
-	$.ajax({
-		url: ajax_dir,
-		cache: false,
-		data: "validatedPromocode=true&code="+$(".parsley-validated").val(),
-		dataType: "json",
-		success: function(data)
-			{
-				$(".panier-resume-bloc p.loader").addClass("hidden");
-				if(data.status=="NO"){
-					$(".panier-resume-bloc p.warring").removeClass("hidden");
-				}else{
-					$(".promocode-total strong").html(data.discount);
-					$(".promocode-total").removeClass("hidden");
-					$(".panier-total strong").html(data.total);
-				}
-			}
-		});
-})
-</script>
 {else}
 <h2 class="tc-standard">购物车为空...</h2>
 <div class="box-style">

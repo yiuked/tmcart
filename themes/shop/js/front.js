@@ -48,8 +48,20 @@ $(document).ready(function(){
 	$("a.fav").click(function(){
 		addWish($(this),$(this).attr("data-id"));
 	})
+
 	$(".cart_quantity_delete").click(function(){
 		Cart.removeItem($(this).data("id"), $(this));
+	})
+
+	/*
+	 * 全选按钮的class值为check-all，且必须设置data-name属性，其值为子选项的name值
+	 * 例:<input type="checkbox" class="check-all" data-name="product[]">
+	 * */
+	$(".check-all").click(function(){
+		var allCheck = $(this).prop("checked");
+		$("input[name='"+$(this).data("name")+"']").each(function(){
+			$(this).prop("checked",allCheck);
+		})
 	})
 })
 

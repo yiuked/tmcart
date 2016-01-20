@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2016-01-11 09:59:13
+<?php /* Smarty version Smarty-3.1.12, created on 2016-01-20 21:31:38
          compiled from "D:\wamp\www\red\shoes\themes\shop\product.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:314454993646aabd45-87107133%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '12b2f12fe072bf938e38c7714e413f78f80e0733' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\product.tpl',
-      1 => 1452476966,
+      1 => 1453296374,
       2 => 'file',
     ),
   ),
@@ -236,7 +236,8 @@ $_smarty_tpl->tpl_vars['attribute']->_loop = true;
 
 					<div class="form-group">
 						<div class="col-sm-offset-2">
-							<button type="submit" class="btn btn-pink" name="addToCart" id="add_to_cart"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> 加入购物车</button>
+							<input type="hidden" name="addToCart" value="true">
+							<button type="submit" class="btn btn-pink" id="add_to_cart"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> 加入购物车</button>
 							<button type="button" class="btn btn-warning" id="add-to-wish"><span aria-hidden="true" class="glyphicon glyphicon-heart"></span> 收藏</button>
 						</div>
 					</div>
