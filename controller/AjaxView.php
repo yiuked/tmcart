@@ -167,6 +167,18 @@ class AjaxView extends View
 					}
 					die(json_encode(array("status" => "no")));
 					break;
+				case 'deleteMultiItem':
+					if ($cart->deleteMultiProduct(explode(',', Tools::G('id')))) {
+						$cart_info = $cart->getCartInfo();
+						$result = array(
+							'status' => 'yes',
+							'cart_total' => Tools::displayPrice($cart_info['cart_total']),
+							'cart_quantity' => $cart_info['cart_quantity'],
+						);
+						die(json_encode($result));
+					}
+					die(json_encode(array("status" => "no")));
+					break;
 				default:
 					break;
 			}

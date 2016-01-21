@@ -3,13 +3,13 @@
 <ul id="order_step" class="step">
 	<li class="current"><span><i>01</i><strong>购物车</strong></span></li>
 	<li class="todo"><span><i>02</i><strong>登录/注册</strong></span></li>
-	<li class="todo"><span><i>03</i><strong>填写收货地址</strong></span></li>
+	<li class="todo"><span><i>03</i><strong>核对定单</strong></span></li>
 	<li class="todo"><span><i>04</i><strong>支付</strong></span></li>
 </ul>
 <h2>购物车 <small> <span class="cart-total-quantity">{$cart_quantity}</span> 件商品</small></h2>
 <table class="table cart-table">
 	<tr class="cart-header">
-		<th class="th-select"><input type="checkbox" name="check-all" class="check-all" data-name="id_cart_product[]"> 全选</th>
+		<th class="th-select"><input type="checkbox" name="check-all" class="check-all" data-name="id_cart_product"> 全选</th>
 		<th class="th-image"></th>
 		<th class="th-name">商品</th>
 		<th class="th-price">单价</th>
@@ -19,7 +19,7 @@
 	</tr>
 	{foreach from=$cart_products item=product name=product}
 	<tr class="item">
-		<td class="td-select"><input type="checkbox" name="id_cart_product[]" value="{$product.id_cart_product}"></td>
+		<td class="td-select"><input type="checkbox" name="id_cart_product" value="{$product.id_cart_product}"></td>
 		<td class="td-image"><a href="{$product.link}" title="{$product.name}" target="_blank"><img src="{$product.image}" alt="{$product.name}" /></a></td>
 		<td class="td-name"><a href="{$product.link}" title="{$product.name}" target="_blank">{$product.name}</a><br/>
 			{foreach from=$product.attributes item=attribute name=attribute}
@@ -39,8 +39,8 @@
 	</tr>
 	{/foreach}
 	<tr class="basket-footer">
-		<td><input type="checkbox" name="check-all" class="check-all" data-name="id_cart_product[]"> 全选</td>
-		<td><a href="javascript:;" class="cart_quantity_delete">删除选中</a></td>
+		<td><input type="checkbox" name="check-all" class="check-all" data-name="id_cart_product"> 全选</td>
+		<td><a href="javascript:;" class="cart-selected-delete">删除选中</a></td>
 		<td colspan="4" class="price-sum">
 			<div>
 				<span class="txt">总价（不含运费）：</span>

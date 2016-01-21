@@ -55,7 +55,12 @@ $(document).ready(function(){
 	$(".cart_quantity_delete").click(function(){
 		Cart.removeItem($(this).data("id"), $(this).parent().parent());
 	})
-
+	/**
+	 * 删除选中定单
+	 */
+	$(".cart-selected-delete").click(function(){
+		Cart.deleteSelected($(".td-select [name='id_cart_product']"));
+	})
 	/**
 	 * 增加购物车商品数量
 	 */
@@ -195,6 +200,36 @@ var Cart = {
 				}
 			}
 		});
+	},
+	/**
+	 * 删除选择购物车项
+	 */
+	deleteSelected: function (id) {
+		needDelete = new Array();
+		id.each(function(){
+			if ($(this).is(":checked") == true) {
+				needDelete.push( $(this).val());
+			}
+		})
+		if (needDelete.length > 0) {
+			$.ajax({
+				url: ajax_dir,
+				cache: false,
+				data: "c=Cart&m=deleteMultiItem&id=" + needDelete.join(),
+				dataType: "json",
+				success: function(data) {
+					if (data.status == 'yes') {
+						needDelete.forEach(function(e){
+							$(".td-select [value=" + e + "]").parent().parent().remove();
+						})
+						$(".cart-block .badge").text(data.cart_quantity)
+						$(".cart-total-quantity").text(data.cart_quantity)
+						$(".cart-total").html(data.cart_total);
+						$(".basket-footer .total-price").html(data.cart_total);
+					}
+				}
+			});
+		}
 	}
 };
 

@@ -117,6 +117,17 @@ class Cart extends ObjectBase{
 	}
 
 	/**
+	 * 删除多个购物车商品
+	 *
+	 * @param $id_cart_product
+	 * @return bool
+	 */
+	public function deleteMultiProduct($id_cart_product)
+	{
+		return Db::getInstance()->exec('DELETE FROM '.DB_PREFIX.'cart_product WHERE `id_cart` = ' . (int) $this->id . ' AND `id_cart_product` IN(' . implode(',', array_map('intval', $id_cart_product)) . ')');
+	}
+
+	/**
 	 * 增加购物车商品数量,并返回更新后的内容
 	 * @param $id_cart_product
 	 * @param int $step

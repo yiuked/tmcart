@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2016-01-21 14:11:10
+<?php /* Smarty version Smarty-3.1.12, created on 2016-01-21 15:02:22
          compiled from "D:\wamp\www\red\shoes\themes\shop\cart.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:13715549a679f58f126-20984040%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '5457143d89ebc00a09604dc6c2095c1032608ad4' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\cart.tpl',
-      1 => 1453356668,
+      1 => 1453359738,
       2 => 'file',
     ),
   ),
@@ -35,14 +35,14 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 <ul id="order_step" class="step">
 	<li class="current"><span><i>01</i><strong>购物车</strong></span></li>
 	<li class="todo"><span><i>02</i><strong>登录/注册</strong></span></li>
-	<li class="todo"><span><i>03</i><strong>填写收货地址</strong></span></li>
+	<li class="todo"><span><i>03</i><strong>核对定单</strong></span></li>
 	<li class="todo"><span><i>04</i><strong>支付</strong></span></li>
 </ul>
 <h2>购物车 <small> <span class="cart-total-quantity"><?php echo $_smarty_tpl->tpl_vars['cart_quantity']->value;?>
 </span> 件商品</small></h2>
 <table class="table cart-table">
 	<tr class="cart-header">
-		<th class="th-select"><input type="checkbox" name="check-all" class="check-all" data-name="id_cart_product[]"> 全选</th>
+		<th class="th-select"><input type="checkbox" name="check-all" class="check-all" data-name="id_cart_product"> 全选</th>
 		<th class="th-image"></th>
 		<th class="th-name">商品</th>
 		<th class="th-price">单价</th>
@@ -56,7 +56,7 @@ foreach ($_from as $_smarty_tpl->tpl_vars['product']->key => $_smarty_tpl->tpl_v
 $_smarty_tpl->tpl_vars['product']->_loop = true;
 ?>
 	<tr class="item">
-		<td class="td-select"><input type="checkbox" name="id_cart_product[]" value="<?php echo $_smarty_tpl->tpl_vars['product']->value['id_cart_product'];?>
+		<td class="td-select"><input type="checkbox" name="id_cart_product" value="<?php echo $_smarty_tpl->tpl_vars['product']->value['id_cart_product'];?>
 "></td>
 		<td class="td-image"><a href="<?php echo $_smarty_tpl->tpl_vars['product']->value['link'];?>
 " title="<?php echo $_smarty_tpl->tpl_vars['product']->value['name'];?>
@@ -96,8 +96,8 @@ $_smarty_tpl->tpl_vars['attribute']->_loop = true;
 	</tr>
 	<?php } ?>
 	<tr class="basket-footer">
-		<td><input type="checkbox" name="check-all" class="check-all" data-name="id_cart_product[]"> 全选</td>
-		<td><a href="javascript:;" class="cart_quantity_delete">删除选中</a></td>
+		<td><input type="checkbox" name="check-all" class="check-all" data-name="id_cart_product"> 全选</td>
+		<td><a href="javascript:;" class="cart-selected-delete">删除选中</a></td>
 		<td colspan="4" class="price-sum">
 			<div>
 				<span class="txt">总价（不含运费）：</span>
