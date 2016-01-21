@@ -124,13 +124,44 @@ class AjaxView extends View
 			global $cart;
 			switch (Tools::G('m')) {
 				case 'removeItem':
-
 					if ($cart->deleteProduct(Tools::G('id'))) {
 						$cart_info = $cart->getCartInfo();
 						$result = array(
 							'status' => 'yes',
 							'cart_total' => Tools::displayPrice($cart_info['cart_total']),
 							'cart_quantity' => $cart_info['cart_quantity'],
+						);
+						die(json_encode($result));
+					}
+					die(json_encode(array("status" => "no")));
+					break;
+				case 'plusItem':
+					if ($row = $cart->plusProduct(Tools::G('id'))) {
+						$cart_info = $cart->getCartInfo();
+						$result = array(
+							'status' => 'yes',
+							'cart_total' => Tools::displayPrice($cart_info['cart_total']),
+							'cart_quantity' => $cart_info['cart_quantity'],
+							'item' => array(
+								'quantity' => $row['quantity'],
+								'total' => Tools::displayPrice($row['total']),
+							)
+						);
+						die(json_encode($result));
+					}
+					die(json_encode(array("status" => "no")));
+					break;
+				case 'minusItem':
+					if ($row = $cart->minusProduct(Tools::G('id'))) {
+						$cart_info = $cart->getCartInfo();
+						$result = array(
+							'status' => 'yes',
+							'cart_total' => Tools::displayPrice($cart_info['cart_total']),
+							'cart_quantity' => $cart_info['cart_quantity'],
+							'item' => array(
+								'quantity' => $row['quantity'],
+								'total' => Tools::displayPrice($row['total']),
+							)
 						);
 						die(json_encode($result));
 					}

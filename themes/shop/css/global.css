@@ -72,6 +72,16 @@ input[type="checkbox"], input[type="radio"] {
 .panel-heading h1,.panel-heading h2,.panel-heading h3,.panel-heading h4{
     margin: 0;
 }
+.spinner .input-group-addon a.disable, .spinner .input-group-addon a.disable{
+    color: #ccc;
+}
+.spinner .input-group-addon{
+    padding: 0px;
+}
+.spinner .input-group-addon a{
+    display: block;
+    padding: 7px;
+}
 /* header.tpl */
 .top-menu {
     background: #f1f1f1 none repeat scroll 0 0;

@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2016-01-20 21:48:45
+<?php /* Smarty version Smarty-3.1.12, created on 2016-01-21 14:11:10
          compiled from "D:\wamp\www\red\shoes\themes\shop\cart.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:13715549a679f58f126-20984040%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '5457143d89ebc00a09604dc6c2095c1032608ad4' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\cart.tpl',
-      1 => 1453297722,
+      1 => 1453356668,
       2 => 'file',
     ),
   ),
@@ -38,16 +38,16 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 	<li class="todo"><span><i>03</i><strong>填写收货地址</strong></span></li>
 	<li class="todo"><span><i>04</i><strong>支付</strong></span></li>
 </ul>
-<h2 class="tc-standard">购物车 <small><?php echo $_smarty_tpl->tpl_vars['cart_quantity']->value;?>
- 件商品</small></h2>
+<h2>购物车 <small> <span class="cart-total-quantity"><?php echo $_smarty_tpl->tpl_vars['cart_quantity']->value;?>
+</span> 件商品</small></h2>
 <table class="table cart-table">
 	<tr class="cart-header">
 		<th class="th-select"><input type="checkbox" name="check-all" class="check-all" data-name="id_cart_product[]"> 全选</th>
 		<th class="th-image"></th>
 		<th class="th-name">商品</th>
 		<th class="th-price">单价</th>
-		<th class="th-quantity">数量</th>
-		<th class="th-total">小计</th>
+		<th class="th-quantity" width="100">数量</th>
+		<th class="th-total" width="150">小计</th>
 		<th class="th-action">操作</th>
 	</tr>
 	<?php  $_smarty_tpl->tpl_vars['product'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['product']->_loop = false;
@@ -80,45 +80,14 @@ $_smarty_tpl->tpl_vars['attribute']->_loop = true;
 		<td class="td-price"><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['product']->value['price']),$_smarty_tpl);?>
 </td>
 		<td class="td-quantity">
-		<span class="skin-select skin">
-			<span class="select-content"><span><?php echo $_smarty_tpl->tpl_vars['product']->value['quantity'];?>
-</span></span>
-			<select data-nofirst="true" class="skin shopping_cart_form_submit" autocomplete="off" name="quantity[<?php echo $_smarty_tpl->tpl_vars['product']->value['id_cart_product'];?>
-][quantity]">
-			 <?php if (isset($_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop'])) unset($_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']);
-$_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['start'] = (int)1;
-$_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['loop'] = is_array($_loop=6) ? count($_loop) : max(0, (int)$_loop); unset($_loop);
-$_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['name'] = 'quantityLoop';
-$_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['show'] = true;
-$_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['max'] = $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['loop'];
-$_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['step'] = 1;
-if ($_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['start'] < 0)
-    $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['start'] = max($_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['step'] > 0 ? 0 : -1, $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['loop'] + $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['start']);
-else
-    $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['start'] = min($_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['start'], $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['step'] > 0 ? $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['loop'] : $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['loop']-1);
-if ($_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['show']) {
-    $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['total'] = min(ceil(($_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['step'] > 0 ? $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['loop'] - $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['start'] : $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['start']+1)/abs($_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['step'])), $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['max']);
-    if ($_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['total'] == 0)
-        $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['show'] = false;
-} else
-    $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['total'] = 0;
-if ($_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['show']):
-
-            for ($_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['index'] = $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['start'], $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['iteration'] = 1;
-                 $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['iteration'] <= $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['total'];
-                 $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['index'] += $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['step'], $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['iteration']++):
-$_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['rownum'] = $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['iteration'];
-$_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['index_prev'] = $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['index'] - $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['step'];
-$_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['index_next'] = $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['index'] + $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['step'];
-$_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['first']      = ($_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['iteration'] == 1);
-$_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['last']       = ($_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['iteration'] == $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['total']);
-?>
-			  <option value="<?php echo $_smarty_tpl->getVariable('smarty')->value['section']['quantityLoop']['index'];?>
-" <?php if ($_smarty_tpl->getVariable('smarty')->value['section']['quantityLoop']['index']==$_smarty_tpl->tpl_vars['product']->value['quantity']){?>selected="selected"<?php }?>><?php echo $_smarty_tpl->getVariable('smarty')->value['section']['quantityLoop']['index'];?>
-</option>
-			  <?php endfor; endif; ?>
-			</select>
-		</span>
+			<div class="input-group spinner">
+				<div class="input-group-addon"><a href="javascript:;" class="minus<?php if ($_smarty_tpl->tpl_vars['product']->value['quantity']<=1){?> disable<?php }?>" data-id="<?php echo $_smarty_tpl->tpl_vars['product']->value['id_cart_product'];?>
+"> - </a></div>
+				<input type="text" class="form-control input-sm" value="<?php echo $_smarty_tpl->tpl_vars['product']->value['quantity'];?>
+">
+				<div class="input-group-addon"><a href="javascript:;" class="plus" data-id="<?php echo $_smarty_tpl->tpl_vars['product']->value['id_cart_product'];?>
+"> + </a></div>
+			</div>
 		</td>
 		<td class="td-total"><strong><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['product']->value['total']),$_smarty_tpl);?>
 </strong></td>
@@ -128,7 +97,7 @@ $_smarty_tpl->tpl_vars['smarty']->value['section']['quantityLoop']['last']      
 	<?php } ?>
 	<tr class="basket-footer">
 		<td><input type="checkbox" name="check-all" class="check-all" data-name="id_cart_product[]"> 全选</td>
-		<td>删除选中</td>
+		<td><a href="javascript:;" class="cart_quantity_delete">删除选中</a></td>
 		<td colspan="4" class="price-sum">
 			<div>
 				<span class="txt">总价（不含运费）：</span>

@@ -49,11 +49,34 @@ $(document).ready(function(){
 		addWish($(this),$(this).attr("data-id"));
 	})
 
+	/**
+	 * 删除购物车产品
+	 */
 	$(".cart_quantity_delete").click(function(){
-		Cart.removeItem($(this).data("id"), $(this));
+		Cart.removeItem($(this).data("id"), $(this).parent().parent());
 	})
 
-	/*
+	/**
+	 * 增加购物车商品数量
+	 */
+	$(".td-quantity .plus").click(function(){
+		if ($(this).hasClass("disable")) {
+			return;
+		}
+		Cart.plusItem($(this).data("id"), $(this).parent().parent().parent().parent());
+	})
+
+	/**
+	 * 减少购物车商品数量
+	 */
+	$(".td-quantity .minus").click(function(){
+		if ($(this).hasClass("disable")) {
+			return;
+		}
+		Cart.minusItem($(this).data("id"), $(this).parent().parent().parent().parent());
+	})
+
+	/**
 	 * 全选按钮的class值为check-all，且必须设置data-name属性，其值为子选项的name值
 	 * 例:<input type="checkbox" class="check-all" data-name="product[]">
 	 * */
@@ -96,17 +119,17 @@ function navCartPrev(obj)
 	}
 	bdUl.animate({top:newTop});
 }
-function qantityReduce(obj){
-	var quantity_input = obj.next();
-	if(quantity_input.val()>0)
-		quantity_input.val(parseInt(quantity_input.val())-1)
-}
-function qantityAdd(obj){
-	var quantity_input = obj.prev();
-	quantity_input.val(parseInt(quantity_input.val())+1)
-}
+
+/**
+ * 购物车类，用于处理ajax购物车请求
+ */
 var Cart = {
-	removeItem: function(id, e){
+	/**
+	 * 删除购物车产品
+	 * @param Int id 需要删除的id_cart_product
+	 * @param Object e 调用该方法的tr行
+	 */
+	removeItem: function(id, e) {
 		$.ajax({
 			 url: ajax_dir,
 			 cache: false,
@@ -114,15 +137,67 @@ var Cart = {
 			 dataType: "json",
 			 success: function(data) {
 				 if (data.status == 'yes') {
-					 e.parent().parent().remove();
+					 e.remove();
 					 $(".cart-block .badge").text(data.cart_quantity)
 					 $(".cart-total-quantity").text(data.cart_quantity)
 					 $(".cart-total").html(data.cart_total);
+					 $(".basket-footer .total-price").html(data.cart_total);
 				 }
 			 }
 		 });
+	},
+	/**
+	 * 增加购物车商品数量
+	 */
+	minusItem: function(id, e) {
+		$.ajax({
+			url: ajax_dir,
+			cache: false,
+			data: "c=Cart&m=minusItem&id=" + id,
+			dataType: "json",
+			success: function(data) {
+				if (data.status == 'yes') {
+					if (data.item.quantity <= 1) {
+						e.find(".td-quantity .minus").addClass("disable");
+					}
+					e.find(".td-total strong").html(data.item.total);
+					e.find(".td-quantity input").val(data.item.quantity);
+					$(".cart-block .badge").text(data.cart_quantity)
+					$(".cart-total-quantity").text(data.cart_quantity)
+					$(".cart-total").html(data.cart_total);
+					$(".basket-footer .total-price").html(data.cart_total);
+				}
+			}
+		});
+	},
+	/**
+	 * 增加购物车商品数量
+	 */
+	plusItem: function(id, e) {
+		$.ajax({
+			url: ajax_dir,
+			cache: false,
+			data: "c=Cart&m=plusItem&id=" + id,
+			dataType: "json",
+			success: function(data) {
+				if (data.status == 'yes') {
+					if (data.item.quantity > 1) {
+						if (e.find(".td-quantity .minus").hasClass('disable')) {
+							e.find(".td-quantity .minus").removeClass('disable');
+						}
+					}
+					e.find(".td-total strong").html(data.item.total);
+					e.find(".td-quantity input").val(data.item.quantity);
+					$(".cart-block .badge").text(data.cart_quantity)
+					$(".cart-total-quantity").text(data.cart_quantity)
+					$(".cart-total").html(data.cart_total);
+					$(".basket-footer .total-price").html(data.cart_total);
+				}
+			}
+		});
 	}
 };
+
 /**
  * hover 延时处理
  */

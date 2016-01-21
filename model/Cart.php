@@ -104,21 +104,46 @@ class Cart extends ObjectBase{
 			return Db::getInstance()->exec('INSERT INTO '.DB_PREFIX.'cart_product (id_cart,id_product,quantity,unit_price,id_attributes) VALUES('.(int)($this->id).','.(int)($id_product).','.(int)($quantity).','.(float)($price).',"'.pSQL($id_attributes).'")');
 			
 	}
-	
+
+	/**
+	 * 删除购物车商品
+	 *
+	 * @param $id_cart_product
+	 * @return bool
+	 */
 	public function deleteProduct($id_cart_product)
 	{
-		if(Db::getInstance()->exec('DELETE FROM '.DB_PREFIX.'cart_product WHERE `id_cart` = ' . (int) $this->id . ' AND `id_cart_product`=' . (int) $id_cart_product)){
-			$this->discount = 0;
-			return $this->update();
+		return Db::getInstance()->exec('DELETE FROM '.DB_PREFIX.'cart_product WHERE `id_cart` = ' . (int) $this->id . ' AND `id_cart_product`=' . (int) $id_cart_product);
+	}
+
+	/**
+	 * 增加购物车商品数量,并返回更新后的内容
+	 * @param $id_cart_product
+	 * @param int $step
+	 * @return bool
+	 */
+	public function plusProduct($id_cart_product, $step = 1)
+	{
+		$ret = Db::getInstance()->exec('UPDATE '.DB_PREFIX.'cart_product SET `quantity`=quantity+'. (int) $step .' WHERE  `id_cart` = ' . (int) $this->id . ' AND `id_cart_product`='.(int)$id_cart_product);
+		if ($ret) {
+			return Db::getInstance()->getRow('SELECT quantity,SUM(`quantity`*`unit_price`) AS total FROM ' . DB_PREFIX . 'cart_product WHERE `id_cart_product`='.(int)$id_cart_product);
 		}
 		return false;
 	}
-	
-	public function updateProduct($id_cart_product,$quantity)
+
+	/**
+	 * 减少购物车产品数量，并返回更新后的内容
+	 * 当quantity为1时将不能再减少.
+	 *
+	 * @param $id_cart_product
+	 * @param int $step
+	 * @return bool
+	 */
+	public function minusProduct($id_cart_product, $step = 1)
 	{
-		if(Db::getInstance()->exec('UPDATE '.DB_PREFIX.'cart_product SET `quantity`='.$quantity.' WHERE  `id_cart` = ' . (int) $this->id . ' AND `id_cart_product`='.intval($id_cart_product))){
-			$this->discount = 0;
-			return $this->update();
+		$ret = Db::getInstance()->exec('UPDATE '.DB_PREFIX.'cart_product SET `quantity`=quantity-'. (int) $step .' WHERE quantity>1 AND `id_cart` = ' . (int) $this->id . ' AND `id_cart_product`='.intval($id_cart_product));
+		if ($ret) {
+			return Db::getInstance()->getRow('SELECT quantity,SUM(`quantity`*`unit_price`) AS total FROM ' . DB_PREFIX . 'cart_product WHERE `id_cart_product`='.(int)$id_cart_product);
 		}
 		return false;
 	}

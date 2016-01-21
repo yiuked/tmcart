@@ -40,7 +40,7 @@ class MyfeedbackView extends View
 						$products [] = $row;
 					}
 			}
-			
+
 			$smarty->assign(array(
 				'success'=>$success,
 				'errors'=>$errors,

@@ -6,15 +6,15 @@
 	<li class="todo"><span><i>03</i><strong>填写收货地址</strong></span></li>
 	<li class="todo"><span><i>04</i><strong>支付</strong></span></li>
 </ul>
-<h2 class="tc-standard">购物车 <small>{$cart_quantity} 件商品</small></h2>
+<h2>购物车 <small> <span class="cart-total-quantity">{$cart_quantity}</span> 件商品</small></h2>
 <table class="table cart-table">
 	<tr class="cart-header">
 		<th class="th-select"><input type="checkbox" name="check-all" class="check-all" data-name="id_cart_product[]"> 全选</th>
 		<th class="th-image"></th>
 		<th class="th-name">商品</th>
 		<th class="th-price">单价</th>
-		<th class="th-quantity">数量</th>
-		<th class="th-total">小计</th>
+		<th class="th-quantity" width="100">数量</th>
+		<th class="th-total" width="150">小计</th>
 		<th class="th-action">操作</th>
 	</tr>
 	{foreach from=$cart_products item=product name=product}
@@ -28,14 +28,11 @@
 		</td>
 		<td class="td-price">{displayPrice price=$product.price}</td>
 		<td class="td-quantity">
-		<span class="skin-select skin">
-			<span class="select-content"><span>{$product.quantity}</span></span>
-			<select data-nofirst="true" class="skin shopping_cart_form_submit" autocomplete="off" name="quantity[{$product.id_cart_product}][quantity]">
-			 {section start=1 loop=6 name=quantityLoop}
-			  <option value="{$smarty.section.quantityLoop.index}" {if $smarty.section.quantityLoop.index==$product.quantity}selected="selected"{/if}>{$smarty.section.quantityLoop.index}</option>
-			  {/section}
-			</select>
-		</span>
+			<div class="input-group spinner">
+				<div class="input-group-addon"><a href="javascript:;" class="minus{if $product.quantity <= 1} disable{/if}" data-id="{$product.id_cart_product}"> - </a></div>
+				<input type="text" class="form-control input-sm" value="{$product.quantity}">
+				<div class="input-group-addon"><a href="javascript:;" class="plus" data-id="{$product.id_cart_product}"> + </a></div>
+			</div>
 		</td>
 		<td class="td-total"><strong>{displayPrice price=$product.total}</strong></td>
 		<td class="td-action"><a href="javascript:;" class="cart_quantity_delete" data-id="{$product.id_cart_product}">删除</a></td>
@@ -43,7 +40,7 @@
 	{/foreach}
 	<tr class="basket-footer">
 		<td><input type="checkbox" name="check-all" class="check-all" data-name="id_cart_product[]"> 全选</td>
-		<td>删除选中</td>
+		<td><a href="javascript:;" class="cart_quantity_delete">删除选中</a></td>
 		<td colspan="4" class="price-sum">
 			<div>
 				<span class="txt">总价（不含运费）：</span>
