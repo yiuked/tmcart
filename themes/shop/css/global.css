@@ -614,3 +614,32 @@ ul.step strong {
     text-align: right;
 }
 /* end my-address.tpl */
+/* onepage.tpl */
+.address-block {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 30px;
+}
+.address-block .item{
+    padding: 5px 50px;
+}
+.address-block .item .name{
+    cursor: pointer;
+    position: relative;
+    border: 2px solid #fff;
+}
+.address-block .item.active .name,.address-block .item .name:hover{
+    border: 2px solid #ed0080;
+}
+.address-block .item .name b{
+    background: rgba(0, 0, 0, 0) url("../img/icon-map.png") no-repeat scroll 0 0;
+    bottom: 0;
+    height: 12px;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    width: 12px;
+}
+.address-block .label{
+    font-size: 100%;
+}
+/* end onepage.tpl */

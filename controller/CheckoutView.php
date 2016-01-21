@@ -26,18 +26,14 @@ class CheckoutView extends View
 
 		$cart = new Cart((int)($cookie->id_cart));
 		$user = new User((int)($cart->id_user));
-		$address = $user->getDefaultAddress();
-		if($cart->id_address != $address->id){
-			$cart->id_address = $address->id;
-			$cart->update();
-		}
+		$addresses = $user->getAddresses();
 		
 		$carriers  = Carrier::loadData();
 		$payments   = PaymentModule::getHookPayment();
 		
 		$smarty->assign(array(
 			'cart'=>$cart,
-			'address' => $address,
+			'addresses' => $addresses,
 			'carriers'  => $carriers,
 			'payments'  => $payments,
 			'products' => $cart->getProducts(),

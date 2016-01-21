@@ -1,60 +1,68 @@
 <ul id="order_step" class="step">
 	<li class="done"><span><i>01</i><strong>购物车</strong></span></li>
 	<li class="done"><span><i>02</i><strong>注册/登录</strong></span></li>
-	<li class="current"><span><i>03</i><strong>配送</strong></span></li>
+	<li class="current"><span><i>03</i><strong>核对定单</strong></span></li>
 	<li class="todo"><span><i>04</i><strong>支付</strong></span></li>
 </ul>
-<div class="box-style">
-<form action="{$link->getPage('ConfirmOrderView')}" method="post" class="bd" id="order-confrim">
-<div class="row">
-	<h2>支付</h2>
-	<div class="txt-22"><p>请确认您的定单信息后继续支付.</p></div>
+<form action="{$link->getPage('ConfirmOrderView')}" method="post" id="order-confrim">
+<p class="tex-info">请确认您的定单信息后继续支付.</p>
+
+<div class="panel panel-default">
+	<div class="panel-body">
+		<div class="address-block">
+			<h3>收货人信息</h3>
+			{foreach from=$addresses item=address}
+			<div class="row item{if $address->is_default} active{/if}">
+				<div class="col-md-2 text-center name">{if $address->is_default}<b></b>{/if}<strong>{$address->name}</strong></div>
+				<div class="col-md-8">
+				<span class="addr-country">{$address->join('Country',  'id_country')->name}</span>
+				{if $address->join('Country',  'id_country')->need_state}<span class="addr-state">{$address->join('State',  'id_state')->name}{/if}</span>
+				<span class="addr-city">{$address->city}</span>
+				<span class="addr-address">{$address->address}{if $address->address2} {$address->address2}{/if}</span>
+				<span class="addr-postcode">{$address->postcode}</span>
+				<span class="addr-phone">{$address->phone}</span>
+				{if $address->is_default}<span class="label label-default">默认地址</span>{/if}
+				</div>
+				<div class="col-md-2">
+					<a href="{$link->getPage('AddressView', $address->id, "referer=CheckoutView")}" class="all"><strong>编辑</strong></a>
+				</div>
+			</div>
+			{/foreach}
+		</div>
+
+		{if count($carriers.items) > 1}
+		<div class="address-block">
+			<h3>配送方式</h3>
+			{foreach from=$carriers.items item=carrier name=carrier}
+				<div class="row item">
+					<div class="col-md-2 text-center name"><strong>{$carrier.name}</strong></div>
+					<div class="col-md-8">{$carrier.description}</div>
+					<div class="col-md-2">{if $carrier.shipping>0} + {displayPrice price=$carrier.shipping} {else}免运费{/if}</div>
+				</div>
+			{/foreach}
+		</div>
+		{/if}
+		{if $products}
+			<div class="cart_block">
+				<table class="table">
+					{foreach from=$products item=product name=product}
+						<tr>
+							<td><a href="{$product.link}" title="{$product.name}" target="_blank"><img src="{$product.image}" alt="{$product.name}" /></a></td>
+							<td><a href="{$product.link}" title="{$product.name}" target="_blank">{$product.name|truncate:50:'...'|escape:'html':'UTF-8'}</a><br/>
+								{foreach from=$product.attributes item=attribute name=attribute}
+									<em>{$attribute.group_name}:{$attribute.name}</em><br/>
+								{/foreach}
+								数量:{$product.quantity}
+							</td>
+							<td align="right"><strong>{displayPrice price=$product.total}</strong></td>
+						</tr>
+					{/foreach}
+				</table>
+			</div>
+		{/if}
+	</div>
 </div>
-<fieldset id="p-address">
-	<legend>收货地址</legend>
-	<p class="selectedAddress">
-        <strong>{$address->name}</strong><br>
-		{$address->address}{if $address->address2} {$address->address2}{/if}<br>
-		{$address->postcode} {$address->city} {if $address->join('Country',  'id_country')->need_state} {$address->join('State',  'id_state')->name}{/if} <br>
-		{$address->join('Country',  'id_country')->name}<br>
-		{$address->phone}<br>
-        <a href="{$link->getPage('AddressView', $address->id, "referer=CheckoutView")}" class="all"><strong>编辑</strong></a>
-    </p>
-</fieldset>
-<br/>
-{if count($carriers.items) > 1}
-<fieldset id="p-carrier">
-	<legend>Delivery methods</legend>
-	<ul id="carrier-list" class="carrier-list">
-	{foreach from=$carriers.items item=carrier name=carrier}
-		<li>
-			<input type="radio" name="id_carrier" value="{$carrier.id_carrier}" class="carrier_list" id="id_address_{$carrier.id_carrier}" {if $cart->id_carrier==$carrier.id_carrier}checked="checked"{/if}/>
-			<label for="id_carrier_{$carrier.id_carrier}"><strong>{$carrier.name}</strong> <span>{$carrier.description}</span></label>
-			<font color="#f60">({if $carrier.shipping>0}+{displayPrice price=$carrier.shipping}{else}Free Shipping{/if})</font>
-		</li>
-	{/foreach}
-	</ul>
-</fieldset>
-<br/>
-{/if}
-{if $products}
-<div class="cart_block">
-	<table width="100%">
-		{foreach from=$products item=product name=product}
-		<tr>
-			<td style="padding:5px"><a href="{$product.link}" title="{$product.name}" target="_blank"><img src="{$product.image}" alt="{$product.name}" /></a></td>
-			<td valign="top"><a href="{$product.link}" title="{$product.name}" target="_blank">{$product.name|truncate:50:'...'|escape:'html':'UTF-8'}</a><br/>
-				{foreach from=$product.attributes item=attribute name=attribute}
-				<em>{$attribute.group_name}:{$attribute.name}</em><br/>
-				{/foreach}
-				Quantity:{$product.quantity}
-			</td>
-			<td align="right"><strong>{displayPrice price=$product.total}</strong></td>
-		</tr>
-		{/foreach}
-	</table>
-</div>
-{/if}
+
 <div class="panier-resume">
 <div class="panier-livraison" {if $cart->id_carrier==0}style="display:none"{/if}>
 	<p class="panier-resume-titre">
@@ -79,7 +87,7 @@
 </div>
 {/if}
 <div class="panier-total panier-resume-titre">
-	<span>Total</span>
+	<span>应付总金额:</span>
 	<strong id="a_total">{displayPrice price=$total-$discount}</strong>
 </div>
 </div>
@@ -90,7 +98,6 @@
 {/foreach}
 </div>
 </form>
-</div>
 <script type="text/javascript">
 var ajaxLink = "{$link->getPage('AjaxView')}";
 var id_cart  = {$cart->id}

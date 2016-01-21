@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2014-12-24 17:24:18
+<?php /* Smarty version Smarty-3.1.12, created on 2016-01-21 17:06:53
          compiled from "D:\wamp\www\red\shoes\themes\shop\sale.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:4611549a864289b2d3-60488781%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'af6060070bdb1bdb467441fae5ad0b2a6ff82da1' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\sale.tpl',
-      1 => 1418610036,
+      1 => 1452476966,
       2 => 'file',
     ),
   ),
@@ -15,9 +15,9 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'function' => 
   array (
   ),
-  'has_nocache_code' => false,
   'version' => 'Smarty-3.1.12',
   'unifunc' => 'content_549a86428d6b00_70598866',
+  'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
 <?php if ($_valid && !is_callable('content_549a86428d6b00_70598866')) {function content_549a86428d6b00_70598866($_smarty_tpl) {?><div id="main_columns_two">
 <div class="list-entete">

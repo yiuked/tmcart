@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2016-01-03 17:13:26
+Date: 2016-01-21 17:18:08
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -33,13 +33,14 @@ CREATE TABLE `tm_address` (
   `add_date` datetime NOT NULL,
   `upd_date` datetime NOT NULL,
   PRIMARY KEY (`id_address`)
-) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Records of tm_address
 -- ----------------------------
-INSERT INTO `tm_address` VALUES ('64', '0', 'Address', '21', '20', 'City', '11111', 'Down Load 4', '', '68451232', '1', '2015-06-27 10:34:29', '2015-08-10 15:01:22');
-INSERT INTO `tm_address` VALUES ('65', '0', '牛皮', '21', '4', 'tet', '11111', 'Down Load 4', '128号', '11111', '0', '2015-12-21 15:22:59', '2015-12-21 15:22:59');
+INSERT INTO `tm_address` VALUES ('64', '14', '张小三', '21', '20', '成都市', '610000', '武侯区电信路1号', '成都交投B栋14楼A单元', '68451232', '1', '2015-06-27 10:34:29', '2015-08-10 15:01:22');
+INSERT INTO `tm_address` VALUES ('65', '14', '李小四', '21', '4', 'tet', '11111', 'Down Load 4', '128号', '11111', '0', '2015-12-21 15:22:59', '2015-12-21 15:22:59');
+INSERT INTO `tm_address` VALUES ('66', '15', '张小三', '5', '0', '广州市', '56244', '白云区建设路', '2栋三单元', '12697456', '1', '2016-01-07 15:53:01', '2016-01-07 15:53:01');
 
 -- ----------------------------
 -- Table structure for `tm_alert`
@@ -87,17 +88,17 @@ CREATE TABLE `tm_attribute` (
 -- ----------------------------
 -- Records of tm_attribute
 -- ----------------------------
-INSERT INTO `tm_attribute` VALUES ('122', '1', 'US 6 (EUR 36)', '0');
-INSERT INTO `tm_attribute` VALUES ('123', '1', 'US 6.5 (EUR 36.5)', '1');
-INSERT INTO `tm_attribute` VALUES ('124', '1', 'US 7 (EUR 37)', '2');
-INSERT INTO `tm_attribute` VALUES ('125', '1', 'US 7.5 (EUR 37.5)', '3');
-INSERT INTO `tm_attribute` VALUES ('126', '1', 'US 8 (EUR 38)', '4');
-INSERT INTO `tm_attribute` VALUES ('127', '1', 'US 8.5 (EUR 38.5)', '5');
-INSERT INTO `tm_attribute` VALUES ('128', '1', 'US 9 (EUR 39)', '6');
-INSERT INTO `tm_attribute` VALUES ('129', '1', 'US 9.5 (EUR 39.5)', '7');
-INSERT INTO `tm_attribute` VALUES ('130', '1', 'US 10 (EUR 40)', '8');
-INSERT INTO `tm_attribute` VALUES ('131', '1', 'US 10.5 (EUR 40.5)', '9');
-INSERT INTO `tm_attribute` VALUES ('132', '1', 'US 11 (EUR 41)', '10');
+INSERT INTO `tm_attribute` VALUES ('122', '1', '36', '0');
+INSERT INTO `tm_attribute` VALUES ('123', '1', '36.5', '1');
+INSERT INTO `tm_attribute` VALUES ('124', '1', '37', '2');
+INSERT INTO `tm_attribute` VALUES ('125', '1', '37.5', '3');
+INSERT INTO `tm_attribute` VALUES ('126', '1', '38', '4');
+INSERT INTO `tm_attribute` VALUES ('127', '1', '38.5', '5');
+INSERT INTO `tm_attribute` VALUES ('128', '1', '39', '6');
+INSERT INTO `tm_attribute` VALUES ('129', '1', '39.5', '7');
+INSERT INTO `tm_attribute` VALUES ('130', '1', '40', '8');
+INSERT INTO `tm_attribute` VALUES ('131', '1', '40.5', '9');
+INSERT INTO `tm_attribute` VALUES ('132', '1', '41', '10');
 INSERT INTO `tm_attribute` VALUES ('133', '6', '8G', '0');
 INSERT INTO `tm_attribute` VALUES ('134', '6', '18G', '2');
 INSERT INTO `tm_attribute` VALUES ('135', '6', '32G', '1');
@@ -117,7 +118,7 @@ CREATE TABLE `tm_attribute_group` (
 -- ----------------------------
 -- Records of tm_attribute_group
 -- ----------------------------
-INSERT INTO `tm_attribute_group` VALUES ('1', 'Size', '1', '0');
+INSERT INTO `tm_attribute_group` VALUES ('1', '鞋码', '2', '0');
 INSERT INTO `tm_attribute_group` VALUES ('6', ' 内存', '2', '1');
 INSERT INTO `tm_attribute_group` VALUES ('7', '年龄', '1', '2');
 
@@ -166,8 +167,8 @@ CREATE TABLE `tm_carrier` (
 -- ----------------------------
 -- Records of tm_carrier
 -- ----------------------------
-INSERT INTO `tm_carrier` VALUES ('1', 'DHL', '49306', '4-7DAY Tracking Online', '15', '1');
-INSERT INTO `tm_carrier` VALUES ('2', 'EMS', '49305', '5-10DAY Tracking Online', '0', '1');
+INSERT INTO `tm_carrier` VALUES ('1', 'DHL', '49306', '1-3天送达特殊情况可能需要更长时间', '15', '1');
+INSERT INTO `tm_carrier` VALUES ('2', 'EMS', '49305', '3-5天送达偏远地区可能需要更长时间', '0', '1');
 
 -- ----------------------------
 -- Table structure for `tm_cart`
@@ -185,7 +186,7 @@ CREATE TABLE `tm_cart` (
   `add_date` datetime NOT NULL,
   `upd_date` datetime NOT NULL,
   PRIMARY KEY (`id_cart`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Records of tm_cart
@@ -198,7 +199,8 @@ INSERT INTO `tm_cart` VALUES ('31', '0', '0', '0', '0', '0.00', '', '0', '2015-1
 INSERT INTO `tm_cart` VALUES ('32', '0', '0', '0', '0', '0.00', '', '0', '2015-12-22 13:47:55', '2015-12-22 13:47:55');
 INSERT INTO `tm_cart` VALUES ('33', '0', '0', '0', '0', '0.00', '', '0', '2015-12-22 13:48:43', '2015-12-22 13:48:43');
 INSERT INTO `tm_cart` VALUES ('34', '0', '0', '0', '2', '0.00', '', '0', '2015-12-22 13:50:57', '2015-12-22 13:50:57');
-INSERT INTO `tm_cart` VALUES ('35', '0', '0', '0', '2', '0.00', '', '0', '2015-12-24 14:26:01', '2015-12-24 14:26:01');
+INSERT INTO `tm_cart` VALUES ('35', '15', '66', '0', '2', '0.00', '', '0', '2015-12-24 14:26:01', '2015-12-24 14:26:01');
+INSERT INTO `tm_cart` VALUES ('36', '14', '64', '0', '2', '0.00', '', '0', '2016-01-11 09:59:16', '2016-01-11 09:59:16');
 
 -- ----------------------------
 -- Table structure for `tm_cart_product`
@@ -212,7 +214,7 @@ CREATE TABLE `tm_cart_product` (
   `unit_price` float(11,2) NOT NULL DEFAULT '0.00',
   `id_attributes` varchar(56) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id_cart_product`)
-) ENGINE=InnoDB AUTO_INCREMENT=139 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=167 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Records of tm_cart_product
@@ -225,8 +227,10 @@ INSERT INTO `tm_cart_product` VALUES ('133', '31', '3693', '1', '159.00', '123')
 INSERT INTO `tm_cart_product` VALUES ('134', '32', '3693', '1', '159.00', '123');
 INSERT INTO `tm_cart_product` VALUES ('135', '33', '3704', '1', '159.00', '123');
 INSERT INTO `tm_cart_product` VALUES ('136', '34', '3703', '3', '179.00', '123');
-INSERT INTO `tm_cart_product` VALUES ('137', '35', '3704', '1', '159.00', '122');
-INSERT INTO `tm_cart_product` VALUES ('138', '35', '3692', '1', '215.00', '124');
+INSERT INTO `tm_cart_product` VALUES ('146', '35', '3604', '1', '269.00', '');
+INSERT INTO `tm_cart_product` VALUES ('147', '35', '3692', '1', '215.00', '124');
+INSERT INTO `tm_cart_product` VALUES ('165', '36', '3699', '1', '139.00', '123');
+INSERT INTO `tm_cart_product` VALUES ('166', '36', '3691', '1', '279.00', '124');
 
 -- ----------------------------
 -- Table structure for `tm_category`
@@ -8661,7 +8665,7 @@ CREATE TABLE `tm_image` (
   `add_date` datetime NOT NULL,
   PRIMARY KEY (`id_image`),
   UNIQUE KEY `idx_product_image` (`id_image`)
-) ENGINE=MyISAM AUTO_INCREMENT=49307 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=49315 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tm_image
@@ -8799,6 +8803,7 @@ INSERT INTO `tm_image` VALUES ('49280', '0000-00-00 00:00:00');
 INSERT INTO `tm_image` VALUES ('49294', '2015-12-02 16:36:18');
 INSERT INTO `tm_image` VALUES ('49282', '0000-00-00 00:00:00');
 INSERT INTO `tm_image` VALUES ('49281', '0000-00-00 00:00:00');
+INSERT INTO `tm_image` VALUES ('49307', '2016-01-04 16:37:38');
 INSERT INTO `tm_image` VALUES ('49297', '2015-12-02 16:37:16');
 INSERT INTO `tm_image` VALUES ('49285', '0000-00-00 00:00:00');
 INSERT INTO `tm_image` VALUES ('49295', '2015-12-02 16:37:06');
@@ -9124,11 +9129,18 @@ INSERT INTO `tm_image` VALUES ('49148', '0000-00-00 00:00:00');
 INSERT INTO `tm_image` VALUES ('48987', '0000-00-00 00:00:00');
 INSERT INTO `tm_image` VALUES ('49300', '2015-12-02 16:43:01');
 INSERT INTO `tm_image` VALUES ('49292', '2015-12-02 11:41:26');
+INSERT INTO `tm_image` VALUES ('49308', '2016-01-04 16:37:38');
 INSERT INTO `tm_image` VALUES ('49302', '2015-12-02 16:43:12');
 INSERT INTO `tm_image` VALUES ('49303', '2015-12-07 12:18:28');
 INSERT INTO `tm_image` VALUES ('49304', '2015-12-07 12:18:32');
 INSERT INTO `tm_image` VALUES ('49305', '2015-12-07 12:46:32');
 INSERT INTO `tm_image` VALUES ('49306', '2015-12-07 12:46:42');
+INSERT INTO `tm_image` VALUES ('49309', '2016-01-04 16:37:39');
+INSERT INTO `tm_image` VALUES ('49310', '2016-01-04 16:37:39');
+INSERT INTO `tm_image` VALUES ('49311', '2016-01-04 16:37:51');
+INSERT INTO `tm_image` VALUES ('49312', '2016-01-04 16:37:51');
+INSERT INTO `tm_image` VALUES ('49313', '2016-01-04 16:37:51');
+INSERT INTO `tm_image` VALUES ('49314', '2016-01-04 16:37:52');
 
 -- ----------------------------
 -- Table structure for `tm_image_type`
@@ -9173,7 +9185,7 @@ CREATE TABLE `tm_module` (
 -- ----------------------------
 INSERT INTO `tm_module` VALUES ('5', 'ecpss', 'payment', 'Ecpss', 'Ecpss by credit cart', '0');
 INSERT INTO `tm_module` VALUES ('6', 'sht', 'payment', 'Fashionpay', 'Fashionpay by credit cart', '0');
-INSERT INTO `tm_module` VALUES ('7', 'neworder', 'payment', 'Neworder', 'Create a new order', '1');
+INSERT INTO `tm_module` VALUES ('7', 'neworder', 'payment', 'Neworder', 'Create a new order', '0');
 
 -- ----------------------------
 -- Table structure for `tm_newsletter`
@@ -11023,7 +11035,7 @@ CREATE TABLE `tm_product_to_image` (
   `position` int(11) NOT NULL,
   `cover` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id_product_image`)
-) ENGINE=InnoDB AUTO_INCREMENT=462 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=470 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tm_product_to_image
@@ -11479,6 +11491,14 @@ INSERT INTO `tm_product_to_image` VALUES ('457', '49148', '3670', '1', '1');
 INSERT INTO `tm_product_to_image` VALUES ('458', '48987', '3630', '2', '0');
 INSERT INTO `tm_product_to_image` VALUES ('459', '49300', '3704', '3', '1');
 INSERT INTO `tm_product_to_image` VALUES ('461', '49302', '3704', '2', '0');
+INSERT INTO `tm_product_to_image` VALUES ('462', '49307', '3685', '5', '0');
+INSERT INTO `tm_product_to_image` VALUES ('463', '49308', '3685', '6', '0');
+INSERT INTO `tm_product_to_image` VALUES ('464', '49309', '3685', '7', '0');
+INSERT INTO `tm_product_to_image` VALUES ('465', '49310', '3685', '8', '0');
+INSERT INTO `tm_product_to_image` VALUES ('466', '49311', '3685', '9', '0');
+INSERT INTO `tm_product_to_image` VALUES ('467', '49312', '3685', '10', '0');
+INSERT INTO `tm_product_to_image` VALUES ('468', '49313', '3685', '11', '0');
+INSERT INTO `tm_product_to_image` VALUES ('469', '49314', '3685', '12', '0');
 
 -- ----------------------------
 -- Table structure for `tm_product_to_tag`
@@ -12053,12 +12073,13 @@ CREATE TABLE `tm_user` (
   `add_date` datetime NOT NULL,
   `upd_date` datetime NOT NULL,
   PRIMARY KEY (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Records of tm_user
 -- ----------------------------
-INSERT INTO `tm_user` VALUES ('14', 'Address', 'ubb@123.com', 'c47db853915decf5a47cad5b7ca766fa', '1', '2015-06-27 10:34:29', '2015-06-27 10:34:29');
+INSERT INTO `tm_user` VALUES ('14', '李小四', 'ubb@123.com', 'c47db853915decf5a47cad5b7ca766fa', '1', '2015-06-27 10:34:29', '2015-06-27 10:34:29');
+INSERT INTO `tm_user` VALUES ('15', '张小三', 'yiuked@vip.qq.com', 'c47db853915decf5a47cad5b7ca766fa', '1', '2016-01-07 15:53:01', '2016-01-07 15:53:01');
 
 -- ----------------------------
 -- Table structure for `tm_wish`

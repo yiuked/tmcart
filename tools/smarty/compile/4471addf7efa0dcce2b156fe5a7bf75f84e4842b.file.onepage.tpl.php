@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2016-01-20 21:41:12
+<?php /* Smarty version Smarty-3.1.12, created on 2016-01-21 17:15:08
          compiled from "D:\wamp\www\red\shoes\themes\shop\block\onepage.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:469454b8df9014a788-63244910%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '4471addf7efa0dcce2b156fe5a7bf75f84e4842b' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\block\\onepage.tpl',
-      1 => 1453296374,
+      1 => 1453367704,
       2 => 'file',
     ),
   ),
@@ -20,13 +20,14 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'variables' => 
   array (
     'link' => 0,
+    'addresses' => 0,
     'address' => 0,
     'carriers' => 0,
     'carrier' => 0,
-    'cart' => 0,
     'products' => 0,
     'product' => 0,
     'attribute' => 0,
+    'cart' => 0,
     'shipping' => 0,
     'discount' => 0,
     'total' => 0,
@@ -40,99 +41,108 @@ if (!is_callable('smarty_modifier_escape')) include 'D:\\wamp\\www\\red\\shoes\\
 ?><ul id="order_step" class="step">
 	<li class="done"><span><i>01</i><strong>购物车</strong></span></li>
 	<li class="done"><span><i>02</i><strong>注册/登录</strong></span></li>
-	<li class="current"><span><i>03</i><strong>配送</strong></span></li>
+	<li class="current"><span><i>03</i><strong>核对定单</strong></span></li>
 	<li class="todo"><span><i>04</i><strong>支付</strong></span></li>
 </ul>
-<div class="box-style">
 <form action="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('ConfirmOrderView');?>
-" method="post" class="bd" id="order-confrim">
-<div class="row">
-	<h2>支付</h2>
-	<div class="txt-22"><p>请确认您的定单信息后继续支付.</p></div>
-</div>
-<fieldset id="p-address">
-	<legend>收货地址</legend>
-	<p class="selectedAddress">
-        <strong><?php echo $_smarty_tpl->tpl_vars['address']->value->name;?>
-</strong><br>
-		<?php echo $_smarty_tpl->tpl_vars['address']->value->address;?>
+" method="post" id="order-confrim">
+<p class="tex-info">请确认您的定单信息后继续支付.</p>
+
+<div class="panel panel-default">
+	<div class="panel-body">
+		<div class="address-block">
+			<h3>收货人信息</h3>
+			<?php  $_smarty_tpl->tpl_vars['address'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['address']->_loop = false;
+ $_from = $_smarty_tpl->tpl_vars['addresses']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
+foreach ($_from as $_smarty_tpl->tpl_vars['address']->key => $_smarty_tpl->tpl_vars['address']->value){
+$_smarty_tpl->tpl_vars['address']->_loop = true;
+?>
+			<div class="row item<?php if ($_smarty_tpl->tpl_vars['address']->value->is_default){?> active<?php }?>">
+				<div class="col-md-2 text-center name"><?php if ($_smarty_tpl->tpl_vars['address']->value->is_default){?><b></b><?php }?><strong><?php echo $_smarty_tpl->tpl_vars['address']->value->name;?>
+</strong></div>
+				<div class="col-md-8">
+				<span class="addr-country"><?php echo $_smarty_tpl->tpl_vars['address']->value->join('Country','id_country')->name;?>
+</span>
+				<?php if ($_smarty_tpl->tpl_vars['address']->value->join('Country','id_country')->need_state){?><span class="addr-state"><?php echo $_smarty_tpl->tpl_vars['address']->value->join('State','id_state')->name;?>
+<?php }?></span>
+				<span class="addr-city"><?php echo $_smarty_tpl->tpl_vars['address']->value->city;?>
+</span>
+				<span class="addr-address"><?php echo $_smarty_tpl->tpl_vars['address']->value->address;?>
 <?php if ($_smarty_tpl->tpl_vars['address']->value->address2){?> <?php echo $_smarty_tpl->tpl_vars['address']->value->address2;?>
-<?php }?><br>
-		<?php echo $_smarty_tpl->tpl_vars['address']->value->postcode;?>
- <?php echo $_smarty_tpl->tpl_vars['address']->value->city;?>
- <?php if ($_smarty_tpl->tpl_vars['address']->value->join('Country','id_country')->need_state){?> <?php echo $_smarty_tpl->tpl_vars['address']->value->join('State','id_state')->name;?>
-<?php }?> <br>
-		<?php echo $_smarty_tpl->tpl_vars['address']->value->join('Country','id_country')->name;?>
-<br>
-		<?php echo $_smarty_tpl->tpl_vars['address']->value->phone;?>
-<br>
-        <a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('AddressView',$_smarty_tpl->tpl_vars['address']->value->id,"referer=CheckoutView");?>
+<?php }?></span>
+				<span class="addr-postcode"><?php echo $_smarty_tpl->tpl_vars['address']->value->postcode;?>
+</span>
+				<span class="addr-phone"><?php echo $_smarty_tpl->tpl_vars['address']->value->phone;?>
+</span>
+				<?php if ($_smarty_tpl->tpl_vars['address']->value->is_default){?><span class="label label-default">默认地址</span><?php }?>
+				</div>
+				<div class="col-md-2">
+					<a href="<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('AddressView',$_smarty_tpl->tpl_vars['address']->value->id,"referer=CheckoutView");?>
 " class="all"><strong>编辑</strong></a>
-    </p>
-</fieldset>
-<br/>
-<?php if (count($_smarty_tpl->tpl_vars['carriers']->value['items'])>1){?>
-<fieldset id="p-carrier">
-	<legend>Delivery methods</legend>
-	<ul id="carrier-list" class="carrier-list">
-	<?php  $_smarty_tpl->tpl_vars['carrier'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['carrier']->_loop = false;
+				</div>
+			</div>
+			<?php } ?>
+		</div>
+
+		<?php if (count($_smarty_tpl->tpl_vars['carriers']->value['items'])>1){?>
+		<div class="address-block">
+			<h3>配送方式</h3>
+			<?php  $_smarty_tpl->tpl_vars['carrier'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['carrier']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['carriers']->value['items']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
 foreach ($_from as $_smarty_tpl->tpl_vars['carrier']->key => $_smarty_tpl->tpl_vars['carrier']->value){
 $_smarty_tpl->tpl_vars['carrier']->_loop = true;
 ?>
-		<li>
-			<input type="radio" name="id_carrier" value="<?php echo $_smarty_tpl->tpl_vars['carrier']->value['id_carrier'];?>
-" class="carrier_list" id="id_address_<?php echo $_smarty_tpl->tpl_vars['carrier']->value['id_carrier'];?>
-" <?php if ($_smarty_tpl->tpl_vars['cart']->value->id_carrier==$_smarty_tpl->tpl_vars['carrier']->value['id_carrier']){?>checked="checked"<?php }?>/>
-			<label for="id_carrier_<?php echo $_smarty_tpl->tpl_vars['carrier']->value['id_carrier'];?>
-"><strong><?php echo $_smarty_tpl->tpl_vars['carrier']->value['name'];?>
-</strong> <span><?php echo $_smarty_tpl->tpl_vars['carrier']->value['description'];?>
-</span></label>
-			<font color="#f60">(<?php if ($_smarty_tpl->tpl_vars['carrier']->value['shipping']>0){?>+<?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['carrier']->value['shipping']),$_smarty_tpl);?>
-<?php }else{ ?>Free Shipping<?php }?>)</font>
-		</li>
-	<?php } ?>
-	</ul>
-</fieldset>
-<br/>
-<?php }?>
-<?php if ($_smarty_tpl->tpl_vars['products']->value){?>
-<div class="cart_block">
-	<table width="100%">
-		<?php  $_smarty_tpl->tpl_vars['product'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['product']->_loop = false;
+				<div class="row item">
+					<div class="col-md-2 text-center name"><strong><?php echo $_smarty_tpl->tpl_vars['carrier']->value['name'];?>
+</strong></div>
+					<div class="col-md-8"><?php echo $_smarty_tpl->tpl_vars['carrier']->value['description'];?>
+</div>
+					<div class="col-md-2"><?php if ($_smarty_tpl->tpl_vars['carrier']->value['shipping']>0){?> + <?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['carrier']->value['shipping']),$_smarty_tpl);?>
+ <?php }else{ ?>免运费<?php }?></div>
+				</div>
+			<?php } ?>
+		</div>
+		<?php }?>
+		<?php if ($_smarty_tpl->tpl_vars['products']->value){?>
+			<div class="cart_block">
+				<table class="table">
+					<?php  $_smarty_tpl->tpl_vars['product'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['product']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['products']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
 foreach ($_from as $_smarty_tpl->tpl_vars['product']->key => $_smarty_tpl->tpl_vars['product']->value){
 $_smarty_tpl->tpl_vars['product']->_loop = true;
 ?>
-		<tr>
-			<td style="padding:5px"><a href="<?php echo $_smarty_tpl->tpl_vars['product']->value['link'];?>
+						<tr>
+							<td><a href="<?php echo $_smarty_tpl->tpl_vars['product']->value['link'];?>
 " title="<?php echo $_smarty_tpl->tpl_vars['product']->value['name'];?>
 " target="_blank"><img src="<?php echo $_smarty_tpl->tpl_vars['product']->value['image'];?>
 " alt="<?php echo $_smarty_tpl->tpl_vars['product']->value['name'];?>
 " /></a></td>
-			<td valign="top"><a href="<?php echo $_smarty_tpl->tpl_vars['product']->value['link'];?>
+							<td><a href="<?php echo $_smarty_tpl->tpl_vars['product']->value['link'];?>
 " title="<?php echo $_smarty_tpl->tpl_vars['product']->value['name'];?>
 " target="_blank"><?php echo smarty_modifier_escape(smarty_modifier_truncate($_smarty_tpl->tpl_vars['product']->value['name'],50,'...'), 'html', 'UTF-8');?>
 </a><br/>
-				<?php  $_smarty_tpl->tpl_vars['attribute'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['attribute']->_loop = false;
+								<?php  $_smarty_tpl->tpl_vars['attribute'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['attribute']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['product']->value['attributes']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
 foreach ($_from as $_smarty_tpl->tpl_vars['attribute']->key => $_smarty_tpl->tpl_vars['attribute']->value){
 $_smarty_tpl->tpl_vars['attribute']->_loop = true;
 ?>
-				<em><?php echo $_smarty_tpl->tpl_vars['attribute']->value['group_name'];?>
+									<em><?php echo $_smarty_tpl->tpl_vars['attribute']->value['group_name'];?>
 :<?php echo $_smarty_tpl->tpl_vars['attribute']->value['name'];?>
 </em><br/>
-				<?php } ?>
-				Quantity:<?php echo $_smarty_tpl->tpl_vars['product']->value['quantity'];?>
+								<?php } ?>
+								数量:<?php echo $_smarty_tpl->tpl_vars['product']->value['quantity'];?>
 
-			</td>
-			<td align="right"><strong><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['product']->value['total']),$_smarty_tpl);?>
+							</td>
+							<td align="right"><strong><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['product']->value['total']),$_smarty_tpl);?>
 </strong></td>
-		</tr>
-		<?php } ?>
-	</table>
+						</tr>
+					<?php } ?>
+				</table>
+			</div>
+		<?php }?>
+	</div>
 </div>
-<?php }?>
+
 <div class="panier-resume">
 <div class="panier-livraison" <?php if ($_smarty_tpl->tpl_vars['cart']->value->id_carrier==0){?>style="display:none"<?php }?>>
 	<p class="panier-resume-titre">
@@ -159,7 +169,7 @@ $_smarty_tpl->tpl_vars['attribute']->_loop = true;
 </div>
 <?php }?>
 <div class="panier-total panier-resume-titre">
-	<span>Total</span>
+	<span>应付总金额:</span>
 	<strong id="a_total"><?php echo Tools::displayPriceSmarty(array('price'=>$_smarty_tpl->tpl_vars['total']->value-$_smarty_tpl->tpl_vars['discount']->value),$_smarty_tpl);?>
 </strong>
 </div>
@@ -176,7 +186,6 @@ $_smarty_tpl->tpl_vars['payment']->_loop = true;
 <?php } ?>
 </div>
 </form>
-</div>
 <script type="text/javascript">
 var ajaxLink = "<?php echo $_smarty_tpl->tpl_vars['link']->value->getPage('AjaxView');?>
 ";
