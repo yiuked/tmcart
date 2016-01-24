@@ -6,5 +6,5 @@
 	<a class="list-group-item" href="{$link->getPage('MyfeedbackView')}" title="商品评价">商品评价</a>
 	<a class="list-group-item" href="{$link->getPage('MyAlertView')}" title="站内信息">站内信息</a>
 	<a class="list-group-item" href="{$link->getPage('UserView')}" title="账户信息">账户信息</a>
-	<a class="list-group-item" href="{$link->getPage('MyaccountView')}?mylogout" title="注销">注销</a>
+	<a class="list-group-item" href="{$exit}" title="注销">注销</a>
 </div>
