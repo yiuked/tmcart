@@ -42,4 +42,3 @@ class CheckoutView extends View
 		));
 	}
 }
-?>

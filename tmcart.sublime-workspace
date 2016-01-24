@@ -28,10 +28,34 @@
 	"buffers":
 	[
 		{
+			"file": "controller/CheckoutView.php",
+			"settings":
+			{
+				"buffer_size": 1141,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "model/User.php",
+			"settings":
+			{
+				"buffer_size": 6229,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "controller/CartView.php",
 			"settings":
 			{
 				"buffer_size": 2567,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "core/View.php",
+			"settings":
+			{
+				"buffer_size": 5249,
 				"line_ending": "Unix"
 			}
 		},
@@ -52,11 +76,55 @@
 			}
 		},
 		{
-			"file": "model/Cart.php",
+			"file": "core/DbPdo.php",
 			"settings":
 			{
-				"buffer_size": 7342,
+				"buffer_size": 3609,
 				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "$_COOKIE = array[3]\n	$_COOKIE['d41d8cd98f00b204e9800998ecf8427e'] = (string) s40gXFvhngM=j+4++fU4TtY=Dl3iQyj6+yo=7vdV4Oraq38=0JzHIos+/wU=K6yccp4Q1SA=ODTQXOpLX+Q=sUTLDl/G5vI=jTDfqeziM54=jV3FKrHIQBk=BeQGSAuy344=OoyI18ugWFI=2LHTTgEEgHY=m2iGJ+uCDI8=gxO3dyvZSvw=YoRqQ3+0HQQ=nwVTr2TQGpo=SYi4XXfx6Aw=/MSZU+1cdLU=z5j83yXL8oU=Ql+dglJjyrE=w3buEDInsKg=+QiTy+wry6U=qpKGrW8ti3w=aiWOoMskhgA=UaGz3GZ+DMI=000201\n	$_COOKIE['_ga'] = (string) GA1.1.2324149.1452264256\n	$_COOKIE['XDEBUG_SESSION'] = (string) sublime.xdebug\n$_ENV = array[0]\n$_FILES = array[0]\n$_GET = array[1]\n	$_GET['route'] = (string) checkout-view\n$_POST = array[0]\n$_REQUEST = array[1]\n	$_REQUEST['route'] = (string) checkout-view\n$_SERVER = array[32]\n	$_SERVER['HTTP_HOST'] = (string) 127.0.0.1\n	$_SERVER['HTTP_CONNECTION'] = (string) keep-alive\n	$_SERVER['HTTP_CACHE_CONTROL'] = (string) max-age=0\n	$_SERVER['HTTP_ACCEPT'] = (string) text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\n	$_SERVER['HTTP_USER_AGENT'] = (string) Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.66 Safari/537.36 QQBrowser/2.0.1128.400\n	$_SERVER['HTTP_REFERER'] = (string) http://127.0.0.1/red/shoes/index.php?route=cart-view\n	$_SERVER['HTTP_ACCEPT_ENCODING'] = (string) gzip,deflate,sdch\n	$_SERVER['HTTP_ACCEPT_LANGUAGE'] = (string) zh-CN,zh;q=0.8\n	$_SERVER['HTTP_COOKIE'] = (string) d41d8cd98f00b204e9800998ecf8427e=s40gXFvhngM%3Dj%2B4%2B%2BfU4TtY%3DDl3iQyj6%2Byo%3D7vdV4Oraq38%3D0JzHIos%2B%2FwU%3DK6yccp4Q1SA%3DODTQXOpLX%2BQ%3DsUTLDl%2FG5vI%3DjTDfqeziM54%3DjV3FKrHIQBk%3DBeQGSAuy344%3DOoyI18ugWFI%3D2LHTTgEEgHY%3Dm2iGJ%2BuCDI8%3DgxO3dyvZSvw%3DYoRqQ3%2B0HQQ%3DnwVTr2TQGpo%3DSYi4XXfx6Aw%3D%2FMSZU%2B1cdLU%3Dz5j83yXL8oU%3DQl%2BdglJjyrE%3Dw3buEDInsKg%3D%2BQiTy%2Bwry6U%3DqpKGrW8ti3w%3DaiWOoMskhgA%3DUaGz3GZ%2BDMI%3D000201; _ga=GA1.1.2324149.1452264256; XDEBUG_SESSION=sublime.xdebug\n	$_SERVER['PATH'] = (string) /usr/bin:/bin:/usr/sbin:/sbin\n	$_SERVER['SERVER_SIGNATURE'] = <string>\n	$_SERVER['SERVER_SOFTWARE'] = (string) Apache/2.4.16 (Unix) PHP/5.5.30\n	$_SERVER['SERVER_NAME'] = (string) 127.0.0.1\n	$_SERVER['SERVER_ADDR'] = (string) 127.0.0.1\n	$_SERVER['SERVER_PORT'] = (string) 80\n	$_SERVER['REMOTE_ADDR'] = (string) 127.0.0.1\n	$_SERVER['DOCUMENT_ROOT'] = (string) /Users/apple/Documents/httpd\n	$_SERVER['REQUEST_SCHEME'] = (string) http\n	$_SERVER['CONTEXT_PREFIX'] = <string>\n	$_SERVER['CONTEXT_DOCUMENT_ROOT'] = (string) /Users/apple/Documents/httpd\n	$_SERVER['SERVER_ADMIN'] = (string) you@example.com\n	$_SERVER['SCRIPT_FILENAME'] = (string) /Users/apple/Documents/httpd/red/shoes/index.php\n	$_SERVER['REMOTE_PORT'] = (string) 50101\n	$_SERVER['GATEWAY_INTERFACE'] = (string) CGI/1.1\n	$_SERVER['SERVER_PROTOCOL'] = (string) HTTP/1.1\n	$_SERVER['REQUEST_METHOD'] = (string) GET\n	$_SERVER['QUERY_STRING'] = (string) route=checkout-view\n	$_SERVER['REQUEST_URI'] = (string) /red/shoes/index.php?route=checkout-view\n	$_SERVER['SCRIPT_NAME'] = (string) /red/shoes/index.php\n	$_SERVER['PHP_SELF'] = (string) /red/shoes/index.php\n	$_SERVER['REQUEST_TIME_FLOAT'] = (float) 1453522310.336\n	$_SERVER['REQUEST_TIME'] = (int) 1453522310\n$query = (string) SELECT `id_address` FROM `tm_address` WHERE `id_user`=0 LIMIT 0,10\n$st = <uninitialized>\n$this = DbPdo[6]\n	$this::_instance = DbPdo[6]\n		...\n	$this->_server = (string) localhost\n	$this->_user = (string) root\n	$this->_password = <string>\n	$this->_database = (string) red_shoes\n	$this->_link = PDO[0]\n",
+			"settings":
+			{
+				"buffer_size": 3455,
+				"line_ending": "Unix",
+				"name": "Xdebug Context",
+				"read_only": true,
+				"scratch": true
+			}
+		},
+		{
+			"contents": "",
+			"settings":
+			{
+				"buffer_size": 0,
+				"line_ending": "Unix",
+				"name": "Xdebug Watch",
+				"read_only": true,
+				"scratch": true
+			}
+		},
+		{
+			"contents": "[0] file:///Users/apple/Documents/httpd/red/shoes/core/DbPdo.php.DbPdo->getAll:80\n[1] file:///Users/apple/Documents/httpd/red/shoes/model/User.php.User->getAddresses:118\n[2] file:///Users/apple/Documents/httpd/red/shoes/controller/CheckoutView.php.CheckoutView->LoginedAction:29\n[3] file:///Users/apple/Documents/httpd/red/shoes/controller/CheckoutView.php.CheckoutView->displayMain:16\n[4] file:///Users/apple/Documents/httpd/red/shoes/core/View.php.View->display:93\n[5] file:///Users/apple/Documents/httpd/red/shoes/index.php.{main}:4\n",
+			"settings":
+			{
+				"buffer_size": 536,
+				"line_ending": "Unix",
+				"name": "Xdebug Stack",
+				"read_only": true,
+				"scratch": true
+			}
+		},
+		{
+			"contents": "=> /Users/apple/Documents/httpd/red/shoes/controller/CheckoutView.php\n	|+| 28\n",
+			"settings":
+			{
+				"buffer_size": 78,
+				"line_ending": "Unix",
+				"name": "Xdebug Breakpoint",
+				"read_only": true,
+				"scratch": true
 			}
 		}
 	],
@@ -120,6 +188,11 @@
 	},
 	"file_history":
 	[
+		"/Users/apple/Documents/httpd/red/shoes/.gitignore",
+		"/Users/apple/Documents/httpd/red/shoes/controller/CartView.php",
+		"/Users/apple/Documents/httpd/red/shoes/model/Cart.php",
+		"/Users/apple/Documents/httpd/red/shoes/core/Db.php",
+		"/Users/apple/Documents/httpd/red/shoes/model/ObjectBase.php",
 		"/Users/apple/Documents/httpd/red/shoes/themes/shop/product.tpl",
 		"/Users/apple/Documents/httpd/red/shoes/core/Tools.php",
 		"/Users/apple/Documents/httpd/red/shoes/config/config.php",
@@ -133,9 +206,6 @@
 		"/Users/apple/Library/Application Support/Sublime Text 2/Packages/Xdebug Client/Xdebug.sublime-settings",
 		"/Users/apple/Documents/httpd/red/shoes/tmcart.sublime-project",
 		"/Users/apple/Documents/httpd/red/shoes/tmcart.sublime-workspace",
-		"/Users/apple/Documents/httpd/red/shoes/model/ObjectBase.php",
-		"/Users/apple/Documents/httpd/red/shoes/controller/CartView.php",
-		"/Users/apple/Documents/httpd/red/shoes/model/Cart.php",
 		"/Users/apple/Documents/httpd/red/shoes/themes/shop/block/product_list.tpl",
 		"/Users/apple/Documents/httpd/red/shoes/controller/CategoryView.php",
 		"/Users/apple/Documents/httpd/ci/system/core/CodeIgniter.php",
@@ -190,11 +260,65 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
+					"file": "controller/CheckoutView.php",
+					"settings":
+					{
+						"buffer_size": 1141,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								717,
+								717
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 169.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "model/User.php",
+					"settings":
+					{
+						"buffer_size": 6229,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1517.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
 					"file": "controller/CartView.php",
 					"settings":
 					{
@@ -205,8 +329,8 @@
 						"selection":
 						[
 							[
-								1269,
-								1269
+								754,
+								754
 							]
 						],
 						"settings":
@@ -215,13 +339,40 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 69.0,
+						"translation.y": 63.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 1,
+					"buffer": 3,
+					"file": "core/View.php",
+					"settings":
+					{
+						"buffer_size": 5249,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1128.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
 					"file": "model/ObjectBase.php",
 					"settings":
 					{
@@ -232,8 +383,8 @@
 						"selection":
 						[
 							[
-								4479,
-								4479
+								0,
+								0
 							]
 						],
 						"settings":
@@ -242,13 +393,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2287.0,
+						"translation.y": 78.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 5,
 					"file": "core/Db.php",
 					"settings":
 					{
@@ -269,34 +420,35 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1052.0,
+						"translation.y": 452.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "model/Cart.php",
+					"buffer": 6,
+					"file": "core/DbPdo.php",
 					"settings":
 					{
-						"buffer_size": 7342,
+						"buffer_size": 3609,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								273,
-								280
+								0,
+								0
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 8.0,
-						"translation.y": 1.0,
+						"translation.x": 0.0,
+						"translation.y": 903.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -304,13 +456,119 @@
 			]
 		},
 		{
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 7,
+					"settings":
+					{
+						"buffer_size": 3455,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								538,
+								538
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Xdebug Client/Xdebug.tmLanguage",
+							"word_wrap": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"settings":
+					{
+						"buffer_size": 0,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Xdebug Client/Xdebug.tmLanguage",
+							"word_wrap": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
 			]
 		},
 		{
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 9,
+					"settings":
+					{
+						"buffer_size": 536,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								536,
+								536
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Xdebug Client/Xdebug.tmLanguage",
+							"word_wrap": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"settings":
+					{
+						"buffer_size": 78,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								78,
+								78
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Xdebug Client/Xdebug.tmLanguage",
+							"word_wrap": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
 			]
 		}
 	],
@@ -348,13 +606,13 @@
 		"cols":
 		[
 			0.0,
-			0.5,
+			0.739235143918,
 			1.0
 		],
 		"rows":
 		[
 			0.0,
-			0.933774834437,
+			0.7,
 			1.0
 		]
 	},
@@ -388,6 +646,6 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 170.0,
+	"side_bar_width": 204.0,
 	"status_bar_visible": true
 }
