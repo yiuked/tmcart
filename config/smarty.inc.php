@@ -38,4 +38,3 @@ function smartyRegisterFunction($smarty, $type, $function, $params)
 		return false;
 	$smarty->registerPlugin($type, $function, $params);
 }
-?>

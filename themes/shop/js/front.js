@@ -45,8 +45,8 @@ $(document).ready(function(){
 	$(".shopping_cart_form_submit").change(function(){
 		$(".shopping_cart_form").submit();
 	})
-	$("a.fav").click(function(){
-		addWish($(this),$(this).attr("data-id"));
+	$("a.wish ").click(function(){
+		Wish.addItem($(this).attr("data-id"), $(this));
 	})
 
 	/**
@@ -92,38 +92,6 @@ $(document).ready(function(){
 		})
 	})
 })
-
-function addWish(obj,id_product)
-{
-	$.ajax({
-		url: ajax_dir,
-		cache: false,
-		data: "action=add_wish&id_product="+id_product,
-		dataType: "json",
-		success: function(data)
-			{
-				if(data.status=="YES"){
-					if(data.action=="+"){
-						obj.addClass("on")
-					}else{
-						obj.removeClass("on")
-					}
-					$(".likes .icon").html(data.count);
-				}
-			}
-		}); 
-}
-function navCartPrev(obj)
-{
-	var nextBtn = obj.parent();
-	var bdUl	= nextBtn.next().find("ul");
-	var bdUltop	= parseInt(bdUl.css("top"));
-	var newTop	= "0px";
-	if(bdUltop>-1800){
-		newTop	= (bdUltop-300)+'px';
-	}
-	bdUl.animate({top:newTop});
-}
 
 /**
  * 购物车类，用于处理ajax购物车请求
@@ -231,7 +199,31 @@ var Cart = {
 			});
 		}
 	}
-};
+};//声明类型后面一定要加分号，否则会报错。
+
+/**
+ * Wish 类用于处理收藏产品的增删操作
+ */
+var Wish = {
+	addItem: function (id, e) {
+		$.ajax({
+			url: ajax_dir,
+			cache: false,
+			data: "c=Wish&m=addItem&id="+id,
+			dataType: "json",
+			success: function(data)
+				{
+					if (data.status == "yes") {
+						if (data.m == "add") {
+							e.addClass("on")
+						} else {
+							e.removeClass("on")
+						}
+					}
+				}
+		}); 
+	}
+};//声明类型后面一定要加分号，否则会报错。
 
 /**
  * hover 延时处理
@@ -261,7 +253,16 @@ var Cart = {
 		});
 	}
 })(jQuery);
-
+/*
+$(function (){
+		$('.radio-new-style .item').click(function(){
+		$('.radio-new-style .item').removeClass('active');
+		$(this).addClass('active');
+		$(this).appendChild("<b><b>")
+		//$(this).parent().children('.id_attribute_group').val($(this).data('id_attribute'));
+	})
+})
+*/
 /**
  * 提示标签
  */

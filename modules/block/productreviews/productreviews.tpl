@@ -1,3 +1,16 @@
+<script>
+function navCartPrev(obj)
+{
+	var nextBtn = obj.parent();
+	var bdUl	= nextBtn.next().find("ul");
+	var bdUltop	= parseInt(bdUl.css("top"));
+	var newTop	= "0px";
+	if(bdUltop>-1800){
+		newTop	= (bdUltop-300)+'px';
+	}
+	bdUl.animate({top:newTop});
+}
+</script>
 <div id="color_block_left" class="block">
   <h4>Product reviews</h4>
   <div class="block_content">

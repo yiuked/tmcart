@@ -9,7 +9,7 @@
 
 <div class="panel panel-default">
 	<div class="panel-body">
-		<div class="address-block">
+		<div class="address-block radio-new-style">
 			<h3>收货人信息</h3>
 			{foreach from=$addresses item=address}
 			<div class="row item{if $address->is_default} active{/if}">
@@ -63,32 +63,30 @@
 	</div>
 </div>
 
-<div class="panier-resume">
-<div class="panier-livraison" {if $cart->id_carrier==0}style="display:none"{/if}>
-	<p class="panier-resume-titre">
+<div class="order-resume">
+<div class="shipping-resume" {if $cart->id_carrier==0}style="display:none"{/if}>
 	{assign var="shipping" value=$cart->getShippingTotal()}
 	{if $shipping==0}
-		<label class="icon-checkmark">Shipping</label>
-		<strong class="free">FREE</strong>
+		<label class="icon-checkmark">运费</label>
+		<strong class="free">包邮</strong>
 	{else}
-		<label>Shipping</label>
+		<label>运费</label>
 		<strong>{displayPrice price=$shipping}</strong>
 	{/if}
-	</p>
 </div>
-{if $discount>0}
-<div class="panier-promo">
-	<div class="promocode-total">
-		<div class="panier-resume-titre">
-			<span>Promo code</span>
-			<strong>-{displayPrice price=$discount}</strong>
-		</div>
+{if $discount > 0}
+<div class="discount-resume">
+	<div class="title">
+		<span>优惠</span>
+		<strong>-{displayPrice price=$discount}</strong>
 	</div>
 </div>
 {/if}
-<div class="panier-total panier-resume-titre">
-	<span>应付总金额:</span>
-	<strong id="a_total">{displayPrice price=$total-$discount}</strong>
+<div class="total-resume">
+	<div class="title">
+		<span>应付总金额:</span>
+		<strong id="a_total">{displayPrice price=$total-$discount}</strong>
+	</div>
 </div>
 </div>
 <br/>
@@ -99,7 +97,6 @@
 </div>
 </form>
 <script type="text/javascript">
-var ajaxLink = "{$link->getPage('AjaxView')}";
 var id_cart  = {$cart->id}
 {literal}
 $(document).ready(function(){
@@ -113,7 +110,7 @@ $(document).ready(function(){
 		function ajaxStates (id_carrier)
 		{
 			$.ajax({
-				url: ajaxLink,
+				url: ajax_dir,
 				cache: false,
 				data: "getTotal=true&id_cart="+id_cart+"&id_carrier="+id_carrier,
 				dataType: "json",

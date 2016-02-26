@@ -337,9 +337,13 @@ color:#F13FA0;
     position: absolute;
     color: #ccc;
 }
-.product-list li .wish:hover
+.product-list li .wish:hover,.product-list li .wish.on
 {
     color: #f13fa0;
+}
+.product-list .tooltip{
+    position: absolute;
+    z-index: 9999;
 }
 .product-name{
     font-size: 14px;

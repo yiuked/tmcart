@@ -130,7 +130,7 @@
 						<div class="col-sm-offset-2">
 							<input type="hidden" name="addToCart" value="true">
 							<button type="submit" class="btn btn-pink" id="add_to_cart"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> 加入购物车</button>
-							<button type="button" class="btn btn-warning" id="add-to-wish"><span aria-hidden="true" class="glyphicon glyphicon-heart"></span> 收藏</button>
+							<a href="javascript:;" class="btn btn-warning wish" id="add-to-wish" data-id="{$entity->id}"><span aria-hidden="true" class="glyphicon glyphicon-heart"></span> 收藏</a>
 						</div>
 					</div>
 				</form>
@@ -186,7 +186,7 @@
 							<ul class="product-list">
 								{foreach from=$products item=product name=product}
 								<li>
-									<a data-id="{$product.id_product}" href="javascript:void(0)" data-toggle="tooltip" data-placement="bottom" title="点击收藏该商品" class="wish {if in_array($product.id_product,$wish_array)}on{/if}">
+									<a data-id="{$product.id_product}" href="javascript:void(0)" data-toggle="tooltip" data-placement="{if $smarty.foreach.product.iteration % 5 == 1}right{else}bottom{/if}" title="点击收藏该商品" class="wish {if in_array($product.id_product,$wish_array)}on{/if}">
 										<span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
 									</a>
 									{if $product.is_new}
