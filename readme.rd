@@ -1,1 +1,2 @@
 TMCart是一个开源免费的B2C电子商务系统。
+TMCart基于PHP+MYSQL，采用典型的MVC模式开发.
