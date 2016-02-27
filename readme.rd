@@ -1,2 +1,2 @@
-TMCart ¿¿¿¿¿¿¿¿¿¿¿¿¿¿.
-¿¿¿PHP + Mysql¿¿.
+TMCart¿¿¿¿¿¿¿¿B2C¿¿¿¿¿¿
+TMCart¿¿PHP+MYSQL¿¿¿¿¿¿MVC¿¿¿¿.
