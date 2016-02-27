@@ -1,1 +1,2 @@
-TMCart是一个开源免费的B2C电子商务系统。
+TMCart 靠靠靠靠靠靠靠.
+靠縋HP + Mysql靠.
