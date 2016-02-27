@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"add",
+				"addItem"
+			],
+			[
 				"ca",
 				"cart"
 			],
@@ -28,18 +32,67 @@
 	"buffers":
 	[
 		{
-			"file": "controller/CartView.php",
+			"file": "themes/shop/js/front.js",
 			"settings":
 			{
-				"buffer_size": 2567,
+				"buffer_size": 6825,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "model/ObjectBase.php",
+			"file": "modules/block/productreviews/productreviews.tpl",
 			"settings":
 			{
-				"buffer_size": 11121,
+				"buffer_size": 1146,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "paypal jonleger\nSELECT p.*,i.`id_image` FROM tm_wish w 				  \nLEFT JOIN tm_product p ON (w.`id_product` = p.`id_product`) 				  \nLEFT JOIN tm_image i ON (p.`id_product` = i.`id_product`) 				  \nWHERE w.id_user=14 AND i.`cover`=1\n",
+			"settings":
+			{
+				"buffer_size": 229,
+				"line_ending": "Unix",
+				"name": "paypal jonleger"
+			}
+		},
+		{
+			"file": "themes/shop/css/global.css",
+			"settings":
+			{
+				"buffer_size": 12384,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "themes/shop/js/product.js",
+			"settings":
+			{
+				"buffer_size": 1258,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "themes/shop/block/onepage.tpl",
+			"settings":
+			{
+				"buffer_size": 4715,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "api.php",
+			"settings":
+			{
+				"buffer_size": 1085,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "core/Blowfish.php",
+			"settings":
+			{
+				"buffer_size": 19590,
 				"line_ending": "Unix"
 			}
 		},
@@ -48,14 +101,6 @@
 			"settings":
 			{
 				"buffer_size": 4779,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "model/Cart.php",
-			"settings":
-			{
-				"buffer_size": 7342,
 				"line_ending": "Unix"
 			}
 		}
@@ -120,23 +165,48 @@
 	},
 	"file_history":
 	[
-		"/Users/apple/Documents/httpd/red/shoes/themes/shop/product.tpl",
-		"/Users/apple/Documents/httpd/red/shoes/core/Tools.php",
-		"/Users/apple/Documents/httpd/red/shoes/config/config.php",
+		"/Users/apple/Documents/httpd/red/shoes/themes/shop/my-wish.tpl",
+		"/Users/apple/Documents/httpd/red/shoes/themes/shop/block/product_list.tpl",
+		"/Users/apple/Documents/httpd/red/shoes/modules/block/homeproduct/homeproduct.tpl",
+		"/Users/apple/Documents/httpd/red/shoes/modules/block/homeproduct/homeproduct.php",
 		"/Users/apple/Documents/httpd/red/shoes/core/View.php",
+		"/Users/apple/Documents/httpd/red/shoes/model/User.php",
+		"/Users/apple/Documents/httpd/red/shoes/core/DbPdo.php",
+		"/Users/apple/Documents/httpd/red/shoes/core/Db.php",
 		"/Users/apple/Documents/httpd/red/shoes/model/Cookie.php",
+		"/Users/apple/Documents/httpd/red/shoes/model/Wish.php",
+		"/Users/apple/Documents/httpd/red/shoes/controller/MyWishView.php",
+		"/Users/apple/Documents/httpd/red/shoes/themes/shop/product.tpl",
+		"/Users/apple/Documents/httpd/red/shoes/modules/block/viewed/viewed.tpl",
+		"/Users/apple/Documents/httpd/red/shoes/model/CMSTag.php",
+		"/Users/apple/Documents/httpd/red/shoes/config/config.php",
+		"/Users/apple/Documents/httpd/red/shoes/config/init.php",
+		"/Users/apple/Documents/httpd/red/shoes/config/smarty.inc.php",
+		"/Users/apple/Documents/httpd/red/shoes/themes/shop/js/front.js",
+		"/Users/apple/Documents/httpd/red/shoes/themes/shop/css/global.css",
+		"/Users/apple/Documents/httpd/red/shoes/controller/AjaxView.php",
+		"/Users/apple/Documents/httpd/red/shoes/model/Address.php",
+		"/Users/apple/Documents/httpd/red/shoes/model/ObjectBase.php",
 		"/Users/apple/Documents/httpd/red/shoes/core/Validate.php",
+		"/Users/apple/Documents/httpd/red/shoes/tools/smarty/compile/205d4152758edd810b53649fd0efba9b9704ca9e.file.product.tpl.php",
+		"/Users/apple/Documents/httpd/red/shoes/cache/class_index.php",
+		"/Users/apple/Documents/httpd/red/shoes/.gitignore",
+		"/Users/apple/Documents/git/study-log/git/配置.gitignore",
+		"/Users/apple/Documents/httpd/red/shoes/model/Alert.php",
+		"/Users/apple/Documents/httpd/red/shoes/themes/shop/block/top_men.tpl",
+		"/Users/apple/Documents/httpd/red/shoes/themes/shop/header.tpl",
+		"/Users/apple/Documents/httpd/red/shoes/modules/block/myaccount/myaccount.tpl",
+		"/Users/apple/Documents/httpd/red/shoes/themes/shop/block/top_navigation.tpl",
+		"/Users/apple/Documents/httpd/red/shoes/controller/CheckoutView.php",
+		"/Users/apple/Documents/httpd/red/shoes/controller/CartView.php",
+		"/Users/apple/Documents/httpd/red/shoes/model/Cart.php",
+		"/Users/apple/Documents/httpd/red/shoes/core/Tools.php",
 		"/Users/apple/Documents/httpd/red/shoes/config/autoload.php",
 		"/Users/apple/Documents/httpd/red/shoes/tools/smarty/Smarty.class.php",
 		"/Users/apple/Documents/httpd/red/shoes/index.php",
-		"/Users/apple/Documents/httpd/red/shoes/config/init.php",
 		"/Users/apple/Library/Application Support/Sublime Text 2/Packages/Xdebug Client/Xdebug.sublime-settings",
 		"/Users/apple/Documents/httpd/red/shoes/tmcart.sublime-project",
 		"/Users/apple/Documents/httpd/red/shoes/tmcart.sublime-workspace",
-		"/Users/apple/Documents/httpd/red/shoes/model/ObjectBase.php",
-		"/Users/apple/Documents/httpd/red/shoes/controller/CartView.php",
-		"/Users/apple/Documents/httpd/red/shoes/model/Cart.php",
-		"/Users/apple/Documents/httpd/red/shoes/themes/shop/block/product_list.tpl",
 		"/Users/apple/Documents/httpd/red/shoes/controller/CategoryView.php",
 		"/Users/apple/Documents/httpd/ci/system/core/CodeIgniter.php",
 		"/Users/apple/Documents/httpd/ci/system/core/Controller.php",
@@ -144,7 +214,6 @@
 		"/Users/apple/Documents/httpd/ci/application/models/User_model.php",
 		"/Users/apple/Documents/httpd/ci/application/controllers/User.php",
 		"/Users/apple/Documents/httpd/ci/index.php",
-		"/Users/apple/Documents/httpd/red/shoes/core/DbPdo.php",
 		"/Users/apple/Documents/git/study-log/服务器/php安装.txt",
 		"/Users/apple/Documents/httpd/ci/system/core/Loader.php",
 		"/Users/apple/Documents/httpd/ci/application/models/user.php",
@@ -159,6 +228,7 @@
 		"height": 0.0,
 		"where_history":
 		[
+			""
 		]
 	},
 	"find_state":
@@ -166,6 +236,17 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"livraison",
+			"addWish",
+			"navCartPrev",
+			"attrbiute",
+			"attribute",
+			"getWishProductWithUser",
+			"Wish",
+			"wish_array",
+			"cookie",
+			"cookie->id_us",
+			"wish",
 			"isPrice",
 			"getLastPosition",
 			"();\n",
@@ -190,50 +271,183 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 3,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "controller/CartView.php",
+					"file": "themes/shop/js/front.js",
 					"settings":
 					{
-						"buffer_size": 2567,
+						"buffer_size": 6825,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1269,
-								1269
+								618,
+								618
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 69.0,
+						"translation.y": 584.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "model/ObjectBase.php",
+					"file": "modules/block/productreviews/productreviews.tpl",
 					"settings":
 					{
-						"buffer_size": 11121,
+						"buffer_size": 1146,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4479,
-								4479
+								8,
+								8
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"settings":
+					{
+						"buffer_size": 229,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								228,
+								16
+							]
+						],
+						"settings":
+						{
+							"auto_name": "paypal jonleger",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "themes/shop/css/global.css",
+					"settings":
+					{
+						"buffer_size": 12384,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6445,
+								6445
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "themes/shop/js/product.js",
+					"settings":
+					{
+						"buffer_size": 1258,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								889,
+								666
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "themes/shop/block/onepage.tpl",
+					"settings":
+					{
+						"buffer_size": 4715,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3434,
+								3434
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 995.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "api.php",
+					"settings":
+					{
+						"buffer_size": 1085,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
 							]
 						],
 						"settings":
@@ -242,13 +456,40 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2287.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 7,
+					"file": "core/Blowfish.php",
+					"settings":
+					{
+						"buffer_size": 19590,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 13.0,
+						"translation.y": 1369.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
 					"file": "core/Db.php",
 					"settings":
 					{
@@ -269,48 +510,11 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1052.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "model/Cart.php",
-					"settings":
-					{
-						"buffer_size": 7342,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								273,
-								280
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 8.0,
-						"translation.y": 1.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				}
-			]
-		},
-		{
-			"sheets":
-			[
-			]
-		},
-		{
-			"sheets":
-			[
 			]
 		}
 	],
@@ -329,39 +533,25 @@
 			[
 				0,
 				0,
-				2,
+				1,
 				1
-			],
-			[
-				0,
-				1,
-				1,
-				2
-			],
-			[
-				1,
-				1,
-				2,
-				2
 			]
 		],
 		"cols":
 		[
 			0.0,
-			0.5,
 			1.0
 		],
 		"rows":
 		[
 			0.0,
-			0.933774834437,
 			1.0
 		]
 	},
 	"menu_visible": true,
 	"output.xdebug":
 	{
-		"height": 200.0
+		"height": 25.0
 	},
 	"replace":
 	{
@@ -388,6 +578,6 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 170.0,
+	"side_bar_width": 229.0,
 	"status_bar_visible": true
 }

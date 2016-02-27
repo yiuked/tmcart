@@ -215,5 +215,27 @@ class User extends ObjectBase{
 				'items'  => $result);
 		return $rows;
 	}
+
+	public function addToWish($id_product)
+	{
+		 if((int) $id_product == 0) {
+		 	return false;
+		 }
+
+		 $id_wish = Db::getInstance()->getValue('SELECT id_wish FROM ' . DB_PREFIX . 'wish WHERE id_user=' . (int) $this->id . ' AND id_product=' . (int) $id_product);
+		 if ($id_wish > 0) {
+			$wish = new Wish($id_wish);
+			$wish->delete();
+			return -1;
+		 } else {
+		 	$wish = new Wish();
+		 	$wish->copyFromPost();
+			$wish->id_user		= (int)$this->id;
+			$wish->id_product	= (int)$id_product;
+			if($wish->add())
+				return 1;
+			return false;
+		 }
+	}
+
 }
-?>

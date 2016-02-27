@@ -19,7 +19,7 @@
 					<ul class="product-list">
 					{foreach from=$vieweds item=viewed name=viewed}
 						<li>
-							<a data-id="{$viewed.id_product}" href="javascript:void(0)" data-toggle="tooltip" data-placement="bottom" title="点击收藏该商品" class="wish {if in_array($viewed.id_product,$wish_array)}on{/if}">
+							<a data-id="{$viewed.id_product}" href="javascript:void(0)" data-toggle="tooltip" data-placement="{if $smarty.foreach.viewed.iteration % 5 == 1}right{else}bottom{/if}" title="点击收藏该商品" class="wish {if in_array($viewed.id_product,$wish_array)}on{/if}">
 								<span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
 							</a>
 							{if $viewed.is_new}

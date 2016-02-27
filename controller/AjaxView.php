@@ -50,30 +50,6 @@ class AjaxView extends View
 		}//end use gettotal
 		
 		/*
-		start use add wish,from ProductView or CategoryView
-		*/
-		if(isset($_GET['action'])&&$_GET['action']=='add_wish'&&isset($_GET['id_product']))
-		{
-			if($action = Wish::userAddWishProduct($_GET['id_product'])){
-				$wishs    	= Wish::getWishSumByUser();
-				$count_html = "";
-				if($wishs['count']>0)
-					$count_html = "<i>{$wishs['count']}</i>";
-					
-				$arr	  = array(
-							'action'=>$action,
-							'count'=>$count_html,
-							'status'=>"YES"
-							);
-				echo json_encode($arr);
-			}else{
-				$arr	  = array('status'=>"NO");
-				echo json_encode($arr);
-			}
-			exit();
-		}//end use add wish
-		
-		/*
 		start use promo code,from CartView
 		*/
 		if(isset($_GET['validatedPromocode'])&&isset($_GET['code'])){
@@ -183,6 +159,66 @@ class AjaxView extends View
 					break;
 			}
 		}
+
+		/**
+		* 商品收藏
+		*/
+		if (Tools::G('c') == 'Wish') {
+			if (!isset($cookie->id_user)) {
+				die(json_encode(array("status" => "no", "msg" => "d'not login!")));
+			}
+			$user = new User((int) $cookie->id_user);
+			if (!Validate::isLoadedObject($user)) {
+				die(json_encode(array("status" => "no", "msg" => "user load fail!")));
+			}
+
+			switch (Tools::G('m')) {
+				case 'addItem':
+					if ($status = $user->addToWish(Tools::G('id'))) {
+						if ($status === 1) {
+							$result = array(
+								"m" => "add",
+								'status' => 'yes',
+							);
+						} else if ($status === -1) {
+							$result = array(
+								"m" => "delete",
+								'status' => 'yes',
+							);
+						}
+						die(json_encode($result));
+					}
+					die(json_encode(array("status" => "no")));
+					break;
+				default:
+					break;
+			}
+		}
+
+				/*
+		start use add wish,from ProductView or CategoryView
+		*/
+		if(isset($_GET['action'])&&$_GET['action']=='add_wish'&&isset($_GET['id_product']))
+		{
+			if($action = Wish::userAddWishProduct($_GET['id_product'])){
+				$wishs    	= Wish::getWishSumByUser();
+				$count_html = "";
+				if($wishs['count']>0)
+					$count_html = "<i>{$wishs['count']}</i>";
+					
+				$arr	  = array(
+							'action'=>$action,
+							'count'=>$count_html,
+							'status'=>"YES"
+							);
+				echo json_encode($arr);
+			}else{
+				$arr	  = array('status'=>"NO");
+				echo json_encode($arr);
+			}
+			exit();
+		}//end use add wish
+
 
 		/**
 		 * 邮箱是否已被注册
