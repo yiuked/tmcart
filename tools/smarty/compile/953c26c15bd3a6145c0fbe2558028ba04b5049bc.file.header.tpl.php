@@ -1,22 +1,20 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2016-01-11 09:58:34
+<?php /* Smarty version Smarty-3.1.12, created on 2016-02-26 22:03:00
          compiled from "D:\wamp\www\red\shoes\themes\shop\header.tpl" */ ?>
-<?php /*%%SmartyHeaderCode:2377154992dd1dbaf44-85901661%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /*%%SmartyHeaderCode:783756d05b147b17e1-42438656%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
     '953c26c15bd3a6145c0fbe2558028ba04b5049bc' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\header.tpl',
-      1 => 1452476965,
+      1 => 1452398898,
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '2377154992dd1dbaf44-85901661',
+  'nocache_hash' => '783756d05b147b17e1-42438656',
   'function' => 
   array (
   ),
-  'version' => 'Smarty-3.1.12',
-  'unifunc' => 'content_54992dd2161aa5_89058516',
   'variables' => 
   array (
     'meta' => 0,
@@ -42,8 +40,10 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'SECATION_HEAD' => 0,
   ),
   'has_nocache_code' => false,
+  'version' => 'Smarty-3.1.12',
+  'unifunc' => 'content_56d05b14e49170_92138742',
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_54992dd2161aa5_89058516')) {function content_54992dd2161aa5_89058516($_smarty_tpl) {?><?php if (!is_callable('smarty_modifier_truncate')) include 'D:\\wamp\\www\\red\\shoes\\tools\\smarty\\plugins\\modifier.truncate.php';
+<?php if ($_valid && !is_callable('content_56d05b14e49170_92138742')) {function content_56d05b14e49170_92138742($_smarty_tpl) {?><?php if (!is_callable('smarty_modifier_truncate')) include 'D:\\wamp\\www\\red\\shoes\\tools\\smarty\\plugins\\modifier.truncate.php';
 if (!is_callable('smarty_modifier_escape')) include 'D:\\wamp\\www\\red\\shoes\\tools\\smarty\\plugins\\modifier.escape.php';
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">

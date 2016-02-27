@@ -1,30 +1,30 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2016-01-11 09:58:35
+<?php /* Smarty version Smarty-3.1.12, created on 2016-02-26 22:03:01
          compiled from "D:\wamp\www\red\shoes\themes\shop\block\foot.tpl" */ ?>
-<?php /*%%SmartyHeaderCode:2318154992dd248c3b9-97088008%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /*%%SmartyHeaderCode:110956d05b156abfb8-87011140%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
     '117fbccc8b7326ee27c267236fba3d363b776fdc' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\block\\foot.tpl',
-      1 => 1452476965,
+      1 => 1452398898,
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '2318154992dd248c3b9-97088008',
+  'nocache_hash' => '110956d05b156abfb8-87011140',
   'function' => 
   array (
   ),
-  'version' => 'Smarty-3.1.12',
-  'unifunc' => 'content_54992dd2542b65_27359381',
   'variables' => 
   array (
     'link' => 0,
     'shop_name' => 0,
   ),
   'has_nocache_code' => false,
+  'version' => 'Smarty-3.1.12',
+  'unifunc' => 'content_56d05b157a9e77_11068982',
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_54992dd2542b65_27359381')) {function content_54992dd2542b65_27359381($_smarty_tpl) {?><div class="row">
+<?php if ($_valid && !is_callable('content_56d05b157a9e77_11068982')) {function content_56d05b157a9e77_11068982($_smarty_tpl) {?><div class="row">
 	<div class="col-md-3">
 		<h3>客户服务</h3>
 		<ul>

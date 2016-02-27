@@ -1,6 +1,6 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2016-01-20 21:31:14
+<?php /* Smarty version Smarty-3.1.12, created on 2016-02-26 22:03:00
          compiled from "D:\wamp\www\red\shoes\themes\shop\block\top_men.tpl" */ ?>
-<?php /*%%SmartyHeaderCode:4057567b5fb395d501-11190934%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /*%%SmartyHeaderCode:385856d05b14e97386-24531125%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
@@ -11,12 +11,10 @@ $_valid = $_smarty_tpl->decodeProperties(array (
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '4057567b5fb395d501-11190934',
+  'nocache_hash' => '385856d05b14e97386-24531125',
   'function' => 
   array (
   ),
-  'version' => 'Smarty-3.1.12',
-  'unifunc' => 'content_567b5fb3a01610_75584247',
   'variables' => 
   array (
     'shop_name' => 0,
@@ -26,8 +24,10 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'exit' => 0,
   ),
   'has_nocache_code' => false,
+  'version' => 'Smarty-3.1.12',
+  'unifunc' => 'content_56d05b150a8d54_52477397',
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_567b5fb3a01610_75584247')) {function content_567b5fb3a01610_75584247($_smarty_tpl) {?><div class="top-menu">
+<?php if ($_valid && !is_callable('content_56d05b150a8d54_52477397')) {function content_56d05b150a8d54_52477397($_smarty_tpl) {?><div class="top-menu">
     <div class="container">
         <div class="row">
             <div class="col-md-4 user-summary">

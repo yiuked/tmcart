@@ -1,22 +1,20 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2016-01-11 09:58:34
+<?php /* Smarty version Smarty-3.1.12, created on 2016-02-26 22:03:01
          compiled from "D:\wamp\www\red\shoes\modules\block\homeproduct\homeproduct.tpl" */ ?>
-<?php /*%%SmartyHeaderCode:2721754992dd223b893-95276049%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /*%%SmartyHeaderCode:194556d05b152a0c47-15524125%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
     '415f3981ff6a51f5fcb96557abba633629f45d0d' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\modules\\block\\homeproduct\\homeproduct.tpl',
-      1 => 1452476964,
+      1 => 1452398898,
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '2721754992dd223b893-95276049',
+  'nocache_hash' => '194556d05b152a0c47-15524125',
   'function' => 
   array (
   ),
-  'version' => 'Smarty-3.1.12',
-  'unifunc' => 'content_54992dd22d0994_23450145',
   'variables' => 
   array (
     'link' => 0,
@@ -25,8 +23,10 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'wish_array' => 0,
   ),
   'has_nocache_code' => false,
+  'version' => 'Smarty-3.1.12',
+  'unifunc' => 'content_56d05b153f4a13_40493228',
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_54992dd22d0994_23450145')) {function content_54992dd22d0994_23450145($_smarty_tpl) {?><div class="container">
+<?php if ($_valid && !is_callable('content_56d05b153f4a13_40493228')) {function content_56d05b153f4a13_40493228($_smarty_tpl) {?><div class="container">
 	<div class="full-block home-product-block">
 		<div class="block-title">
 			<div class="title">推荐产品 <small>买新奇，买低价</small></div>

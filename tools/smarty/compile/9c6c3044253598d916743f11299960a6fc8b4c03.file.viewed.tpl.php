@@ -1,22 +1,20 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2016-01-11 09:58:34
+<?php /* Smarty version Smarty-3.1.12, created on 2016-02-26 22:03:01
          compiled from "D:\wamp\www\red\shoes\modules\block\viewed\viewed.tpl" */ ?>
-<?php /*%%SmartyHeaderCode:2757554992dd2377f67-64002052%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /*%%SmartyHeaderCode:1593556d05b1542b520-81709072%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
     '9c6c3044253598d916743f11299960a6fc8b4c03' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\modules\\block\\viewed\\viewed.tpl',
-      1 => 1452476964,
+      1 => 1452398898,
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '2757554992dd2377f67-64002052',
+  'nocache_hash' => '1593556d05b1542b520-81709072',
   'function' => 
   array (
   ),
-  'version' => 'Smarty-3.1.12',
-  'unifunc' => 'content_54992dd23fa518_48440495',
   'variables' => 
   array (
     'vieweds' => 0,
@@ -24,8 +22,10 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'wish_array' => 0,
   ),
   'has_nocache_code' => false,
+  'version' => 'Smarty-3.1.12',
+  'unifunc' => 'content_56d05b156560a4_89160597',
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_54992dd23fa518_48440495')) {function content_54992dd23fa518_48440495($_smarty_tpl) {?><?php if ($_smarty_tpl->tpl_vars['vieweds']->value){?>
+<?php if ($_valid && !is_callable('content_56d05b156560a4_89160597')) {function content_56d05b156560a4_89160597($_smarty_tpl) {?><?php if ($_smarty_tpl->tpl_vars['vieweds']->value){?>
 <div class="container">
 	<div class="full-block full-slider">
 		<h3 class="block-title">浏览过的产商品</h3>

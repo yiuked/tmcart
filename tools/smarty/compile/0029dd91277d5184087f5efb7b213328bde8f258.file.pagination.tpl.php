@@ -1,22 +1,20 @@
-<?php /* Smarty version Smarty-3.1.12, created on 2016-01-11 10:38:08
+<?php /* Smarty version Smarty-3.1.12, created on 2016-02-26 22:03:24
          compiled from "D:\wamp\www\red\shoes\themes\shop\block\pagination.tpl" */ ?>
-<?php /*%%SmartyHeaderCode:112105681049f9d9b78-67540892%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /*%%SmartyHeaderCode:822756d05b2c801143-05724930%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
     '0029dd91277d5184087f5efb7b213328bde8f258' => 
     array (
       0 => 'D:\\wamp\\www\\red\\shoes\\themes\\shop\\block\\pagination.tpl',
-      1 => 1452476965,
+      1 => 1452398898,
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '112105681049f9d9b78-67540892',
+  'nocache_hash' => '822756d05b2c801143-05724930',
   'function' => 
   array (
   ),
-  'version' => 'Smarty-3.1.12',
-  'unifunc' => 'content_5681049ff198a9_73699349',
   'variables' => 
   array (
     'this_url' => 0,
@@ -33,8 +31,10 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'pageBefor' => 0,
   ),
   'has_nocache_code' => false,
+  'version' => 'Smarty-3.1.12',
+  'unifunc' => 'content_56d05b2d096c19_96778850',
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_5681049ff198a9_73699349')) {function content_5681049ff198a9_73699349($_smarty_tpl) {?><div class="row product-pagination">
+<?php if ($_valid && !is_callable('content_56d05b2d096c19_96778850')) {function content_56d05b2d096c19_96778850($_smarty_tpl) {?><div class="row product-pagination">
 	<div class="col-md-5">
 		<form action="<?php echo $_smarty_tpl->tpl_vars['this_url']->value;?>
 " method="POST">
