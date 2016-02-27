@@ -65,10 +65,11 @@ class CMS extends ObjectBase{
 	
 	public static function resetCMS($result)
 	{
+		global $link;
 		if(!is_array($result))
 			return;
 		foreach($result as &$row){
-			$row['link'] = Tools::getLink($row['rewrite']);
+			$row['link'] = $link->getPage('CMSView', $row['id_cms']);
 			$row['tags'] = self::getCMSTags($row['id_cms']);
 		}
 		return $result;
@@ -76,12 +77,13 @@ class CMS extends ObjectBase{
 	
 	public static function getCMSTags($id_cms)
 	{
+		global $link;
 		$result = Db::getInstance()->getAll('
 		SELECT ct.* FROM `'.DB_PREFIX.'cms_tag` ct
 		LEFT JOIN `'.DB_PREFIX.'cms_to_tag` ctt ON (ct.`id_cms_tag` = ctt.`id_cms_tag`)
 		WHERE ctt.`id_cms` = '.(int)$id_cms);
 		foreach($result as &$row)
-			$row['link'] = Tools::getLink($row['rewrite']);
+			$row['link'] = $link->getPage('CMSViewTag', $row['id_cms_tag']);
 		return $result;
 	}
 	
