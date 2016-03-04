@@ -15,6 +15,9 @@ class CheckoutView extends View
 		}else{
 			$this->LoginedAction();
 		}
+		$smarty->assign(array(
+			'id_default_carrier' => Configuration::get('TM_DEFAULT_CARRIER_ID'),
+		));
 		return $smarty->fetch('checkout.tpl');
 	}
 	

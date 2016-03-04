@@ -1,4 +1,5 @@
 <?php
+
 class ProductView extends View
 {
 		public function __construct()
