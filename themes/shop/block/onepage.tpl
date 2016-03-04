@@ -11,8 +11,9 @@
 	<div class="panel-body">
 		<div class="address-block radio-new-style">
 			<h3>收货人信息</h3>
+			{assign var="id_address_default" value="0"}
 			{foreach from=$addresses item=address}
-			<div class="row item{if $address->is_default} active{/if}">
+			<div class="row item{if $address->is_default}{assign var="id_address_default" value=$address->is_default} active{/if}">
 				<div class="col-md-2 text-center name">{if $address->is_default}<b></b>{/if}<strong>{$address->name}</strong></div>
 				<div class="col-md-8">
 				<span class="addr-country">{$address->join('Country',  'id_country')->name}</span>
@@ -28,18 +29,20 @@
 				</div>
 			</div>
 			{/foreach}
+			<input type="hidden" name="id_address" value="{$id_address_default}" id="id_address">
 		</div>
 
 		{if count($carriers.items) > 1}
 		<div class="address-block">
 			<h3>配送方式</h3>
 			{foreach from=$carriers.items item=carrier name=carrier}
-				<div class="row item">
-					<div class="col-md-2 text-center name"><strong>{$carrier.name}</strong></div>
+				<div class="row item {if $carrier.id_carrier == $id_default_carrier} active{/if}">
+					<div class="col-md-2 text-center name">{if $carrier.id_carrier == $id_default_carrier}<b></b>{/if}<strong>{$carrier.name}</strong></div>
 					<div class="col-md-8">{$carrier.description}</div>
 					<div class="col-md-2">{if $carrier.shipping>0} + {displayPrice price=$carrier.shipping} {else}免运费{/if}</div>
 				</div>
 			{/foreach}
+			<input type="hidden" name="id_carrier" value="{$id_default_carrier}" id="id_address">
 		</div>
 		{/if}
 		{if $products}
