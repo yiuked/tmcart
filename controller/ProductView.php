@@ -15,7 +15,6 @@ class ProductView extends View
 			$attributes = Product::getAttributeAndGrop($this->entity->id);
 			$feedbacks = Feedback::feedbackWithProdict($this->entity->id);
 			$brand		= $this->entity->id_brand> 0 ? new Brand($this->entity->id_brand):false;
-
 			$smarty->assign(array(
 				'feedback'=>$feedbacks,
 				'entity'   => $this->entity,
