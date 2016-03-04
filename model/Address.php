@@ -14,7 +14,7 @@
  *
  * DISCLAIMER
  *
- * Do not edit or add to this file if you wish to upgrade yiukedautoseo to newer
+ * Do not edit or add to this file if you wish to upgrade to newer
  * versions in the future.
  *
  *  @author    Yiuked SA <yiuked@vip.qq.com>
